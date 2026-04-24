@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Be Tech | Nivel</title>
+    <link rel="stylesheet" href="estilos.css?v=4" />
+  </head>
+  <body class="game-body">
+    <main class="game-page">
+      <section class="game-panel" aria-labelledby="game-title">
+        <nav class="game-topbar" aria-label="Navegación principal">
+          <a class="back-link" href="index.html">Volver</a>
+        </nav>
+
+        <h1 id="game-title" class="game-title">Nivel <span data-current-level>4</span></h1>
+
+        <div class="game-frame">
+          <div class="game-stage">
+            <img class="game-stage-bg" src="assets/learnia-games-bg.png" alt="" />
+            <div class="game-workspace">
+              <div class="selector-wrap" aria-label="Progresion de desafios">
+                <button class="selector-chip is-active" type="button" data-challenge="1" aria-label="Desafio 1">
+                  <strong>1</strong>
+                </button>
+                <button class="selector-chip" type="button" data-challenge="2" aria-label="Desafio 2">
+                  <strong>2</strong>
+                </button>
+                <button class="selector-chip" type="button" data-challenge="3" aria-label="Desafio 3">
+                  <strong>3</strong>
+                </button>
+                <button class="selector-chip" type="button" data-challenge="4" aria-label="Desafio 4">
+                  <strong>4</strong>
+                </button>
+                <button class="selector-chip" type="button" data-challenge="5" aria-label="Desafio 5">
+                  <strong>5</strong>
+                </button>
+              </div>
+              <section class="challenge-shell is-open" aria-live="polite">
+                <div class="challenge-content" id="challenge-content"></div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js?v=4"></script>
+  </body>
+</html>

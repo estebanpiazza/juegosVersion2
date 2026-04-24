@@ -1,0 +1,67 @@
+{
+  "grado": 4,
+  "seccion": 1,
+  "objetivo": "Fortalecer pensamiento computacional y programacion inicial para primer grado con secuencias, depuracion, patrones de comandos y mapas en grilla.",
+  "desafios": [
+    {
+      "id": "n4-s1-d1",
+      "titulo": "Secuencia de comandos",
+      "tipo": "secuenciacion-guiada",
+      "inspiracion": "Code.org inicial",
+      "consigna": "Mira el camino marcado y completa los giros faltantes para que el robot vaya de INICIO a META.",
+      "objetivo": "Practicar secuencias de instrucciones: avanzar, girar derecha y girar izquierda.",
+      "pantalla": "Mapa 6x6 con camino resaltado y tira de instrucciones con huecos vacios.",
+      "interaccion": "Seleccionar cada hueco y asignar la accion correcta.",
+      "feedback": "Confirma si el robot sigue el camino y da pistas sobre los pasos de giro.",
+      "variantes": ["Accion distractora extra", "Resolver con menos pasos", "Mostrar previsualizacion del recorrido"]
+    },
+    {
+      "id": "n4-s1-d2",
+      "titulo": "Depura el programa",
+      "tipo": "depuracion-inicial",
+      "inspiracion": "Pensamiento computacional",
+      "consigna": "Detecta la linea incorrecta del programa y reemplazala para que el robot no se salga del recorrido.",
+      "objetivo": "Reconocer y corregir errores en secuencias cortas.",
+      "pantalla": "Lista de lineas de programa con un error y banco de reemplazos.",
+      "interaccion": "Seleccionar una linea y asignar la accion correcta.",
+      "feedback": "Confirma si el algoritmo fue depurado y da pista puntual en la linea de giro.",
+      "variantes": ["Dos lineas incorrectas", "Cambios limitados", "Agregar simulacion de ejecucion"]
+    },
+    {
+      "id": "n4-s1-d3",
+      "titulo": "Programa al robot",
+      "tipo": "programacion-por-bloques",
+      "inspiracion": "Code.org",
+      "consigna": "Arma una secuencia de instrucciones para que el robot llegue al tesoro sin chocar con los obstaculos.",
+      "objetivo": "Practicar secuenciacion, orientacion espacial, depuracion y conteo de pasos.",
+      "pantalla": "Grilla de 6 x 6 con robot, tesoro, obstaculos y casilleros especiales.",
+      "interaccion": "Armar un programa con bloques: avanzar, girar derecha, girar izquierda, repetir 2 veces, repetir 3 veces.",
+      "feedback": "El robot ejecuta la secuencia paso a paso. Si choca, se detiene y marca el bloque donde fallo.",
+      "variantes": ["Maximo de 8 bloques", "Bloque repetir obligatorio", "Visitar numeros en orden"]
+    },
+    {
+      "id": "n4-s1-d4",
+      "titulo": "Patrones de algoritmo",
+      "tipo": "patrones-de-comandos",
+      "inspiracion": "Mixto",
+      "consigna": "Descubri el patron repetido Avanzar, Avanzar, Girar derecha y completa los huecos.",
+      "objetivo": "Reconocer repeticion en algoritmos cortos.",
+      "pantalla": "Cinta con acciones del robot, espacios vacios y banco de comandos.",
+      "interaccion": "Elegir comandos del banco y colocarlos en los huecos.",
+      "feedback": "Valida el patron correcto y da pista sobre el bloque repetido.",
+      "variantes": ["Patron mas largo", "Mezclar comandos y colores", "Inventar el siguiente bloque"]
+    },
+    {
+      "id": "n4-s1-d5",
+      "titulo": "Mision mapa del robot",
+      "tipo": "mapa-en-grilla",
+      "inspiracion": "Pensamiento computacional",
+      "consigna": "Ubica los puntos del recorrido del robot en las coordenadas indicadas.",
+      "objetivo": "Planear rutas simples usando grillas de filas y columnas.",
+      "pantalla": "Mapa en grilla A-F y 1-6 con tarjetas: inicio, bateria, llave y meta.",
+      "interaccion": "Seleccionar cada punto y ubicarlo en su coordenada.",
+      "feedback": "Resalta aciertos y da pistas cuando se confunde columna con fila.",
+      "variantes": ["Trazar ruta completa", "Cambiar orientacion del mapa", "Intentos limitados"]
+    }
+  ]
+}
