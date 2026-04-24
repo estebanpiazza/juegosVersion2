@@ -237,22 +237,31 @@ function renderPathChallenge() {
 }
 
 function renderBalanceChallenge() {
-  const originalProgram = ["Avanzar", "Avanzar", "Girar der.", "Girar izq.", "Avanzar"];
-  const fixedStep = 3;
+  const originalProgram = ["Girar izq.", "Avanzar", "Avanzar"];
+  const fixedStep = 0;
   const expectedFix = "Girar der.";
-  const start = { row: 5, col: 1, dir: 0 };
-  const goal = { row: 4, col: 1 };
-  const obstacle = new Set(["2-1"]);
-  const dirs = ["N", "E", "S", "O"];
+  const start = { row: 5, col: 0, dir: 0 };
+  const goal = { row: 5, col: 2 };
+  const obstacle = new Set(["4-0"]);
   let program = [...originalProgram];
   let selectedLine = fixedStep;
 
   challengeContent.innerHTML = `
-    <article class="challenge-card">
-      ${renderHeader(2, "Usa el mapa de referencia. El robot debe evitar el bloque rojo y terminar en META. Corrige la linea equivocada.")}
+    <article class="challenge-card challenge-card-debug">
+      ${renderHeader(2, "Cambia una sola linea para que el robot salga de IN y llegue a META.")}
+      <section class="debug-reference" aria-label="Referencia visual">
+        <h3>Mapa de referencia</h3>
+        <div class="debug-legend">
+          <span><i class="legend-dot legend-start"></i> Inicio</span>
+          <span><i class="legend-dot legend-goal"></i> Meta</span>
+          <span><i class="legend-dot legend-obstacle"></i> Bloque</span>
+          <span><i class="legend-dot legend-trail"></i> Recorrido</span>
+        </div>
+      </section>
+      <p class="challenge-note">Objetivo: corrige solo la linea 1. Es un giro equivocado.</p>
       <div class="debug-layout">
         <div class="debug-map" data-debug-map></div>
-        <div>
+        <div class="debug-program">
           <div class="debug-list" data-debug-list></div>
           <div class="debug-options">
             <button type="button">Avanzar</button>
@@ -266,7 +275,7 @@ function renderBalanceChallenge() {
         <button class="primary-action" type="button" data-check>Comprobar</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Pista: mira en el mapa en que paso toca el bloque rojo.</p>
+      <p class="challenge-message" data-message>Pista: la linea 1 debe girar hacia META, no hacia afuera.</p>
     </article>
   `;
 
@@ -312,10 +321,14 @@ function renderBalanceChallenge() {
     return { ok: reachedGoal, failedStep: null, reason: reachedGoal ? "goal" : "wrong-end", trail, robot };
   }
 
-  function renderMap(result) {
+  function renderMap(result, showTrail = true, showRobot = true) {
     debugMap.innerHTML = "";
-    const trailSet = new Set(result.trail);
-    const robotKey = keyOf(result.robot.row, result.robot.col);
+    const trailSet = new Set(showTrail ? result.trail : []);
+    const robotKey = showRobot ? keyOf(result.robot.row, result.robot.col) : null;
+    const trailIndex = new Map();
+    result.trail.forEach((key, index) => {
+      if (!trailIndex.has(key)) trailIndex.set(key, index);
+    });
 
     for (let row = 0; row < 6; row += 1) {
       for (let col = 0; col < 6; col += 1) {
@@ -338,7 +351,9 @@ function renderBalanceChallenge() {
         }
         if (key === robotKey) {
           cell.classList.add("is-robot");
-          cell.textContent = dirs[result.robot.dir];
+          cell.textContent = "🤖";
+        } else if (trailSet.has(key) && !obstacle.has(key) && !(row === start.row && col === start.col) && !(row === goal.row && col === goal.col)) {
+          cell.textContent = String(trailIndex.get(key));
         }
 
         debugMap.append(cell);
@@ -359,8 +374,6 @@ function renderBalanceChallenge() {
         renderProgram();
       });
     });
-
-    renderMap(simulateProgram());
   }
 
   challengeContent.querySelectorAll(".debug-options button").forEach((button) => {
@@ -372,7 +385,7 @@ function renderBalanceChallenge() {
 
   challengeContent.querySelector("[data-check]").addEventListener("click", () => {
     const result = simulateProgram();
-    renderMap(result);
+    renderMap(result, true, true);
 
     if (result.ok && program[fixedStep] === expectedFix) {
       setMessage("Muy bien. El robot evita el bloque rojo y termina en META.", "is-success");
@@ -380,7 +393,7 @@ function renderBalanceChallenge() {
     }
 
     if (result.reason === "obstacle") {
-      setMessage(`Ahora se ve el error: en el paso ${result.failedStep} el robot toca el bloque rojo.`, "is-error");
+      setMessage(`En el paso ${result.failedStep} toca el bloque rojo. Corrige la linea 1.`, "is-error");
       return;
     }
 
@@ -389,17 +402,19 @@ function renderBalanceChallenge() {
       return;
     }
 
-    setMessage("No llega a META. Revisa la linea 4 y compara con el mapa.", "is-error");
+    setMessage("No llega a META. Corrige la linea 1 para que gire hacia la derecha.", "is-error");
   });
 
   challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
     program = [...originalProgram];
     selectedLine = fixedStep;
     renderProgram();
-    setMessage("Pista: mira en el mapa en que paso toca el bloque rojo.");
+    renderMap({ trail: [keyOf(start.row, start.col)], robot: { ...start } }, false, false);
+    setMessage("Pista: la linea 1 debe girar hacia META, no hacia afuera.");
   });
 
   renderProgram();
+  renderMap({ trail: [keyOf(start.row, start.col)], robot: { ...start } }, false, false);
 }
 
 function renderRobotChallenge() {
@@ -408,11 +423,17 @@ function renderRobotChallenge() {
   const obstacles = new Set(["4-2", "3-2", "2-2", "2-3"]);
   let program = [];
   let robot = { ...start };
-  const dirs = ["N", "E", "S", "O"];
+  let isRunning = false;
+  const commandLabels = {
+    F: "Avanzar",
+    L: "Girar izq.",
+    R: "Girar der.",
+  };
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(3, "Arma instrucciones para que el robot llegue al tesoro sin chocar.")}
+      ${renderHeader(3, "Programa al robot para llegar a la estrella sin chocar con los bloques.")}
+      <p class="challenge-note">Objetivo: usa hasta 10 instrucciones. Luego toca Ejecutar para ver el recorrido paso a paso.</p>
       <div class="robot-layout">
         <div class="robot-grid"></div>
         <div class="program-panel">
@@ -424,9 +445,10 @@ function renderRobotChallenge() {
           <div class="program-list" data-program></div>
           <div class="challenge-actions">
             <button class="primary-action" type="button" data-run>Ejecutar</button>
+            <button class="secondary-action" type="button" data-undo>Quitar ultimo</button>
             <button class="secondary-action" type="button" data-clear>Limpiar</button>
           </div>
-          <p class="challenge-message" data-message>Pista: avanza, gira y rodea los bloques azules.</p>
+          <p class="challenge-message" data-message>Empieza con avanzar dos veces y luego busca rodear la pared azul.</p>
         </div>
       </div>
     </article>
@@ -434,6 +456,10 @@ function renderRobotChallenge() {
 
   const grid = challengeContent.querySelector(".robot-grid");
   const programNode = challengeContent.querySelector("[data-program]");
+  const runButton = challengeContent.querySelector("[data-run]");
+  const clearButton = challengeContent.querySelector("[data-clear]");
+  const undoButton = challengeContent.querySelector("[data-undo]");
+  const commandButtons = [...challengeContent.querySelectorAll("[data-command]")];
 
   function cellKey(row, col) {
     return `${row}-${col}`;
@@ -447,9 +473,10 @@ function renderRobotChallenge() {
         cell.className = "robot-cell";
         if (obstacles.has(cellKey(row, col))) cell.classList.add("is-obstacle");
         if (row === treasure.row && col === treasure.col) cell.textContent = "★";
+        if (row === start.row && col === start.col) cell.classList.add("is-start");
         if (row === robot.row && col === robot.col) {
           cell.classList.add("is-robot");
-          cell.textContent = dirs[robot.dir];
+          cell.textContent = "🤖";
         }
         grid.append(cell);
       }
@@ -457,7 +484,19 @@ function renderRobotChallenge() {
   }
 
   function renderProgram() {
-    programNode.innerHTML = program.length ? program.map((cmd, index) => `<span>${index + 1}. ${cmd}</span>`).join("") : "<em>Sin instrucciones</em>";
+    programNode.innerHTML = program.length
+      ? program.map((cmd, index) => `<span>${index + 1}. ${commandLabels[cmd]}</span>`).join("")
+      : "<em>Sin instrucciones</em>";
+  }
+
+  function setRunningState(running) {
+    isRunning = running;
+    runButton.disabled = running;
+    clearButton.disabled = running;
+    undoButton.disabled = running;
+    commandButtons.forEach((button) => {
+      button.disabled = running;
+    });
   }
 
   function step(command) {
@@ -480,12 +519,25 @@ function renderRobotChallenge() {
 
   challengeContent.querySelectorAll("[data-command]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (isRunning) return;
+      if (program.length >= 10) {
+        setMessage("Llegaste al maximo de 10 instrucciones. Ejecuta o limpia el programa.", "is-error");
+        return;
+      }
       program.push(button.dataset.command);
       renderProgram();
     });
   });
 
-  challengeContent.querySelector("[data-clear]").addEventListener("click", () => {
+  undoButton.addEventListener("click", () => {
+    if (isRunning) return;
+    if (!program.length) return;
+    program.pop();
+    renderProgram();
+  });
+
+  clearButton.addEventListener("click", () => {
+    if (isRunning) return;
     program = [];
     robot = { ...start };
     renderGrid();
@@ -493,17 +545,31 @@ function renderRobotChallenge() {
     setMessage("Programa limpio. Vuelve a intentarlo.");
   });
 
-  challengeContent.querySelector("[data-run]").addEventListener("click", () => {
+  runButton.addEventListener("click", async () => {
+    if (isRunning) return;
+    if (!program.length) {
+      setMessage("Primero agrega instrucciones antes de ejecutar.", "is-error");
+      return;
+    }
+
+    setRunningState(true);
     robot = { ...start };
-    for (const command of program) {
+    renderGrid();
+
+    for (let i = 0; i < program.length; i += 1) {
+      const command = program[i];
+      await new Promise((resolve) => setTimeout(resolve, 240));
       const ok = step(command);
       if (!ok) {
         renderGrid();
-        setMessage("El robot choco. Revisa el bloque donde cambia el camino.", "is-error");
+        setRunningState(false);
+        setMessage(`El robot choco en el paso ${i + 1}. Revisa ese bloque del programa.`, "is-error");
         return;
       }
+      renderGrid();
     }
-    renderGrid();
+
+    setRunningState(false);
     if (robot.row === treasure.row && robot.col === treasure.col) {
       setMessage("Tesoro encontrado. Tu algoritmo funciona.", "is-success");
     } else {
@@ -521,13 +587,15 @@ function renderPatternChallenge() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(4, "Completa el patron de comandos repetido: Avanzar, Avanzar, Girar der.")}
+      ${renderHeader(4, "Completa el patron que se repite: Avanzar, Avanzar, Girar der.")}
+      <p class="challenge-note">Selecciona un hueco, elige un comando y repite el bloque sin romper la secuencia.</p>
       <div class="pattern-row">
         <span>Avanzar</span><span>Avanzar</span><span>Girar der.</span>
-        <button type="button" class="pattern-blank is-selected" data-blank="0">?</button>
         <span>Avanzar</span>
-        <button type="button" class="pattern-blank" data-blank="1">?</button>
+        <button type="button" class="pattern-blank is-selected" data-blank="0">?</button>
         <span>Girar der.</span>
+        <button type="button" class="pattern-blank" data-blank="1">?</button>
+        <span>Avanzar</span>
         <button type="button" class="pattern-blank" data-blank="2">?</button>
       </div>
       <div class="option-bank">
@@ -568,12 +636,17 @@ function renderPatternChallenge() {
   });
 
   challengeContent.querySelector("[data-check]").addEventListener("click", () => {
+    if (blanks.some((blank) => !blank.dataset.value)) {
+      setMessage("Completa los tres huecos antes de comprobar.", "is-error");
+      return;
+    }
+
     const values = blanks.map((blank) => blank.dataset.value);
     if (values.every((value, index) => value === answers[index])) {
       blanks.forEach((blank) => blank.classList.add("is-correct"));
       setMessage("Perfecto. Reconociste el patron del algoritmo.", "is-success");
     } else {
-      setMessage("Todavia no. Busca que comando se repite cada tres pasos.", "is-error");
+      setMessage("Todavia no. El bloque correcto es: Avanzar, Avanzar, Girar der.", "is-error");
     }
   });
 
