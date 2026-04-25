@@ -1,23 +1,21 @@
 const params = new URLSearchParams(window.location.search);
 const requestedLevel = Number(params.get("nivel"));
-const level = Number.isInteger(requestedLevel) && requestedLevel >= 4 && requestedLevel <= 10 ? requestedLevel : 4;
+const DEFAULT_LEVEL = 4;
+let level = Number.isInteger(requestedLevel) ? requestedLevel : DEFAULT_LEVEL;
 
 const challengeContent = document.querySelector("#challenge-content");
 const challengeShell = document.querySelector(".challenge-shell");
 const selectorWrap = document.querySelector(".selector-wrap");
-const selectorButtons = [...document.querySelectorAll(".selector-chip")];
-const totalChallenges = level === 4 ? 5 : 1;
+let selectorButtons = [...document.querySelectorAll(".selector-chip")];
+let totalChallenges = level === 4 ? 5 : 1;
 const completedChallenges = new Set();
 let levelModal = null;
 let hasShownLevelModal = false;
+let availableLevels = [];
+let levelDataByNumber = new Map();
+let currentLevelData = null;
 
-document.querySelectorAll("[data-current-level]").forEach((node) => {
-  node.textContent = String(level);
-});
-
-document.title = `Be Tech | Nivel ${level}`;
-
-const challengeTitles = {
+let challengeTitles = {
   1: "Camino del robot",
   2: "Depura el programa",
   3: "Programa al robot",
@@ -25,8 +23,99 @@ const challengeTitles = {
   5: "Mision mapa del robot",
 };
 
+const challengeTypeRenderers = {
+  "secuenciacion-guiada": () => renderPathChallenge(),
+  "depuracion-inicial": () => renderBalanceChallengeV2(),
+  "programacion-por-bloques": () => renderRobotChallengeV2(),
+  "patrones-de-comandos": () => renderPatternChallengeV2(),
+  "mapa-en-grilla": () => renderCoordinatesChallenge(),
+};
+
+async function loadLevelSection(levelNumber, section = 1) {
+  const url = `contenido/nivel-${levelNumber}-seccion-${section}.json`;
+  try {
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    return payload && typeof payload === "object" ? payload : null;
+  } catch {
+    return null;
+  }
+}
+
+async function discoverLevelsFromJson() {
+  const discovered = [];
+  const dataByLevel = new Map();
+  const maxProbeLevel = 40;
+  let missesAfterFirstMatch = 0;
+
+  for (let probe = 1; probe <= maxProbeLevel; probe += 1) {
+    const levelData = await loadLevelSection(probe, 1);
+    if (levelData) {
+      discovered.push(probe);
+      dataByLevel.set(probe, levelData);
+      missesAfterFirstMatch = 0;
+      continue;
+    }
+
+    if (discovered.length) {
+      missesAfterFirstMatch += 1;
+      if (missesAfterFirstMatch >= 8) break;
+    }
+  }
+
+  return { discovered, dataByLevel };
+}
+
+function getChallengesFromData(levelData) {
+  return Array.isArray(levelData?.desafios) ? levelData.desafios : [];
+}
+
+function syncLevelHeading() {
+  document.querySelectorAll("[data-current-level]").forEach((node) => {
+    node.textContent = String(level);
+  });
+  document.title = `Be Tech | Nivel ${level}`;
+}
+
+function buildSelectorButtons() {
+  if (!selectorWrap) return;
+
+  const challenges = getChallengesFromData(currentLevelData);
+  if (challenges.length <= 1) {
+    selectorWrap.classList.add("is-hidden");
+    selectorButtons = [];
+    return;
+  }
+
+  selectorWrap.classList.remove("is-hidden");
+  selectorWrap.innerHTML = challenges
+    .map(
+      (_, index) => `
+        <button class="selector-chip ${index === 0 ? "is-active" : ""}" type="button" data-challenge="${index + 1}" aria-label="Desafio ${index + 1}">
+          <strong>${index + 1}</strong>
+        </button>
+      `,
+    )
+    .join("");
+
+  selectorButtons = [...selectorWrap.querySelectorAll(".selector-chip")];
+}
+
+function mapChallengeTitles(levelData) {
+  const challenges = getChallengesFromData(levelData);
+  if (!challenges.length) return;
+
+  challengeTitles = Object.fromEntries(
+    challenges.map((challenge, index) => [index + 1, challenge.titulo || `Desafio ${index + 1}`]),
+  );
+}
+
 function getNextLevelHref() {
-  return level < 10 ? `nivel.html?nivel=${level + 1}` : "index.html";
+  if (!availableLevels.length) return level < 10 ? `nivel.html?nivel=${level + 1}` : "index.html";
+  const currentIndex = availableLevels.indexOf(level);
+  if (currentIndex === -1 || currentIndex === availableLevels.length - 1) return "index.html";
+  return `nivel.html?nivel=${availableLevels[currentIndex + 1]}`;
 }
 
 function createLevelModal() {
@@ -86,33 +175,39 @@ function completeChallenge(id) {
   }
 }
 
-selectorButtons.forEach((button) => {
-  const challengeId = Number(button.dataset.challenge);
+function wireSelectorButtons() {
+  selectorButtons.forEach((button) => {
+    const challengeId = Number(button.dataset.challenge);
 
-  if (level !== 4) {
-    selectorWrap?.classList.add("is-hidden");
-    return;
-  }
-
-  if (challengeId > 5) {
-    button.classList.add("is-disabled");
-    button.setAttribute("aria-disabled", "true");
-  }
-
-  button.addEventListener("click", () => {
-    if (challengeId > 5) {
-      showLocked(challengeId);
-      return;
+    if (challengeId > totalChallenges) {
+      button.classList.add("is-disabled");
+      button.setAttribute("aria-disabled", "true");
     }
 
-    selectorButtons.forEach((chip) => chip.classList.remove("is-active"));
-    button.classList.add("is-active");
-    openChallenge(challengeId);
+    button.addEventListener("click", () => {
+      if (challengeId > totalChallenges) {
+        showLocked(challengeId);
+        return;
+      }
+
+      selectorButtons.forEach((chip) => chip.classList.remove("is-active"));
+      button.classList.add("is-active");
+      openChallenge(challengeId);
+    });
   });
-});
+}
 
 function openChallenge(id) {
   challengeShell?.classList.add("is-open");
+
+  const challengeData = getChallengesFromData(currentLevelData)[id - 1];
+  if (challengeData) {
+    const renderer = challengeTypeRenderers[challengeData.tipo];
+    if (renderer) {
+      renderer();
+      return;
+    }
+  }
 
   if (id === 1) renderPathChallenge();
   if (id === 2) renderBalanceChallengeV2();
@@ -151,6 +246,11 @@ function renderHeader(id, instruction) {
   `;
 }
 
+function getChallengeInstruction(id, fallbackText) {
+  const challenge = getChallengesFromData(currentLevelData)[id - 1];
+  return challenge?.consigna || fallbackText;
+}
+
 function renderPathChallenge() {
   const routePath = ["5-0", "4-0", "3-0", "3-1", "3-2", "2-2", "1-2", "1-3", "1-4"];
   const routeCells = new Set(["5-0", "4-0", "3-0", "3-1", "3-2", "2-2", "1-2", "1-3", "1-4"]);
@@ -165,7 +265,7 @@ function renderPathChallenge() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(1, "Mira el camino celeste y completa los giros para que el robot vaya desde INICIO hasta META.")}
+      ${renderHeader(1, getChallengeInstruction(1, "Mira el camino celeste y completa los giros para que el robot vaya desde INICIO hasta META."))}
       <div class="path-layout">
         <div class="path-map" data-path-map></div>
         <div>
@@ -319,7 +419,7 @@ function renderBalanceChallenge() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card challenge-card-debug">
-      ${renderHeader(2, "Corrige el programa para que el robot salga de IN y llegue a META.")}
+      ${renderHeader(2, getChallengeInstruction(2, "Corrige el programa para que el robot salga de IN y llegue a META."))}
       <section class="debug-reference" aria-label="Referencia visual">
         <h3>Mapa de referencia</h3>
         <div class="debug-legend">
@@ -518,7 +618,7 @@ function renderRobotChallenge() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(3, "Programa al robot para llegar a la estrella sin chocar con los bloques.")}
+      ${renderHeader(3, getChallengeInstruction(3, "Programa al robot para llegar a la estrella sin chocar con los bloques."))}
       <p class="challenge-note">Objetivo: arma hasta 10 instrucciones. El robot deja marcado el recorrido mientras ejecuta.</p>
       <div class="robot-layout">
         <div class="robot-grid"></div>
@@ -725,7 +825,7 @@ function renderPatternChallenge() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(4, "Completa el patron de instrucciones que se repite.")}
+      ${renderHeader(4, getChallengeInstruction(4, "Completa el patron de instrucciones que se repite."))}
       <p class="challenge-note">El bloque se repite de a tres: Avanzar, Avanzar, Girar der.</p>
       <div class="pattern-row">
         <span data-group="1">Avanzar</span><span data-group="1">Avanzar</span><span data-group="1">Girar der.</span>
@@ -827,7 +927,7 @@ function renderBalanceChallengeV2() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(2, "Completa los giros para esquivar los bloques rojos y llegar a META.")}
+      ${renderHeader(2, getChallengeInstruction(2, "Completa los giros para esquivar los bloques rojos y llegar a META."))}
       <div class="visual-sequence-layout">
         <div class="path-map visual-map" data-map></div>
         <div class="sequence-panel">
@@ -1009,7 +1109,7 @@ function renderRobotChallengeV2() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(3, "Arma la secuencia para juntar las baterias y llegar a META.")}
+      ${renderHeader(3, getChallengeInstruction(3, "Arma la secuencia para juntar las baterias y llegar a META."))}
       <div class="visual-sequence-layout">
         <div class="robot-grid visual-map" data-map></div>
         <div class="sequence-panel">
@@ -1438,7 +1538,7 @@ function renderCoordinatesChallenge() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(5, "Ubica puntos del mapa para planear la ruta del robot desde inicio hasta la meta.")}
+      ${renderHeader(5, getChallengeInstruction(5, "Ubica puntos del mapa para planear la ruta del robot desde inicio hasta la meta."))}
       <div class="coord-layout">
         <div class="coord-bank"></div>
         <div class="coord-grid"></div>
@@ -1652,7 +1752,7 @@ function renderLevel7Factory() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderLevelHeader("Fabrica de cajas", "Clasifica cada caja en el deposito del mismo color.")}
+      ${renderLevelHeader("Fabrica de cajas", getChallengeInstruction(1, "Clasifica cada caja en el deposito del mismo color."))}
       <div class="factory-layout">
         <div class="factory-belt">
           ${items.map((item, index) => `<button class="factory-box box-${item.target} ${index === current ? "is-current" : ""}" type="button" data-item="${index}">${item.label}</button>`).join("")}
@@ -1701,7 +1801,7 @@ function renderLevel8Circuit() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderLevelHeader("Circuito de energia", "Activa los switches para copiar el patron de luces objetivo.")}
+      ${renderLevelHeader("Circuito de energia", getChallengeInstruction(1, "Activa los switches para copiar el patron de luces objetivo."))}
       <div class="circuit-layout">
         <div class="circuit-row" aria-label="Objetivo">
           ${target.map((isOn) => `<span class="circuit-light ${isOn ? "is-on" : ""}"></span>`).join("")}
@@ -1751,7 +1851,7 @@ function renderLevel9Memory() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderLevelHeader("Memoria de pares", "Encuentra los pares iguales.")}
+      ${renderLevelHeader("Memoria de pares", getChallengeInstruction(1, "Encuentra los pares iguales."))}
       <div class="memory-grid">
         ${cards.map((card, index) => `<button class="memory-card" type="button" data-card="${index}" data-value="${card}">?</button>`).join("")}
       </div>
@@ -1801,7 +1901,7 @@ function renderLevel10Lock() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderLevelHeader("Candado final", "Lee las columnas y marca el codigo correcto.")}
+      ${renderLevelHeader("Candado final", getChallengeInstruction(1, "Lee las columnas y marca el codigo correcto."))}
       <div class="lock-layout">
         <div class="lock-clues">
           <span><i></i><i></i><i></i></span>
@@ -1858,8 +1958,38 @@ function openStandaloneLevel() {
   if (level === 10) renderLevel10Lock();
 }
 
-if (level === 4) {
-  openChallenge(1);
-} else {
+async function initializeLevelPage() {
+  const { discovered, dataByLevel } = await discoverLevelsFromJson();
+  availableLevels = discovered;
+  levelDataByNumber = dataByLevel;
+
+  if (availableLevels.length) {
+    level = availableLevels.includes(level) ? level : availableLevels[0];
+    currentLevelData = levelDataByNumber.get(level) || null;
+  } else {
+    currentLevelData = null;
+  }
+
+  const challenges = getChallengesFromData(currentLevelData);
+  totalChallenges = challenges.length || (level === 4 ? 5 : 1);
+  mapChallengeTitles(currentLevelData);
+  syncLevelHeading();
+  buildSelectorButtons();
+  wireSelectorButtons();
+
+  if (challenges.length) {
+    openChallenge(1);
+    return;
+  }
+
+  if (level === 4) {
+    openChallenge(1);
+    return;
+  }
+
   openStandaloneLevel();
+}
+
+if (challengeContent && challengeShell) {
+  initializeLevelPage();
 }
