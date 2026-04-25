@@ -6,6 +6,10 @@ const challengeContent = document.querySelector("#challenge-content");
 const challengeShell = document.querySelector(".challenge-shell");
 const selectorWrap = document.querySelector(".selector-wrap");
 const selectorButtons = [...document.querySelectorAll(".selector-chip")];
+const totalChallenges = level === 4 ? 5 : 1;
+const completedChallenges = new Set();
+let levelModal = null;
+let hasShownLevelModal = false;
 
 document.querySelectorAll("[data-current-level]").forEach((node) => {
   node.textContent = String(level);
@@ -21,16 +25,82 @@ const challengeTitles = {
   5: "Mision mapa del robot",
 };
 
+function getNextLevelHref() {
+  return level < 10 ? `nivel.html?nivel=${level + 1}` : "index.html";
+}
+
+function createLevelModal() {
+  const modal = document.createElement("div");
+  modal.className = "level-modal";
+  modal.hidden = true;
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+  modal.setAttribute("aria-labelledby", "level-modal-title");
+  modal.innerHTML = `
+    <div class="level-modal-backdrop" data-close-level-modal></div>
+    <div class="level-modal-panel" tabindex="-1">
+      <p class="challenge-kicker">Nivel completado</p>
+      <h2 id="level-modal-title">Buen trabajo</h2>
+      <p>Completaste todos los desafios del nivel ${level}. Ya puedes avanzar al siguiente.</p>
+      <div class="level-modal-actions">
+        <a class="primary-action" href="${getNextLevelHref()}">Siguiente nivel</a>
+        <button class="secondary-action" type="button" data-close-level-modal>Quedarme aqui</button>
+      </div>
+    </div>
+  `;
+
+  modal.querySelectorAll("[data-close-level-modal]").forEach((control) => {
+    control.addEventListener("click", () => {
+      modal.hidden = true;
+      document.body.classList.remove("has-level-modal");
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.hidden) {
+      modal.hidden = true;
+      document.body.classList.remove("has-level-modal");
+    }
+  });
+
+  document.body.append(modal);
+  return modal;
+}
+
+function showLevelCompleteModal() {
+  if (!levelModal) levelModal = createLevelModal();
+  levelModal.hidden = false;
+  document.body.classList.add("has-level-modal");
+  levelModal.querySelector(".level-modal-panel")?.focus();
+}
+
+function completeChallenge(id) {
+  if (!totalChallenges || completedChallenges.has(id)) return;
+
+  completedChallenges.add(id);
+  document.querySelector(`[data-challenge="${id}"]`)?.classList.add("is-complete");
+
+  if (completedChallenges.size === totalChallenges && !hasShownLevelModal) {
+    hasShownLevelModal = true;
+    window.setTimeout(showLevelCompleteModal, 450);
+  }
+}
+
 selectorButtons.forEach((button) => {
   const challengeId = Number(button.dataset.challenge);
 
-  if (level !== 4 || challengeId > 5) {
+  if (level !== 4) {
+    selectorWrap?.classList.add("is-hidden");
+    return;
+  }
+
+  if (challengeId > 5) {
     button.classList.add("is-disabled");
     button.setAttribute("aria-disabled", "true");
   }
 
   button.addEventListener("click", () => {
-    if (level !== 4 || challengeId > 5) {
+    if (challengeId > 5) {
       showLocked(challengeId);
       return;
     }
@@ -45,9 +115,9 @@ function openChallenge(id) {
   challengeShell?.classList.add("is-open");
 
   if (id === 1) renderPathChallenge();
-  if (id === 2) renderBalanceChallenge();
-  if (id === 3) renderRobotChallenge();
-  if (id === 4) renderPatternChallenge();
+  if (id === 2) renderBalanceChallengeV2();
+  if (id === 3) renderRobotChallengeV2();
+  if (id === 4) renderPatternChallengeV2();
   if (id === 5) renderCoordinatesChallenge();
 }
 
@@ -214,6 +284,7 @@ function renderPathChallenge() {
       setMessage("Muy bien. Mira como el robot recorre el camino.", "is-good");
       runRobotAnimation().then(() => {
         setMessage("Excelente. El robot sigue el camino y llega a la meta.", "is-success");
+        completeChallenge(1);
       });
       return;
     }
@@ -248,7 +319,7 @@ function renderBalanceChallenge() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card challenge-card-debug">
-      ${renderHeader(2, "Cambia una sola linea para que el robot salga de IN y llegue a META.")}
+      ${renderHeader(2, "Corrige el programa para que el robot salga de IN y llegue a META.")}
       <section class="debug-reference" aria-label="Referencia visual">
         <h3>Mapa de referencia</h3>
         <div class="debug-legend">
@@ -258,16 +329,16 @@ function renderBalanceChallenge() {
           <span><i class="legend-dot legend-trail"></i> Recorrido</span>
         </div>
       </section>
-      <p class="challenge-note">Objetivo: corrige solo la linea 1. Es un giro equivocado.</p>
+      <p class="challenge-note">Objetivo: solo la linea 1 esta editable. Las otras dos ya estan bien.</p>
       <div class="debug-layout">
         <div class="debug-map" data-debug-map></div>
         <div class="debug-program">
+          <p class="debug-program-title">Programa del robot</p>
           <div class="debug-list" data-debug-list></div>
           <div class="debug-options">
             <button type="button">Avanzar</button>
             <button type="button">Girar der.</button>
             <button type="button">Girar izq.</button>
-            <button type="button">Saltar</button>
           </div>
         </div>
       </div>
@@ -363,14 +434,20 @@ function renderBalanceChallenge() {
 
   function renderProgram() {
     debugList.innerHTML = program.map((step, index) => `
-      <button class="debug-line ${index === selectedLine ? "is-selected" : ""}" type="button" data-line="${index}">
+      <button class="debug-line ${index === selectedLine ? "is-selected" : ""} ${index === fixedStep ? "is-editable" : "is-locked"}" type="button" data-line="${index}">
         <strong>${index + 1}.</strong> ${step}
+        <small>${index === fixedStep ? "Editar" : "Bloqueada"}</small>
       </button>
     `).join("");
 
     debugList.querySelectorAll("[data-line]").forEach((button) => {
       button.addEventListener("click", () => {
-        selectedLine = Number(button.dataset.line);
+        const line = Number(button.dataset.line);
+        if (line !== fixedStep) {
+          setMessage("Esa linea ya esta bien. Cambia solo la linea 1.", "is-good");
+          return;
+        }
+        selectedLine = line;
         renderProgram();
       });
     });
@@ -380,6 +457,11 @@ function renderBalanceChallenge() {
     button.addEventListener("click", () => {
       program[selectedLine] = button.textContent;
       renderProgram();
+      renderMap(simulateProgram(), true, true);
+      setMessage(button.textContent === expectedFix
+        ? "Bien: ahora prueba el programa completo."
+        : "Prueba el programa y mira donde termina el robot.",
+      button.textContent === expectedFix ? "is-good" : "");
     });
   });
 
@@ -389,6 +471,7 @@ function renderBalanceChallenge() {
 
     if (result.ok && program[fixedStep] === expectedFix) {
       setMessage("Muy bien. El robot evita el bloque rojo y termina en META.", "is-success");
+      completeChallenge(2);
       return;
     }
 
@@ -409,20 +492,23 @@ function renderBalanceChallenge() {
     program = [...originalProgram];
     selectedLine = fixedStep;
     renderProgram();
-    renderMap({ trail: [keyOf(start.row, start.col)], robot: { ...start } }, false, false);
+    renderMap({ trail: [keyOf(start.row, start.col)], robot: { ...start } }, true, true);
     setMessage("Pista: la linea 1 debe girar hacia META, no hacia afuera.");
   });
 
   renderProgram();
-  renderMap({ trail: [keyOf(start.row, start.col)], robot: { ...start } }, false, false);
+  renderMap({ trail: [keyOf(start.row, start.col)], robot: { ...start } }, true, true);
 }
 
 function renderRobotChallenge() {
   const start = { row: 5, col: 0, dir: 1 };
   const treasure = { row: 1, col: 4 };
   const obstacles = new Set(["4-2", "3-2", "2-2", "2-3"]);
+  const solution = ["F", "F", "F", "F", "L", "F", "F", "F", "F"];
+  const directionMarks = ["^", ">", "v", "<"];
   let program = [];
   let robot = { ...start };
+  let visitedCells = [];
   let isRunning = false;
   const commandLabels = {
     F: "Avanzar",
@@ -433,10 +519,14 @@ function renderRobotChallenge() {
   challengeContent.innerHTML = `
     <article class="challenge-card">
       ${renderHeader(3, "Programa al robot para llegar a la estrella sin chocar con los bloques.")}
-      <p class="challenge-note">Objetivo: usa hasta 10 instrucciones. Luego toca Ejecutar para ver el recorrido paso a paso.</p>
+      <p class="challenge-note">Objetivo: arma hasta 10 instrucciones. El robot deja marcado el recorrido mientras ejecuta.</p>
       <div class="robot-layout">
         <div class="robot-grid"></div>
         <div class="program-panel">
+          <div class="program-meta">
+            <strong data-program-count>0/10</strong>
+            <button class="secondary-action" type="button" data-hint>Pista</button>
+          </div>
           <div class="command-bank">
             <button type="button" data-command="F">Avanzar</button>
             <button type="button" data-command="L">Girar izq.</button>
@@ -448,7 +538,7 @@ function renderRobotChallenge() {
             <button class="secondary-action" type="button" data-undo>Quitar ultimo</button>
             <button class="secondary-action" type="button" data-clear>Limpiar</button>
           </div>
-          <p class="challenge-message" data-message>Empieza con avanzar dos veces y luego busca rodear la pared azul.</p>
+          <p class="challenge-message" data-message>Camino: avanza por abajo hasta quedar debajo de la estrella, gira a la izquierda y sube.</p>
         </div>
       </div>
     </article>
@@ -456,9 +546,11 @@ function renderRobotChallenge() {
 
   const grid = challengeContent.querySelector(".robot-grid");
   const programNode = challengeContent.querySelector("[data-program]");
+  const countNode = challengeContent.querySelector("[data-program-count]");
   const runButton = challengeContent.querySelector("[data-run]");
   const clearButton = challengeContent.querySelector("[data-clear]");
   const undoButton = challengeContent.querySelector("[data-undo]");
+  const hintButton = challengeContent.querySelector("[data-hint]");
   const commandButtons = [...challengeContent.querySelectorAll("[data-command]")];
 
   function cellKey(row, col) {
@@ -467,16 +559,28 @@ function renderRobotChallenge() {
 
   function renderGrid() {
     grid.innerHTML = "";
+    const trailSet = new Set(visitedCells);
     for (let row = 0; row < 6; row += 1) {
       for (let col = 0; col < 6; col += 1) {
+        const key = cellKey(row, col);
         const cell = document.createElement("div");
         cell.className = "robot-cell";
-        if (obstacles.has(cellKey(row, col))) cell.classList.add("is-obstacle");
-        if (row === treasure.row && col === treasure.col) cell.textContent = "★";
+        if (trailSet.has(key)) {
+          cell.classList.add("is-trail");
+          cell.textContent = ".";
+        }
+        if (obstacles.has(key)) {
+          cell.classList.add("is-obstacle");
+          cell.textContent = "X";
+        }
+        if (row === treasure.row && col === treasure.col) {
+          cell.classList.add("is-treasure");
+          cell.textContent = "*";
+        }
         if (row === start.row && col === start.col) cell.classList.add("is-start");
         if (row === robot.row && col === robot.col) {
           cell.classList.add("is-robot");
-          cell.textContent = "🤖";
+          cell.textContent = directionMarks[robot.dir];
         }
         grid.append(cell);
       }
@@ -487,6 +591,7 @@ function renderRobotChallenge() {
     programNode.innerHTML = program.length
       ? program.map((cmd, index) => `<span>${index + 1}. ${commandLabels[cmd]}</span>`).join("")
       : "<em>Sin instrucciones</em>";
+    countNode.textContent = `${program.length}/10`;
   }
 
   function setRunningState(running) {
@@ -494,9 +599,14 @@ function renderRobotChallenge() {
     runButton.disabled = running;
     clearButton.disabled = running;
     undoButton.disabled = running;
+    hintButton.disabled = running;
     commandButtons.forEach((button) => {
       button.disabled = running;
     });
+  }
+
+  function isSolutionPrefix() {
+    return program.every((command, index) => command === solution[index]);
   }
 
   function step(command) {
@@ -513,6 +623,7 @@ function renderRobotChallenge() {
         return false;
       }
       robot = next;
+      visitedCells.push(cellKey(robot.row, robot.col));
     }
     return true;
   }
@@ -525,6 +636,9 @@ function renderRobotChallenge() {
         return;
       }
       program.push(button.dataset.command);
+      robot = { ...start };
+      visitedCells = [];
+      renderGrid();
       renderProgram();
     });
   });
@@ -533,6 +647,9 @@ function renderRobotChallenge() {
     if (isRunning) return;
     if (!program.length) return;
     program.pop();
+    visitedCells = [];
+    robot = { ...start };
+    renderGrid();
     renderProgram();
   });
 
@@ -540,9 +657,28 @@ function renderRobotChallenge() {
     if (isRunning) return;
     program = [];
     robot = { ...start };
+    visitedCells = [];
     renderGrid();
     renderProgram();
     setMessage("Programa limpio. Vuelve a intentarlo.");
+  });
+
+  hintButton.addEventListener("click", () => {
+    if (isRunning) return;
+    if (!isSolutionPrefix()) {
+      setMessage("Hay una instruccion que se desvia del camino sugerido. Quita la ultima o limpia el programa.", "is-error");
+      return;
+    }
+    if (program.length >= solution.length) {
+      setMessage("Ya tienes el camino sugerido completo. Ejecutalo.", "is-good");
+      return;
+    }
+    program.push(solution[program.length]);
+    robot = { ...start };
+    visitedCells = [];
+    renderGrid();
+    renderProgram();
+    setMessage(`Agregue una pista: ${commandLabels[program[program.length - 1]]}.`, "is-good");
   });
 
   runButton.addEventListener("click", async () => {
@@ -554,6 +690,7 @@ function renderRobotChallenge() {
 
     setRunningState(true);
     robot = { ...start };
+    visitedCells = [cellKey(robot.row, robot.col)];
     renderGrid();
 
     for (let i = 0; i < program.length; i += 1) {
@@ -572,6 +709,7 @@ function renderRobotChallenge() {
     setRunningState(false);
     if (robot.row === treasure.row && robot.col === treasure.col) {
       setMessage("Tesoro encontrado. Tu algoritmo funciona.", "is-success");
+      completeChallenge(3);
     } else {
       setMessage("El robot ejecuto el programa, pero no llego al tesoro.", "is-good");
     }
@@ -587,15 +725,15 @@ function renderPatternChallenge() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(4, "Completa el patron que se repite: Avanzar, Avanzar, Girar der.")}
-      <p class="challenge-note">Selecciona un hueco, elige un comando y repite el bloque sin romper la secuencia.</p>
+      ${renderHeader(4, "Completa el patron de instrucciones que se repite.")}
+      <p class="challenge-note">El bloque se repite de a tres: Avanzar, Avanzar, Girar der.</p>
       <div class="pattern-row">
-        <span>Avanzar</span><span>Avanzar</span><span>Girar der.</span>
-        <span>Avanzar</span>
+        <span data-group="1">Avanzar</span><span data-group="1">Avanzar</span><span data-group="1">Girar der.</span>
+        <span data-group="2">Avanzar</span>
         <button type="button" class="pattern-blank is-selected" data-blank="0">?</button>
-        <span>Girar der.</span>
+        <span data-group="2">Girar der.</span>
         <button type="button" class="pattern-blank" data-blank="1">?</button>
-        <span>Avanzar</span>
+        <span data-group="3">Avanzar</span>
         <button type="button" class="pattern-blank" data-blank="2">?</button>
       </div>
       <div class="option-bank">
@@ -626,11 +764,14 @@ function renderPatternChallenge() {
     button.addEventListener("click", () => {
       blanks[selectedBlank].textContent = button.textContent;
       blanks[selectedBlank].dataset.value = button.textContent;
+      blanks[selectedBlank].classList.remove("is-wrong", "is-correct");
       const next = blanks.find((blank) => !blank.dataset.value);
       blanks.forEach((item) => item.classList.remove("is-selected"));
       if (next) {
         next.classList.add("is-selected");
         selectedBlank = Number(next.dataset.blank);
+      } else {
+        blanks[selectedBlank].classList.add("is-selected");
       }
     });
   });
@@ -643,10 +784,20 @@ function renderPatternChallenge() {
 
     const values = blanks.map((blank) => blank.dataset.value);
     if (values.every((value, index) => value === answers[index])) {
-      blanks.forEach((blank) => blank.classList.add("is-correct"));
+      blanks.forEach((blank) => {
+        blank.classList.remove("is-wrong");
+        blank.classList.add("is-correct");
+      });
       setMessage("Perfecto. Reconociste el patron del algoritmo.", "is-success");
+      completeChallenge(4);
     } else {
-      setMessage("Todavia no. El bloque correcto es: Avanzar, Avanzar, Girar der.", "is-error");
+      const firstWrongIndex = values.findIndex((value, index) => value !== answers[index]);
+      blanks.forEach((blank, index) => {
+        blank.classList.toggle("is-wrong", values[index] !== answers[index]);
+        blank.classList.toggle("is-selected", index === firstWrongIndex);
+      });
+      selectedBlank = firstWrongIndex;
+      setMessage(`Revisa el hueco ${firstWrongIndex + 1}. El patron vuelve siempre al mismo bloque de tres.`, "is-error");
     }
   });
 
@@ -655,11 +806,624 @@ function renderPatternChallenge() {
       blank.textContent = "?";
       delete blank.dataset.value;
       blank.classList.toggle("is-selected", index === 0);
-      blank.classList.remove("is-correct");
+      blank.classList.remove("is-correct", "is-wrong");
     });
     selectedBlank = 0;
     setMessage("Pista: se repite el bloque Avanzar, Avanzar, Girar der.");
   });
+}
+
+function renderBalanceChallengeV2() {
+  const route = ["5-0", "5-1", "5-2", "4-2", "3-2", "3-3", "3-4"];
+  const routeCells = new Set(route);
+  const obstacles = new Set(["4-1", "4-3", "2-1", "2-4"]);
+  const steps = ["Avanzar", "Avanzar", null, "Avanzar", "Avanzar", null, "Avanzar", "Avanzar"];
+  const expected = {
+    2: "Girar izq.",
+    5: "Girar der.",
+  };
+  let selectedBlank = 2;
+  let isAnimating = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card">
+      ${renderHeader(2, "Completa los giros para esquivar los bloques rojos y llegar a META.")}
+      <div class="visual-sequence-layout">
+        <div class="path-map visual-map" data-map></div>
+        <div class="sequence-panel">
+          <div class="sequence-track compact-sequence">
+            ${steps.map((step, index) => step
+    ? `<span class="sequence-slot">${step}</span>`
+    : `<button class="sequence-slot ${index === selectedBlank ? "is-selected" : ""}" type="button" data-blank="${index}">Elegir giro</button>`).join("")}
+          </div>
+          <div class="instruction-bank compact-bank">
+            <button class="instruction-chip" type="button">Girar izq.</button>
+            <button class="instruction-chip" type="button">Girar der.</button>
+            <button class="instruction-chip" type="button">Avanzar</button>
+          </div>
+        </div>
+      </div>
+      <div class="challenge-actions">
+        <button class="primary-action" type="button" data-check>Comprobar</button>
+        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+      </div>
+      <p class="challenge-message" data-message>Observa el camino celeste: faltan dos giros para rodear los bloques.</p>
+    </article>
+  `;
+
+  const map = challengeContent.querySelector("[data-map]");
+  const checkButton = challengeContent.querySelector("[data-check]");
+  const resetButton = challengeContent.querySelector("[data-reset]");
+  const cells = new Map();
+  const blanks = [...challengeContent.querySelectorAll("[data-blank]")];
+
+  function keyOf(row, col) {
+    return `${row}-${col}`;
+  }
+
+  function buildMap() {
+    map.innerHTML = "";
+    cells.clear();
+
+    for (let row = 0; row < 6; row += 1) {
+      for (let col = 0; col < 6; col += 1) {
+        const key = keyOf(row, col);
+        const cell = document.createElement("div");
+        cell.className = "path-map-cell";
+        if (routeCells.has(key)) cell.classList.add("is-route");
+        if (obstacles.has(key)) {
+          cell.classList.add("is-obstacle");
+          cell.textContent = "X";
+        }
+        if (key === route[0]) {
+          cell.classList.add("is-start");
+          cell.textContent = "IN";
+        }
+        if (key === route[route.length - 1]) {
+          cell.classList.add("is-goal");
+          cell.textContent = "META";
+        }
+        cell.dataset.baseText = cell.textContent;
+        cells.set(key, cell);
+        map.append(cell);
+      }
+    }
+  }
+
+  function paintRobot(key) {
+    cells.forEach((cell) => {
+      cell.classList.remove("is-robot", "is-trail");
+      cell.textContent = cell.dataset.baseText || "";
+    });
+
+    for (const routeKey of route.slice(0, route.indexOf(key) + 1)) {
+      cells.get(routeKey)?.classList.add("is-trail");
+    }
+
+    const robotCell = cells.get(key);
+    if (!robotCell) return;
+    robotCell.classList.add("is-robot");
+    robotCell.textContent = "R";
+  }
+
+  async function animateRoute() {
+    isAnimating = true;
+    checkButton.disabled = true;
+    resetButton.disabled = true;
+
+    for (const key of route) {
+      paintRobot(key);
+      await new Promise((resolve) => setTimeout(resolve, 230));
+    }
+
+    isAnimating = false;
+    checkButton.disabled = false;
+    resetButton.disabled = false;
+  }
+
+  blanks.forEach((blank) => {
+    blank.addEventListener("click", () => {
+      if (isAnimating) return;
+      blanks.forEach((item) => item.classList.remove("is-selected"));
+      blank.classList.add("is-selected");
+      selectedBlank = Number(blank.dataset.blank);
+    });
+  });
+
+  challengeContent.querySelectorAll(".instruction-chip").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (isAnimating) return;
+      const target = blanks.find((blank) => Number(blank.dataset.blank) === selectedBlank);
+      if (!target) return;
+      target.textContent = button.textContent;
+      target.dataset.value = button.textContent;
+      target.classList.remove("is-wrong");
+      const next = blanks.find((blank) => !blank.dataset.value);
+      blanks.forEach((item) => item.classList.remove("is-selected"));
+      if (next) {
+        next.classList.add("is-selected");
+        selectedBlank = Number(next.dataset.blank);
+      } else {
+        target.classList.add("is-selected");
+      }
+    });
+  });
+
+  checkButton.addEventListener("click", () => {
+    if (isAnimating) return;
+
+    if (blanks.some((blank) => !blank.dataset.value)) {
+      setMessage("Completa los dos giros antes de comprobar.", "is-error");
+      return;
+    }
+
+    const wrong = blanks.find((blank) => blank.dataset.value !== expected[Number(blank.dataset.blank)]);
+    if (wrong) {
+      wrong.classList.add("is-wrong");
+      setMessage("Ese giro no sigue el camino celeste. Mira hacia donde dobla la ruta.", "is-error");
+      return;
+    }
+
+    setMessage("Muy bien. Ahora mira al robot recorrer la ruta.", "is-good");
+    animateRoute().then(() => {
+      setMessage("Ruta corregida. El robot llego a META.", "is-success");
+      completeChallenge(2);
+    });
+  });
+
+  resetButton.addEventListener("click", () => {
+    if (isAnimating) return;
+    blanks.forEach((blank, index) => {
+      blank.textContent = "Elegir giro";
+      delete blank.dataset.value;
+      blank.classList.remove("is-wrong");
+      blank.classList.toggle("is-selected", index === 0);
+    });
+    selectedBlank = Number(blanks[0].dataset.blank);
+    buildMap();
+    paintRobot(route[0]);
+    setMessage("Observa el camino celeste: faltan dos giros para rodear los bloques.");
+  });
+
+  buildMap();
+  paintRobot(route[0]);
+}
+
+function renderRobotChallengeV2() {
+  const route = ["5-0", "5-1", "5-2", "5-3", "4-3", "3-3", "3-4", "3-5"];
+  const routeCells = new Set(route);
+  const batteries = new Set(["5-2", "3-3"]);
+  const obstacles = new Set(["4-1", "4-2", "2-4", "4-5"]);
+  const expected = {
+    0: "Avanzar",
+    1: "Avanzar",
+    2: "Avanzar",
+    3: "Girar izq.",
+    4: "Avanzar",
+    5: "Avanzar",
+    6: "Girar der.",
+    7: "Avanzar",
+  };
+  let selectedBlank = 0;
+  let isAnimating = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card">
+      ${renderHeader(3, "Arma la secuencia para juntar las baterias y llegar a META.")}
+      <div class="visual-sequence-layout">
+        <div class="robot-grid visual-map" data-map></div>
+        <div class="sequence-panel">
+          <div class="sequence-track compact-sequence">
+            ${Array.from({ length: 8 }, (_, index) => `
+              <button class="sequence-slot ${index === selectedBlank ? "is-selected" : ""}" type="button" data-blank="${index}">
+                ${index + 1}
+              </button>
+            `).join("")}
+          </div>
+          <div class="instruction-bank compact-bank">
+            <button class="instruction-chip" type="button">Avanzar</button>
+            <button class="instruction-chip" type="button">Girar izq.</button>
+            <button class="instruction-chip" type="button">Girar der.</button>
+          </div>
+        </div>
+      </div>
+      <div class="challenge-actions">
+        <button class="primary-action" type="button" data-check>Ejecutar</button>
+        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+      </div>
+      <p class="challenge-message" data-message>Sigue la ruta celeste: pasa por B1, despues por B2 y termina en META.</p>
+    </article>
+  `;
+
+  const map = challengeContent.querySelector("[data-map]");
+  const checkButton = challengeContent.querySelector("[data-check]");
+  const resetButton = challengeContent.querySelector("[data-reset]");
+  const blanks = [...challengeContent.querySelectorAll("[data-blank]")];
+  const cells = new Map();
+
+  function cellKey(row, col) {
+    return `${row}-${col}`;
+  }
+
+  function renderGrid() {
+    map.innerHTML = "";
+    cells.clear();
+
+    for (let row = 0; row < 6; row += 1) {
+      for (let col = 0; col < 6; col += 1) {
+        const key = cellKey(row, col);
+        const cell = document.createElement("div");
+        cell.className = "robot-cell";
+        if (routeCells.has(key)) cell.classList.add("is-route");
+        if (obstacles.has(key)) {
+          cell.classList.add("is-obstacle");
+          cell.textContent = "X";
+        }
+        if (batteries.has(key)) {
+          cell.classList.add("is-treasure");
+          cell.textContent = key === "5-2" ? "B1" : "B2";
+        }
+        if (key === route[0]) {
+          cell.classList.add("is-start");
+          cell.textContent = "IN";
+        }
+        if (key === route[route.length - 1]) {
+          cell.classList.add("is-goal");
+          cell.textContent = "META";
+        }
+        cell.dataset.baseText = cell.textContent;
+        cells.set(key, cell);
+        map.append(cell);
+      }
+    }
+  }
+
+  function paintRobot(key) {
+    cells.forEach((cell) => {
+      cell.classList.remove("is-robot", "is-trail");
+      cell.textContent = cell.dataset.baseText || "";
+    });
+
+    for (const routeKey of route.slice(0, route.indexOf(key) + 1)) {
+      cells.get(routeKey)?.classList.add("is-trail");
+    }
+
+    const robotCell = cells.get(key);
+    if (!robotCell) return;
+    robotCell.classList.add("is-robot");
+    robotCell.textContent = "R";
+  }
+
+  async function animateRoute() {
+    isAnimating = true;
+    checkButton.disabled = true;
+    resetButton.disabled = true;
+
+    for (const key of route) {
+      paintRobot(key);
+      await new Promise((resolve) => setTimeout(resolve, 210));
+    }
+
+    isAnimating = false;
+    checkButton.disabled = false;
+    resetButton.disabled = false;
+  }
+
+  blanks.forEach((blank) => {
+    blank.addEventListener("click", () => {
+      if (isAnimating) return;
+      blanks.forEach((item) => item.classList.remove("is-selected"));
+      blank.classList.add("is-selected");
+      selectedBlank = Number(blank.dataset.blank);
+    });
+  });
+
+  challengeContent.querySelectorAll(".instruction-chip").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (isAnimating) return;
+      const target = blanks[selectedBlank];
+      target.textContent = button.textContent;
+      target.dataset.value = button.textContent;
+      target.classList.remove("is-wrong");
+      const next = blanks.find((blank) => !blank.dataset.value);
+      blanks.forEach((item) => item.classList.remove("is-selected"));
+      if (next) {
+        next.classList.add("is-selected");
+        selectedBlank = Number(next.dataset.blank);
+      } else {
+        target.classList.add("is-selected");
+      }
+    });
+  });
+
+  checkButton.addEventListener("click", () => {
+    if (isAnimating) return;
+
+    if (blanks.some((blank) => !blank.dataset.value)) {
+      setMessage("Completa las 8 instrucciones para ejecutar el robot.", "is-error");
+      return;
+    }
+
+    const wrong = blanks.find((blank) => blank.dataset.value !== expected[Number(blank.dataset.blank)]);
+    if (wrong) {
+      wrong.classList.add("is-wrong");
+      setMessage("La secuencia se desvia de la ruta celeste. Revisa la primera tarjeta marcada.", "is-error");
+      return;
+    }
+
+    setMessage("Secuencia lista. El robot va por las baterias.", "is-good");
+    animateRoute().then(() => {
+      setMessage("Baterias cargadas y META alcanzada.", "is-success");
+      completeChallenge(3);
+    });
+  });
+
+  resetButton.addEventListener("click", () => {
+    if (isAnimating) return;
+    blanks.forEach((blank, index) => {
+      blank.textContent = String(index + 1);
+      delete blank.dataset.value;
+      blank.classList.remove("is-wrong");
+      blank.classList.toggle("is-selected", index === 0);
+    });
+    selectedBlank = 0;
+    renderGrid();
+    paintRobot(route[0]);
+    setMessage("Sigue la ruta celeste: pasa por B1, despues por B2 y termina en META.");
+  });
+
+  renderGrid();
+  paintRobot(route[0]);
+}
+
+function renderPatternChallengeV2() {
+  const scenes = [
+    {
+      title: "Camino de baldosas",
+      theme: "tiles",
+      hint: "Completa el piso: azul, azul, amarilla.",
+      pattern: ["tile-blue", "tile-blue", "tile-yellow"],
+      sequence: ["tile-blue", "tile-blue", null, "tile-blue", null, "tile-yellow", "tile-blue", "tile-blue", null],
+      answers: ["tile-yellow", "tile-blue", "tile-yellow"],
+      options: ["tile-blue", "tile-yellow", "tile-pink"],
+    },
+    {
+      title: "Fabrica de cajas",
+      theme: "factory",
+      hint: "La cinta repite dos cajas chicas y una grande.",
+      pattern: ["box-small", "box-small", "box-large"],
+      sequence: ["box-small", null, "box-large", "box-small", "box-small", null, null, "box-small", "box-large"],
+      answers: ["box-small", "box-large", "box-small"],
+      options: ["box-small", "box-large", "box-tall"],
+    },
+    {
+      title: "Luces del semaforo",
+      theme: "lights",
+      hint: "El semaforo repite verde, verde, rojo.",
+      pattern: ["light-green", "light-green", "light-red"],
+      sequence: ["light-green", "light-green", null, "light-green", null, "light-red", null, "light-green", "light-red"],
+      answers: ["light-red", "light-green", "light-green"],
+      options: ["light-green", "light-red", "light-yellow"],
+    },
+    {
+      title: "Robot pintor",
+      theme: "paint",
+      hint: "El robot pinta, pinta y gira.",
+      pattern: ["paint-dot", "paint-dot", "turn-right"],
+      sequence: ["paint-dot", null, "turn-right", "paint-dot", "paint-dot", null, null, "paint-dot", "turn-right"],
+      answers: ["paint-dot", "turn-right", "paint-dot"],
+      options: ["paint-dot", "turn-right", "turn-left"],
+    },
+    {
+      title: "Tren de vagones",
+      theme: "train",
+      hint: "El tren repite circulo, circulo, estrella.",
+      pattern: ["wagon-circle", "wagon-circle", "wagon-star"],
+      sequence: ["wagon-circle", "wagon-circle", null, "wagon-circle", null, "wagon-star", null, "wagon-circle", "wagon-star"],
+      answers: ["wagon-star", "wagon-circle", "wagon-circle"],
+      options: ["wagon-circle", "wagon-star", "wagon-square"],
+    },
+    {
+      title: "Huerta de semillas",
+      theme: "garden",
+      hint: "El cantero repite semilla, semilla, flor.",
+      pattern: ["seed", "seed", "flower"],
+      sequence: ["seed", null, "flower", "seed", "seed", null, null, "seed", "flower"],
+      answers: ["seed", "flower", "seed"],
+      options: ["seed", "flower", "leaf"],
+    },
+    {
+      title: "Pasos del robot",
+      theme: "commands",
+      hint: "El robot repite adelante, adelante, giro.",
+      pattern: ["cmd-forward", "cmd-forward", "cmd-turn"],
+      sequence: ["cmd-forward", "cmd-forward", null, "cmd-forward", null, "cmd-turn", null, "cmd-forward", "cmd-turn"],
+      answers: ["cmd-turn", "cmd-forward", "cmd-forward"],
+      options: ["cmd-forward", "cmd-turn", "cmd-jump"],
+    },
+  ];
+  scenes.splice(0, scenes.length, {
+    title: "Robot pintor",
+    theme: "paint",
+    hint: "Completa el patron: pintar, pintar y girar.",
+    pattern: ["paint-dot", "paint-dot", "turn-right"],
+    sequence: ["paint-dot", null, "turn-right", "paint-dot", "paint-dot", null, null, "paint-dot", "turn-right"],
+    answers: ["paint-dot", "turn-right", "paint-dot"],
+    options: ["paint-dot", "turn-right", "turn-left"],
+  });
+  const labels = {
+    "tile-blue": "Azul",
+    "tile-yellow": "Amarilla",
+    "tile-pink": "Rosa",
+    "box-small": "Chica",
+    "box-large": "Grande",
+    "box-tall": "Alta",
+    "light-green": "Verde",
+    "light-red": "Roja",
+    "light-yellow": "Amarilla",
+    "paint-dot": "Pintar",
+    "turn-right": "Girar der.",
+    "turn-left": "Girar izq.",
+    "wagon-circle": "Circulo",
+    "wagon-star": "Estrella",
+    "wagon-square": "Cuadro",
+    seed: "Semilla",
+    flower: "Flor",
+    leaf: "Hoja",
+    "cmd-forward": "Avanzar",
+    "cmd-turn": "Girar",
+    "cmd-jump": "Saltar",
+  };
+  let sceneIndex = 0;
+  let selectedBlank = 0;
+  const completedScenes = new Set();
+
+  function itemMarkup(kind) {
+    return `<span class="pattern-item kind-${kind}"><i></i><strong>${labels[kind]}</strong></span>`;
+  }
+
+  function blankMarkup(blankIndex, isSelected) {
+    return `
+      <button type="button" class="pattern-blank graphic-blank ${isSelected ? "is-selected" : ""}" data-blank="${blankIndex}">
+        ?
+      </button>
+    `;
+  }
+
+  function renderScene() {
+    const scene = scenes[sceneIndex];
+    selectedBlank = 0;
+    let blankIndex = 0;
+
+    challengeContent.innerHTML = `
+      <article class="challenge-card">
+        <header class="challenge-header">
+          <p class="challenge-kicker">Desafio 4</p>
+          <h2>${scene.title}</h2>
+          <p>${scene.hint}</p>
+        </header>
+        <div class="pattern-visual-layout pattern-scene pattern-theme-${scene.theme}">
+          <div class="pattern-progress" aria-label="Escenarios completados">
+            ${scenes.map((item, index) => `
+              <button class="${index === sceneIndex ? "is-active" : ""} ${completedScenes.has(index) ? "is-done" : ""}" type="button" data-scene="${index}">
+                ${index + 1}
+              </button>
+            `).join("")}
+          </div>
+          <div class="pattern-preview" aria-label="Bloque que se repite">
+            ${scene.pattern.map(itemMarkup).join("")}
+          </div>
+          <div class="pattern-row graphic-pattern-row">
+            ${scene.sequence.map((kind) => {
+    if (kind) return itemMarkup(kind);
+    const markup = blankMarkup(blankIndex, blankIndex === 0);
+    blankIndex += 1;
+    return markup;
+  }).join("")}
+          </div>
+          <div class="option-bank compact-bank graphic-options">
+            ${scene.options.map((kind) => `
+              <button type="button" data-option="${kind}">
+                ${itemMarkup(kind)}
+              </button>
+            `).join("")}
+          </div>
+        </div>
+        <div class="challenge-actions">
+          <button class="primary-action" type="button" data-check>Comprobar</button>
+          <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        </div>
+        <p class="challenge-message" data-message>${scene.hint}</p>
+      </article>
+    `;
+
+    wireScene();
+  }
+
+  function wireScene() {
+    const scene = scenes[sceneIndex];
+    const blanks = [...challengeContent.querySelectorAll(".pattern-blank")];
+
+    challengeContent.querySelectorAll("[data-scene]").forEach((button) => {
+      button.addEventListener("click", () => {
+        sceneIndex = Number(button.dataset.scene);
+        renderScene();
+      });
+    });
+
+    blanks.forEach((blank) => {
+      blank.addEventListener("click", () => {
+        blanks.forEach((item) => item.classList.remove("is-selected"));
+        blank.classList.add("is-selected");
+        selectedBlank = Number(blank.dataset.blank);
+      });
+    });
+
+    challengeContent.querySelectorAll("[data-option]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const target = blanks[selectedBlank];
+        if (!target) return;
+        const kind = button.dataset.option;
+        target.innerHTML = itemMarkup(kind);
+        target.dataset.value = kind;
+        target.classList.remove("is-wrong", "is-correct");
+        const next = blanks.find((blank) => !blank.dataset.value);
+        blanks.forEach((item) => item.classList.remove("is-selected"));
+        if (next) {
+          next.classList.add("is-selected");
+          selectedBlank = Number(next.dataset.blank);
+        } else {
+          target.classList.add("is-selected");
+        }
+      });
+    });
+
+    challengeContent.querySelector("[data-check]").addEventListener("click", () => {
+      if (blanks.some((blank) => !blank.dataset.value)) {
+        setMessage("Completa los tres espacios antes de comprobar.", "is-error");
+        return;
+      }
+
+      const values = blanks.map((blank) => blank.dataset.value);
+      const firstWrongIndex = values.findIndex((value, index) => value !== scene.answers[index]);
+      if (firstWrongIndex !== -1) {
+        blanks.forEach((blank, index) => {
+          blank.classList.toggle("is-wrong", values[index] !== scene.answers[index]);
+          blank.classList.toggle("is-selected", index === firstWrongIndex);
+        });
+        selectedBlank = firstWrongIndex;
+        setMessage("Ese objeto rompe el patron del escenario. Mira el bloque modelo.", "is-error");
+        return;
+      }
+
+      blanks.forEach((blank) => blank.classList.add("is-correct"));
+      completedScenes.add(sceneIndex);
+      setMessage(`Escenario ${sceneIndex + 1} listo.`, "is-success");
+
+      if (completedScenes.size === scenes.length) {
+        completeChallenge(4);
+        return;
+      }
+
+      window.setTimeout(() => {
+        sceneIndex = scenes.findIndex((_, index) => !completedScenes.has(index));
+        renderScene();
+      }, 650);
+    });
+
+    challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
+      blanks.forEach((blank, index) => {
+        blank.textContent = "?";
+        delete blank.dataset.value;
+        blank.classList.remove("is-correct", "is-wrong");
+        blank.classList.toggle("is-selected", index === 0);
+      });
+      selectedBlank = 0;
+      setMessage(scene.hint);
+    });
+  }
+
+  renderScene();
 }
 
 function renderCoordinatesChallenge() {
@@ -740,6 +1504,7 @@ function renderCoordinatesChallenge() {
             renderBank();
             renderGrid();
             setMessage("Ruta lista. Tu mapa del robot quedo completo.", "is-success");
+            completeChallenge(5);
           }
         });
         grid.append(cell);
@@ -751,6 +1516,350 @@ function renderCoordinatesChallenge() {
   renderGrid();
 }
 
+const graphicLabels = {
+  "tile-blue": "Azul",
+  "tile-yellow": "Amarilla",
+  "tile-pink": "Rosa",
+  "light-green": "Verde",
+  "light-red": "Roja",
+  "light-yellow": "Amarilla",
+};
+
+function renderLevelHeader(title, instruction) {
+  return `
+    <header class="challenge-header">
+      <p class="challenge-kicker">Nivel ${level}</p>
+      <h2>${title}</h2>
+      <p>${instruction}</p>
+    </header>
+  `;
+}
+
+function renderGraphicToken(kind) {
+  return `<span class="pattern-item kind-${kind}"><i></i><strong>${graphicLabels[kind] || kind}</strong></span>`;
+}
+
+function renderGraphicPatternLevel(config) {
+  let selectedBlank = 0;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card">
+      ${renderLevelHeader(config.title, config.hint)}
+      <div class="pattern-visual-layout pattern-scene pattern-theme-${config.theme}">
+        <div class="pattern-preview" aria-label="Bloque modelo">
+          ${config.pattern.map(renderGraphicToken).join("")}
+        </div>
+        <div class="pattern-row graphic-pattern-row">
+          ${config.sequence.map((kind, index) => kind
+    ? renderGraphicToken(kind)
+    : `<button type="button" class="pattern-blank graphic-blank ${index === 0 ? "is-selected" : ""}" data-blank="${index}">?</button>`).join("")}
+        </div>
+        <div class="option-bank compact-bank graphic-options">
+          ${config.options.map((kind) => `<button type="button" data-option="${kind}">${renderGraphicToken(kind)}</button>`).join("")}
+        </div>
+      </div>
+      <div class="challenge-actions">
+        <button class="primary-action" type="button" data-check>Comprobar</button>
+        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+      </div>
+      <p class="challenge-message" data-message>${config.hint}</p>
+    </article>
+  `;
+
+  const blanks = [...challengeContent.querySelectorAll(".pattern-blank")];
+  blanks.forEach((blank, index) => {
+    blank.dataset.blank = String(index);
+    blank.classList.toggle("is-selected", index === 0);
+    blank.addEventListener("click", () => {
+      blanks.forEach((item) => item.classList.remove("is-selected"));
+      blank.classList.add("is-selected");
+      selectedBlank = index;
+    });
+  });
+
+  challengeContent.querySelectorAll("[data-option]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const target = blanks[selectedBlank];
+      const kind = button.dataset.option;
+      target.innerHTML = renderGraphicToken(kind);
+      target.dataset.value = kind;
+      target.classList.remove("is-wrong", "is-correct");
+      const next = blanks.find((blank) => !blank.dataset.value);
+      blanks.forEach((item) => item.classList.remove("is-selected"));
+      if (next) {
+        next.classList.add("is-selected");
+        selectedBlank = blanks.indexOf(next);
+      } else {
+        target.classList.add("is-selected");
+      }
+    });
+  });
+
+  challengeContent.querySelector("[data-check]").addEventListener("click", () => {
+    if (blanks.some((blank) => !blank.dataset.value)) {
+      setMessage("Completa todos los espacios antes de comprobar.", "is-error");
+      return;
+    }
+    const values = blanks.map((blank) => blank.dataset.value);
+    const firstWrong = values.findIndex((value, index) => value !== config.answers[index]);
+    if (firstWrong !== -1) {
+      blanks.forEach((blank, index) => {
+        blank.classList.toggle("is-wrong", values[index] !== config.answers[index]);
+        blank.classList.toggle("is-selected", index === firstWrong);
+      });
+      selectedBlank = firstWrong;
+      setMessage("Ese objeto rompe el patron visual.", "is-error");
+      return;
+    }
+    blanks.forEach((blank) => blank.classList.add("is-correct"));
+    setMessage("Patron completo.", "is-success");
+    completeChallenge(1);
+  });
+
+  challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
+    blanks.forEach((blank, index) => {
+      blank.textContent = "?";
+      delete blank.dataset.value;
+      blank.classList.remove("is-correct", "is-wrong");
+      blank.classList.toggle("is-selected", index === 0);
+    });
+    selectedBlank = 0;
+    setMessage(config.hint);
+  });
+}
+
+function renderLevel6Lights() {
+  renderGraphicPatternLevel({
+    title: "Luces del semaforo",
+    theme: "lights",
+    hint: "Completa la secuencia de luces: verde, verde, rojo.",
+    pattern: ["light-green", "light-green", "light-red"],
+    sequence: ["light-green", "light-green", null, "light-green", null, "light-red", null, "light-green", "light-red"],
+    answers: ["light-red", "light-green", "light-green"],
+    options: ["light-green", "light-red", "light-yellow"],
+  });
+}
+
+function renderLevel7Factory() {
+  const items = [
+    { id: "caja-azul", label: "Caja azul", target: "azul" },
+    { id: "caja-amarilla", label: "Caja amarilla", target: "amarillo" },
+    { id: "caja-rosa", label: "Caja rosa", target: "rosa" },
+    { id: "caja-azul-2", label: "Caja azul", target: "azul" },
+  ];
+  let current = 0;
+  const sorted = new Set();
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card">
+      ${renderLevelHeader("Fabrica de cajas", "Clasifica cada caja en el deposito del mismo color.")}
+      <div class="factory-layout">
+        <div class="factory-belt">
+          ${items.map((item, index) => `<button class="factory-box box-${item.target} ${index === current ? "is-current" : ""}" type="button" data-item="${index}">${item.label}</button>`).join("")}
+        </div>
+        <div class="factory-bins">
+          <button type="button" data-bin="azul">Deposito azul</button>
+          <button type="button" data-bin="amarillo">Deposito amarillo</button>
+          <button type="button" data-bin="rosa">Deposito rosa</button>
+        </div>
+      </div>
+      <p class="challenge-message" data-message>Selecciona el deposito de la caja marcada.</p>
+    </article>
+  `;
+
+  function renderFactory() {
+    challengeContent.querySelectorAll("[data-item]").forEach((box, index) => {
+      box.classList.toggle("is-current", index === current && !sorted.has(index));
+      box.classList.toggle("is-done", sorted.has(index));
+    });
+  }
+
+  challengeContent.querySelectorAll("[data-bin]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const item = items[current];
+      if (!item || sorted.has(current)) return;
+      if (button.dataset.bin !== item.target) {
+        setMessage("Ese deposito no coincide con la caja.", "is-error");
+        return;
+      }
+      sorted.add(current);
+      current += 1;
+      renderFactory();
+      if (sorted.size === items.length) {
+        setMessage("Todas las cajas quedaron ordenadas.", "is-success");
+        completeChallenge(1);
+      } else {
+        setMessage("Bien. Ahora clasifica la siguiente caja.", "is-good");
+      }
+    });
+  });
+}
+
+function renderLevel8Circuit() {
+  const target = [true, false, true, true];
+  const state = [false, false, false, false];
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card">
+      ${renderLevelHeader("Circuito de energia", "Activa los switches para copiar el patron de luces objetivo.")}
+      <div class="circuit-layout">
+        <div class="circuit-row" aria-label="Objetivo">
+          ${target.map((isOn) => `<span class="circuit-light ${isOn ? "is-on" : ""}"></span>`).join("")}
+        </div>
+        <div class="circuit-row" data-current>
+          ${state.map((_, index) => `<button class="circuit-switch" type="button" data-switch="${index}"><span></span></button>`).join("")}
+        </div>
+      </div>
+      <div class="challenge-actions">
+        <button class="primary-action" type="button" data-check>Comprobar</button>
+      </div>
+      <p class="challenge-message" data-message>Copia el patron de luces de arriba.</p>
+    </article>
+  `;
+
+  function renderCircuit() {
+    challengeContent.querySelectorAll("[data-switch]").forEach((button, index) => {
+      button.classList.toggle("is-on", state[index]);
+    });
+  }
+
+  challengeContent.querySelectorAll("[data-switch]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const index = Number(button.dataset.switch);
+      state[index] = !state[index];
+      renderCircuit();
+    });
+  });
+
+  challengeContent.querySelector("[data-check]").addEventListener("click", () => {
+    if (state.every((value, index) => value === target[index])) {
+      setMessage("Circuito encendido correctamente.", "is-success");
+      completeChallenge(1);
+    } else {
+      setMessage("Todavia no copia el objetivo.", "is-error");
+    }
+  });
+
+  renderCircuit();
+}
+
+function renderLevel9Memory() {
+  const cards = ["A", "B", "C", "A", "B", "C"];
+  let first = null;
+  let lock = false;
+  const matched = new Set();
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card">
+      ${renderLevelHeader("Memoria de pares", "Encuentra los pares iguales.")}
+      <div class="memory-grid">
+        ${cards.map((card, index) => `<button class="memory-card" type="button" data-card="${index}" data-value="${card}">?</button>`).join("")}
+      </div>
+      <p class="challenge-message" data-message>Da vuelta dos cartas y busca las parejas.</p>
+    </article>
+  `;
+
+  challengeContent.querySelectorAll("[data-card]").forEach((card) => {
+    card.addEventListener("click", () => {
+      if (lock) return;
+      const index = Number(card.dataset.card);
+      if (matched.has(index) || card.classList.contains("is-open")) return;
+      card.textContent = card.dataset.value;
+      card.classList.add("is-open");
+      if (!first) {
+        first = card;
+        return;
+      }
+      if (first.dataset.value === card.dataset.value) {
+        matched.add(Number(first.dataset.card));
+        matched.add(index);
+        first.classList.add("is-matched");
+        card.classList.add("is-matched");
+        first = null;
+        if (matched.size === cards.length) {
+          setMessage("Encontraste todos los pares.", "is-success");
+          completeChallenge(1);
+        }
+        return;
+      }
+      lock = true;
+      window.setTimeout(() => {
+        first.textContent = "?";
+        card.textContent = "?";
+        first.classList.remove("is-open");
+        card.classList.remove("is-open");
+        first = null;
+        lock = false;
+      }, 650);
+    });
+  });
+}
+
+function renderLevel10Lock() {
+  const code = "314";
+  let input = "";
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card">
+      ${renderLevelHeader("Candado final", "Lee las columnas y marca el codigo correcto.")}
+      <div class="lock-layout">
+        <div class="lock-clues">
+          <span><i></i><i></i><i></i></span>
+          <span><i></i></span>
+          <span><i></i><i></i><i></i><i></i></span>
+        </div>
+        <div class="lock-display" data-display>___</div>
+        <div class="lock-pad">
+          ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num) => `<button type="button" data-num="${num}">${num}</button>`).join("")}
+        </div>
+      </div>
+      <div class="challenge-actions">
+        <button class="secondary-action" type="button" data-reset>Borrar</button>
+      </div>
+      <p class="challenge-message" data-message>Cada columna muestra un numero del codigo.</p>
+    </article>
+  `;
+
+  const display = challengeContent.querySelector("[data-display]");
+  function renderDisplay() {
+    display.textContent = input.padEnd(3, "_");
+  }
+
+  challengeContent.querySelectorAll("[data-num]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (input.length >= 3) return;
+      input += button.dataset.num;
+      renderDisplay();
+      if (input.length === 3) {
+        if (input === code) {
+          setMessage("Candado abierto. Nivel final completado.", "is-success");
+          completeChallenge(1);
+        } else {
+          setMessage("Ese codigo no coincide con las columnas.", "is-error");
+        }
+      }
+    });
+  });
+
+  challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
+    input = "";
+    renderDisplay();
+    setMessage("Cada columna muestra un numero del codigo.");
+  });
+}
+
+function openStandaloneLevel() {
+  challengeShell?.classList.add("is-open");
+  if (level === 5) renderCoordinatesChallenge();
+  if (level === 6) renderLevel6Lights();
+  if (level === 7) renderLevel7Factory();
+  if (level === 8) renderLevel8Circuit();
+  if (level === 9) renderLevel9Memory();
+  if (level === 10) renderLevel10Lock();
+}
+
 if (level === 4) {
   openChallenge(1);
+} else {
+  openStandaloneLevel();
 }
