@@ -642,15 +642,15 @@ h2 {
   background: #fde7ea;
 }
 
-body.has-level-modal {
+body.has-scenario-modal {
   overflow: hidden;
 }
 
-.level-modal[hidden] {
+.scenario-modal[hidden] {
   display: none;
 }
 
-.level-modal {
+.scenario-modal {
   position: fixed;
   inset: 0;
   z-index: 20;
@@ -659,14 +659,14 @@ body.has-level-modal {
   padding: 20px;
 }
 
-.level-modal-backdrop {
+.scenario-modal-backdrop {
   position: absolute;
   inset: 0;
   background: rgba(30, 36, 48, 0.5);
   backdrop-filter: blur(4px);
 }
 
-.level-modal-panel {
+.scenario-modal-panel {
   position: relative;
   z-index: 1;
   width: min(100%, 460px);
@@ -679,20 +679,20 @@ body.has-level-modal {
   outline: none;
 }
 
-.level-modal-panel h2 {
+.scenario-modal-panel h2 {
   margin-bottom: 12px;
   color: var(--color-primary);
   font-size: clamp(2rem, 6vw, 3rem);
 }
 
-.level-modal-panel p:not(.challenge-kicker) {
+.scenario-modal-panel p:not(.challenge-kicker) {
   margin-bottom: 0;
   color: var(--color-muted);
   font-weight: 700;
   line-height: 1.5;
 }
 
-.level-modal-actions {
+.scenario-modal-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -718,6 +718,7 @@ body.has-level-modal {
   grid-template-columns: minmax(240px, 330px) minmax(0, 1fr);
   align-items: start;
   max-width: 1180px;
+  width: 100%;
   margin: 0 auto;
   gap: clamp(8px, 1.2vw, 14px);
   min-height: 0;
@@ -816,6 +817,39 @@ body.has-level-modal {
   cursor: pointer;
 }
 
+.command-card,
+.instruction-chip {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.command-symbol {
+  display: block;
+  color: var(--color-primary);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 900;
+  line-height: 0.9;
+}
+
+.command-label {
+  display: block;
+  font-size: clamp(0.62rem, 1vw, 0.74rem);
+  line-height: 1;
+  text-align: center;
+}
+
+.command-placeholder {
+  color: var(--color-dark);
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  line-height: 1;
+  font-weight: 900;
+}
+
+.sequence-slot.command-card,
+.instruction-chip {
+  min-height: 58px;
+}
+
 .visual-sequence-layout {
   display: grid;
   grid-template-columns: minmax(190px, 320px) minmax(0, 1fr);
@@ -837,11 +871,56 @@ body.has-level-modal {
 }
 
 .sequence-panel {
+  width: 100%;
   min-height: 0;
   display: flex;
   flex-direction: column;
   gap: clamp(6px, 1dvh, 10px);
   overflow: hidden;
+}
+
+.command-workbench {
+  gap: clamp(8px, 1.2dvh, 12px);
+}
+
+.command-section {
+  min-width: 0;
+  padding: clamp(7px, 1vw, 10px);
+  border-radius: 14px;
+}
+
+.command-steps {
+  border: 2px dashed rgba(36, 60, 143, 0.2);
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.command-actions-bank {
+  background: rgba(223, 244, 255, 0.78);
+}
+
+.command-section-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 7px;
+  color: var(--color-primary);
+  font-size: clamp(0.72rem, 1vw, 0.82rem);
+  font-weight: 900;
+}
+
+.command-section-title span {
+  width: 24px;
+  height: 24px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #3c3100;
+  background: var(--color-accent);
+  line-height: 1;
+}
+
+.command-section-title strong {
+  line-height: 1;
 }
 
 .compact-sequence {
@@ -1988,6 +2067,12 @@ button:disabled {
     padding: 6px;
   }
 
+  .challenge-content,
+  .challenge-card {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .game-workspace {
     padding-top: 42px;
     gap: 6px;
@@ -2001,11 +2086,95 @@ button:disabled {
 
   .robot-layout,
   .debug-layout,
-  .path-layout,
-  .visual-sequence-layout,
   .coord-layout {
     grid-template-columns: minmax(118px, 38%) minmax(0, 1fr);
     gap: 6px;
+  }
+
+  .path-layout,
+  .visual-sequence-layout {
+    grid-template-columns: 1fr;
+    align-content: start;
+    flex: 0 0 auto;
+    overflow: visible;
+    gap: 6px;
+  }
+
+  .visual-map,
+  .path-map,
+  .robot-grid.visual-map {
+    width: min(46vw, 190px);
+    max-width: 190px;
+    min-width: 0;
+    justify-self: center;
+  }
+
+  .path-map-cell,
+  .robot-grid.visual-map .robot-cell {
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 6px;
+    font-size: clamp(0.46rem, 2.1vw, 0.56rem);
+    line-height: 1;
+  }
+
+  .sequence-panel {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .command-section {
+    padding: 6px;
+    border-radius: 12px;
+  }
+
+  .command-section-title {
+    margin-bottom: 5px;
+    gap: 6px;
+    font-size: 0.68rem;
+  }
+
+  .command-section-title span {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sequence-track,
+  .compact-sequence {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: 100%;
+    gap: 5px;
+    margin-top: 0;
+  }
+
+  .instruction-bank {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    gap: 5px;
+  }
+
+  .sequence-slot,
+  .instruction-chip {
+    min-width: 0;
+    min-height: 44px;
+    padding: 0 6px;
+    text-align: center;
+    line-height: 1.05;
+  }
+
+  .sequence-slot.command-card,
+  .instruction-chip {
+    min-height: 48px;
+  }
+
+  .command-symbol {
+    font-size: 1.85rem;
+  }
+
+  .sequence-slot .command-label {
+    display: none;
   }
 
   .path-board {
@@ -2014,11 +2183,6 @@ button:disabled {
 
   .pattern-row {
     grid-template-columns: repeat(3, minmax(72px, 1fr));
-  }
-
-  .compact-sequence {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 5px;
   }
 
   .pattern-preview {
@@ -2052,22 +2216,15 @@ button:disabled {
     min-height: 38px;
   }
 
-  .path-layout {
-    grid-template-columns: 1fr;
-    align-content: start;
-    gap: 4px;
-  }
-
+  .path-layout,
   .visual-sequence-layout {
-    grid-template-columns: 1fr;
-    align-content: start;
     gap: 4px;
   }
 
   .path-map,
   .robot-grid.visual-map {
-    width: 112px;
-    max-width: 112px;
+    width: min(44vw, 168px);
+    max-width: 168px;
     min-width: 0;
     justify-self: center;
     grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -2091,24 +2248,31 @@ button:disabled {
 
   .sequence-slot {
     min-width: 0;
-    min-height: 28px;
+    min-height: 38px;
     padding: 0 3px;
     border-radius: 8px;
     font-size: 0.66rem;
   }
 
   .instruction-bank {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 4px;
     margin-top: 4px;
   }
 
   .instruction-chip {
-    min-height: 28px;
+    min-height: 42px;
     padding: 0 3px;
     border-radius: 8px;
     font-size: 0.62rem;
+  }
+
+  .command-symbol {
+    font-size: 1.7rem;
+  }
+
+  .instruction-chip .command-label {
+    font-size: 0.56rem;
   }
 
   .compact-sequence {

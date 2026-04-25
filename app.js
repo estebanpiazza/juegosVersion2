@@ -6,11 +6,11 @@ let level = Number.isInteger(requestedLevel) ? requestedLevel : DEFAULT_LEVEL;
 const challengeContent = document.querySelector("#challenge-content");
 const challengeShell = document.querySelector(".challenge-shell");
 const selectorWrap = document.querySelector(".selector-wrap");
+const gameStageBg = document.querySelector(".game-stage-bg");
 let selectorButtons = [...document.querySelectorAll(".selector-chip")];
 let totalChallenges = level === 4 ? 5 : 1;
 const completedChallenges = new Set();
-let levelModal = null;
-let hasShownLevelModal = false;
+let scenarioModal = null;
 let availableLevels = [];
 let levelDataByNumber = new Map();
 let currentLevelData = null;
@@ -30,6 +30,12 @@ const challengeTypeRenderers = {
   "patrones-de-comandos": () => renderPatternChallengeV2(),
   "mapa-en-grilla": () => renderCoordinatesChallenge(),
 };
+
+const levelBackgrounds = [
+  "assets/learnia-games-bg.png",
+  "assets/learnia-games-bg-2.png",
+  "assets/learnia-games-bg-3.png",
+];
 
 async function loadLevelSection(levelNumber, section = 1) {
   const url = `contenido/nivel-${levelNumber}-seccion-${section}.json`;
@@ -78,6 +84,12 @@ function syncLevelHeading() {
   document.title = `Be Tech | Nivel ${level}`;
 }
 
+function syncLevelBackground() {
+  if (!gameStageBg || !levelBackgrounds.length) return;
+  const backgroundIndex = Math.floor(Math.max(level - 1, 0) / 3) % levelBackgrounds.length;
+  gameStageBg.src = levelBackgrounds[backgroundIndex];
+}
+
 function buildSelectorButtons() {
   if (!selectorWrap) return;
 
@@ -111,44 +123,49 @@ function mapChallengeTitles(levelData) {
   );
 }
 
-function getNextLevelHref() {
-  if (!availableLevels.length) return level < 10 ? `nivel.html?nivel=${level + 1}` : "index.html";
-  const currentIndex = availableLevels.indexOf(level);
-  if (currentIndex === -1 || currentIndex === availableLevels.length - 1) return "index.html";
-  return `nivel.html?nivel=${availableLevels[currentIndex + 1]}`;
+function closeScenarioModal() {
+  if (!scenarioModal) return;
+  scenarioModal.hidden = true;
+  document.body.classList.remove("has-scenario-modal");
 }
 
-function createLevelModal() {
+function goToScenario(id) {
+  selectorButtons.forEach((chip) => chip.classList.remove("is-active"));
+  document.querySelector(`[data-challenge="${id}"]`)?.classList.add("is-active");
+  openChallenge(id);
+}
+
+function createScenarioModal() {
   const modal = document.createElement("div");
-  modal.className = "level-modal";
+  modal.className = "scenario-modal";
   modal.hidden = true;
   modal.setAttribute("role", "dialog");
   modal.setAttribute("aria-modal", "true");
-  modal.setAttribute("aria-labelledby", "level-modal-title");
+  modal.setAttribute("aria-labelledby", "scenario-modal-title");
   modal.innerHTML = `
-    <div class="level-modal-backdrop" data-close-level-modal></div>
-    <div class="level-modal-panel" tabindex="-1">
-      <p class="challenge-kicker">Nivel completado</p>
-      <h2 id="level-modal-title">Buen trabajo</h2>
-      <p>Completaste todos los desafios del nivel ${level}. Ya puedes avanzar al siguiente.</p>
-      <div class="level-modal-actions">
-        <a class="primary-action" href="${getNextLevelHref()}">Siguiente nivel</a>
-        <button class="secondary-action" type="button" data-close-level-modal>Quedarme aqui</button>
-      </div>
+    <div class="scenario-modal-backdrop" data-close-scenario-modal></div>
+    <div class="scenario-modal-panel" tabindex="-1">
+      <div data-scenario-modal-content></div>
     </div>
   `;
 
-  modal.querySelectorAll("[data-close-level-modal]").forEach((control) => {
-    control.addEventListener("click", () => {
-      modal.hidden = true;
-      document.body.classList.remove("has-level-modal");
-    });
+  modal.addEventListener("click", (event) => {
+    const closeControl = event.target.closest("[data-close-scenario-modal]");
+    if (closeControl) {
+      closeScenarioModal();
+      return;
+    }
+
+    const nextControl = event.target.closest("[data-next-scenario]");
+    if (!nextControl) return;
+    const nextScenario = Number(nextControl.dataset.nextScenario);
+    closeScenarioModal();
+    goToScenario(nextScenario);
   });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && !modal.hidden) {
-      modal.hidden = true;
-      document.body.classList.remove("has-level-modal");
+      closeScenarioModal();
     }
   });
 
@@ -156,23 +173,37 @@ function createLevelModal() {
   return modal;
 }
 
-function showLevelCompleteModal() {
-  if (!levelModal) levelModal = createLevelModal();
-  levelModal.hidden = false;
-  document.body.classList.add("has-level-modal");
-  levelModal.querySelector(".level-modal-panel")?.focus();
+function showScenarioCompleteModal(id) {
+  if (!scenarioModal) scenarioModal = createScenarioModal();
+
+  const nextScenario = id < totalChallenges ? id + 1 : null;
+  const title = challengeTitles[id] || `Escenario ${id}`;
+  const content = scenarioModal.querySelector("[data-scenario-modal-content]");
+  content.innerHTML = `
+    <p class="challenge-kicker">Escenario completado</p>
+    <h2 id="scenario-modal-title">Buen trabajo</h2>
+    <p>${nextScenario
+      ? `Completaste el escenario ${id}: ${title}. Ya puedes pasar al siguiente escenario.`
+      : `Completaste todos los escenarios de este grado.`}</p>
+    <div class="scenario-modal-actions">
+      ${nextScenario
+        ? `<button class="primary-action" type="button" data-next-scenario="${nextScenario}">Pasar al siguiente escenario</button>`
+        : `<a class="primary-action" href="index.html">Volver a grados</a>`}
+      <button class="secondary-action" type="button" data-close-scenario-modal>Quedarme aqui</button>
+    </div>
+  `;
+
+  scenarioModal.hidden = false;
+  document.body.classList.add("has-scenario-modal");
+  scenarioModal.querySelector(".scenario-modal-panel")?.focus();
 }
 
 function completeChallenge(id) {
-  if (!totalChallenges || completedChallenges.has(id)) return;
+  if (!totalChallenges || id > totalChallenges) return;
 
   completedChallenges.add(id);
   document.querySelector(`[data-challenge="${id}"]`)?.classList.add("is-complete");
-
-  if (completedChallenges.size === totalChallenges && !hasShownLevelModal) {
-    hasShownLevelModal = true;
-    window.setTimeout(showLevelCompleteModal, 450);
-  }
+  window.setTimeout(() => showScenarioCompleteModal(id), 450);
 }
 
 function wireSelectorButtons() {
@@ -251,6 +282,66 @@ function getChallengeInstruction(id, fallbackText) {
   return challenge?.consigna || fallbackText;
 }
 
+const commandSymbols = {
+  Avanzar: "➜",
+  "Girar der.": "↷",
+  "Girar izq.": "↶",
+  Saltar: "⤴",
+  Repetir: "⟳",
+};
+
+function renderCommand(command) {
+  return `
+    <span class="command-symbol" aria-hidden="true">${commandSymbols[command] || "?"}</span>
+    <span class="command-label">${command}</span>
+  `;
+}
+
+function renderCommandButton(command, className = "instruction-chip") {
+  return `
+    <button class="${className}" type="button" data-value="${command}" aria-label="${command}">
+      ${renderCommand(command)}
+    </button>
+  `;
+}
+
+function renderSequenceStep(command) {
+  return `<span class="sequence-slot command-card" aria-label="${command}">${renderCommand(command)}</span>`;
+}
+
+function renderSequenceBlank(index, selectedBlank, label = "Elegir accion") {
+  return `
+    <button class="sequence-slot command-card ${index === selectedBlank ? "is-selected" : ""}" type="button" data-blank="${index}" aria-label="${label}">
+      <span class="command-placeholder">${index + 1}</span>
+    </button>
+  `;
+}
+
+function renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact = false }) {
+  return `
+    <div class="sequence-panel command-workbench">
+      <section class="command-section command-steps" aria-label="Pasos a hacer">
+        <div class="command-section-title">
+          <span>1</span>
+          <strong>Pasos a hacer</strong>
+        </div>
+        <div class="sequence-track ${compact ? "compact-sequence" : ""}" data-track>
+          ${stepsMarkup}
+        </div>
+      </section>
+      <section class="command-section command-actions-bank" aria-label="Acciones">
+        <div class="command-section-title">
+          <span>2</span>
+          <strong>Acciones</strong>
+        </div>
+        <div class="instruction-bank ${compact ? "compact-bank" : ""}">
+          ${actionsMarkup}
+        </div>
+      </section>
+    </div>
+  `;
+}
+
 function renderPathChallenge() {
   const routePath = ["5-0", "4-0", "3-0", "3-1", "3-2", "2-2", "1-2", "1-3", "1-4"];
   const routeCells = new Set(["5-0", "4-0", "3-0", "3-1", "3-2", "2-2", "1-2", "1-3", "1-4"]);
@@ -262,25 +353,19 @@ function renderPathChallenge() {
   };
   let selectedBlank = 2;
   let isAnimating = false;
+  const stepsMarkup = steps.map((step, index) => step
+    ? renderSequenceStep(step)
+    : renderSequenceBlank(index, selectedBlank)).join("");
+  const actionsMarkup = ["Girar der.", "Girar izq.", "Saltar", "Repetir"]
+    .map((command) => renderCommandButton(command))
+    .join("");
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
       ${renderHeader(1, getChallengeInstruction(1, "Mira el camino celeste y completa los giros para que el robot vaya desde INICIO hasta META."))}
       <div class="path-layout">
         <div class="path-map" data-path-map></div>
-        <div>
-          <div class="sequence-track" data-track>
-            ${steps.map((step, index) => step
-    ? `<span class="sequence-slot">${step}</span>`
-    : `<button class="sequence-slot ${index === selectedBlank ? "is-selected" : ""}" type="button" data-blank="${index}">Elegir accion</button>`).join("")}
-          </div>
-          <div class="instruction-bank">
-            <button class="instruction-chip" type="button">Girar der.</button>
-            <button class="instruction-chip" type="button">Girar izq.</button>
-            <button class="instruction-chip" type="button">Saltar</button>
-            <button class="instruction-chip" type="button">Repetir</button>
-          </div>
-        </div>
+        ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup })}
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>Comprobar</button>
@@ -360,8 +445,9 @@ function renderPathChallenge() {
       if (isAnimating) return;
       const target = blanks.find((blank) => Number(blank.dataset.blank) === selectedBlank);
       if (!target) return;
-      target.textContent = button.textContent;
-      target.dataset.value = button.textContent;
+      const command = button.dataset.value;
+      target.innerHTML = renderCommand(command);
+      target.dataset.value = command;
       const next = blanks.find((blank) => !blank.dataset.value);
       blanks.forEach((item) => item.classList.remove("is-selected"));
       if (next) {
@@ -397,7 +483,7 @@ function renderPathChallenge() {
   challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
     if (isAnimating) return;
     blanks.forEach((blank, index) => {
-      blank.textContent = "Elegir accion";
+      blank.innerHTML = `<span class="command-placeholder">${Number(blank.dataset.blank) + 1}</span>`;
       delete blank.dataset.value;
       blank.classList.toggle("is-selected", index === 0);
     });
@@ -924,24 +1010,19 @@ function renderBalanceChallengeV2() {
   };
   let selectedBlank = 2;
   let isAnimating = false;
+  const stepsMarkup = steps.map((step, index) => step
+    ? renderSequenceStep(step)
+    : renderSequenceBlank(index, selectedBlank, "Elegir giro")).join("");
+  const actionsMarkup = ["Girar izq.", "Girar der.", "Avanzar"]
+    .map((command) => renderCommandButton(command))
+    .join("");
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
       ${renderHeader(2, getChallengeInstruction(2, "Completa los giros para esquivar los bloques rojos y llegar a META."))}
       <div class="visual-sequence-layout">
         <div class="path-map visual-map" data-map></div>
-        <div class="sequence-panel">
-          <div class="sequence-track compact-sequence">
-            ${steps.map((step, index) => step
-    ? `<span class="sequence-slot">${step}</span>`
-    : `<button class="sequence-slot ${index === selectedBlank ? "is-selected" : ""}" type="button" data-blank="${index}">Elegir giro</button>`).join("")}
-          </div>
-          <div class="instruction-bank compact-bank">
-            <button class="instruction-chip" type="button">Girar izq.</button>
-            <button class="instruction-chip" type="button">Girar der.</button>
-            <button class="instruction-chip" type="button">Avanzar</button>
-          </div>
-        </div>
+        ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>Comprobar</button>
@@ -1035,8 +1116,9 @@ function renderBalanceChallengeV2() {
       if (isAnimating) return;
       const target = blanks.find((blank) => Number(blank.dataset.blank) === selectedBlank);
       if (!target) return;
-      target.textContent = button.textContent;
-      target.dataset.value = button.textContent;
+      const command = button.dataset.value;
+      target.innerHTML = renderCommand(command);
+      target.dataset.value = command;
       target.classList.remove("is-wrong");
       const next = blanks.find((blank) => !blank.dataset.value);
       blanks.forEach((item) => item.classList.remove("is-selected"));
@@ -1074,7 +1156,7 @@ function renderBalanceChallengeV2() {
   resetButton.addEventListener("click", () => {
     if (isAnimating) return;
     blanks.forEach((blank, index) => {
-      blank.textContent = "Elegir giro";
+      blank.innerHTML = `<span class="command-placeholder">${Number(blank.dataset.blank) + 1}</span>`;
       delete blank.dataset.value;
       blank.classList.remove("is-wrong");
       blank.classList.toggle("is-selected", index === 0);
@@ -1103,29 +1185,21 @@ function renderRobotChallengeV2() {
     5: "Avanzar",
     6: "Girar der.",
     7: "Avanzar",
+    8: "Avanzar",
   };
   let selectedBlank = 0;
   let isAnimating = false;
+  const stepsMarkup = Array.from({ length: 9 }, (_, index) => renderSequenceBlank(index, selectedBlank)).join("");
+  const actionsMarkup = ["Avanzar", "Girar izq.", "Girar der."]
+    .map((command) => renderCommandButton(command))
+    .join("");
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
       ${renderHeader(3, getChallengeInstruction(3, "Arma la secuencia para juntar las baterias y llegar a META."))}
       <div class="visual-sequence-layout">
         <div class="robot-grid visual-map" data-map></div>
-        <div class="sequence-panel">
-          <div class="sequence-track compact-sequence">
-            ${Array.from({ length: 8 }, (_, index) => `
-              <button class="sequence-slot ${index === selectedBlank ? "is-selected" : ""}" type="button" data-blank="${index}">
-                ${index + 1}
-              </button>
-            `).join("")}
-          </div>
-          <div class="instruction-bank compact-bank">
-            <button class="instruction-chip" type="button">Avanzar</button>
-            <button class="instruction-chip" type="button">Girar izq.</button>
-            <button class="instruction-chip" type="button">Girar der.</button>
-          </div>
-        </div>
+        ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>Ejecutar</button>
@@ -1222,8 +1296,9 @@ function renderRobotChallengeV2() {
     button.addEventListener("click", () => {
       if (isAnimating) return;
       const target = blanks[selectedBlank];
-      target.textContent = button.textContent;
-      target.dataset.value = button.textContent;
+      const command = button.dataset.value;
+      target.innerHTML = renderCommand(command);
+      target.dataset.value = command;
       target.classList.remove("is-wrong");
       const next = blanks.find((blank) => !blank.dataset.value);
       blanks.forEach((item) => item.classList.remove("is-selected"));
@@ -1240,7 +1315,7 @@ function renderRobotChallengeV2() {
     if (isAnimating) return;
 
     if (blanks.some((blank) => !blank.dataset.value)) {
-      setMessage("Completa las 8 instrucciones para ejecutar el robot.", "is-error");
+      setMessage("Completa las 9 instrucciones para ejecutar el robot.", "is-error");
       return;
     }
 
@@ -1261,7 +1336,7 @@ function renderRobotChallengeV2() {
   resetButton.addEventListener("click", () => {
     if (isAnimating) return;
     blanks.forEach((blank, index) => {
-      blank.textContent = String(index + 1);
+      blank.innerHTML = `<span class="command-placeholder">${index + 1}</span>`;
       delete blank.dataset.value;
       blank.classList.remove("is-wrong");
       blank.classList.toggle("is-selected", index === 0);
@@ -1343,13 +1418,13 @@ function renderPatternChallengeV2() {
     },
   ];
   scenes.splice(0, scenes.length, {
-    title: "Robot pintor",
-    theme: "paint",
-    hint: "Completa el patron: pintar, pintar y girar.",
-    pattern: ["paint-dot", "paint-dot", "turn-right"],
-    sequence: ["paint-dot", null, "turn-right", "paint-dot", "paint-dot", null, null, "paint-dot", "turn-right"],
-    answers: ["paint-dot", "turn-right", "paint-dot"],
-    options: ["paint-dot", "turn-right", "turn-left"],
+    title: "Pasos del robot",
+    theme: "commands",
+    hint: "Completa el patron: avanzar, avanzar y girar.",
+    pattern: ["cmd-forward", "cmd-forward", "cmd-turn"],
+    sequence: ["cmd-forward", "cmd-forward", null, "cmd-forward", null, "cmd-turn", null, "cmd-forward", "cmd-turn"],
+    answers: ["cmd-turn", "cmd-forward", "cmd-forward"],
+    options: ["cmd-forward", "cmd-turn", "cmd-jump"],
   });
   const labels = {
     "tile-blue": "Azul",
@@ -1974,6 +2049,7 @@ async function initializeLevelPage() {
   totalChallenges = challenges.length || (level === 4 ? 5 : 1);
   mapChallengeTitles(currentLevelData);
   syncLevelHeading();
+  syncLevelBackground();
   buildSelectorButtons();
   wireSelectorButtons();
 
