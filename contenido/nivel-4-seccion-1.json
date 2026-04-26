@@ -2,7 +2,7 @@
   "grado": 4,
   "seccion": 1,
   "objetivo": "Fortalecer pensamiento computacional y programacion inicial para primer grado con secuencias, depuracion, patrones de comandos y mapas en grilla.",
-  "desafios": [
+  "desafíos": [
     {
       "id": "n4-s1-d1",
       "titulo": "Secuencia de comandos",

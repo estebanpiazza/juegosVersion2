@@ -1,8 +1,8 @@
 # Nivel 4 - Seccion 1
 
-Objetivo de la seccion: fortalecer pensamiento computacional y programacion inicial (secuencias, depuracion, patrones de comandos y mapas en grilla) con desafios breves para primer grado.
+Objetivo de la seccion: fortalecer pensamiento computacional y programacion inicial (secuencias, depuracion, patrones de comandos y mapas en grilla) con desafíos breves para primer grado.
 
-## Desafio 1: Secuencia de comandos
+## desafío 1: Secuencia de comandos
 
 Tipo: secuenciacion guiada, estilo Code.org inicial.
 
@@ -26,7 +26,7 @@ Variantes:
 - Pedir resolver con menos pasos.
 - Mostrar una previsualizacion del recorrido.
 
-## Desafio 2: Depura el programa
+## desafío 2: Depura el programa
 
 Tipo: depuracion inicial, estilo pensamiento computacional.
 
@@ -50,7 +50,7 @@ Variantes:
 - Limitar cantidad de cambios.
 - Agregar boton "ejecutar" para ver resultado.
 
-## Desafio 3: Programa al robot
+## desafío 3: Programa al robot
 
 Tipo: programacion por bloques, estilo Code.org.
 
@@ -74,7 +74,7 @@ Variantes:
 - Incluir un bloque repetir obligatorio.
 - Agregar casilleros con numeros que deben visitarse en orden.
 
-## Desafio 4: Detectives de patrones
+## desafío 4: Detectives de patrones
 
 Tipo: patrones de comandos, mixto visual.
 
@@ -98,7 +98,7 @@ Variantes:
 - Mezclar comandos y colores.
 - Pedir inventar el siguiente bloque.
 
-## Desafio 5: Mision mapa del robot
+## desafío 5: Mision mapa del robot
 
 Tipo: mapa en grilla, pensamiento computacional.
 

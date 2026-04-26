@@ -6,7 +6,7 @@ let level = Number.isInteger(requestedLevel) ? requestedLevel : DEFAULT_LEVEL;
 const challengeContent = document.querySelector("#challenge-content");
 const challengeShell = document.querySelector(".challenge-shell");
 const selectorWrap = document.querySelector(".selector-wrap");
-const gameStageBg = document.querySelector(".game-stage-bg");
+const gamestágeBg = document.querySelector(".game-stage-bg");
 let selectorButtons = [...document.querySelectorAll(".selector-chip")];
 let totalChallenges = level === 4 ? 5 : 1;
 const completedChallenges = new Set();
@@ -105,7 +105,7 @@ async function discoverLevelsFromJson() {
 }
 
 function getChallengesFromData(levelData) {
-  return Array.isArray(levelData?.desafios) ? levelData.desafios : [];
+  return Array.isArray(levelData?.desafíos) ? levelData.desafíos : [];
 }
 
 function syncLevelHeading() {
@@ -116,9 +116,9 @@ function syncLevelHeading() {
 }
 
 function syncLevelBackground() {
-  if (!gameStageBg || !levelBackgrounds.length) return;
+  if (!gamestágeBg || !levelBackgrounds.length) return;
   const backgroundIndex = Math.floor(Math.max(level - 1, 0) / 3) % levelBackgrounds.length;
-  gameStageBg.src = levelBackgrounds[backgroundIndex];
+  gamestágeBg.src = levelBackgrounds[backgroundIndex];
 }
 
 function buildSelectorButtons() {
@@ -135,7 +135,7 @@ function buildSelectorButtons() {
   selectorWrap.innerHTML = challenges
     .map(
       (_, index) => `
-        <button class="selector-chip ${index === 0 ? "is-active" : ""}" type="button" data-challenge="${index + 1}" aria-label="Desafio ${index + 1}">
+        <button class="selector-chip ${index === 0 ? "is-active" : ""}" type="button" data-challenge="${index + 1}" aria-label="desafío ${index + 1}">
           <strong>${index + 1}</strong>
         </button>
       `,
@@ -150,7 +150,7 @@ function mapChallengeTitles(levelData) {
   if (!challenges.length) return;
 
   challengeTitles = Object.fromEntries(
-    challenges.map((challenge, index) => [index + 1, challenge.titulo || `Desafio ${index + 1}`]),
+    challenges.map((challenge, index) => [index + 1, challenge.titulo || `desafío ${index + 1}`]),
   );
 }
 
@@ -214,11 +214,11 @@ function showScenarioCompleteModal(id) {
     <p class="challenge-kicker">Logro desbloqueado</p>
     <h2 id="scenario-modal-title">Lo hiciste genial</h2>
     <p>${nextScenario
-      ? `Completaste el nivel. Tu robot ya esta listo para el proximo desafio.`
-      : `Completaste todos los desafios de este grado. Gran recorrido.`}</p>
+      ? `Completaste el nivel. Tu robot ya está listo para el próximo desafío.`
+      : `Completaste todos los desafíos de este grado. Gran recorrido.`}</p>
     <div class="scenario-modal-actions">
       ${nextScenario
-        ? `<button class="primary-action" type="button" data-next-scenario="${nextScenario}">Ir al siguiente desafio</button>`
+        ? `<button class="primary-action" type="button" data-next-scenario="${nextScenario}">Ir al siguiente desafío</button>`
         : `<a class="primary-action" href="index.html">Volver a grados</a>`}
       <button class="secondary-action" type="button" data-close-scenario-modal>Quedarme aqui</button>
     </div>
@@ -285,7 +285,7 @@ function showLocked(id) {
   challengeContent.innerHTML = `
     <article class="challenge-card">
       <p class="challenge-kicker">Proximamente</p>
-      <h2>Desafio ${id}</h2>
+      <h2>desafío ${id}</h2>
       <p>Este espacio queda reservado para las siguientes secciones.</p>
     </article>
   `;
@@ -301,7 +301,7 @@ function setMessage(text, tone = "") {
 function renderHeader(id, instruction) {
   return `
     <header class="challenge-header">
-      <p class="challenge-kicker">Desafio ${id}</p>
+      <p class="challenge-kicker">desafío ${id}</p>
       <h2>${challengeTitles[id]}</h2>
       <p>${instruction}</p>
     </header>
@@ -569,7 +569,7 @@ function renderBalanceChallenge() {
           <span><i class="legend-dot legend-trail"></i> Recorrido</span>
         </div>
       </section>
-      <p class="challenge-note">Objetivo: solo la linea 1 esta editable. Las otras dos ya estan bien.</p>
+      <p class="challenge-note">Objetivo: solo la linea 1 está editable. Las otras dos ya están bien.</p>
       <div class="debug-layout">
         <div class="debug-map" data-debug-map></div>
         <div class="debug-program">
@@ -726,7 +726,7 @@ function renderBalanceChallenge() {
       return;
     }
 
-    setMessage("Todavia no llega a META, pero estas cerca. La linea 1 necesita girar hacia la derecha.", "is-error");
+    setMessage("Todavia no llega a META, pero estás cerca. La linea 1 necesita girar hacia la derecha.", "is-error");
   });
 
   challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
@@ -1200,7 +1200,7 @@ function renderBalanceChallengeV2() {
       });
       selectedBlank = stepIndex;
       setMessage(issue.dataset.value
-        ? "Vas bien hasta ahi. Ese giro manda al robot fuera de la ruta celeste."
+        ? "Vas bien hasta ahi. Ese giro hace que el robot salga de la ruta celeste.."
         : `Buen avance. El robot llega hasta ahi; agrega el paso ${stepIndex + 1} para continuar.`,
       issue.dataset.value ? "is-error" : "is-good");
       animateRoute(routeLimit);
@@ -1552,7 +1552,7 @@ function renderPatternChallengeV2() {
     challengeContent.innerHTML = `
       <article class="challenge-card">
         <header class="challenge-header">
-          <p class="challenge-kicker">Desafio 4</p>
+          <p class="challenge-kicker">desafío 4</p>
           <h2>${scene.title}</h2>
           <p>${scene.hint}</p>
         </header>
@@ -1663,7 +1663,7 @@ function renderPatternChallengeV2() {
 
       blanks.forEach((blank) => blank.classList.add("is-correct"));
       completedScenes.add(sceneIndex);
-      setMessage(`Desafio ${sceneIndex + 1} resuelto. Muy buen trabajo detectando el patron.`, "is-success");
+      setMessage(`desafío ${sceneIndex + 1} resuelto. Muy buen trabajo detectando el patron.`, "is-success");
 
       if (completedScenes.size === scenes.length) {
         completeChallenge(4);
