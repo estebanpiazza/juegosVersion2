@@ -36,6 +36,37 @@ const levelBackgrounds = [
   "assets/learnia-games-bg-2.png",
   "assets/learnia-games-bg-3.png",
 ];
+const ROBOT_IMAGE_SRC = "articulos-622.jpeg";
+const robotDirectionRotations = {
+  0: 180,
+  1: -90,
+  2: 0,
+  3: 90,
+};
+
+function renderRobotMarker(direction = 2) {
+  const rotation = robotDirectionRotations[direction] ?? 0;
+  return `<img class="robot-marker" src="${ROBOT_IMAGE_SRC}" alt="Robot" style="--robot-rotation: ${rotation}deg" />`;
+}
+
+function directionBetweenKeys(fromKey, toKey) {
+  if (!fromKey || !toKey) return 2;
+  const [fromRow, fromCol] = fromKey.split("-").map(Number);
+  const [toRow, toCol] = toKey.split("-").map(Number);
+  if (toRow < fromRow) return 0;
+  if (toCol > fromCol) return 1;
+  if (toRow > fromRow) return 2;
+  if (toCol < fromCol) return 3;
+  return 2;
+}
+
+function directionForRouteKey(route, key) {
+  const index = route.indexOf(key);
+  if (index === -1) return 2;
+  if (route[index + 1]) return directionBetweenKeys(key, route[index + 1]);
+  if (route[index - 1]) return directionBetweenKeys(route[index - 1], key);
+  return 2;
+}
 
 async function loadLevelSection(levelNumber, section = 1) {
   const url = `contenido/nivel-${levelNumber}-seccion-${section}.json`;
@@ -410,7 +441,7 @@ function renderPathChallenge() {
     const robotCell = mapCells.get(key);
     if (!robotCell) return;
     robotCell.classList.add("is-robot");
-    robotCell.textContent = "🤖";
+    robotCell.innerHTML = renderRobotMarker(directionForRouteKey(routePath, key));
   }
 
   async function runRobotAnimation() {
@@ -608,7 +639,7 @@ function renderBalanceChallenge() {
         }
         if (key === robotKey) {
           cell.classList.add("is-robot");
-          cell.textContent = "🤖";
+          cell.innerHTML = renderRobotMarker(result.robot.dir);
         } else if (trailSet.has(key) && !obstacle.has(key) && !(row === start.row && col === start.col) && !(row === goal.row && col === goal.col)) {
           cell.textContent = String(trailIndex.get(key));
         }
@@ -691,7 +722,6 @@ function renderRobotChallenge() {
   const treasure = { row: 1, col: 4 };
   const obstacles = new Set(["4-2", "3-2", "2-2", "2-3"]);
   const solution = ["F", "F", "F", "F", "L", "F", "F", "F", "F"];
-  const directionMarks = ["^", ">", "v", "<"];
   let program = [];
   let robot = { ...start };
   let visitedCells = [];
@@ -766,7 +796,7 @@ function renderRobotChallenge() {
         if (row === start.row && col === start.col) cell.classList.add("is-start");
         if (row === robot.row && col === robot.col) {
           cell.classList.add("is-robot");
-          cell.textContent = directionMarks[robot.dir];
+          cell.innerHTML = renderRobotMarker(robot.dir);
         }
         grid.append(cell);
       }
@@ -1084,7 +1114,7 @@ function renderBalanceChallengeV2() {
     const robotCell = cells.get(key);
     if (!robotCell) return;
     robotCell.classList.add("is-robot");
-    robotCell.textContent = "R";
+    robotCell.innerHTML = renderRobotMarker(directionForRouteKey(route, key));
   }
 
   async function animateRoute() {
@@ -1265,7 +1295,7 @@ function renderRobotChallengeV2() {
     const robotCell = cells.get(key);
     if (!robotCell) return;
     robotCell.classList.add("is-robot");
-    robotCell.textContent = "R";
+    robotCell.innerHTML = renderRobotMarker(directionForRouteKey(route, key));
   }
 
   async function animateRoute() {
@@ -1623,7 +1653,7 @@ function renderCoordinatesChallenge() {
   const placed = {};
 
   challengeContent.innerHTML = `
-    <article class="challenge-card">
+    <article class="challenge-card challenge-card-coords">
       ${renderHeader(5, getChallengeInstruction(5, "Ubica puntos del mapa para planear la ruta del robot desde inicio hasta la meta."))}
       <div class="coord-layout">
         <div class="coord-bank"></div>
@@ -2050,7 +2080,7 @@ async function initializeLevelPage() {
   levelDataByNumber = dataByLevel;
 
   if (availableLevels.length) {
-    level = availableLevels.includes(level) ? level : availableLevels[0];
+    level = availableLevels.includes(level) || Number.isInteger(requestedLevel) ? level : availableLevels[0];
     currentLevelData = levelDataByNumber.get(level) || null;
   } else {
     currentLevelData = null;

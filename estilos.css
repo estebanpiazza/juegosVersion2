@@ -779,6 +779,17 @@ body.has-scenario-modal {
   transition: transform 140ms ease, background 140ms ease;
 }
 
+.robot-marker {
+  display: block;
+  width: 86%;
+  height: 86%;
+  object-fit: contain;
+  border-radius: 6px;
+  pointer-events: none;
+  transform: rotate(var(--robot-rotation, 0deg));
+  transform-origin: center;
+}
+
 .sequence-slot,
 .instruction-chip,
 .debug-line {
@@ -1307,8 +1318,9 @@ button:disabled {
 }
 
 .robot-cell.is-robot {
-  color: var(--color-white);
-  background: var(--color-primary);
+  color: #1e2430;
+  background: #fff3cc;
+  box-shadow: inset 0 0 0 2px #ffd978;
 }
 
 .program-panel {
@@ -2121,6 +2133,81 @@ button:disabled {
     gap: 6px;
   }
 
+  .challenge-card-coords {
+    justify-content: flex-start;
+  }
+
+  .challenge-card-coords .challenge-header p {
+    display: none;
+  }
+
+  .coord-layout {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 282px;
+    margin: 0 auto 0 0;
+    flex: 0 0 auto;
+    gap: 8px;
+    align-content: start;
+    justify-items: center;
+    overflow: visible;
+  }
+
+  .coord-bank {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .coord-bank button {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "icon label"
+      "icon coord";
+    min-height: 46px;
+    gap: 1px 6px;
+    padding: 5px 8px;
+    border-radius: 12px;
+    text-align: left;
+  }
+
+  .coord-bank span {
+    grid-area: icon;
+    font-size: 1.05rem;
+  }
+
+  .coord-bank strong {
+    grid-area: label;
+    min-width: 0;
+    font-size: 0.72rem;
+    line-height: 1;
+  }
+
+  .coord-bank em {
+    grid-area: coord;
+    font-size: 0.7rem;
+    line-height: 1;
+  }
+
+  .coord-grid {
+    width: min(100%, 270px);
+    max-width: 270px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 4px;
+    justify-self: center;
+  }
+
+  .coord-cell {
+    min-width: 0;
+    border-radius: 7px;
+    font-size: clamp(0.58rem, 2.7vw, 0.74rem);
+    line-height: 1;
+  }
+
+  .coord-cell.has-object {
+    font-size: clamp(1.05rem, 5vw, 1.35rem);
+  }
+
   .path-layout,
   .visual-sequence-layout {
     grid-template-columns: 1fr;
@@ -2249,6 +2336,26 @@ button:disabled {
   .path-layout,
   .visual-sequence-layout {
     gap: 4px;
+  }
+
+  .coord-layout {
+    max-width: 282px;
+    gap: 6px;
+  }
+
+  .coord-bank {
+    gap: 5px;
+  }
+
+  .coord-bank button {
+    min-height: 42px;
+    padding: 4px 6px;
+  }
+
+  .coord-grid {
+    width: min(100%, 270px);
+    max-width: 270px;
+    gap: 3px;
   }
 
   .path-map,
