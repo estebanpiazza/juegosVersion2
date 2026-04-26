@@ -314,11 +314,11 @@ function getChallengeInstruction(id, fallbackText) {
 }
 
 const commandSymbols = {
-  Avanzar: "➜",
-  "Girar der.": "↷",
-  "Girar izq.": "↶",
-  Saltar: "⤴",
-  Repetir: "⟳",
+  Avanzar: "⬆️",
+  "Girar der.": "↪️",
+  "Girar izq.": "↩️",
+  Saltar: "↗️",
+  Repetir: "🔁",
 };
 
 function renderCommand(command) {
@@ -346,6 +346,17 @@ function renderSequenceBlank(index, selectedBlank, label = "Elegir accion") {
       <span class="command-placeholder">${index + 1}</span>
     </button>
   `;
+}
+
+function findFirstSequenceIssue(blanks, expected) {
+  return blanks.find((blank) => blank.dataset.value !== expected[Number(blank.dataset.blank)]);
+}
+
+function countAdvancesBefore(commands, stepIndex) {
+  return commands
+    .slice(0, stepIndex)
+    .filter((command) => command === "Avanzar")
+    .length;
 }
 
 function renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact = false }) {
@@ -444,12 +455,12 @@ function renderPathChallenge() {
     robotCell.innerHTML = renderRobotMarker(directionForRouteKey(routePath, key));
   }
 
-  async function runRobotAnimation() {
+  async function runRobotAnimation(routeLimit = routePath.length - 1) {
     isAnimating = true;
     checkButton.disabled = true;
     resetButton.disabled = true;
 
-    for (const key of routePath) {
+    for (const key of routePath.slice(0, routeLimit + 1)) {
       paintRobot(key);
       await new Promise((resolve) => setTimeout(resolve, 260));
     }
@@ -479,6 +490,7 @@ function renderPathChallenge() {
       const command = button.dataset.value;
       target.innerHTML = renderCommand(command);
       target.dataset.value = command;
+      target.classList.remove("is-wrong");
       const next = blanks.find((blank) => !blank.dataset.value);
       blanks.forEach((item) => item.classList.remove("is-selected"));
       if (next) {
@@ -491,13 +503,9 @@ function renderPathChallenge() {
   challengeContent.querySelector("[data-check]").addEventListener("click", () => {
     if (isAnimating) return;
 
-    if (blanks.some((blank) => !blank.dataset.value)) {
-      setMessage("Completa los tres pasos faltantes antes de comprobar.", "is-error");
-      return;
-    }
-
-    const isOk = blanks.every((blank) => blank.dataset.value === expected[Number(blank.dataset.blank)]);
-    if (isOk) {
+    blanks.forEach((blank) => blank.classList.remove("is-wrong"));
+    const issue = findFirstSequenceIssue(blanks, expected);
+    if (!issue) {
       setMessage("Muy bien. Mira como el robot recorre el camino.", "is-good");
       runRobotAnimation().then(() => {
         setMessage("Excelente. El robot sigue el camino y llega a la meta.", "is-success");
@@ -506,9 +514,19 @@ function renderPathChallenge() {
       return;
     }
 
-    const wrong = blanks.find((blank) => blank.dataset.value !== expected[Number(blank.dataset.blank)]);
-    const stepNumber = Number(wrong.dataset.blank) + 1;
-    setMessage(`Ajusta el paso ${stepNumber}: ese giro no coincide con el camino.`, "is-error");
+    const stepIndex = Number(issue.dataset.blank);
+    const stepNumber = stepIndex + 1;
+    const routeLimit = countAdvancesBefore(steps, stepIndex);
+    issue.classList.add("is-wrong", "is-selected");
+    blanks.forEach((blank) => {
+      if (blank !== issue) blank.classList.remove("is-selected");
+    });
+    selectedBlank = stepIndex;
+    setMessage(issue.dataset.value
+      ? `Hasta ahi va bien. Ajusta el paso ${stepNumber}: ese giro no coincide con el camino.`
+      : `Buen progreso. El robot llega hasta ahi; completa el paso ${stepNumber} para seguir.`,
+    issue.dataset.value ? "is-error" : "is-good");
+    runRobotAnimation(routeLimit);
   });
 
   challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
@@ -516,6 +534,7 @@ function renderPathChallenge() {
     blanks.forEach((blank, index) => {
       blank.innerHTML = `<span class="command-placeholder">${Number(blank.dataset.blank) + 1}</span>`;
       delete blank.dataset.value;
+      blank.classList.remove("is-wrong");
       blank.classList.toggle("is-selected", index === 0);
     });
     paintRobot(routePath[0]);
@@ -553,9 +572,9 @@ function renderBalanceChallenge() {
           <p class="debug-program-title">Programa del robot</p>
           <div class="debug-list" data-debug-list></div>
           <div class="debug-options">
-            <button type="button">Avanzar</button>
-            <button type="button">Girar der.</button>
-            <button type="button">Girar izq.</button>
+            <button type="button" data-value="Avanzar">${renderCommand("Avanzar")}</button>
+            <button type="button" data-value="Girar der.">${renderCommand("Girar der.")}</button>
+            <button type="button" data-value="Girar izq.">${renderCommand("Girar izq.")}</button>
           </div>
         </div>
       </div>
@@ -652,7 +671,7 @@ function renderBalanceChallenge() {
   function renderProgram() {
     debugList.innerHTML = program.map((step, index) => `
       <button class="debug-line ${index === selectedLine ? "is-selected" : ""} ${index === fixedStep ? "is-editable" : "is-locked"}" type="button" data-line="${index}">
-        <strong>${index + 1}.</strong> ${step}
+        <strong>${index + 1}.</strong> ${renderCommand(step)}
         <small>${index === fixedStep ? "Editar" : "Bloqueada"}</small>
       </button>
     `).join("");
@@ -672,13 +691,14 @@ function renderBalanceChallenge() {
 
   challengeContent.querySelectorAll(".debug-options button").forEach((button) => {
     button.addEventListener("click", () => {
-      program[selectedLine] = button.textContent;
+      const command = button.dataset.value;
+      program[selectedLine] = command;
       renderProgram();
       renderMap(simulateProgram(), true, true);
-      setMessage(button.textContent === expectedFix
+      setMessage(command === expectedFix
         ? "Bien: ahora prueba el programa completo."
         : "Prueba el programa y mira donde termina el robot.",
-      button.textContent === expectedFix ? "is-good" : "");
+      command === expectedFix ? "is-good" : "");
     });
   });
 
@@ -744,9 +764,9 @@ function renderRobotChallenge() {
             <button class="secondary-action" type="button" data-hint>Pista</button>
           </div>
           <div class="command-bank">
-            <button type="button" data-command="F">Avanzar</button>
-            <button type="button" data-command="L">Girar izq.</button>
-            <button type="button" data-command="R">Girar der.</button>
+            <button type="button" data-command="F">${renderCommand("Avanzar")}</button>
+            <button type="button" data-command="L">${renderCommand("Girar izq.")}</button>
+            <button type="button" data-command="R">${renderCommand("Girar der.")}</button>
           </div>
           <div class="program-list" data-program></div>
           <div class="challenge-actions">
@@ -805,7 +825,7 @@ function renderRobotChallenge() {
 
   function renderProgram() {
     programNode.innerHTML = program.length
-      ? program.map((cmd, index) => `<span>${index + 1}. ${commandLabels[cmd]}</span>`).join("")
+      ? program.map((cmd, index) => `<span>${index + 1}. ${renderCommand(commandLabels[cmd])}</span>`).join("")
       : "<em>Sin instrucciones</em>";
     countNode.textContent = `${program.length}/10`;
   }
@@ -1117,12 +1137,12 @@ function renderBalanceChallengeV2() {
     robotCell.innerHTML = renderRobotMarker(directionForRouteKey(route, key));
   }
 
-  async function animateRoute() {
+  async function animateRoute(routeLimit = route.length - 1) {
     isAnimating = true;
     checkButton.disabled = true;
     resetButton.disabled = true;
 
-    for (const key of route) {
+    for (const key of route.slice(0, routeLimit + 1)) {
       paintRobot(key);
       await new Promise((resolve) => setTimeout(resolve, 230));
     }
@@ -1164,15 +1184,21 @@ function renderBalanceChallengeV2() {
   checkButton.addEventListener("click", () => {
     if (isAnimating) return;
 
-    if (blanks.some((blank) => !blank.dataset.value)) {
-      setMessage("Completa los dos giros antes de comprobar.", "is-error");
-      return;
-    }
-
-    const wrong = blanks.find((blank) => blank.dataset.value !== expected[Number(blank.dataset.blank)]);
-    if (wrong) {
-      wrong.classList.add("is-wrong");
-      setMessage("Ese giro no sigue el camino celeste. Mira hacia donde dobla la ruta.", "is-error");
+    blanks.forEach((blank) => blank.classList.remove("is-wrong"));
+    const issue = findFirstSequenceIssue(blanks, expected);
+    if (issue) {
+      const stepIndex = Number(issue.dataset.blank);
+      const routeLimit = countAdvancesBefore(steps, stepIndex);
+      issue.classList.add("is-wrong", "is-selected");
+      blanks.forEach((blank) => {
+        if (blank !== issue) blank.classList.remove("is-selected");
+      });
+      selectedBlank = stepIndex;
+      setMessage(issue.dataset.value
+        ? "Hasta ahi va bien. Ese giro no sigue el camino celeste."
+        : `Buen progreso. El robot llega hasta ahi; completa el paso ${stepIndex + 1} para seguir.`,
+      issue.dataset.value ? "is-error" : "is-good");
+      animateRoute(routeLimit);
       return;
     }
 
@@ -1217,6 +1243,7 @@ function renderRobotChallengeV2() {
     7: "Avanzar",
     8: "Avanzar",
   };
+  const expectedCommands = Array.from({ length: 9 }, (_, index) => expected[index]);
   let selectedBlank = 0;
   let isAnimating = false;
   const stepsMarkup = Array.from({ length: 9 }, (_, index) => renderSequenceBlank(index, selectedBlank)).join("");
@@ -1298,12 +1325,12 @@ function renderRobotChallengeV2() {
     robotCell.innerHTML = renderRobotMarker(directionForRouteKey(route, key));
   }
 
-  async function animateRoute() {
+  async function animateRoute(routeLimit = route.length - 1) {
     isAnimating = true;
     checkButton.disabled = true;
     resetButton.disabled = true;
 
-    for (const key of route) {
+    for (const key of route.slice(0, routeLimit + 1)) {
       paintRobot(key);
       await new Promise((resolve) => setTimeout(resolve, 210));
     }
@@ -1344,15 +1371,21 @@ function renderRobotChallengeV2() {
   checkButton.addEventListener("click", () => {
     if (isAnimating) return;
 
-    if (blanks.some((blank) => !blank.dataset.value)) {
-      setMessage("Completa las 9 instrucciones para ejecutar el robot.", "is-error");
-      return;
-    }
-
-    const wrong = blanks.find((blank) => blank.dataset.value !== expected[Number(blank.dataset.blank)]);
-    if (wrong) {
-      wrong.classList.add("is-wrong");
-      setMessage("La secuencia se desvia de la ruta celeste. Revisa la primera tarjeta marcada.", "is-error");
+    blanks.forEach((blank) => blank.classList.remove("is-wrong"));
+    const issue = findFirstSequenceIssue(blanks, expected);
+    if (issue) {
+      const stepIndex = Number(issue.dataset.blank);
+      const routeLimit = countAdvancesBefore(expectedCommands, stepIndex);
+      issue.classList.add("is-wrong", "is-selected");
+      blanks.forEach((blank) => {
+        if (blank !== issue) blank.classList.remove("is-selected");
+      });
+      selectedBlank = stepIndex;
+      setMessage(issue.dataset.value
+        ? "Hasta ahi va bien. La secuencia se desvia en la tarjeta marcada."
+        : `Buen progreso. El robot llega hasta ahi; completa el paso ${stepIndex + 1} para seguir.`,
+      issue.dataset.value ? "is-error" : "is-good");
+      animateRoute(routeLimit);
       return;
     }
 
