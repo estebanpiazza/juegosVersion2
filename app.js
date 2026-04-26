@@ -211,14 +211,14 @@ function showScenarioCompleteModal(id) {
   const title = challengeTitles[id] || `Escenario ${id}`;
   const content = scenarioModal.querySelector("[data-scenario-modal-content]");
   content.innerHTML = `
-    <p class="challenge-kicker">Escenario completado</p>
-    <h2 id="scenario-modal-title">Buen trabajo</h2>
+    <p class="challenge-kicker">Logro desbloqueado</p>
+    <h2 id="scenario-modal-title">Lo hiciste genial</h2>
     <p>${nextScenario
-      ? `Completaste el escenario ${id}: ${title}. Ya puedes pasar al siguiente escenario.`
-      : `Completaste todos los escenarios de este grado.`}</p>
+      ? `Completaste ${title}. Tu robot ya esta listo para el proximo desafio.`
+      : `Completaste todos los desafios de este grado. Gran recorrido.`}</p>
     <div class="scenario-modal-actions">
       ${nextScenario
-        ? `<button class="primary-action" type="button" data-next-scenario="${nextScenario}">Pasar al siguiente escenario</button>`
+        ? `<button class="primary-action" type="button" data-next-scenario="${nextScenario}">Ir al siguiente desafio</button>`
         : `<a class="primary-action" href="index.html">Volver a grados</a>`}
       <button class="secondary-action" type="button" data-close-scenario-modal>Quedarme aqui</button>
     </div>
@@ -417,7 +417,7 @@ function renderPathChallenge() {
         <button class="primary-action" type="button" data-check>Comprobar</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Completa los pasos 3, 6 y 9 para seguir el camino celeste.</p>
+      <p class="challenge-message" data-message>Empeza por los pasos 3, 6 y 9. La ruta celeste te da una buena pista.</p>
     </article>
   `;
 
@@ -510,9 +510,9 @@ function renderPathChallenge() {
     blanks.forEach((blank) => blank.classList.remove("is-wrong"));
     const issue = findFirstSequenceIssue(blanks, expected);
     if (!issue) {
-      setMessage("Muy bien. Mira como el robot recorre el camino.", "is-good");
+      setMessage("Muy bien, tu plan ya tiene forma. Miremos al robot en accion.", "is-good");
       runRobotAnimation().then(() => {
-        setMessage("Excelente. El robot sigue el camino y llega a la meta.", "is-success");
+        setMessage("Excelente trabajo. El robot siguio tu camino y llego a la meta.", "is-success");
         completeChallenge(1);
       });
       return;
@@ -527,8 +527,8 @@ function renderPathChallenge() {
     });
     selectedBlank = stepIndex;
     setMessage(issue.dataset.value
-      ? `Hasta ahi va bien. Ajusta el paso ${stepNumber}: ese giro no coincide con el camino.`
-      : `Buen progreso. El robot llega hasta ahi; completa el paso ${stepNumber} para seguir.`,
+      ? `Vas muy bien hasta ahi. Probemos otro giro en el paso ${stepNumber}.`
+      : `Buen avance. El robot ya llega hasta ahi; agrega el paso ${stepNumber} para seguir.`,
     issue.dataset.value ? "is-error" : "is-good");
     runRobotAnimation(routeLimit);
   });
@@ -543,7 +543,7 @@ function renderPathChallenge() {
     });
     paintRobot(routePath[0]);
     selectedBlank = Number(blanks[0].dataset.blank);
-    setMessage("Completa los pasos 3, 6 y 9 para seguir el camino celeste.");
+    setMessage("Todo listo para volver a probar. Empeza por los pasos 3, 6 y 9.");
   });
 }
 
@@ -586,7 +586,7 @@ function renderBalanceChallenge() {
         <button class="primary-action" type="button" data-check>Comprobar</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Pista: la linea 1 debe girar hacia META, no hacia afuera.</p>
+      <p class="challenge-message" data-message>Probemos la linea 1: necesita apuntar hacia META.</p>
     </article>
   `;
 
@@ -684,7 +684,7 @@ function renderBalanceChallenge() {
       button.addEventListener("click", () => {
         const line = Number(button.dataset.line);
         if (line !== fixedStep) {
-          setMessage("Esa linea ya esta bien. Cambia solo la linea 1.", "is-good");
+          setMessage("Esa linea ya ayuda al robot. Hoy solo necesitamos ajustar la linea 1.", "is-good");
           return;
         }
         selectedLine = line;
@@ -700,8 +700,8 @@ function renderBalanceChallenge() {
       renderProgram();
       renderMap(simulateProgram(), true, true);
       setMessage(command === expectedFix
-        ? "Bien: ahora prueba el programa completo."
-        : "Prueba el programa y mira donde termina el robot.",
+        ? "Bien pensado. Ahora probemos el programa completo."
+        : "Probalo en el mapa y fijate que aprende el robot con ese cambio.",
       command === expectedFix ? "is-good" : "");
     });
   });
@@ -711,22 +711,22 @@ function renderBalanceChallenge() {
     renderMap(result, true, true);
 
     if (result.ok && program[fixedStep] === expectedFix) {
-      setMessage("Muy bien. El robot evita el bloque rojo y termina en META.", "is-success");
+      setMessage("Gran arreglo. El robot esquivo el bloque rojo y llego a META.", "is-success");
       completeChallenge(2);
       return;
     }
 
     if (result.reason === "obstacle") {
-      setMessage(`En el paso ${result.failedStep} toca el bloque rojo. Corrige la linea 1.`, "is-error");
+      setMessage(`Casi. En el paso ${result.failedStep} toca el bloque rojo; probemos otro giro en la linea 1.`, "is-error");
       return;
     }
 
     if (result.reason === "out") {
-      setMessage(`En el paso ${result.failedStep} el robot se sale del tablero.`, "is-error");
+      setMessage(`Uy, en el paso ${result.failedStep} el robot se sale del tablero. Lo podemos encaminar desde la linea 1.`, "is-error");
       return;
     }
 
-    setMessage("No llega a META. Corrige la linea 1 para que gire hacia la derecha.", "is-error");
+    setMessage("Todavia no llega a META, pero estas cerca. La linea 1 necesita girar hacia la derecha.", "is-error");
   });
 
   challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
@@ -734,7 +734,7 @@ function renderBalanceChallenge() {
     selectedLine = fixedStep;
     renderProgram();
     renderMap({ trail: [keyOf(start.row, start.col)], robot: { ...start } }, true, true);
-    setMessage("Pista: la linea 1 debe girar hacia META, no hacia afuera.");
+    setMessage("Volvemos al inicio. Probemos la linea 1 para que mire hacia META.");
   });
 
   renderProgram();
@@ -778,7 +778,7 @@ function renderRobotChallenge() {
             <button class="secondary-action" type="button" data-undo>Quitar ultimo</button>
             <button class="secondary-action" type="button" data-clear>Limpiar</button>
           </div>
-          <p class="challenge-message" data-message>Camino: avanza por abajo hasta quedar debajo de la estrella, gira a la izquierda y sube.</p>
+          <p class="challenge-message" data-message>Una pista: avanza por abajo, queda debajo de la estrella, gira y sube.</p>
         </div>
       </div>
     </article>
@@ -872,7 +872,7 @@ function renderRobotChallenge() {
     button.addEventListener("click", () => {
       if (isRunning) return;
       if (program.length >= 10) {
-        setMessage("Llegaste al maximo de 10 instrucciones. Ejecuta o limpia el programa.", "is-error");
+        setMessage("Ya usaste las 10 instrucciones. Proba ejecutarlo o limpia para armar otro plan.", "is-error");
         return;
       }
       program.push(button.dataset.command);
@@ -900,17 +900,17 @@ function renderRobotChallenge() {
     visitedCells = [];
     renderGrid();
     renderProgram();
-    setMessage("Programa limpio. Vuelve a intentarlo.");
+    setMessage("Programa limpio. Listo para probar una idea nueva.");
   });
 
   hintButton.addEventListener("click", () => {
     if (isRunning) return;
     if (!isSolutionPrefix()) {
-      setMessage("Hay una instruccion que se desvia del camino sugerido. Quita la ultima o limpia el programa.", "is-error");
+      setMessage("Hay un pasito que se fue de la ruta. Quita el ultimo o limpia y lo armamos mejor.", "is-error");
       return;
     }
     if (program.length >= solution.length) {
-      setMessage("Ya tienes el camino sugerido completo. Ejecutalo.", "is-good");
+      setMessage("Ya tienes el camino armado. Dale ejecutar y mira que pasa.", "is-good");
       return;
     }
     program.push(solution[program.length]);
@@ -918,13 +918,13 @@ function renderRobotChallenge() {
     visitedCells = [];
     renderGrid();
     renderProgram();
-    setMessage(`Agregue una pista: ${commandLabels[program[program.length - 1]]}.`, "is-good");
+    setMessage(`Te agregue una pista: ${commandLabels[program[program.length - 1]]}. Vas construyendo el camino.`, "is-good");
   });
 
   runButton.addEventListener("click", async () => {
     if (isRunning) return;
     if (!program.length) {
-      setMessage("Primero agrega instrucciones antes de ejecutar.", "is-error");
+      setMessage("Primero agrega alguna instruccion. El robot necesita un plan para empezar.", "is-error");
       return;
     }
 
@@ -940,7 +940,7 @@ function renderRobotChallenge() {
       if (!ok) {
         renderGrid();
         setRunningState(false);
-        setMessage(`El robot choco en el paso ${i + 1}. Revisa ese bloque del programa.`, "is-error");
+        setMessage(`Casi. En el paso ${i + 1} el robot choco; revisa ese bloque y vuelve a probar.`, "is-error");
         return;
       }
       renderGrid();
@@ -948,10 +948,10 @@ function renderRobotChallenge() {
 
     setRunningState(false);
     if (robot.row === treasure.row && robot.col === treasure.col) {
-      setMessage("Tesoro encontrado. Tu algoritmo funciona.", "is-success");
+      setMessage("Tesoro encontrado. Tu algoritmo funciono de maravilla.", "is-success");
       completeChallenge(3);
     } else {
-      setMessage("El robot ejecuto el programa, pero no llego al tesoro.", "is-good");
+      setMessage("El robot siguio tu programa. Falta poquito para llegar al tesoro.", "is-good");
     }
   });
 
@@ -986,7 +986,7 @@ function renderPatternChallenge() {
         <button class="primary-action" type="button" data-check>Comprobar</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Pista: se repite el bloque Avanzar, Avanzar, Girar der.</p>
+      <p class="challenge-message" data-message>Mira el ritmo: Avanzar, Avanzar y Girar der. Se repite como una cancion.</p>
     </article>
   `;
 
@@ -1019,7 +1019,7 @@ function renderPatternChallenge() {
 
   challengeContent.querySelector("[data-check]").addEventListener("click", () => {
     if (blanks.some((blank) => !blank.dataset.value)) {
-      setMessage("Completa los tres huecos antes de comprobar.", "is-error");
+      setMessage("Faltan algunos huecos. Completa los tres y lo probamos juntos.", "is-error");
       return;
     }
 
@@ -1029,7 +1029,7 @@ function renderPatternChallenge() {
         blank.classList.remove("is-wrong");
         blank.classList.add("is-correct");
       });
-      setMessage("Perfecto. Reconociste el patron del algoritmo.", "is-success");
+      setMessage("Muy buen ojo. Encontraste el patron del algoritmo.", "is-success");
       completeChallenge(4);
     } else {
       const firstWrongIndex = values.findIndex((value, index) => value !== answers[index]);
@@ -1038,7 +1038,7 @@ function renderPatternChallenge() {
         blank.classList.toggle("is-selected", index === firstWrongIndex);
       });
       selectedBlank = firstWrongIndex;
-      setMessage(`Revisa el hueco ${firstWrongIndex + 1}. El patron vuelve siempre al mismo bloque de tres.`, "is-error");
+      setMessage(`Buen intento. Mira el hueco ${firstWrongIndex + 1}: el patron vuelve al mismo bloque de tres.`, "is-error");
     }
   });
 
@@ -1050,7 +1050,7 @@ function renderPatternChallenge() {
       blank.classList.remove("is-correct", "is-wrong");
     });
     selectedBlank = 0;
-    setMessage("Pista: se repite el bloque Avanzar, Avanzar, Girar der.");
+    setMessage("Volvemos a mirar el ritmo: Avanzar, Avanzar y Girar der.");
   });
 }
 
@@ -1083,7 +1083,7 @@ function renderBalanceChallengeV2() {
         <button class="primary-action" type="button" data-check>Comprobar</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Observa el camino celeste: faltan dos giros para rodear los bloques.</p>
+      <p class="challenge-message" data-message>Mira la ruta celeste: con dos giros bien elegidos el robot rodea los bloques.</p>
     </article>
   `;
 
@@ -1200,16 +1200,16 @@ function renderBalanceChallengeV2() {
       });
       selectedBlank = stepIndex;
       setMessage(issue.dataset.value
-        ? "Hasta ahi va bien. Ese giro no sigue el camino celeste."
-        : `Buen progreso. El robot llega hasta ahi; completa el paso ${stepIndex + 1} para seguir.`,
+        ? "Vas bien hasta ahi. Ese giro manda al robot fuera de la ruta celeste."
+        : `Buen avance. El robot llega hasta ahi; agrega el paso ${stepIndex + 1} para continuar.`,
       issue.dataset.value ? "is-error" : "is-good");
       animateRoute(routeLimit);
       return;
     }
 
-    setMessage("Muy bien. Ahora mira al robot recorrer la ruta.", "is-good");
+    setMessage("Muy bien, la ruta quedo armada. Mira al robot probar tu idea.", "is-good");
     animateRoute().then(() => {
-      setMessage("Ruta corregida. El robot llego a META.", "is-success");
+      setMessage("Ruta lograda. El robot llego a META gracias a tu plan.", "is-success");
       completeChallenge(2);
     });
   });
@@ -1225,7 +1225,7 @@ function renderBalanceChallengeV2() {
     selectedBlank = Number(blanks[0].dataset.blank);
     buildMap();
     paintRobot(route[0]);
-    setMessage("Observa el camino celeste: faltan dos giros para rodear los bloques.");
+    setMessage("Nuevo intento. Mira la ruta celeste y busca los dos giros.");
   });
 
   buildMap();
@@ -1267,7 +1267,7 @@ function renderRobotChallengeV2() {
         <button class="primary-action" type="button" data-check>Ejecutar</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Sigue la ruta celeste: pasa por B1, despues por B2 y termina en META.</p>
+      <p class="challenge-message" data-message>Sigue la ruta celeste: junta B1, despues B2 y termina en META.</p>
     </article>
   `;
 
@@ -1387,16 +1387,16 @@ function renderRobotChallengeV2() {
       });
       selectedBlank = stepIndex;
       setMessage(issue.dataset.value
-        ? "Hasta ahi va bien. La secuencia se desvia en la tarjeta marcada."
-        : `Buen progreso. El robot llega hasta ahi; completa el paso ${stepIndex + 1} para seguir.`,
+        ? "Vas bien hasta ahi. La tarjeta marcada hace que el robot se desvie."
+        : `Buen avance. El robot llega hasta ahi; agrega el paso ${stepIndex + 1} para seguir.`,
       issue.dataset.value ? "is-error" : "is-good");
       animateRoute(routeLimit);
       return;
     }
 
-    setMessage("Secuencia lista. El robot va por las baterias.", "is-good");
+    setMessage("Secuencia lista. Vamos a ver al robot juntar las baterias.", "is-good");
     animateRoute().then(() => {
-      setMessage("Baterias cargadas y META alcanzada.", "is-success");
+      setMessage("Baterias cargadas y META alcanzada. Gran estrategia.", "is-success");
       completeChallenge(3);
     });
   });
@@ -1412,7 +1412,7 @@ function renderRobotChallengeV2() {
     selectedBlank = 0;
     renderGrid();
     paintRobot(route[0]);
-    setMessage("Sigue la ruta celeste: pasa por B1, despues por B2 y termina en META.");
+    setMessage("Arrancamos de nuevo. Busca B1, luego B2 y despues META.");
   });
 
   renderGrid();
@@ -1424,7 +1424,7 @@ function renderPatternChallengeV2() {
     {
       title: "Camino de baldosas",
       theme: "tiles",
-      hint: "Completa el piso: azul, azul, amarilla.",
+      hint: "Mira el ritmo del piso: azul, azul y amarilla.",
       pattern: ["tile-blue", "tile-blue", "tile-yellow"],
       sequence: ["tile-blue", "tile-blue", null, "tile-blue", null, "tile-yellow", "tile-blue", "tile-blue", null],
       answers: ["tile-yellow", "tile-blue", "tile-yellow"],
@@ -1488,7 +1488,7 @@ function renderPatternChallengeV2() {
   scenes.splice(0, scenes.length, {
     title: "Pasos del robot",
     theme: "commands",
-    hint: "Completa el patron: avanzar, avanzar y girar.",
+      hint: "Mira el ritmo del robot: avanzar, avanzar y girar.",
     pattern: ["cmd-forward", "cmd-forward", "cmd-turn"],
     sequence: ["cmd-forward", "cmd-forward", null, "cmd-forward", null, "cmd-turn", null, "cmd-forward", "cmd-turn"],
     answers: ["cmd-turn", "cmd-forward", "cmd-forward"],
@@ -1645,7 +1645,7 @@ function renderPatternChallengeV2() {
 
     challengeContent.querySelector("[data-check]").addEventListener("click", () => {
       if (blanks.some((blank) => !blank.dataset.value)) {
-        setMessage("Completa los tres espacios antes de comprobar.", "is-error");
+        setMessage("Faltan espacios por completar. Agregalos y vemos como queda.", "is-error");
         return;
       }
 
@@ -1657,13 +1657,13 @@ function renderPatternChallengeV2() {
           blank.classList.toggle("is-selected", index === firstWrongIndex);
         });
         selectedBlank = firstWrongIndex;
-        setMessage("Ese objeto rompe el patron del escenario. Mira el bloque modelo.", "is-error");
+        setMessage("Buen intento. Mira el bloque modelo y prueba otra pieza en la tarjeta marcada.", "is-error");
         return;
       }
 
       blanks.forEach((blank) => blank.classList.add("is-correct"));
       completedScenes.add(sceneIndex);
-      setMessage(`Escenario ${sceneIndex + 1} listo.`, "is-success");
+      setMessage(`Desafio ${sceneIndex + 1} resuelto. Muy buen trabajo detectando el patron.`, "is-success");
 
       if (completedScenes.size === scenes.length) {
         completeChallenge(4);
@@ -1708,7 +1708,7 @@ function renderCoordinatesChallenge() {
         <div class="coord-bank"></div>
         <div class="coord-grid"></div>
       </div>
-      <p class="challenge-message" data-message>Primero ubica Inicio en B2.</p>
+      <p class="challenge-message" data-message>Empecemos por el inicio: ubicalo en B2.</p>
     </article>
   `;
 
@@ -1729,7 +1729,7 @@ function renderCoordinatesChallenge() {
         selected = button.dataset.object;
         renderBank();
         const object = objects.find((item) => item.id === selected);
-        setMessage(`Ubica ${object.label} en ${object.target}.`);
+        setMessage(`Ahora busca ${object.label}: va en ${object.target}.`);
       });
     });
   }
@@ -1753,7 +1753,7 @@ function renderCoordinatesChallenge() {
         cell.addEventListener("click", () => {
           const object = objects.find((item) => item.id === selected);
           if (coord !== object.target) {
-            setMessage(`Revisa: ${object.label} va en ${object.target}.`, "is-error");
+            setMessage(`Casi. ${object.label} va en ${object.target}; busca esa coordenada en el mapa.`, "is-error");
             return;
           }
           placed[object.id] = coord;
@@ -1764,11 +1764,11 @@ function renderCoordinatesChallenge() {
             selected = next.id;
             renderBank();
             renderGrid();
-            setMessage(`Bien. Ahora ubica ${next.label} en ${next.target}.`, "is-good");
+            setMessage(`Muy bien. Ya quedo ese punto; ahora ubica ${next.label} en ${next.target}.`, "is-good");
           } else {
             renderBank();
             renderGrid();
-            setMessage("Ruta lista. Tu mapa del robot quedo completo.", "is-success");
+            setMessage("Mapa completo. Planeaste toda la ruta del robot.", "is-success");
             completeChallenge(5);
           }
         });
@@ -1862,7 +1862,7 @@ function renderGraphicPatternLevel(config) {
 
   challengeContent.querySelector("[data-check]").addEventListener("click", () => {
     if (blanks.some((blank) => !blank.dataset.value)) {
-      setMessage("Completa todos los espacios antes de comprobar.", "is-error");
+      setMessage("Todavia quedan espacios vacios. Completalos y lo probamos.", "is-error");
       return;
     }
     const values = blanks.map((blank) => blank.dataset.value);
@@ -1873,11 +1873,11 @@ function renderGraphicPatternLevel(config) {
         blank.classList.toggle("is-selected", index === firstWrong);
       });
       selectedBlank = firstWrong;
-      setMessage("Ese objeto rompe el patron visual.", "is-error");
+      setMessage("Buen intento. La tarjeta marcada no sigue el patron; mira el modelo otra vez.", "is-error");
       return;
     }
     blanks.forEach((blank) => blank.classList.add("is-correct"));
-    setMessage("Patron completo.", "is-success");
+    setMessage("Patron completo. Muy buen ojo para encontrar la repeticion.", "is-success");
     completeChallenge(1);
   });
 
@@ -1897,7 +1897,7 @@ function renderLevel6Lights() {
   renderGraphicPatternLevel({
     title: "Luces del semaforo",
     theme: "lights",
-    hint: "Completa la secuencia de luces: verde, verde, rojo.",
+    hint: "Mira el ritmo de luces: verde, verde y rojo.",
     pattern: ["light-green", "light-green", "light-red"],
     sequence: ["light-green", "light-green", null, "light-green", null, "light-red", null, "light-green", "light-red"],
     answers: ["light-red", "light-green", "light-green"],
@@ -1928,7 +1928,7 @@ function renderLevel7Factory() {
           <button type="button" data-bin="rosa">Deposito rosa</button>
         </div>
       </div>
-      <p class="challenge-message" data-message>Selecciona el deposito de la caja marcada.</p>
+      <p class="challenge-message" data-message>Mira la caja marcada y llevala al deposito del mismo color.</p>
     </article>
   `;
 
@@ -1944,17 +1944,17 @@ function renderLevel7Factory() {
       const item = items[current];
       if (!item || sorted.has(current)) return;
       if (button.dataset.bin !== item.target) {
-        setMessage("Ese deposito no coincide con la caja.", "is-error");
+        setMessage("Casi. Esa caja necesita el deposito de su mismo color.", "is-error");
         return;
       }
       sorted.add(current);
       current += 1;
       renderFactory();
       if (sorted.size === items.length) {
-        setMessage("Todas las cajas quedaron ordenadas.", "is-success");
+        setMessage("Todas las cajas quedaron ordenadas. Excelente trabajo de clasificacion.", "is-success");
         completeChallenge(1);
       } else {
-        setMessage("Bien. Ahora clasifica la siguiente caja.", "is-good");
+        setMessage("Bien hecho. Vamos con la siguiente caja.", "is-good");
       }
     });
   });
@@ -1978,7 +1978,7 @@ function renderLevel8Circuit() {
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>Comprobar</button>
       </div>
-      <p class="challenge-message" data-message>Copia el patron de luces de arriba.</p>
+      <p class="challenge-message" data-message>Enciende los switches para copiar las luces de arriba.</p>
     </article>
   `;
 
@@ -1998,10 +1998,10 @@ function renderLevel8Circuit() {
 
   challengeContent.querySelector("[data-check]").addEventListener("click", () => {
     if (state.every((value, index) => value === target[index])) {
-      setMessage("Circuito encendido correctamente.", "is-success");
+      setMessage("Circuito encendido. Copiaste el patron perfecto.", "is-success");
       completeChallenge(1);
     } else {
-      setMessage("Todavia no copia el objetivo.", "is-error");
+      setMessage("Todavia no coincide. Mira las luces de arriba y prueba otro switch.", "is-error");
     }
   });
 
@@ -2020,7 +2020,7 @@ function renderLevel9Memory() {
       <div class="memory-grid">
         ${cards.map((card, index) => `<button class="memory-card" type="button" data-card="${index}" data-value="${card}">?</button>`).join("")}
       </div>
-      <p class="challenge-message" data-message>Da vuelta dos cartas y busca las parejas.</p>
+      <p class="challenge-message" data-message>Da vuelta dos cartas y busca las parejas iguales.</p>
     </article>
   `;
 
@@ -2042,7 +2042,7 @@ function renderLevel9Memory() {
         card.classList.add("is-matched");
         first = null;
         if (matched.size === cards.length) {
-          setMessage("Encontraste todos los pares.", "is-success");
+          setMessage("Encontraste todos los pares. Memoria de campeon.", "is-success");
           completeChallenge(1);
         }
         return;
@@ -2081,7 +2081,7 @@ function renderLevel10Lock() {
       <div class="challenge-actions">
         <button class="secondary-action" type="button" data-reset>Borrar</button>
       </div>
-      <p class="challenge-message" data-message>Cada columna muestra un numero del codigo.</p>
+      <p class="challenge-message" data-message>Cada columna te da un numero del codigo.</p>
     </article>
   `;
 
@@ -2097,10 +2097,10 @@ function renderLevel10Lock() {
       renderDisplay();
       if (input.length === 3) {
         if (input === code) {
-          setMessage("Candado abierto. Nivel final completado.", "is-success");
+          setMessage("Candado abierto. Completaste el nivel final, gran trabajo.", "is-success");
           completeChallenge(1);
         } else {
-          setMessage("Ese codigo no coincide con las columnas.", "is-error");
+          setMessage("Casi. Ese codigo no coincide con las columnas; vuelve a contar con calma.", "is-error");
         }
       }
     });
@@ -2109,7 +2109,7 @@ function renderLevel10Lock() {
   challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
     input = "";
     renderDisplay();
-    setMessage("Cada columna muestra un numero del codigo.");
+    setMessage("Codigo limpio. Mira cada columna y vuelve a intentarlo.");
   });
 }
 
