@@ -328,6 +328,10 @@ function renderCommand(command) {
   `;
 }
 
+function renderInlineCommand(command) {
+  return `${commandSymbols[command] || "?"} ${command}`;
+}
+
 function renderCommandButton(command, className = "instruction-chip") {
   return `
     <button class="${className}" type="button" data-value="${command}" aria-label="${command}">
@@ -964,19 +968,19 @@ function renderPatternChallenge() {
       ${renderHeader(4, getChallengeInstruction(4, "Completa el patron de instrucciones que se repite."))}
       <p class="challenge-note">El bloque se repite de a tres: Avanzar, Avanzar, Girar der.</p>
       <div class="pattern-row">
-        <span data-group="1">Avanzar</span><span data-group="1">Avanzar</span><span data-group="1">Girar der.</span>
-        <span data-group="2">Avanzar</span>
+        <span data-group="1">${renderInlineCommand("Avanzar")}</span><span data-group="1">${renderInlineCommand("Avanzar")}</span><span data-group="1">${renderInlineCommand("Girar der.")}</span>
+        <span data-group="2">${renderInlineCommand("Avanzar")}</span>
         <button type="button" class="pattern-blank is-selected" data-blank="0">?</button>
-        <span data-group="2">Girar der.</span>
+        <span data-group="2">${renderInlineCommand("Girar der.")}</span>
         <button type="button" class="pattern-blank" data-blank="1">?</button>
-        <span data-group="3">Avanzar</span>
+        <span data-group="3">${renderInlineCommand("Avanzar")}</span>
         <button type="button" class="pattern-blank" data-blank="2">?</button>
       </div>
       <div class="option-bank">
-        <button type="button">Avanzar</button>
-        <button type="button">Girar der.</button>
-        <button type="button">Girar izq.</button>
-        <button type="button">Saltar</button>
+        <button type="button" data-value="Avanzar">${renderInlineCommand("Avanzar")}</button>
+        <button type="button" data-value="Girar der.">${renderInlineCommand("Girar der.")}</button>
+        <button type="button" data-value="Girar izq.">${renderInlineCommand("Girar izq.")}</button>
+        <button type="button" data-value="Saltar">${renderInlineCommand("Saltar")}</button>
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>Comprobar</button>
@@ -998,8 +1002,9 @@ function renderPatternChallenge() {
 
   challengeContent.querySelectorAll(".option-bank button").forEach((button) => {
     button.addEventListener("click", () => {
-      blanks[selectedBlank].textContent = button.textContent;
-      blanks[selectedBlank].dataset.value = button.textContent;
+      const command = button.dataset.value;
+      blanks[selectedBlank].textContent = renderInlineCommand(command);
+      blanks[selectedBlank].dataset.value = command;
       blanks[selectedBlank].classList.remove("is-wrong", "is-correct");
       const next = blanks.find((blank) => !blank.dataset.value);
       blanks.forEach((item) => item.classList.remove("is-selected"));
@@ -1509,14 +1514,25 @@ function renderPatternChallengeV2() {
     flower: "Flor",
     leaf: "Hoja",
     "cmd-forward": "Avanzar",
-    "cmd-turn": "Girar",
+    "cmd-turn": "Girar der.",
     "cmd-jump": "Saltar",
+  };
+  const commandItems = {
+    "cmd-forward": "Avanzar",
+    "cmd-turn": "Girar der.",
+    "cmd-jump": "Saltar",
+    "turn-right": "Girar der.",
+    "turn-left": "Girar izq.",
   };
   let sceneIndex = 0;
   let selectedBlank = 0;
   const completedScenes = new Set();
 
   function itemMarkup(kind) {
+    if (commandItems[kind]) {
+      return `<span class="pattern-item kind-${kind} command-pattern-item">${renderCommand(commandItems[kind])}</span>`;
+    }
+
     return `<span class="pattern-item kind-${kind}"><i></i><strong>${labels[kind]}</strong></span>`;
   }
 

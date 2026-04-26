@@ -1560,6 +1560,21 @@ button:disabled {
   line-height: 1;
 }
 
+.command-pattern-item {
+  grid-template-rows: auto auto;
+  gap: 3px;
+}
+
+.command-pattern-item .command-symbol {
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  line-height: 1;
+}
+
+.command-pattern-item .command-label {
+  font-size: clamp(0.58rem, 1.3vw, 0.74rem);
+  line-height: 1;
+}
+
 .graphic-options {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2161,7 +2176,7 @@ button:disabled {
   }
 
   .challenge-card-coords {
-    justify-content: flex-start;
+    justify-content: center;
   }
 
   .challenge-card-coords .challenge-header p {
@@ -2172,7 +2187,7 @@ button:disabled {
     grid-template-columns: 1fr;
     width: 100%;
     max-width: 282px;
-    margin: 0 auto 0 0;
+    margin: 0 auto;
     flex: 0 0 auto;
     gap: 8px;
     align-content: start;
@@ -2482,6 +2497,14 @@ button:disabled {
   .pattern-item i {
     width: 24px;
     height: 18px;
+  }
+
+  .command-pattern-item .command-symbol {
+    font-size: 1.45rem;
+  }
+
+  .command-pattern-item .command-label {
+    font-size: 0.56rem;
   }
 
   .graphic-options {
