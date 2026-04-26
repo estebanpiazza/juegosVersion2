@@ -1478,31 +1478,42 @@ function renderPatternChallengeV2() {
           <p>${scene.hint}</p>
         </header>
         <div class="pattern-visual-layout pattern-scene pattern-theme-${scene.theme}">
-          <div class="pattern-progress" aria-label="Escenarios completados">
-            ${scenes.map((item, index) => `
-              <button class="${index === sceneIndex ? "is-active" : ""} ${completedScenes.has(index) ? "is-done" : ""}" type="button" data-scene="${index}">
-                ${index + 1}
-              </button>
-            `).join("")}
-          </div>
-          <div class="pattern-preview" aria-label="Bloque que se repite">
-            ${scene.pattern.map(itemMarkup).join("")}
-          </div>
-          <div class="pattern-row graphic-pattern-row">
-            ${scene.sequence.map((kind) => {
+          ${scenes.length > 1 ? `
+            <div class="pattern-progress" aria-label="Escenarios completados">
+              ${scenes.map((item, index) => `
+                <button class="${index === sceneIndex ? "is-active" : ""} ${completedScenes.has(index) ? "is-done" : ""}" type="button" data-scene="${index}">
+                  ${index + 1}
+                </button>
+              `).join("")}
+            </div>
+          ` : ""}
+          <section class="pattern-section pattern-model-section" aria-labelledby="pattern-model-title">
+            <h3 id="pattern-model-title">Patron</h3>
+            <div class="pattern-preview" aria-label="Bloque que se repite">
+              ${scene.pattern.map(itemMarkup).join("")}
+            </div>
+          </section>
+          <section class="pattern-section pattern-complete-section" aria-labelledby="pattern-complete-title">
+            <h3 id="pattern-complete-title">A completar</h3>
+            <div class="pattern-row graphic-pattern-row">
+              ${scene.sequence.map((kind) => {
     if (kind) return itemMarkup(kind);
     const markup = blankMarkup(blankIndex, blankIndex === 0);
     blankIndex += 1;
     return markup;
   }).join("")}
-          </div>
-          <div class="option-bank compact-bank graphic-options">
-            ${scene.options.map((kind) => `
-              <button type="button" data-option="${kind}">
-                ${itemMarkup(kind)}
-              </button>
-            `).join("")}
-          </div>
+            </div>
+          </section>
+          <section class="pattern-section pattern-actions-section" aria-labelledby="pattern-actions-title">
+            <h3 id="pattern-actions-title">Acciones</h3>
+            <div class="option-bank compact-bank graphic-options">
+              ${scene.options.map((kind) => `
+                <button type="button" data-option="${kind}">
+                  ${itemMarkup(kind)}
+                </button>
+              `).join("")}
+            </div>
+          </section>
         </div>
         <div class="challenge-actions">
           <button class="primary-action" type="button" data-check>Comprobar</button>

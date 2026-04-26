@@ -1403,6 +1403,36 @@ button:disabled {
   justify-content: flex-start;
 }
 
+.pattern-section {
+  display: grid;
+  gap: 6px;
+  min-height: 0;
+}
+
+.pattern-section h3 {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.pattern-model-section {
+  flex: 0 0 auto;
+}
+
+.pattern-complete-section {
+  flex: 0 1 auto;
+}
+
+.pattern-actions-section {
+  flex: 0 0 auto;
+}
+
 .pattern-progress {
   display: flex;
   justify-content: center;
