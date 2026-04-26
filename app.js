@@ -214,7 +214,7 @@ function showScenarioCompleteModal(id) {
     <p class="challenge-kicker">Logro desbloqueado</p>
     <h2 id="scenario-modal-title">Lo hiciste genial</h2>
     <p>${nextScenario
-      ? `Completaste ${title}. Tu robot ya esta listo para el proximo desafio.`
+      ? `Completaste el nivel. Tu robot ya esta listo para el proximo desafio.`
       : `Completaste todos los desafios de este grado. Gran recorrido.`}</p>
     <div class="scenario-modal-actions">
       ${nextScenario
