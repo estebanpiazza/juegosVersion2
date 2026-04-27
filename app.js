@@ -490,7 +490,7 @@ function renderPathChallenge() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(1, getChallengeInstruction(1, "Mira el camino celeste y completa los giros para que el robot vaya desde INICIO hasta META."))}
+      ${renderHeader(1, getChallengeInstruction(1, "Mira el camino celeste y completa los giros para que el robot vaya desde INICIO hasta 🏁."))}
       <div class="path-layout">
         <div class="path-map" data-path-map></div>
         ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup })}
@@ -521,7 +521,7 @@ function renderPathChallenge() {
       }
       if (key === "1-4") {
         cell.classList.add("is-goal");
-        cell.textContent = "META";
+        cell.textContent = "🏁";
       }
       cell.dataset.baseText = cell.textContent;
       mapCells.set(key, cell);
@@ -594,7 +594,7 @@ function renderPathChallenge() {
     if (!issue) {
       setMessage("Muy bien, tu plan ya tiene forma. Miremos al robot en accion.", "is-good");
       runRobotAnimation().then(() => {
-        setMessage("Excelente trabajo. El robot siguio tu camino y llego a la meta.", "is-success");
+        setMessage("Excelente trabajo. El robot siguio tu camino y llego a la bandera 🏁.", "is-success");
         completeChallenge(1);
       });
       return;
@@ -641,13 +641,13 @@ function renderBalanceChallenge() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card challenge-card-debug">
-      ${renderHeader(2, getChallengeInstruction(2, "Corrige el programa para que el robot salga de IN y llegue a META."))}
+      ${renderHeader(2, getChallengeInstruction(2, "Corrige el programa para que el robot salga de IN y llegue a 🏁 sin meterse al agua."))}
       <section class="debug-reference" aria-label="Referencia visual">
         <h3>Mapa de referencia</h3>
         <div class="debug-legend">
           <span><i class="legend-dot legend-start"></i> Inicio</span>
-          <span><i class="legend-dot legend-goal"></i> Meta</span>
-          <span><i class="legend-dot legend-obstacle"></i> Bloque</span>
+          <span><i class="legend-dot legend-goal"></i> Bandera 🏁</span>
+          <span><i class="legend-dot legend-obstacle"></i> Agua</span>
           <span><i class="legend-dot legend-trail"></i> Recorrido</span>
         </div>
       </section>
@@ -668,7 +668,7 @@ function renderBalanceChallenge() {
         <button class="primary-action" type="button" data-check>Comprobar</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Probemos la linea 1: necesita apuntar hacia META.</p>
+      <p class="challenge-message" data-message>Probemos la linea 1: necesita apuntar hacia 🏁.</p>
     </article>
   `;
 
@@ -732,7 +732,7 @@ function renderBalanceChallenge() {
         if (trailSet.has(key)) cell.classList.add("is-trail");
         if (obstacle.has(key)) {
           cell.classList.add("is-obstacle");
-          cell.textContent = "X";
+          cell.textContent = "💧";
         }
         if (row === start.row && col === start.col) {
           cell.classList.add("is-start");
@@ -740,7 +740,7 @@ function renderBalanceChallenge() {
         }
         if (row === goal.row && col === goal.col) {
           cell.classList.add("is-goal");
-          cell.textContent = "META";
+          cell.textContent = "🏁";
         }
         if (key === robotKey) {
           cell.classList.add("is-robot");
@@ -793,7 +793,7 @@ function renderBalanceChallenge() {
     renderMap(result, true, true);
 
     if (result.ok && program[fixedStep] === expectedFix) {
-      setMessage("Gran arreglo. El robot esquivo el bloque rojo y llego a META.", "is-success");
+      setMessage("Gran arreglo. El robot esquivo el bloque rojo y llego a 🏁.", "is-success");
       completeChallenge(2);
       return;
     }
@@ -808,7 +808,7 @@ function renderBalanceChallenge() {
       return;
     }
 
-    setMessage("Todavia no llega a META, pero estás cerca. La linea 1 necesita girar hacia la derecha.", "is-error");
+    setMessage("Todavia no llega a 🏁, pero estás cerca. La linea 1 necesita girar hacia la derecha.", "is-error");
   });
 
   challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
@@ -816,7 +816,7 @@ function renderBalanceChallenge() {
     selectedLine = fixedStep;
     renderProgram();
     renderMap({ trail: [keyOf(start.row, start.col)], robot: { ...start } }, true, true);
-    setMessage("Volvemos al inicio. Probemos la linea 1 para que mire hacia META.");
+    setMessage("Volvemos al inicio. Probemos la linea 1 para que mire hacia 🏁.");
   });
 
   renderProgram();
@@ -1156,7 +1156,7 @@ function renderBalanceChallengeV2() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(2, getChallengeInstruction(2, "Completa los giros para esquivar los bloques rojos y llegar a META."))}
+      ${renderHeader(2, getChallengeInstruction(2, "Completa los giros para esquivar el agua y llegar a 🏁."))}
       <div class="visual-sequence-layout">
         <div class="path-map visual-map" data-map></div>
         ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
@@ -1165,7 +1165,7 @@ function renderBalanceChallengeV2() {
         <button class="primary-action" type="button" data-check>Comprobar</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Mira la ruta celeste: con dos giros bien elegidos el robot rodea los bloques.</p>
+      <p class="challenge-message" data-message>Mira la ruta celeste: con dos giros bien elegidos el robot rodea el agua.</p>
     </article>
   `;
 
@@ -1191,7 +1191,7 @@ function renderBalanceChallengeV2() {
         if (routeCells.has(key)) cell.classList.add("is-route");
         if (obstacles.has(key)) {
           cell.classList.add("is-obstacle");
-          cell.textContent = "X";
+          cell.textContent = "💧";
         }
         if (key === route[0]) {
           cell.classList.add("is-start");
@@ -1199,7 +1199,7 @@ function renderBalanceChallengeV2() {
         }
         if (key === route[route.length - 1]) {
           cell.classList.add("is-goal");
-          cell.textContent = "META";
+          cell.textContent = "🏁";
         }
         cell.dataset.baseText = cell.textContent;
         cells.set(key, cell);
@@ -1291,7 +1291,7 @@ function renderBalanceChallengeV2() {
 
     setMessage("Muy bien, la ruta quedo armada. Mira al robot probar tu idea.", "is-good");
     animateRoute().then(() => {
-      setMessage("Ruta lograda. El robot llego a META gracias a tu plan.", "is-success");
+      setMessage("Ruta lograda. El robot llego a 🏁 gracias a tu plan.", "is-success");
       completeChallenge(2);
     });
   });
@@ -1340,7 +1340,7 @@ function renderRobotChallengeV2() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(3, getChallengeInstruction(3, "Arma la secuencia para juntar las baterias y llegar a META."))}
+      ${renderHeader(3, getChallengeInstruction(3, "Arma la secuencia para juntar las baterias y llegar a 🏁."))}
       <div class="visual-sequence-layout">
         <div class="robot-grid visual-map" data-map></div>
         ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
@@ -1349,7 +1349,7 @@ function renderRobotChallengeV2() {
         <button class="primary-action" type="button" data-check>Ejecutar</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Sigue la ruta celeste: junta B1, despues B2 y termina en META.</p>
+      <p class="challenge-message" data-message>Sigue la ruta celeste: junta las pilas de energia y termina en 🏁.</p>
     </article>
   `;
 
@@ -1375,11 +1375,11 @@ function renderRobotChallengeV2() {
         if (routeCells.has(key)) cell.classList.add("is-route");
         if (obstacles.has(key)) {
           cell.classList.add("is-obstacle");
-          cell.textContent = "X";
+          cell.textContent = "💧";
         }
         if (batteries.has(key)) {
           cell.classList.add("is-treasure");
-          cell.textContent = key === "5-2" ? "B1" : "B2";
+          cell.textContent = key === "5-2" ? "🔋" : "⚡";
         }
         if (key === route[0]) {
           cell.classList.add("is-start");
@@ -1387,7 +1387,7 @@ function renderRobotChallengeV2() {
         }
         if (key === route[route.length - 1]) {
           cell.classList.add("is-goal");
-          cell.textContent = "META";
+          cell.textContent = "🏁";
         }
         cell.dataset.baseText = cell.textContent;
         cells.set(key, cell);
@@ -1478,7 +1478,7 @@ function renderRobotChallengeV2() {
 
     setMessage("Secuencia lista. Vamos a ver al robot juntar las baterias.", "is-good");
     animateRoute().then(() => {
-      setMessage("Baterias cargadas y META alcanzada. Gran estrategia.", "is-success");
+      setMessage("Baterias cargadas y 🏁 alcanzada. Gran estrategia.", "is-success");
       completeChallenge(3);
     });
   });
@@ -1494,7 +1494,7 @@ function renderRobotChallengeV2() {
     selectedBlank = 0;
     renderGrid();
     paintRobot(route[0]);
-    setMessage("Arrancamos de nuevo. Busca B1, luego B2 y despues META.");
+    setMessage("Arrancamos de nuevo. Recarga energia y despues llega a 🏁.");
   });
 
   renderGrid();
@@ -1774,14 +1774,14 @@ function renderCoordinatesChallenge() {
     { id: "inicio", label: "Inicio", icon: "🏁", target: "B2" },
     { id: "bateria", label: "Bateria", icon: "🔋", target: "D2" },
     { id: "llave", label: "Llave", icon: "🗝️", target: "D5" },
-    { id: "meta", label: "Meta", icon: "⭐", target: "F5" },
+    { id: "meta", label: "Bandera", icon: "🏁", target: "F5" },
   ];
   let selected = objects[0].id;
   const placed = {};
 
   challengeContent.innerHTML = `
     <article class="challenge-card challenge-card-coords">
-      ${renderHeader(5, getChallengeInstruction(5, "Ubica puntos del mapa para planear la ruta del robot desde inicio hasta la meta."))}
+      ${renderHeader(5, getChallengeInstruction(5, "Ubica puntos del mapa para planear la ruta del robot desde inicio hasta la bandera 🏁."))}
       <div class="coord-layout">
         <div class="coord-bank"></div>
         <div class="coord-grid"></div>

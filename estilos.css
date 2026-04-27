@@ -1363,7 +1363,7 @@ button:disabled {
 
 .robot-cell.is-obstacle {
   color: var(--color-white);
-  background: #7fb9d8;
+  background: #e25353;
 }
 
 .robot-cell.is-start {
