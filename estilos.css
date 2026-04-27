@@ -1630,6 +1630,23 @@ button:disabled {
   box-shadow: none;
 }
 
+.pattern-theme-commands .graphic-pattern-row .pattern-item,
+.pattern-theme-commands .graphic-pattern-row .graphic-blank {
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.pattern-theme-commands .graphic-pattern-row .graphic-blank.is-selected,
+.pattern-theme-commands .graphic-pattern-row .graphic-blank.is-correct,
+.pattern-theme-commands .graphic-pattern-row .graphic-blank.is-wrong {
+  border: 0;
+  background: transparent;
+}
+
 .graphic-options {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
