@@ -1772,8 +1772,8 @@ function renderPatternChallengeV2() {
 function renderCoordinatesChallenge() {
   const objects = [
     { id: "inicio", label: "Inicio", icon: "🏁", target: "B2" },
-    { id: "bateria", label: "Bateria", icon: "🔋", target: "D2" },
-    { id: "llave", label: "Llave", icon: "🗝️", target: "D5" },
+    { id: "bateria", label: "Batería", icon: "🔋", target: "D2" },
+    { id: "llave", label: "Recarga de energía", icon: "⚡", target: "D5" },
     { id: "meta", label: "Bandera", icon: "🏁", target: "F5" },
   ];
   let selected = objects[0].id;
@@ -1825,7 +1825,7 @@ function renderCoordinatesChallenge() {
         cell.textContent = coord;
         const placedObject = objects.find((object) => placed[object.id] === coord);
         if (placedObject) {
-          cell.classList.add("has-object");
+          cell.classList.add("has-object", `object-${placedObject.id}`);
           cell.textContent = placedObject.icon;
         }
         cell.addEventListener("click", () => {
@@ -1835,7 +1835,7 @@ function renderCoordinatesChallenge() {
             return;
           }
           placed[object.id] = coord;
-          cell.classList.add("has-object");
+          cell.classList.add("has-object", `object-${object.id}`);
           cell.textContent = object.icon;
           const next = objects.find((item) => !placed[item.id]);
           if (next) {

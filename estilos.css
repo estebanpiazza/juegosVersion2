@@ -811,7 +811,7 @@ body.has-scenario-modal {
 }
 
 .path-map-cell.is-goal {
-  background: #2fb36d;
+  background: #1f7a3f;
 }
 
 .path-map-cell.is-robot {
@@ -1118,7 +1118,7 @@ body.has-scenario-modal {
 
 .debug-map-cell.is-goal {
   color: #ffffff;
-  background: #2fb36d;
+  background: #1f7a3f;
 }
 
 .debug-map-cell.is-robot {
@@ -1371,8 +1371,13 @@ button:disabled {
 }
 
 .robot-cell.is-treasure {
-  color: #3c3100;
-  background: #fff2bb;
+  color: #14532d;
+  background: #b7f4c2;
+}
+
+.robot-cell.is-goal {
+  color: #ffffff;
+  background: #1f7a3f;
 }
 
 .robot-cell.is-trail {
@@ -1879,6 +1884,37 @@ button:disabled {
 
 .coord-bank button.is-selected {
   background: var(--color-accent);
+}
+
+.coord-bank button[data-object="meta"] {
+  color: #ffffff;
+  background: #1f7a3f;
+}
+
+.coord-bank button[data-object="meta"] em {
+  color: #ffffff;
+}
+
+.coord-bank button[data-object="bateria"],
+.coord-bank button[data-object="llave"] {
+  background: #b7f4c2;
+}
+
+.coord-bank button.is-selected[data-object="bateria"],
+.coord-bank button.is-selected[data-object="llave"] {
+  background: #9be9ab;
+}
+
+.coord-cell.has-object.object-meta {
+  color: #ffffff;
+  border-color: #1f7a3f;
+  background: #1f7a3f;
+}
+
+.coord-cell.has-object.object-bateria,
+.coord-cell.has-object.object-llave {
+  border-color: #66cb83;
+  background: #b7f4c2;
 }
 
 .coord-bank span {
