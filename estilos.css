@@ -1622,6 +1622,14 @@ button:disabled {
   line-height: 1;
 }
 
+.pattern-theme-commands .command-pattern-item {
+  min-height: auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .graphic-options {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

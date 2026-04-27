@@ -392,7 +392,19 @@ function renderHeader(id, instruction) {
 
 function getChallengeInstruction(id, fallbackText) {
   const challenge = getChallengesFromData(currentLevelData)[id - 1];
-  return challenge?.consigna || fallbackText;
+  const baseInstruction = challenge?.consigna || fallbackText;
+  const reminders = [];
+
+  if (id === 2 || id === 3) {
+    reminders.push("Si hay agua, evita pasar por ahi para no dañar al robot.");
+  }
+
+  if (id === 3 || id === 5) {
+    reminders.push("Agarra la bateria y la recarga para que el robot no se quede sin energia.");
+  }
+
+  if (!reminders.length) return baseInstruction;
+  return `${baseInstruction} ${reminders.join(" ")}`;
 }
 
 const commandSymbols = {
