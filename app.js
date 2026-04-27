@@ -260,6 +260,7 @@ function wireSelectorButtons() {
 }
 
 function openChallenge(id) {
+  stopSpeech();
   challengeShell?.classList.add("is-open");
 
   const challengeData = getChallengesFromData(currentLevelData)[id - 1];
@@ -279,6 +280,7 @@ function openChallenge(id) {
 }
 
 function showLocked(id) {
+  stopSpeech();
   selectorButtons.forEach((chip) => chip.classList.remove("is-active"));
   document.querySelector(`[data-challenge="${id}"]`)?.classList.add("is-active");
   challengeShell?.classList.add("is-open");
@@ -298,14 +300,94 @@ function setMessage(text, tone = "") {
   message.className = `challenge-message ${tone}`;
 }
 
-function renderHeader(id, instruction) {
+function resetSpeechButton(button) {
+  if (!button) return;
+  button.classList.remove("is-speaking");
+  button.disabled = false;
+  const label = button.querySelector("[data-speech-label]");
+  if (label) label.textContent = "Escuchar consigna";
+}
+
+let activeSpeechButton = null;
+
+function stopSpeech() {
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  resetSpeechButton(activeSpeechButton);
+  activeSpeechButton = null;
+}
+
+function getSpanishVoice() {
+  if (!("speechSynthesis" in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  return voices.find((voice) => voice.lang === "es-AR")
+    || voices.find((voice) => voice.lang?.startsWith("es"))
+    || null;
+}
+
+function speakInstruction(text, button) {
+  const cleanText = text?.trim();
+  if (!cleanText) return;
+
+  if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+    setMessage("Tu navegador no tiene lectura de voz disponible.", "is-error");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  resetSpeechButton(activeSpeechButton);
+
+  const utterance = new SpeechSynthesisUtterance(cleanText);
+  const spanishVoice = getSpanishVoice();
+  utterance.lang = spanishVoice?.lang || "es-AR";
+  utterance.rate = 0.92;
+  utterance.pitch = 1;
+  if (spanishVoice) utterance.voice = spanishVoice;
+
+  activeSpeechButton = button;
+  button.classList.add("is-speaking");
+  button.disabled = true;
+  const buttonLabel = button.querySelector("[data-speech-label]");
+  if (buttonLabel) buttonLabel.textContent = "Escuchando";
+
+  utterance.addEventListener("end", () => {
+    resetSpeechButton(button);
+    if (activeSpeechButton === button) activeSpeechButton = null;
+  });
+
+  utterance.addEventListener("error", () => {
+    resetSpeechButton(button);
+    if (activeSpeechButton === button) activeSpeechButton = null;
+  });
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function renderChallengeHeader(kicker, title, instruction) {
   return `
     <header class="challenge-header">
-      <p class="challenge-kicker">desafío ${id}</p>
-      <h2>${challengeTitles[id]}</h2>
-      <p>${instruction}</p>
+      <p class="challenge-kicker">${kicker}</p>
+      <div class="challenge-title-row">
+        <h2>${title}</h2>
+        <button class="listen-consigna" type="button" data-speak-consigna aria-label="Escuchar consigna" title="Escuchar consigna">
+          <span aria-hidden="true" class="listen-consigna-icon">&#128266;</span>
+          <span data-speech-label>Escuchar consigna</span>
+        </button>
+      </div>
+      <p data-consigna-text>${instruction}</p>
     </header>
   `;
+}
+
+challengeContent?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-speak-consigna]");
+  if (!button) return;
+  const header = button.closest(".challenge-header");
+  const instruction = header?.querySelector("[data-consigna-text]")?.textContent;
+  speakInstruction(instruction, button);
+});
+
+function renderHeader(id, instruction) {
+  return renderChallengeHeader(`desafío ${id}`, challengeTitles[id], instruction);
 }
 
 function getChallengeInstruction(id, fallbackText) {
@@ -1551,11 +1633,7 @@ function renderPatternChallengeV2() {
 
     challengeContent.innerHTML = `
       <article class="challenge-card">
-        <header class="challenge-header">
-          <p class="challenge-kicker">desafío 4</p>
-          <h2>${scene.title}</h2>
-          <p>${scene.hint}</p>
-        </header>
+        ${renderChallengeHeader("desafío 4", scene.title, scene.hint)}
         <div class="pattern-visual-layout pattern-scene pattern-theme-${scene.theme}">
           ${scenes.length > 1 ? `
             <div class="pattern-progress" aria-label="Escenarios completados">
@@ -1791,13 +1869,7 @@ const graphicLabels = {
 };
 
 function renderLevelHeader(title, instruction) {
-  return `
-    <header class="challenge-header">
-      <p class="challenge-kicker">Nivel ${level}</p>
-      <h2>${title}</h2>
-      <p>${instruction}</p>
-    </header>
-  `;
+  return renderChallengeHeader(`Nivel ${level}`, title, instruction);
 }
 
 function renderGraphicToken(kind) {
