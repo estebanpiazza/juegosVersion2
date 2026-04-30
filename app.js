@@ -14,6 +14,7 @@ let scenarioModal = null;
 let availableLevels = [];
 let levelDataByNumber = new Map();
 let currentLevelData = null;
+let activeChallengeId = 1;
 
 let challengeTitles = {
   1: "Camino del robot",
@@ -278,13 +279,14 @@ function wireSelectorButtons() {
 
 function openChallenge(id) {
   stopSpeech();
+  activeChallengeId = id;
   challengeShell?.classList.add("is-open");
 
   const challengeData = getChallengesFromData(currentLevelData)[id - 1];
   if (challengeData) {
     const renderer = challengeTypeRenderers[challengeData.tipo];
     if (renderer) {
-      renderer();
+      renderer(id);
       return;
     }
   }
@@ -404,11 +406,13 @@ challengeContent?.addEventListener("click", (event) => {
 });
 
 function renderHeader(id, instruction) {
-  return renderChallengeHeader(`desafío ${id}`, challengeTitles[id], instruction);
+  const headerId = Number.isInteger(id) ? id : activeChallengeId;
+  return renderChallengeHeader(`desafío ${headerId}`, challengeTitles[headerId], instruction);
 }
 
 function getChallengeInstruction(id, fallbackText) {
-  const challenge = getChallengesFromData(currentLevelData)[id - 1];
+  const challengeId = Number.isInteger(id) ? id : activeChallengeId;
+  const challenge = getChallengesFromData(currentLevelData)[challengeId - 1];
   const baseInstruction = challenge?.consigna || fallbackText;
   const reminders = [];
 
@@ -2099,7 +2103,6 @@ function renderSequenceMemoryChallenge(id = 1) {
   const sequence = ["azul", "amarillo", "azul", "rosa"];
   const labels = { azul: "Azul", amarillo: "Amarillo", rosa: "Rosa" };
   const input = [];
-  let showing = true;
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
@@ -2113,10 +2116,9 @@ function renderSequenceMemoryChallenge(id = 1) {
         </div>
       </div>
       <div class="challenge-actions">
-        <button class="secondary-action" type="button" data-show>Ver modelo</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Primero mira el modelo. Despues repetilo con las luces de colores.</p>
+      <p class="challenge-message" data-message>Mira el modelo visible arriba y repetilo con las luces de colores.</p>
     </article>
   `;
 
@@ -2125,19 +2127,11 @@ function renderSequenceMemoryChallenge(id = 1) {
 
   function renderMemory() {
     preview.innerHTML = sequence.map((color, index) => `
-      <span class="memory-dot light-${showing ? color : "hidden"}">${showing ? index + 1 : "?"}</span>
+      <span class="memory-dot light-${color}">${index + 1}</span>
     `).join("");
     inputNode.innerHTML = sequence.map((_, index) => `
       <span class="memory-dot ${input[index] ? `light-${input[index]}` : ""}">${input[index] ? index + 1 : "?"}</span>
     `).join("");
-  }
-
-  function hidePreviewSoon() {
-    window.setTimeout(() => {
-      showing = false;
-      renderMemory();
-      setMessage("Ahora repetila abajo. Puedes volver a ver el modelo si lo necesitas.");
-    }, 1800);
   }
 
   challengeContent.querySelectorAll("[data-light]").forEach((button) => {
@@ -2164,23 +2158,13 @@ function renderSequenceMemoryChallenge(id = 1) {
     });
   });
 
-  challengeContent.querySelector("[data-show]").addEventListener("click", () => {
-    showing = true;
-    renderMemory();
-    setMessage("Mira el modelo unos segundos.");
-    hidePreviewSoon();
-  });
-
   challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
     input.length = 0;
-    showing = true;
     renderMemory();
-    setMessage("Volvemos al modelo. Mira el orden de luces.");
-    hidePreviewSoon();
+    setMessage("Volvemos al inicio. Mira el modelo y repetilo otra vez.");
   });
 
   renderMemory();
-  hidePreviewSoon();
 }
 
 function renderChooseCommandChallenge(id = 1) {
@@ -2359,8 +2343,8 @@ function renderBatteryCountChallenge(id = 1) {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Cuenta cuantas baterias hay en la fila y elige el numero correcto."))}
-      <p class="challenge-note">Objetivo: contar objetos y elegir una respuesta.</p>
+      ${renderHeader(id, getChallengeInstruction(id, "Mira la fila de casilleros: algunos tienen bateria y otros estan vacios. Cuenta solo las baterias y toca el numero que indica cuantas hay."))}
+      <p class="challenge-note">Objetivo: distinguir baterias de espacios vacios y elegir la cantidad correcta.</p>
       <div class="count-layout">
         <div class="count-row" data-count-row></div>
         <div class="count-options">
@@ -2368,7 +2352,7 @@ function renderBatteryCountChallenge(id = 1) {
         </div>
         <div class="choose-command-progress" data-progress></div>
       </div>
-      <p class="challenge-message" data-message>Cuenta solo las baterias, no los espacios vacios.</p>
+      <p class="challenge-message" data-message>Cuenta las baterias con calma y despues toca el numero de la respuesta.</p>
     </article>
   `;
 
@@ -2412,25 +2396,36 @@ function renderBatteryMazeChallenge(id = 1) {
   const route = ["5-5", "5-4", "4-4", "3-4", "3-3", "3-2", "2-2", "1-2", "1-1", "0-1"];
   const obstacles = new Set(["5-2", "4-0", "4-2", "4-5", "3-0", "2-4", "1-4", "0-3"]);
   const batteries = new Set(["4-4", "3-2", "1-1"]);
-  const expected = ["Izquierda", "Arriba", "Arriba", "Izquierda", "Izquierda", "Arriba", "Arriba", "Izquierda", "Arriba"];
-  const arrows = { Arriba: "⬆️", Derecha: "➡️", Abajo: "⬇️", Izquierda: "⬅️" };
+  const expected = [
+    "Avanzar",
+    "Girar der.",
+    "Avanzar",
+    "Avanzar",
+    "Girar izq.",
+    "Avanzar",
+    "Avanzar",
+    "Girar der.",
+    "Avanzar",
+    "Avanzar",
+    "Girar izq.",
+    "Avanzar",
+    "Girar der.",
+    "Avanzar",
+  ];
+  const commandOptions = ["Avanzar", "Girar der.", "Girar izq."];
   let selectedBlank = 0;
   let isAnimating = false;
   const cells = new Map();
 
-  function arrowMarkup(value) {
-    return `<span class="command-symbol" aria-hidden="true">${arrows[value]}</span><span class="command-label">${value}</span>`;
-  }
-
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Cruza un laberinto distinto y recoge las baterias con flechas."))}
-      <p class="challenge-note">Objetivo: este es otro mapa. Usa flechas para llegar a OK pasando por baterias.</p>
+      ${renderHeader(id, getChallengeInstruction(id, "El robot empieza mirando hacia la izquierda. Arma la secuencia con Avanzar, Girar derecha y Girar izquierda para juntar las baterias y llegar a OK."))}
+      <p class="challenge-note">Objetivo: usa comandos del robot, no flechas del mapa. Primero avanza a la izquierda y despues gira cuando cambie el camino.</p>
       <div class="visual-sequence-layout">
         <div class="robot-grid visual-map" data-map></div>
         ${renderCommandSequencePanel({
     stepsMarkup: expected.map((_, index) => `<button class="sequence-slot command-card ${index === 0 ? "is-selected" : ""}" type="button" data-blank="${index}"><span class="command-placeholder">${index + 1}</span></button>`).join(""),
-    actionsMarkup: Object.keys(arrows).map((value) => `<button class="instruction-chip" type="button" data-value="${value}">${arrowMarkup(value)}</button>`).join(""),
+    actionsMarkup: commandOptions.map((value) => renderCommandButton(value)).join(""),
     compact: true,
   })}
       </div>
@@ -2438,7 +2433,7 @@ function renderBatteryMazeChallenge(id = 1) {
         <button class="primary-action" type="button" data-check>Ejecutar</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Este laberinto empieza abajo a la derecha. Mira las paredes rojas.</p>
+      <p class="challenge-message" data-message>El robot arranca abajo a la derecha mirando hacia la izquierda.</p>
     </article>
   `;
 
@@ -2518,7 +2513,7 @@ function renderBatteryMazeChallenge(id = 1) {
     button.addEventListener("click", () => {
       if (isAnimating) return;
       const target = blanks[selectedBlank];
-      target.innerHTML = arrowMarkup(button.dataset.value);
+      target.innerHTML = renderCommand(button.dataset.value);
       target.dataset.value = button.dataset.value;
       target.classList.remove("is-wrong");
       const next = blanks.find((blank) => !blank.dataset.value);
@@ -2539,8 +2534,9 @@ function renderBatteryMazeChallenge(id = 1) {
     if (issueIndex !== -1) {
       selectedBlank = issueIndex;
       blanks.forEach((blank, index) => blank.classList.toggle("is-selected", index === issueIndex));
-      setMessage("Esa flecha no sigue el camino seguro. Probemos otra direccion.", "is-error");
-      animate(issueIndex);
+      const routeLimit = countAdvancesBefore(expected, issueIndex);
+      setMessage("Ese comando no sigue el camino seguro. Revisa si toca avanzar o girar.", "is-error");
+      animate(routeLimit);
       return;
     }
     setMessage("Ruta lista. El robot va a recoger las baterias.", "is-good");
@@ -2561,7 +2557,7 @@ function renderBatteryMazeChallenge(id = 1) {
     selectedBlank = 0;
     buildMap();
     paintRobot(route[0]);
-    setMessage("Nuevo intento. Sigue el camino seguro entre paredes.");
+    setMessage("Nuevo intento. Usa avanzar y girar para seguir el camino seguro.");
   });
 
   buildMap();
@@ -2796,66 +2792,86 @@ function renderSymbolCodeChallenge(id = 1) {
 }
 
 function renderColorRouteChallenge(id = 1) {
-  const route = ["azul", "verde", "verde", "rosa"];
-  const labels = { azul: "Azul", verde: "Verde", rosa: "Rosa" };
-  const selected = [];
+  const tiles = [
+    { key: "0-0", color: "rosa" },
+    { key: "0-1", color: "verde", step: 4 },
+    { key: "0-2", color: "azul", step: 5 },
+    { key: "1-0", color: "verde", step: 2 },
+    { key: "1-1", color: "rosa", step: 3 },
+    { key: "1-2", color: "verde" },
+    { key: "2-0", color: "azul", step: 1 },
+    { key: "2-1", color: "azul" },
+    { key: "2-2", color: "rosa" },
+  ];
+  const routeLength = tiles.filter((tile) => tile.step).length;
+  let nextStep = 1;
+  const completed = new Set();
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Sigue la ruta de colores y toca las baldosas en el mismo orden."))}
-      <p class="challenge-note">Objetivo: leer una ruta visual y repetir sus colores.</p>
+      ${renderHeader(id, getChallengeInstruction(id, "Busca las baldosas numeradas y toca el camino en orden: 1, 2, 3, 4 y 5."))}
+      <p class="challenge-note">Objetivo: seguir una ruta en una grilla usando los numeros como guia.</p>
       <div class="color-route-layout">
-        <div class="color-route-map">
-          ${route.map((color, index) => `<span class="route-color-${color}">${index + 1}</span>`).join("")}
+        <div class="color-route-grid" data-route-grid>
+          ${tiles.map((tile) => `
+            <button class="route-color-${tile.color}" type="button" data-step="${tile.step || ""}" data-tile="${tile.key}">
+              ${tile.step || ""}
+            </button>
+          `).join("")}
         </div>
-        <div class="color-route-answer" data-answer></div>
-        <div class="color-route-options">
-          ${Object.keys(labels).map((color) => `<button class="route-color-${color}" type="button" data-color="${color}">${labels[color]}</button>`).join("")}
-        </div>
+        <div class="choose-command-progress" data-progress></div>
       </div>
       <div class="challenge-actions">
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Toca los colores siguiendo los numeros de la ruta.</p>
+      <p class="challenge-message" data-message>Empieza por la baldosa 1 y sigue hasta la 5.</p>
     </article>
   `;
 
-  const answerNode = challengeContent.querySelector("[data-answer]");
-  function renderAnswer() {
-    answerNode.innerHTML = route.map((_, index) => `<span class="${selected[index] ? `route-color-${selected[index]}` : ""}">${selected[index] ? index + 1 : "?"}</span>`).join("");
+  const progressNode = challengeContent.querySelector("[data-progress]");
+
+  function renderRoute() {
+    challengeContent.querySelectorAll("[data-tile]").forEach((button) => {
+      const step = Number(button.dataset.step);
+      button.classList.toggle("is-done", completed.has(step));
+      button.classList.toggle("is-next", step === nextStep);
+      button.classList.remove("is-wrong");
+    });
+    progressNode.innerHTML = Array.from({ length: routeLength }, (_, index) => {
+      const step = index + 1;
+      return `<span class="${step === nextStep ? "is-current" : ""} ${completed.has(step) ? "is-done" : ""}">${step}</span>`;
+    }).join("");
   }
 
-  challengeContent.querySelectorAll("[data-color]").forEach((button) => {
+  challengeContent.querySelectorAll("[data-tile]").forEach((button) => {
     button.addEventListener("click", () => {
-      if (selected.length >= route.length) return;
-      const color = button.dataset.color;
-      selected.push(color);
-      renderAnswer();
-      const index = selected.length - 1;
-      if (color !== route[index]) {
-        setMessage("Ese color no sigue la ruta. Reinicia y vuelve a mirar los numeros.", "is-error");
+      const step = Number(button.dataset.step);
+      if (!step || completed.has(step)) return;
+      if (step !== nextStep) {
+        button.classList.add("is-wrong");
+        setMessage(`Todavia no toca esa baldosa. Busca primero el numero ${nextStep}.`, "is-error");
         return;
       }
-      if (selected.length === route.length) {
-        if (!selected.every((value, selectedIndex) => value === route[selectedIndex])) {
-          setMessage("Hay un color anterior que no coincide. Reinicia y vuelve a seguir la ruta.", "is-error");
-          return;
-        }
-        setMessage("Ruta de colores completa. Seguiste el orden correcto.", "is-success");
+      completed.add(step);
+      nextStep += 1;
+      renderRoute();
+      if (completed.size === routeLength) {
+        setMessage("Ruta completa. Seguiste las baldosas numeradas en orden.", "is-success");
         completeChallenge(id);
       } else {
-        setMessage("Bien. Sigue con el proximo color.", "is-good");
+        setMessage(`Bien. Ahora busca la baldosa ${nextStep}.`, "is-good");
       }
     });
   });
 
   challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
-    selected.length = 0;
-    renderAnswer();
-    setMessage("Ruta limpia. Empieza por el color numero 1.");
+    nextStep = 1;
+    completed.clear();
+    renderRoute();
+    setMessage("Ruta limpia. Empieza otra vez por la baldosa 1.");
   });
 
-  renderAnswer();
+  renderRoute();
 }
 
 function renderSizeOrderChallenge(id = 1) {
@@ -3510,7 +3526,7 @@ function renderLevel7Factory() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderLevelHeader("Fabrica de cajas", getChallengeInstruction(1, "Clasifica cada caja en el deposito del mismo color."))}
+      ${renderLevelHeader("Fabrica de cajas", "Clasifica cada caja en el deposito del mismo color.")}
       <div class="factory-layout">
         <div class="factory-belt">
           ${items.map((item, index) => `<button class="factory-box box-${item.target} ${index === current ? "is-current" : ""}" type="button" data-item="${index}">${item.label}</button>`).join("")}
@@ -3559,7 +3575,7 @@ function renderLevel8Circuit() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderLevelHeader("Circuito de energia", getChallengeInstruction(1, "Activa los switches para copiar el patron de luces objetivo."))}
+      ${renderLevelHeader("Circuito de energia", "Activa los switches para copiar el patron de luces objetivo.")}
       <div class="circuit-layout">
         <div class="circuit-row" aria-label="Objetivo">
           ${target.map((isOn) => `<span class="circuit-light ${isOn ? "is-on" : ""}"></span>`).join("")}
@@ -3609,7 +3625,7 @@ function renderLevel9Memory() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderLevelHeader("Memoria de pares", getChallengeInstruction(1, "Encuentra los pares iguales."))}
+      ${renderLevelHeader("Memoria de pares", "Encuentra los pares iguales.")}
       <div class="memory-grid">
         ${cards.map((card, index) => `<button class="memory-card" type="button" data-card="${index}" data-value="${card}">?</button>`).join("")}
       </div>
@@ -3659,7 +3675,7 @@ function renderLevel10Lock() {
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderLevelHeader("Candado final", getChallengeInstruction(1, "Lee las columnas y marca el codigo correcto."))}
+      ${renderLevelHeader("Candado final", "Lee las columnas y marca el codigo correcto.")}
       <div class="lock-layout">
         <div class="lock-clues">
           <span><i></i><i></i><i></i></span>

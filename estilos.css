@@ -978,16 +978,28 @@ body.has-scenario-modal {
 
 .compact-sequence {
   display: grid;
-  grid-template-columns: repeat(4, minmax(92px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(74px, 1fr));
+  gap: 6px;
   margin-top: 0;
 }
 
-.compact-sequence .sequence-slot {
+.compact-sequence .sequence-slot,
+.compact-bank .instruction-chip {
   min-width: 0;
+  min-height: 46px;
+}
+
+.compact-sequence .command-symbol,
+.compact-bank .command-symbol {
+  font-size: 1.35rem;
+}
+
+.compact-sequence .command-placeholder {
+  font-size: 1.05rem;
 }
 
 .compact-bank {
+  gap: 6px;
   margin-top: 0;
 }
 
@@ -2095,6 +2107,38 @@ button:disabled {
 
 .route-color-rosa {
   background: #ef8ac0 !important;
+}
+
+.color-route-grid {
+  width: min(100%, 360px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.color-route-grid button {
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 12px;
+  color: var(--color-primary);
+  font-size: 1.6rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: inset 0 -6px 0 rgba(44, 38, 80, 0.12);
+}
+
+.color-route-grid button.is-next {
+  outline: 3px solid var(--color-accent);
+}
+
+.color-route-grid button.is-done {
+  color: #0f5132;
+  outline: 3px solid #4fce87;
+}
+
+.color-route-grid button.is-wrong {
+  outline: 3px solid #e24b5f;
 }
 
 .size-card {
