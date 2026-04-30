@@ -456,7 +456,7 @@ function renderCommandButton(command, className = "instruction-chip") {
 }
 
 function renderSequenceStep(command) {
-  return `<span class="sequence-slot command-card" aria-label="${command}">${renderCommand(command)}</span>`;
+  return `<span class="sequence-slot command-card" data-value="${command}" aria-label="${command}">${renderCommand(command)}</span>`;
 }
 
 function renderSequenceBlank(index, selectedBlank, label = "Elegir accion") {
@@ -1758,44 +1758,35 @@ function renderArrowMazeChallenge(id = 1) {
   const routeCells = new Set(route);
   const obstacles = new Set(["5-2", "5-4", "4-4", "3-0", "3-1", "3-4", "2-0", "2-5", "1-1", "0-3"]);
   const signals = new Set(["4-2", "2-3"]);
-  const expected = ["Arriba", "Derecha", "Derecha", "Arriba", "Arriba", "Derecha", "Arriba", "Derecha", "Derecha"];
-  const arrows = {
-    Arriba: "⬆️",
-    Derecha: "➡️",
-    Abajo: "⬇️",
-    Izquierda: "⬅️",
-  };
+  const expected = [
+    "Avanzar",
+    "Girar der.",
+    "Avanzar",
+    "Avanzar",
+    "Girar izq.",
+    "Avanzar",
+    "Avanzar",
+    "Girar der.",
+    "Avanzar",
+    "Girar izq.",
+    "Avanzar",
+    "Girar der.",
+    "Avanzar",
+    "Avanzar",
+  ];
+  const startDirection = 0;
   let selectedBlank = 0;
   let isAnimating = false;
 
-  function renderArrow(value) {
-    return `
-      <span class="command-symbol" aria-hidden="true">${arrows[value]}</span>
-      <span class="command-label">${value}</span>
-    `;
-  }
-
-  function renderBlank(index) {
-    return `
-      <button class="sequence-slot command-card ${index === selectedBlank ? "is-selected" : ""}" type="button" data-blank="${index}" aria-label="Elegir flecha">
-        <span class="command-placeholder">${index + 1}</span>
-      </button>
-    `;
-  }
-
-  const stepsMarkup = expected.map((_, index) => renderBlank(index)).join("");
-  const actionsMarkup = Object.keys(arrows)
-    .map((value) => `
-      <button class="instruction-chip" type="button" data-value="${value}" aria-label="${value}">
-        ${renderArrow(value)}
-      </button>
-    `)
+  const stepsMarkup = expected.map((_, index) => renderSequenceBlank(index, selectedBlank)).join("");
+  const actionsMarkup = ["Avanzar", "Girar izq.", "Girar der."]
+    .map((command) => renderCommandButton(command))
     .join("");
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Elige flechas para cruzar este laberinto nuevo, activar las antenas y llegar a la salida."))}
-      <p class="challenge-note">Objetivo: usa direcciones directas. No hay giros: cada flecha mueve al robot una casilla.</p>
+      ${renderHeader(id, getChallengeInstruction(id, "Arma la secuencia con Avanzar, Girar derecha y Girar izquierda para cruzar el laberinto, activar antenas y llegar a la salida."))}
+      <p class="challenge-note">Objetivo: el robot solo se mueve con Avanzar. Usa los giros para orientarlo antes de seguir.</p>
       <div class="visual-sequence-layout">
         <div class="robot-grid visual-map" data-map></div>
         ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
@@ -1804,7 +1795,7 @@ function renderArrowMazeChallenge(id = 1) {
         <button class="primary-action" type="button" data-check>Ejecutar</button>
         <button class="secondary-action" type="button" data-reset>Reiniciar</button>
       </div>
-      <p class="challenge-message" data-message>Este mapa es distinto: mira las paredes rojas y arma el camino con flechas.</p>
+      <p class="challenge-message" data-message>Mira la ruta celeste: cuando el camino cambia, gira al robot y despues avanza.</p>
     </article>
   `;
 
@@ -1846,7 +1837,7 @@ function renderArrowMazeChallenge(id = 1) {
     }
   }
 
-  function paintRobot(key) {
+  function paintRobot(key, direction = directionForRouteKey(route, key)) {
     cells.forEach((cell) => {
       cell.classList.remove("is-robot", "is-trail");
       cell.textContent = cell.dataset.baseText || "";
@@ -1857,17 +1848,47 @@ function renderArrowMazeChallenge(id = 1) {
     const robotCell = cells.get(key);
     if (!robotCell) return;
     robotCell.classList.add("is-robot");
-    robotCell.innerHTML = renderRobotMarker(directionForRouteKey(route, key));
+    robotCell.innerHTML = renderRobotMarker(direction);
   }
 
-  async function animateRoute(routeLimit = route.length - 1) {
+  function getNextState(state, command) {
+    const [row, col] = state.key.split("-").map(Number);
+    if (command === "Girar der.") {
+      return { key: state.key, direction: (state.direction + 1) % 4 };
+    }
+    if (command === "Girar izq.") {
+      return { key: state.key, direction: (state.direction + 3) % 4 };
+    }
+    if (command !== "Avanzar") return state;
+
+    const deltas = [
+      [-1, 0],
+      [0, 1],
+      [1, 0],
+      [0, -1],
+    ];
+    const [rowDelta, colDelta] = deltas[state.direction];
+    return {
+      key: `${row + rowDelta}-${col + colDelta}`,
+      direction: state.direction,
+    };
+  }
+
+  async function animateCommands(commands = expected) {
     isAnimating = true;
     checkButton.disabled = true;
     resetButton.disabled = true;
-    for (const key of route.slice(0, routeLimit + 1)) {
-      paintRobot(key);
+
+    let state = { key: route[0], direction: startDirection };
+    paintRobot(state.key, state.direction);
+    await new Promise((resolve) => setTimeout(resolve, 180));
+
+    for (const command of commands) {
+      state = getNextState(state, command);
+      paintRobot(state.key, state.direction);
       await new Promise((resolve) => setTimeout(resolve, 210));
     }
+
     isAnimating = false;
     checkButton.disabled = false;
     resetButton.disabled = false;
@@ -1887,7 +1908,7 @@ function renderArrowMazeChallenge(id = 1) {
       if (isAnimating) return;
       const target = blanks[selectedBlank];
       const value = button.dataset.value;
-      target.innerHTML = renderArrow(value);
+      target.innerHTML = renderCommand(value);
       target.dataset.value = value;
       target.classList.remove("is-wrong");
       const next = blanks.find((blank) => !blank.dataset.value);
@@ -1903,21 +1924,31 @@ function renderArrowMazeChallenge(id = 1) {
 
   checkButton.addEventListener("click", () => {
     if (isAnimating) return;
-    const firstWrong = blanks.findIndex((blank, index) => blank.dataset.value !== expected[index]);
-    blanks.forEach((blank, index) => blank.classList.toggle("is-wrong", index === firstWrong));
-    if (firstWrong !== -1) {
-      selectedBlank = firstWrong;
-      blanks.forEach((blank, index) => blank.classList.toggle("is-selected", index === firstWrong));
-      setMessage(blanks[firstWrong].dataset.value
-        ? "Esa flecha mete al robot en una pared o lo aleja del camino. Probemos otra."
-        : `Falta completar la flecha ${firstWrong + 1}.`,
-      blanks[firstWrong].dataset.value ? "is-error" : "is-good");
-      animateRoute(firstWrong);
+
+    blanks.forEach((blank) => blank.classList.remove("is-wrong"));
+    const issue = findFirstSequenceIssue(blanks, expected);
+    if (issue) {
+      const stepIndex = Number(issue.dataset.blank);
+      const previewCommands = blanks
+        .slice(0, stepIndex + (issue.dataset.value ? 1 : 0))
+        .map((blank) => blank.dataset.value)
+        .filter(Boolean);
+      issue.classList.add("is-wrong", "is-selected");
+      blanks.forEach((blank) => {
+        if (blank !== issue) blank.classList.remove("is-selected");
+      });
+      selectedBlank = stepIndex;
+      setMessage(issue.dataset.value
+        ? "Ese comando cambia la orientacion o el avance del robot. Mira hacia donde queda mirando y prueba otro."
+        : `Buen avance. Falta completar el paso ${stepIndex + 1} para seguir.`,
+      issue.dataset.value ? "is-error" : "is-good");
+      animateCommands(previewCommands);
       return;
     }
-    setMessage("Laberinto resuelto. El robot ya puede probar la ruta completa.", "is-good");
-    animateRoute().then(() => {
-      setMessage("Excelente: cruzaste un laberinto nuevo usando flechas.", "is-success");
+
+    setMessage("Programa listo. Vamos a ver al robot girar y avanzar por el laberinto.", "is-good");
+    animateCommands().then(() => {
+      setMessage("Excelente: cruzaste el laberinto girando al robot antes de avanzar.", "is-success");
       completeChallenge(id);
     });
   });
@@ -1932,30 +1963,39 @@ function renderArrowMazeChallenge(id = 1) {
     });
     selectedBlank = 0;
     buildMap();
-    paintRobot(route[0]);
-    setMessage("Nuevo intento. Lee el laberinto como una ruta de flechas.");
+    paintRobot(route[0], startDirection);
+    setMessage("Nuevo intento. Gira cuando cambia el camino y usa Avanzar para moverte.");
   });
 
   buildMap();
-  paintRobot(route[0]);
+  paintRobot(route[0], startDirection);
 }
 
 function renderOrderAlgorithmChallenge(id = 1) {
   const steps = [
-    { id: "motor", label: "Encender motor" },
-    { id: "avanzar", label: "Avanzar al banco" },
-    { id: "bateria", label: "Tomar bateria" },
-    { id: "girar", label: "Girar a la salida" },
-    { id: "salir", label: "Avanzar a la meta" },
+    { id: "motor", label: "Encender motor", icon: "ON", cue: "Motor" },
+    { id: "avanzar", label: "Ir al banco", icon: "&#129302;", cue: "Banco" },
+    { id: "bateria", label: "Tomar bateria", icon: "&#128267;", cue: "Bateria" },
+    { id: "girar", label: "Girar a salida", icon: "&#8618;", cue: "Giro" },
+    { id: "salir", label: "Llegar a OK", icon: "OK", cue: "Salida" },
   ];
   const bank = [steps[2], steps[0], steps[4], steps[1], steps[3]];
   const placed = Array(steps.length).fill(null);
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Ordena las tarjetas para que el robot prepare la salida del taller paso a paso."))}
-      <p class="challenge-note">Objetivo: toca una tarjeta para ponerla en el primer espacio libre. Toca un espacio para quitarla.</p>
+      ${renderHeader(id, getChallengeInstruction(id, "Mira el recorrido del taller y ordena las tarjetas para que el robot pueda salir paso a paso."))}
+      <p class="challenge-note">Objetivo: toca una tarjeta para ponerla en el primer espacio libre. Toca una pieza colocada para quitarla.</p>
       <div class="algorithm-layout">
+        <div class="algorithm-scene" aria-label="Recorrido visual del robot">
+          ${steps.map((step, index) => `
+            <div class="algorithm-scene-step">
+              <span class="algorithm-scene-icon">${step.icon}</span>
+              <small>${step.cue}</small>
+            </div>
+            ${index < steps.length - 1 ? '<span class="algorithm-scene-arrow" aria-hidden="true">-&gt;</span>' : ""}
+          `).join("")}
+        </div>
         <div class="algorithm-bank" data-bank></div>
         <div class="algorithm-slots" data-slots></div>
       </div>
@@ -1974,13 +2014,16 @@ function renderOrderAlgorithmChallenge(id = 1) {
     const used = new Set(placed.filter(Boolean).map((step) => step.id));
     bankNode.innerHTML = bank.map((step) => `
       <button class="algorithm-card ${used.has(step.id) ? "is-used" : ""}" type="button" data-card="${step.id}" ${used.has(step.id) ? "disabled" : ""}>
-        ${step.label}
+        <span class="algorithm-card-icon" aria-hidden="true">${step.icon}</span>
+        <span>${step.label}</span>
       </button>
     `).join("");
     slotsNode.innerHTML = placed.map((step, index) => `
       <button class="algorithm-slot ${step ? "has-card" : ""}" type="button" data-slot="${index}">
         <strong>${index + 1}</strong>
-        <span>${step ? step.label : "Espacio vacio"}</span>
+        ${step
+          ? `<span class="algorithm-slot-card"><span class="algorithm-card-icon" aria-hidden="true">${step.icon}</span><span>${step.label}</span></span>`
+          : `<span class="algorithm-slot-empty"><span>${steps[index].cue}</span><small>Toca una tarjeta</small></span>`}
       </button>
     `).join("");
 
