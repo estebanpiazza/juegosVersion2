@@ -7,7 +7,7 @@ Objetivo de la seccion: fortalecer pensamiento computacional y programacion inic
 Tipo: secuenciacion guiada, estilo Code.org inicial.
 
 Consigna para el alumno:
-Mira el camino marcado en el mapa y completa los giros que faltan para que el robot llegue desde INICIO hasta META.
+¡Ayudalo! El robot camina derecho, pero para ganar tiene que doblar. ¿Para qué lado tiene que mirar? ¡Elegí la flecha!
 
 Objetivo:
 Practicar secuencias de instrucciones: avanzar, girar derecha y girar izquierda.
@@ -31,7 +31,7 @@ Variantes:
 Tipo: depuracion inicial, estilo pensamiento computacional.
 
 Consigna para el alumno:
-El programa tiene un bug: identifica la linea incorrecta y reemplazala para que el robot no se salga del recorrido.
+Completa el camino con las flechas que faltan. Haz que el robot doble y camine para llegar a la bandera sin tocar los charcos. ¡Tú eres el capitán del robot!
 
 Objetivo:
 Reconocer errores en una secuencia y corregirlos.
@@ -55,7 +55,7 @@ Variantes:
 Tipo: programacion por bloques, estilo Code.org.
 
 Consigna para el alumno:
-Arma una secuencia de instrucciones para que el robot llegue al tesoro sin chocar con los obstaculos.
+¡Cuidado con el agua! 🤖🚫 Programá al robot para llegar al tesoro: cargá la batería y evitá los charcos para no mojarlo.
 
 Objetivo:
 Practicar secuenciacion, orientacion espacial, depuracion y conteo de pasos.
@@ -74,12 +74,12 @@ Variantes:
 - Incluir un bloque repetir obligatorio.
 - Agregar casilleros con numeros que deben visitarse en orden.
 
-## desafío 4: Detectives de patrones
+## desafío 4: Patrones de algoritmo
 
 Tipo: patrones de comandos, mixto visual.
 
 Consigna para el alumno:
-Descubri el patron repetido "Avanzar, Avanzar, Girar derecha" y completa los huecos.
+¡Completá el patrón del robot! 🤖✨ Mirá con atención cómo se mueve y repetí el mismo orden. ¿Qué falta para terminar la serie?
 
 Objetivo:
 Identificar repeticion en algoritmos cortos.
@@ -98,12 +98,15 @@ Variantes:
 - Mezclar comandos y colores.
 - Pedir inventar el siguiente bloque.
 
-## desafío 5: Mision mapa del robot
+## desafío 5: Actividad a revisar
 
 Tipo: mapa en grilla, pensamiento computacional.
 
 Consigna para el alumno:
-Ubica los puntos clave del recorrido del robot en el mapa.
+Actividad a revisar: inviable para primer grado.
+
+Observacion:
+INVIABLE PARA PRIMER GRADO.
 
 Objetivo:
 Leer una grilla simple y planear ruta por hitos (inicio, bateria, llave y meta).

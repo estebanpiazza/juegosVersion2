@@ -415,12 +415,16 @@ function getChallengeInstruction(id, fallbackText) {
   const challenge = getChallengesFromData(currentLevelData)[challengeId - 1];
   const baseInstruction = challenge?.consigna || fallbackText;
   const reminders = [];
+  const normalizedInstruction = baseInstruction
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
 
-  if (id === 2 || id === 3) {
+  if ((id === 2 || id === 3) && !/(agua|charco)/.test(normalizedInstruction)) {
     reminders.push("Si hay agua, evita pasar por ahi para no dañar al robot.");
   }
 
-  if (id === 3 || id === 5) {
+  if ((id === 3 || id === 5) && !/(bateria|energia|pila)/.test(normalizedInstruction)) {
     reminders.push("Agarra la bateria y la recarga para que el robot no se quede sin energia.");
   }
 
