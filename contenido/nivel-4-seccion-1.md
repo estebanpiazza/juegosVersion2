@@ -55,7 +55,7 @@ Variantes:
 Tipo: programacion por bloques, estilo Code.org.
 
 Consigna para el alumno:
-¡Cuidado con el agua! 🤖🚫 Programá al robot para llegar al tesoro: cargá la batería y evitá los charcos para no mojarlo.
+¡Cuidado con el agua! Programá al robot para llegar al tesoro: cargá la batería y evitá los charcos para no mojarlo.
 
 Objetivo:
 Practicar secuenciacion, orientacion espacial, depuracion y conteo de pasos.

@@ -32,7 +32,7 @@
       "titulo": "Programa al robot",
       "tipo": "programacion-por-bloques",
       "inspiracion": "Code.org",
-      "consigna": "¡Cuidado con el agua! 🤖🚫 Programá al robot para llegar al tesoro: cargá la batería y evitá los charcos para no mojarlo.",
+      "consigna": "¡Cuidado con el agua! Programá al robot para llegar al tesoro: cargá la batería y evitá los charcos para no mojarlo.",
       "objetivo": "Practicar secuenciacion, orientacion espacial, depuracion y conteo de pasos.",
       "pantalla": "Grilla de 6 x 6 con robot, tesoro, obstaculos y casilleros especiales.",
       "interaccion": "Armar un programa con bloques: avanzar, girar derecha y girar izquierda.",

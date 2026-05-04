@@ -16,11 +16,28 @@ let levelDataByNumber = new Map();
 let currentLevelData = null;
 let activeChallengeId = 1;
 const SOUND_VOLUME_KEY = "betech-sound-volume";
+const MUSIC_VOLUME_KEY = "betech-music-volume";
+const LEVEL_RATINGS_KEY = "betech-level-ratings";
 const DEFAULT_SOUND_VOLUME = 0.45;
+const DEFAULT_MUSIC_VOLUME = 0.28;
+const MUSIC_BAR_SECONDS = 2.4;
+const LEVEL_RATING_OPTIONS = [
+  { value: 1, emoji: "&#128542;", label: "No me gusto" },
+  { value: 2, emoji: "&#128528;", label: "Mas o menos" },
+  { value: 3, emoji: "&#128578;", label: "Estuvo bien" },
+  { value: 4, emoji: "&#128516;", label: "Me gusto" },
+  { value: 5, emoji: "&#128525;", label: "Me encanto" },
+];
 let soundContext = null;
 let soundMaster = null;
+let musicMaster = null;
 let soundVolume = readStoredSoundVolume();
+let musicVolume = readStoredMusicVolume();
 let lastToneAt = 0;
+let musicStarted = false;
+let musicTimer = null;
+let nextMusicTime = 0;
+let musicStep = 0;
 
 let challengeTitles = {
   1: "Camino del robot",
@@ -77,6 +94,11 @@ function readStoredSoundVolume() {
   return Number.isFinite(stored) ? Math.min(Math.max(stored, 0), 1) : DEFAULT_SOUND_VOLUME;
 }
 
+function readStoredMusicVolume() {
+  const stored = Number(window.localStorage?.getItem(MUSIC_VOLUME_KEY));
+  return Number.isFinite(stored) ? Math.min(Math.max(stored, 0), 1) : DEFAULT_MUSIC_VOLUME;
+}
+
 function setSoundVolume(value) {
   soundVolume = Math.min(Math.max(Number(value) || 0, 0), 1);
   window.localStorage?.setItem(SOUND_VOLUME_KEY, String(soundVolume));
@@ -89,6 +111,56 @@ function setSoundVolume(value) {
   });
 }
 
+function setMusicVolume(value) {
+  musicVolume = Math.min(Math.max(Number(value) || 0, 0), 1);
+  window.localStorage?.setItem(MUSIC_VOLUME_KEY, String(musicVolume));
+  if (musicMaster) musicMaster.gain.value = musicVolume;
+  document.querySelectorAll("[data-music-volume]").forEach((slider) => {
+    slider.value = String(Math.round(musicVolume * 100));
+  });
+  document.querySelectorAll("[data-music-value]").forEach((label) => {
+    label.textContent = `${Math.round(musicVolume * 100)}%`;
+  });
+}
+
+function getStoredLevelRatings() {
+  try {
+    const stored = window.localStorage?.getItem(LEVEL_RATINGS_KEY);
+    const parsed = stored ? JSON.parse(stored) : {};
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function ratingKeyFor(challengeId) {
+  return `nivel-${level}-desafio-${challengeId}`;
+}
+
+function readLevelRating(challengeId) {
+  const ratings = getStoredLevelRatings();
+  const value = Number(ratings[ratingKeyFor(challengeId)]?.value);
+  return Number.isFinite(value) ? value : null;
+}
+
+function saveLevelRating(challengeId, value) {
+  const ratings = getStoredLevelRatings();
+  ratings[ratingKeyFor(challengeId)] = {
+    level,
+    challenge: challengeId,
+    value,
+    savedAt: new Date().toISOString(),
+  };
+  window.localStorage?.setItem(LEVEL_RATINGS_KEY, JSON.stringify(ratings));
+}
+
+function ensureMusicMaster(context) {
+  if (!context || musicMaster) return;
+  musicMaster = context.createGain();
+  musicMaster.gain.value = musicVolume;
+  musicMaster.connect(context.destination);
+}
+
 function getSoundContext() {
   if (!soundContext) {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -99,11 +171,68 @@ function getSoundContext() {
     soundMaster.connect(soundContext.destination);
   }
 
+  ensureMusicMaster(soundContext);
+
   if (soundContext.state === "suspended") {
     soundContext.resume();
   }
 
   return soundContext;
+}
+
+function scheduleMusicNote(context, start, frequency, duration, gain = 0.035, type = "triangle") {
+  if (!musicMaster || musicVolume <= 0) return;
+  const oscillator = context.createOscillator();
+  const envelope = context.createGain();
+
+  oscillator.type = type;
+  oscillator.frequency.setValueAtTime(frequency, start);
+
+  envelope.gain.setValueAtTime(0.0001, start);
+  envelope.gain.exponentialRampToValueAtTime(gain, start + 0.035);
+  envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+
+  oscillator.connect(envelope);
+  envelope.connect(musicMaster);
+  oscillator.start(start);
+  oscillator.stop(start + duration + 0.04);
+}
+
+function scheduleBackgroundMusic() {
+  if (!musicStarted) return;
+  const context = getSoundContext();
+  if (!context || !musicMaster) return;
+
+  const melody = [392, 493.88, 587.33, 659.25, 587.33, 493.88, 440, 523.25];
+  const bass = [130.81, 146.83, 164.81, 196];
+  const stepDuration = MUSIC_BAR_SECONDS / melody.length;
+
+  while (nextMusicTime < context.currentTime + 1.2) {
+    const step = musicStep % melody.length;
+    scheduleMusicNote(context, nextMusicTime, melody[step], stepDuration * 1.85, 0.024, "triangle");
+
+    if (step % 2 === 0) {
+      scheduleMusicNote(context, nextMusicTime, bass[Math.floor(step / 2) % bass.length], stepDuration * 3.35, 0.018, "sine");
+    }
+
+    if (step === 0 || step === 4) {
+      scheduleMusicNote(context, nextMusicTime + stepDuration * 0.35, melody[(step + 2) % melody.length] * 1.5, stepDuration * 2, 0.012, "sine");
+    }
+
+    nextMusicTime += stepDuration;
+    musicStep += 1;
+  }
+
+  window.clearTimeout(musicTimer);
+  musicTimer = window.setTimeout(scheduleBackgroundMusic, 450);
+}
+
+function startBackgroundMusic() {
+  const context = getSoundContext();
+  if (!context || !musicMaster || musicStarted) return;
+  musicStarted = true;
+  nextMusicTime = context.currentTime + 0.04;
+  scheduleBackgroundMusic();
 }
 
 function playTone({ frequency = 440, endFrequency = null, duration = 0.12, delay = 0, type = "sine", gain = 0.18 }) {
@@ -170,22 +299,39 @@ function initializeSoundControls() {
   const topbar = document.querySelector(".game-topbar");
   if (!topbar || topbar.querySelector("[data-sound-control]")) return;
 
-  const control = document.createElement("div");
-  control.className = "sound-control";
-  control.dataset.soundControl = "true";
-  control.innerHTML = `
-    <span class="sound-control-icon" aria-hidden="true">&#128266;</span>
-    <label class="sound-control-label" for="sound-volume">Volumen</label>
-    <input id="sound-volume" type="range" min="0" max="100" step="1" data-sound-volume aria-label="Volumen de efectos de sonido" />
-    <span class="sound-control-value" data-sound-value></span>
+  const controlGroup = document.createElement("div");
+  controlGroup.className = "sound-controls";
+  controlGroup.dataset.soundControl = "true";
+  controlGroup.innerHTML = `
+    <div class="sound-control">
+      <span class="sound-control-icon" aria-hidden="true">&#128266;</span>
+      <label class="sound-control-label" for="sound-volume">Efectos</label>
+      <input id="sound-volume" type="range" min="0" max="100" step="1" data-sound-volume aria-label="Volumen de efectos de sonido" />
+      <span class="sound-control-value" data-sound-value></span>
+    </div>
+    <div class="sound-control">
+      <span class="sound-control-icon" aria-hidden="true">&#9835;</span>
+      <label class="sound-control-label" for="music-volume">Musica</label>
+      <input id="music-volume" type="range" min="0" max="100" step="1" data-music-volume aria-label="Volumen de musica de fondo" />
+      <span class="sound-control-value" data-music-value></span>
+    </div>
   `;
 
-  topbar.append(control);
+  topbar.append(controlGroup);
   setSoundVolume(soundVolume);
-  control.querySelector("[data-sound-volume]")?.addEventListener("input", (event) => {
+  setMusicVolume(musicVolume);
+  controlGroup.querySelector("[data-sound-volume]")?.addEventListener("input", (event) => {
     setSoundVolume(Number(event.target.value) / 100);
     playSound("tap");
   });
+  controlGroup.querySelector("[data-music-volume]")?.addEventListener("input", (event) => {
+    setMusicVolume(Number(event.target.value) / 100);
+    startBackgroundMusic();
+  });
+
+  const startMusic = () => startBackgroundMusic();
+  window.addEventListener("pointerdown", startMusic, { once: true });
+  window.addEventListener("keydown", startMusic, { once: true });
 }
 
 function directionBetweenKeys(fromKey, toKey) {
@@ -306,6 +452,30 @@ function goToScenario(id) {
   openChallenge(id);
 }
 
+function renderLevelRating(challengeId, nextScenario) {
+  const savedRating = readLevelRating(challengeId);
+  const prompt = nextScenario ? "Que te parecio este desafio?" : "Que te parecio este nivel?";
+  const buttons = LEVEL_RATING_OPTIONS.map((option) => {
+    const isSelected = option.value === savedRating;
+    return `
+      <button class="level-rating-button ${isSelected ? "is-selected" : ""}" type="button" data-rating-value="${option.value}" aria-label="${option.label}" aria-pressed="${isSelected ? "true" : "false"}">
+        <span class="level-rating-emoji" aria-hidden="true">${option.emoji}</span>
+        <span>${option.label}</span>
+      </button>
+    `;
+  }).join("");
+
+  return `
+    <section class="level-rating" aria-labelledby="level-rating-title" data-rating-challenge="${challengeId}">
+      <h3 id="level-rating-title">${prompt}</h3>
+      <div class="level-rating-scale" role="group" aria-label="${prompt}">
+        ${buttons}
+      </div>
+      <p class="level-rating-status" data-rating-status>${savedRating ? "Gracias por contarme." : "Elegi un emoji para responder."}</p>
+    </section>
+  `;
+}
+
 function createScenarioModal() {
   const modal = document.createElement("div");
   modal.className = "scenario-modal";
@@ -321,6 +491,24 @@ function createScenarioModal() {
   `;
 
   modal.addEventListener("click", (event) => {
+    const ratingControl = event.target.closest("[data-rating-value]");
+    if (ratingControl) {
+      const ratingSection = ratingControl.closest("[data-rating-challenge]");
+      const challengeId = Number(ratingSection?.dataset.ratingChallenge);
+      const ratingValue = Number(ratingControl.dataset.ratingValue);
+      if (Number.isFinite(challengeId) && Number.isFinite(ratingValue)) {
+        saveLevelRating(challengeId, ratingValue);
+        ratingSection.querySelectorAll("[data-rating-value]").forEach((button) => {
+          const isSelected = button === ratingControl;
+          button.classList.toggle("is-selected", isSelected);
+          button.setAttribute("aria-pressed", String(isSelected));
+        });
+        const status = ratingSection.querySelector("[data-rating-status]");
+        if (status) status.textContent = "Gracias por contarme.";
+      }
+      return;
+    }
+
     const closeControl = event.target.closest("[data-close-scenario-modal]");
     if (closeControl) {
       closeScenarioModal();
@@ -356,6 +544,7 @@ function showScenarioCompleteModal(id) {
     <p>${nextScenario
       ? `Completaste el nivel. Tu robot ya está listo para el próximo desafío.`
       : `Completaste todos los desafíos de este grado. Gran recorrido.`}</p>
+    ${renderLevelRating(id, nextScenario)}
     <div class="scenario-modal-actions">
       ${nextScenario
         ? `<button class="primary-action" type="button" data-next-scenario="${nextScenario}">Ir al siguiente desafío</button>`
@@ -467,8 +656,17 @@ function getSpanishVoice() {
     || null;
 }
 
+function cleanInstructionForSpeech(text) {
+  return (text || "")
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, "")
+    .replace(/ð[^\s.,;:!?)]*/g, "")
+    .replace(/(?:âœ¨|âš™|ï¸)/g, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 function speakInstruction(text, button) {
-  const cleanText = text?.trim();
+  const cleanText = cleanInstructionForSpeech(text);
   if (!cleanText) return;
 
   if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
