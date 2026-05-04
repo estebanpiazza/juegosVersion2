@@ -6,7 +6,7 @@ let level = Number.isInteger(requestedLevel) ? requestedLevel : DEFAULT_LEVEL;
 const challengeContent = document.querySelector("#challenge-content");
 const challengeShell = document.querySelector(".challenge-shell");
 const selectorWrap = document.querySelector(".selector-wrap");
-const gamestágeBg = document.querySelector(".game-stage-bg");
+const gameStageBg = document.querySelector(".game-stage-bg");
 let selectorButtons = [...document.querySelectorAll(".selector-chip")];
 let totalChallenges = level === 4 ? 5 : 1;
 const completedChallenges = new Set();
@@ -391,7 +391,7 @@ async function discoverLevelsFromJson() {
 
 function getChallengesFromData(levelData) {
   if (Array.isArray(levelData?.desafios)) return levelData.desafios;
-  return Array.isArray(levelData?.desafíos) ? levelData.desafíos : [];
+  return [];
 }
 
 function syncLevelHeading() {
@@ -402,9 +402,9 @@ function syncLevelHeading() {
 }
 
 function syncLevelBackground() {
-  if (!gamestágeBg || !levelBackgrounds.length) return;
+  if (!gameStageBg || !levelBackgrounds.length) return;
   const backgroundIndex = Math.floor(Math.max(level - 1, 0) / 3) % levelBackgrounds.length;
-  gamestágeBg.src = levelBackgrounds[backgroundIndex];
+  gameStageBg.src = levelBackgrounds[backgroundIndex];
 }
 
 function buildSelectorButtons() {
@@ -421,7 +421,7 @@ function buildSelectorButtons() {
   selectorWrap.innerHTML = challenges
     .map(
       (_, index) => `
-        <button class="selector-chip ${index === 0 ? "is-active" : ""}" type="button" data-challenge="${index + 1}" aria-label="desafío ${index + 1}">
+        <button class="selector-chip ${index === 0 ? "is-active" : ""}" type="button" data-challenge="${index + 1}" aria-label="desafio ${index + 1}">
           <strong>${index + 1}</strong>
         </button>
       `,
@@ -436,7 +436,7 @@ function mapChallengeTitles(levelData) {
   if (!challenges.length) return;
 
   challengeTitles = Object.fromEntries(
-    challenges.map((challenge, index) => [index + 1, challenge.titulo || `desafío ${index + 1}`]),
+    challenges.map((challenge, index) => [index + 1, challenge.titulo || `desafio ${index + 1}`]),
   );
 }
 
@@ -542,12 +542,12 @@ function showScenarioCompleteModal(id) {
     <p class="challenge-kicker">Logro desbloqueado</p>
     <h2 id="scenario-modal-title">Lo hiciste genial</h2>
     <p>${nextScenario
-      ? `Completaste el nivel. Tu robot ya está listo para el próximo desafío.`
-      : `Completaste todos los desafíos de este grado. Gran recorrido.`}</p>
+      ? `Completaste el nivel. Tu robot ya esta listo para el proximo desafio.`
+      : `Completaste todos los desafios de este grado. Gran recorrido.`}</p>
     ${renderLevelRating(id, nextScenario)}
     <div class="scenario-modal-actions">
       ${nextScenario
-        ? `<button class="primary-action" type="button" data-next-scenario="${nextScenario}">Ir al siguiente desafío</button>`
+        ? `<button class="primary-action" type="button" data-next-scenario="${nextScenario}">Ir al siguiente desafio</button>`
         : `<a class="primary-action" href="index.html">Volver a grados</a>`}
       <button class="secondary-action" type="button" data-close-scenario-modal>Quedarme aqui</button>
     </div>
@@ -617,7 +617,7 @@ function showLocked(id) {
   challengeContent.innerHTML = `
     <article class="challenge-card">
       <p class="challenge-kicker">Proximamente</p>
-      <h2>desafío ${id}</h2>
+      <h2>desafio ${id}</h2>
       <p>Este espacio queda reservado para las siguientes secciones.</p>
     </article>
   `;
@@ -747,7 +747,7 @@ document.addEventListener("click", (event) => {
 
 function renderHeader(id, instruction) {
   const headerId = Number.isInteger(id) ? id : activeChallengeId;
-  return renderChallengeHeader(`desafío ${headerId}`, challengeTitles[headerId], instruction);
+  return renderChallengeHeader(`desafio ${headerId}`, challengeTitles[headerId], instruction);
 }
 
 function getChallengeInstruction(id, fallbackText) {
@@ -761,7 +761,7 @@ function getChallengeInstruction(id, fallbackText) {
     .toLowerCase();
 
   if ((id === 2 || id === 3) && !/(agua|charco)/.test(normalizedInstruction)) {
-    reminders.push("Si hay agua, evita pasar por ahi para no dañar al robot.");
+    reminders.push("Si hay agua, evita pasar por ahi para no danar al robot.");
   }
 
   if ((id === 3 || id === 5) && !/(bateria|energia|pila)/.test(normalizedInstruction)) {
@@ -1029,7 +1029,7 @@ function renderBalanceChallenge(id = 2) {
           <span><i class="legend-dot legend-trail"></i> Recorrido</span>
         </div>
       </section>
-      <p class="challenge-note">Objetivo: solo la linea 1 está editable. Las otras dos ya están bien.</p>
+      <p class="challenge-note">Objetivo: solo la linea 1 esta editable. Las otras dos ya estan bien.</p>
       <div class="debug-layout">
         <div class="debug-map" data-debug-map></div>
         <div class="debug-program">
@@ -1186,7 +1186,7 @@ function renderBalanceChallenge(id = 2) {
       return;
     }
 
-    setMessage("Todavia no llega a 🏁, pero estás cerca. La linea 1 necesita girar hacia la derecha.", "is-error");
+    setMessage("Todavia no llega a 🏁, pero estas cerca. La linea 1 necesita girar hacia la derecha.", "is-error");
   });
 
   challengeContent.querySelector("[data-reset]").addEventListener("click", () => {
@@ -1738,6 +1738,7 @@ function renderRobotChallengeV2(id = 3) {
   const resetButton = challengeContent.querySelector("[data-reset]");
   const blanks = [...challengeContent.querySelectorAll("[data-blank]")];
   const cells = new Map();
+  const collectedBatteries = new Set();
 
   function cellKey(row, col) {
     return `${row}-${col}`;
@@ -1777,9 +1778,13 @@ function renderRobotChallengeV2(id = 3) {
   }
 
   function paintRobot(key) {
-    cells.forEach((cell) => {
+    if (batteries.has(key)) collectedBatteries.add(key);
+
+    cells.forEach((cell, cellKeyValue) => {
       cell.classList.remove("is-robot", "is-trail");
-      cell.textContent = cell.dataset.baseText || "";
+      const hasCollectedBattery = collectedBatteries.has(cellKeyValue);
+      cell.classList.toggle("is-treasure", batteries.has(cellKeyValue) && !hasCollectedBattery);
+      cell.textContent = hasCollectedBattery ? "" : cell.dataset.baseText || "";
     });
 
     for (const routeKey of route.slice(0, route.indexOf(key) + 1)) {
@@ -1796,6 +1801,7 @@ function renderRobotChallengeV2(id = 3) {
     isAnimating = true;
     checkButton.disabled = true;
     resetButton.disabled = true;
+    collectedBatteries.clear();
 
     for (const [index, key] of route.slice(0, routeLimit + 1).entries()) {
       paintRobot(key);
@@ -1873,6 +1879,7 @@ function renderRobotChallengeV2(id = 3) {
       blank.classList.toggle("is-selected", index === 0);
     });
     selectedBlank = 0;
+    collectedBatteries.clear();
     renderGrid();
     paintRobot(route[0]);
     setMessage("Arrancamos de nuevo. Recarga energia y despues llega a 🏁.");
@@ -1959,6 +1966,7 @@ function renderRepeatRequiredChallenge(id = 1) {
   const resetButton = challengeContent.querySelector("[data-reset]");
   const blanks = [...challengeContent.querySelectorAll("[data-blank]")];
   const cells = new Map();
+  const collectedBatteries = new Set();
 
   function cellKey(row, col) {
     return `${row}-${col}`;
@@ -1998,9 +2006,13 @@ function renderRepeatRequiredChallenge(id = 1) {
   }
 
   function paintRobot(key) {
-    cells.forEach((cell) => {
+    if (batteries.has(key)) collectedBatteries.add(key);
+
+    cells.forEach((cell, cellKeyValue) => {
       cell.classList.remove("is-robot", "is-trail");
-      cell.textContent = cell.dataset.baseText || "";
+      const hasCollectedBattery = collectedBatteries.has(cellKeyValue);
+      cell.classList.toggle("is-treasure", batteries.has(cellKeyValue) && !hasCollectedBattery);
+      cell.textContent = hasCollectedBattery ? "" : cell.dataset.baseText || "";
     });
 
     for (const routeKey of route.slice(0, route.indexOf(key) + 1)) {
@@ -2017,6 +2029,7 @@ function renderRepeatRequiredChallenge(id = 1) {
     isAnimating = true;
     checkButton.disabled = true;
     resetButton.disabled = true;
+    collectedBatteries.clear();
 
     for (const [index, key] of route.slice(0, routeLimit + 1).entries()) {
       paintRobot(key);
@@ -2093,6 +2106,7 @@ function renderRepeatRequiredChallenge(id = 1) {
       blank.classList.toggle("is-selected", index === 0);
     });
     selectedBlank = 0;
+    collectedBatteries.clear();
     renderGrid();
     paintRobot(route[0]);
     setMessage("Nuevo intento. Conviene reemplazar tramos rectos por repetir.");
@@ -2767,7 +2781,7 @@ function renderBatteryCountChallenge(id = 1) {
     button.addEventListener("click", () => {
       const answer = Number(button.dataset.count);
       if (answer !== scenes[sceneIndex].answer) {
-        setMessage("Casi. Señala con la vista cada bateria y vuelve a contar.", "is-error");
+        setMessage("Casi. Senala con la vista cada bateria y vuelve a contar.", "is-error");
         return;
       }
       solved.add(sceneIndex);
@@ -2810,6 +2824,7 @@ function renderBatteryMazeChallenge(id = 1) {
   let selectedBlank = 0;
   let isAnimating = false;
   const cells = new Map();
+  const collectedBatteries = new Set();
 
   challengeContent.innerHTML = `
     <article class="challenge-card">
@@ -2869,9 +2884,13 @@ function renderBatteryMazeChallenge(id = 1) {
   }
 
   function paintRobot(key) {
-    cells.forEach((cell) => {
+    if (batteries.has(key)) collectedBatteries.add(key);
+
+    cells.forEach((cell, cellKeyValue) => {
       cell.classList.remove("is-robot", "is-trail");
-      cell.textContent = cell.dataset.baseText || "";
+      const hasCollectedBattery = collectedBatteries.has(cellKeyValue);
+      cell.classList.toggle("is-treasure", batteries.has(cellKeyValue) && !hasCollectedBattery);
+      cell.textContent = hasCollectedBattery ? "" : cell.dataset.baseText || "";
     });
     route.slice(0, route.indexOf(key) + 1).forEach((routeKey) => cells.get(routeKey)?.classList.add("is-trail"));
     const robotCell = cells.get(key);
@@ -2885,6 +2904,7 @@ function renderBatteryMazeChallenge(id = 1) {
     isAnimating = true;
     checkButton.disabled = true;
     resetButton.disabled = true;
+    collectedBatteries.clear();
     for (const [index, key] of route.slice(0, routeLimit + 1).entries()) {
       paintRobot(key);
       if (index > 0) playRobotMoveSound();
@@ -2950,6 +2970,7 @@ function renderBatteryMazeChallenge(id = 1) {
       blank.classList.toggle("is-selected", index === 0);
     });
     selectedBlank = 0;
+    collectedBatteries.clear();
     buildMap();
     paintRobot(route[0]);
     setMessage("Nuevo intento. Usa avanzar y girar para seguir el camino seguro.");
@@ -3325,7 +3346,7 @@ function renderSizeOrderChallenge(id = 1) {
       setMessage("Orden correcto. Las baterias quedaron de chica a grande.", "is-success");
       completeChallenge(id);
     } else {
-      setMessage("Casi. Mira el tamaño de cada bateria y vuelve a ordenar.", "is-error");
+      setMessage("Casi. Mira el tamano de cada bateria y vuelve a ordenar.", "is-error");
     }
   });
 
@@ -3565,7 +3586,7 @@ function renderPatternChallengeV2(id = 4) {
 
     challengeContent.innerHTML = `
       <article class="challenge-card">
-        ${renderChallengeHeader(`desafío ${id}`, challengeTitles[id] || scene.title, scene.hint)}
+        ${renderChallengeHeader(`desafio ${id}`, challengeTitles[id] || scene.title, scene.hint)}
         <div class="pattern-visual-layout pattern-scene pattern-theme-${scene.theme}">
           ${scenes.length > 1 ? `
             <div class="pattern-progress" aria-label="Escenarios completados">
@@ -3704,8 +3725,8 @@ function renderPatternChallengeV2(id = 4) {
 function renderCoordinatesChallenge(id = 5) {
   const objects = [
     { id: "inicio", label: "Inicio", icon: "🏁", target: "B2" },
-    { id: "bateria", label: "Batería", icon: "🔋", target: "D2" },
-    { id: "llave", label: "Recarga de energía", icon: "⚡", target: "D5" },
+    { id: "bateria", label: "Bateria", icon: "🔋", target: "D2" },
+    { id: "llave", label: "Recarga de energia", icon: "⚡", target: "D5" },
     { id: "meta", label: "Bandera", icon: "🏁", target: "F5" },
   ];
   let selected = objects[0].id;
