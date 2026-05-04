@@ -72,9 +72,7 @@ const challengeTypeRenderers = {
 };
 
 const levelBackgrounds = [
-  "assets/learnia-games-bg.png",
-  "assets/learnia-games-bg-2.png",
-  "assets/learnia-games-bg-3.png",
+  "assets/fondo.jpeg",
 ];
 const ROBOT_IMAGE_SRC = "articulos-622.jpeg";
 const robotDirectionRotations = {
@@ -403,8 +401,7 @@ function syncLevelHeading() {
 
 function syncLevelBackground() {
   if (!gameStageBg || !levelBackgrounds.length) return;
-  const backgroundIndex = Math.floor(Math.max(level - 1, 0) / 3) % levelBackgrounds.length;
-  gameStageBg.src = levelBackgrounds[backgroundIndex];
+  gameStageBg.src = levelBackgrounds[0];
 }
 
 function buildSelectorButtons() {
