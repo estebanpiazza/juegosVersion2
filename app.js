@@ -15,6 +15,12 @@ let availableLevels = [];
 let levelDataByNumber = new Map();
 let currentLevelData = null;
 let activeChallengeId = 1;
+const SOUND_VOLUME_KEY = "betech-sound-volume";
+const DEFAULT_SOUND_VOLUME = 0.45;
+let soundContext = null;
+let soundMaster = null;
+let soundVolume = readStoredSoundVolume();
+let lastToneAt = 0;
 
 let challengeTitles = {
   1: "Camino del robot",
@@ -64,6 +70,122 @@ const robotDirectionRotations = {
 function renderRobotMarker(direction = 2) {
   const rotation = robotDirectionRotations[direction] ?? 0;
   return `<img class="robot-marker" src="${ROBOT_IMAGE_SRC}" alt="Robot" style="--robot-rotation: ${rotation}deg" />`;
+}
+
+function readStoredSoundVolume() {
+  const stored = Number(window.localStorage?.getItem(SOUND_VOLUME_KEY));
+  return Number.isFinite(stored) ? Math.min(Math.max(stored, 0), 1) : DEFAULT_SOUND_VOLUME;
+}
+
+function setSoundVolume(value) {
+  soundVolume = Math.min(Math.max(Number(value) || 0, 0), 1);
+  window.localStorage?.setItem(SOUND_VOLUME_KEY, String(soundVolume));
+  if (soundMaster) soundMaster.gain.value = soundVolume;
+  document.querySelectorAll("[data-sound-volume]").forEach((slider) => {
+    slider.value = String(Math.round(soundVolume * 100));
+  });
+  document.querySelectorAll("[data-sound-value]").forEach((label) => {
+    label.textContent = `${Math.round(soundVolume * 100)}%`;
+  });
+}
+
+function getSoundContext() {
+  if (!soundContext) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return null;
+    soundContext = new AudioContextClass();
+    soundMaster = soundContext.createGain();
+    soundMaster.gain.value = soundVolume;
+    soundMaster.connect(soundContext.destination);
+  }
+
+  if (soundContext.state === "suspended") {
+    soundContext.resume();
+  }
+
+  return soundContext;
+}
+
+function playTone({ frequency = 440, endFrequency = null, duration = 0.12, delay = 0, type = "sine", gain = 0.18 }) {
+  if (soundVolume <= 0) return;
+  const context = getSoundContext();
+  if (!context || !soundMaster) return;
+
+  const start = context.currentTime + delay;
+  const oscillator = context.createOscillator();
+  const envelope = context.createGain();
+
+  oscillator.type = type;
+  oscillator.frequency.setValueAtTime(frequency, start);
+  if (endFrequency) oscillator.frequency.exponentialRampToValueAtTime(Math.max(endFrequency, 1), start + duration);
+
+  envelope.gain.setValueAtTime(0.0001, start);
+  envelope.gain.exponentialRampToValueAtTime(gain, start + 0.012);
+  envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+
+  oscillator.connect(envelope);
+  envelope.connect(soundMaster);
+  oscillator.start(start);
+  oscillator.stop(start + duration + 0.02);
+}
+
+function playSound(name) {
+  const now = performance.now();
+  if (name === "tap" && now - lastToneAt < 45) return;
+  lastToneAt = now;
+
+  if (name === "win") {
+    playTone({ frequency: 523.25, duration: 0.11, gain: 0.16 });
+    playTone({ frequency: 659.25, duration: 0.11, delay: 0.09, gain: 0.16 });
+    playTone({ frequency: 783.99, duration: 0.18, delay: 0.18, gain: 0.17 });
+    playTone({ frequency: 1046.5, duration: 0.24, delay: 0.31, gain: 0.13 });
+    return;
+  }
+
+  if (name === "lose") {
+    playTone({ frequency: 240, endFrequency: 120, duration: 0.22, type: "sawtooth", gain: 0.13 });
+    playTone({ frequency: 170, endFrequency: 90, duration: 0.18, delay: 0.15, type: "triangle", gain: 0.11 });
+    return;
+  }
+
+  if (name === "move") {
+    playTone({ frequency: 210, endFrequency: 285, duration: 0.075, type: "square", gain: 0.08 });
+    return;
+  }
+
+  if (name === "place") {
+    playTone({ frequency: 360, duration: 0.08, type: "triangle", gain: 0.12 });
+    playTone({ frequency: 540, duration: 0.08, delay: 0.055, type: "triangle", gain: 0.11 });
+    return;
+  }
+
+  playTone({ frequency: 520, endFrequency: 680, duration: 0.055, type: "sine", gain: 0.07 });
+}
+
+function playRobotMoveSound() {
+  playSound("move");
+}
+
+function initializeSoundControls() {
+  const topbar = document.querySelector(".game-topbar");
+  if (!topbar || topbar.querySelector("[data-sound-control]")) return;
+
+  const control = document.createElement("div");
+  control.className = "sound-control";
+  control.dataset.soundControl = "true";
+  control.innerHTML = `
+    <span class="sound-control-icon" aria-hidden="true">&#128266;</span>
+    <label class="sound-control-label" for="sound-volume">Volumen</label>
+    <input id="sound-volume" type="range" min="0" max="100" step="1" data-sound-volume aria-label="Volumen de efectos de sonido" />
+    <span class="sound-control-value" data-sound-value></span>
+  `;
+
+  topbar.append(control);
+  setSoundVolume(soundVolume);
+  control.querySelector("[data-sound-volume]")?.addEventListener("input", (event) => {
+    setSoundVolume(Number(event.target.value) / 100);
+    playSound("tap");
+  });
 }
 
 function directionBetweenKeys(fromKey, toKey) {
@@ -317,6 +439,8 @@ function setMessage(text, tone = "") {
   if (!message) return;
   message.textContent = text;
   message.className = `challenge-message ${tone}`;
+  if (tone === "is-success") playSound("win");
+  if (tone === "is-error") playSound("lose");
 }
 
 function resetSpeechButton(button) {
@@ -403,6 +527,24 @@ challengeContent?.addEventListener("click", (event) => {
   const header = button.closest(".challenge-header");
   const instruction = header?.querySelector("[data-consigna-text]")?.textContent;
   speakInstruction(instruction, button);
+});
+
+document.addEventListener("click", (event) => {
+  const interactive = event.target.closest("button, a, [role='button']");
+  if (!interactive || interactive.closest("[data-sound-control]")) return;
+
+  if (
+    interactive.matches(".instruction-chip, .algorithm-card, .graphic-options button, .command-bank button, .option-bank button, .coord-bank button, .mini-choice-card, .event-card, .size-card, .lock-pad button")
+    || interactive.hasAttribute("data-card")
+    || interactive.hasAttribute("data-command")
+    || interactive.hasAttribute("data-value")
+    || interactive.hasAttribute("data-num")
+  ) {
+    playSound("place");
+    return;
+  }
+
+  playSound("tap");
 });
 
 function renderHeader(id, instruction) {
@@ -583,8 +725,9 @@ function renderPathChallenge(id = 1) {
     checkButton.disabled = true;
     resetButton.disabled = true;
 
-    for (const key of routePath.slice(0, routeLimit + 1)) {
+    for (const [index, key] of routePath.slice(0, routeLimit + 1).entries()) {
       paintRobot(key);
+      if (index > 0) playRobotMoveSound();
       await new Promise((resolve) => setTimeout(resolve, 260));
     }
 
@@ -1062,6 +1205,7 @@ function renderRobotChallenge(id = 3) {
         setMessage(`Casi. En el paso ${i + 1} el robot choco; revisa ese bloque y vuelve a probar.`, "is-error");
         return;
       }
+      if (command === "F") playRobotMoveSound();
       renderGrid();
     }
 
@@ -1266,8 +1410,9 @@ function renderBalanceChallengeV2(id = 2) {
     checkButton.disabled = true;
     resetButton.disabled = true;
 
-    for (const key of route.slice(0, routeLimit + 1)) {
+    for (const [index, key] of route.slice(0, routeLimit + 1).entries()) {
       paintRobot(key);
+      if (index > 0) playRobotMoveSound();
       await new Promise((resolve) => setTimeout(resolve, 230));
     }
 
@@ -1454,8 +1599,9 @@ function renderRobotChallengeV2(id = 3) {
     checkButton.disabled = true;
     resetButton.disabled = true;
 
-    for (const key of route.slice(0, routeLimit + 1)) {
+    for (const [index, key] of route.slice(0, routeLimit + 1).entries()) {
       paintRobot(key);
+      if (index > 0) playRobotMoveSound();
       await new Promise((resolve) => setTimeout(resolve, 210));
     }
 
@@ -1674,8 +1820,9 @@ function renderRepeatRequiredChallenge(id = 1) {
     checkButton.disabled = true;
     resetButton.disabled = true;
 
-    for (const key of route.slice(0, routeLimit + 1)) {
+    for (const [index, key] of route.slice(0, routeLimit + 1).entries()) {
       paintRobot(key);
+      if (index > 0) playRobotMoveSound();
       await new Promise((resolve) => setTimeout(resolve, 220));
     }
 
@@ -1888,8 +2035,10 @@ function renderArrowMazeChallenge(id = 1) {
     await new Promise((resolve) => setTimeout(resolve, 180));
 
     for (const command of commands) {
+      const previousKey = state.key;
       state = getNextState(state, command);
       paintRobot(state.key, state.direction);
+      if (command === "Avanzar" && state.key !== previousKey) playRobotMoveSound();
       await new Promise((resolve) => setTimeout(resolve, 210));
     }
 
@@ -2538,8 +2687,9 @@ function renderBatteryMazeChallenge(id = 1) {
     isAnimating = true;
     checkButton.disabled = true;
     resetButton.disabled = true;
-    for (const key of route.slice(0, routeLimit + 1)) {
+    for (const [index, key] of route.slice(0, routeLimit + 1).entries()) {
       paintRobot(key);
+      if (index > 0) playRobotMoveSound();
       await new Promise((resolve) => setTimeout(resolve, 190));
     }
     isAnimating = false;
@@ -3780,6 +3930,7 @@ function openStandaloneLevel() {
 }
 
 async function initializeLevelPage() {
+  initializeSoundControls();
   const { discovered, dataByLevel } = await discoverLevelsFromJson();
   availableLevels = discovered;
   levelDataByNumber = dataByLevel;

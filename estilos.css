@@ -285,6 +285,41 @@ h2 {
   justify-content: flex-start;
 }
 
+.sound-control {
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-card);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.sound-control-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  background: rgba(0, 174, 239, 0.14);
+  line-height: 1;
+}
+
+.sound-control-label,
+.sound-control-value {
+  white-space: nowrap;
+}
+
+.sound-control input[type="range"] {
+  width: 112px;
+  accent-color: var(--color-secondary);
+  cursor: pointer;
+}
+
 .game-title {
   display: none;
 }
@@ -2928,6 +2963,8 @@ button:disabled {
   .game-topbar {
     top: 8px;
     left: 8px;
+    right: 8px;
+    gap: 8px;
   }
 
   .selector-wrap {
@@ -2963,6 +3000,17 @@ button:disabled {
     min-height: 32px;
     padding: 0 12px;
     font-size: 0.8rem;
+  }
+
+  .sound-control {
+    min-height: 32px;
+    gap: 6px;
+    padding: 0 8px;
+    font-size: 0.72rem;
+  }
+
+  .sound-control input[type="range"] {
+    width: min(92px, 24vw);
   }
 
   .robot-layout,
@@ -3536,6 +3584,15 @@ button:disabled {
     min-height: 30px;
     padding: 0 10px;
     font-size: 0.76rem;
+  }
+
+  .sound-control {
+    min-height: 30px;
+    padding: 0 7px;
+  }
+
+  .sound-control-label {
+    display: none;
   }
 
   .selector-wrap {
