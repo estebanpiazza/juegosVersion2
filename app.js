@@ -2537,8 +2537,8 @@ function renderSortingRulesChallenge(id = 1) {
 }
 
 function renderSequenceMemoryChallenge(id = 1) {
-  const sequence = ["azul", "amarillo", "azul", "rosa"];
-  const labels = { azul: "Azul", amarillo: "Amarillo", rosa: "Rosa" };
+  const sequence = ["azul", "amarillo", "azul", "verde"];
+  const labels = { azul: "Azul", amarillo: "Amarillo", verde: "Verde" };
   const input = [];
 
   challengeContent.innerHTML = `
@@ -3566,7 +3566,7 @@ function renderPatternChallengeV2(id = 4) {
     "box-large": "Grande",
     "box-tall": "Alta",
     "light-green": "Verde",
-    "light-red": "Roja",
+    "light-red": "Azul",
     "light-yellow": "Amarilla",
     "paint-dot": "Pintar",
     "turn-right": "Girar der.",
@@ -3846,7 +3846,7 @@ const graphicLabels = {
   "tile-yellow": "Amarilla",
   "tile-pink": "Rosa",
   "light-green": "Verde",
-  "light-red": "Roja",
+  "light-red": "Azul",
   "light-yellow": "Amarilla",
 };
 
