@@ -37,7 +37,7 @@
       "pantalla": "Grilla de 6 x 6 con robot, tesoro, obstaculos y casilleros especiales.",
       "interaccion": "Armar un programa con bloques: avanzar, girar derecha y girar izquierda.",
       "feedback": "El robot ejecuta la secuencia paso a paso. Si choca, se detiene y marca el bloque donde fallo.",
-      "variantes": ["Maximo de 8 bloques", "Bloque repetir obligatorio", "Visitar numeros en orden"]
+      "variantes": ["Maximo de 8 bloques", "Visitar numeros en orden"]
     },
     {
       "id": "n4-s1-d4",
@@ -180,7 +180,7 @@
       "consigna": "Observa el evento y elige la acción que debe realizar el robot. ¡Conecta la respuesta correcta!",
       "objetivo": "Relacionar una condicion simple con una accion.",
       "pantalla": "Tarjeta de evento y banco de acciones.",
-      "interaccion": "Elegir tomar, saltar, parar o girar.",
+      "interaccion": "Elegir tomar, parar o girar.",
       "feedback": "Confirma la regla correcta y avanza a otro evento.",
       "variantes": ["Mas eventos", "Eventos con colores", "Acciones con comandos"]
     },

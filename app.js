@@ -801,23 +801,32 @@ function getChallengeInstruction(id, fallbackText) {
   return `${baseInstruction} ${reminders.join(" ")}`;
 }
 
-const commandSymbols = {
-  Avanzar: "⬆️",
-  "Girar der.": "↪️",
-  "Girar izq.": "↩️",
-  Saltar: "↗️",
-  Repetir: "🔁",
+const commandAssets = {
+  Avanzar: "tarjetas%20movimiento/AVANZAR.png",
+  "Girar der.": "tarjetas%20movimiento/DERECHA.png",
+  "Girar derecha": "tarjetas%20movimiento/DERECHA.png",
+  "Girar izq.": "tarjetas%20movimiento/IZQUIERDA.png",
+  "Girar izquierda": "tarjetas%20movimiento/IZQUIERDA.png",
 };
 
 function renderCommand(command) {
+  const asset = commandAssets[command];
+  if (asset) {
+    return `
+      <span class="command-symbol" aria-hidden="true">
+        <img class="command-image" src="${asset}" alt="" />
+      </span>
+      <span class="command-label">${command}</span>
+    `;
+  }
+
   return `
-    <span class="command-symbol" aria-hidden="true">${commandSymbols[command] || "?"}</span>
-    <span class="command-label">${command}</span>
+    <span class="command-label command-label-only">${command}</span>
   `;
 }
 
 function renderInlineCommand(command) {
-  return `${commandSymbols[command] || "?"} ${command}`;
+  return `<span class="inline-command">${renderCommand(command)}</span>`;
 }
 
 function renderCommandButton(command, className = "instruction-chip") {
@@ -890,7 +899,7 @@ function renderPathChallenge(id = 1) {
   const stepsMarkup = steps.map((step, index) => step
     ? renderSequenceStep(step)
     : renderSequenceBlank(index, selectedBlank)).join("");
-  const actionsMarkup = ["Girar der.", "Girar izq.", "Saltar", "Repetir"]
+  const actionsMarkup = ["Girar der.", "Girar izq."]
     .map((command) => renderCommandButton(command))
     .join("");
 
@@ -1470,7 +1479,6 @@ function renderPatternChallenge(id = 4) {
         <button type="button" data-value="Avanzar">${renderInlineCommand("Avanzar")}</button>
         <button type="button" data-value="Girar der.">${renderInlineCommand("Girar der.")}</button>
         <button type="button" data-value="Girar izq.">${renderInlineCommand("Girar izq.")}</button>
-        <button type="button" data-value="Saltar">${renderInlineCommand("Saltar")}</button>
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>COMPROBAR</button>
@@ -1493,7 +1501,7 @@ function renderPatternChallenge(id = 4) {
   challengeContent.querySelectorAll(".option-bank button").forEach((button) => {
     button.addEventListener("click", () => {
       const command = button.dataset.value;
-      blanks[selectedBlank].textContent = renderInlineCommand(command);
+      blanks[selectedBlank].innerHTML = renderInlineCommand(command);
       blanks[selectedBlank].dataset.value = command;
       blanks[selectedBlank].classList.remove("is-wrong", "is-correct");
       const next = blanks.find((blank) => !blank.dataset.value);
@@ -2538,7 +2546,7 @@ function renderSortingRulesChallenge(id = 1) {
 
 function renderSequenceMemoryChallenge(id = 1) {
   const sequence = ["azul", "amarillo", "azul", "verde"];
-  const labels = { azul: "Azul", amarillo: "Amarillo", verde: "Verde" };
+  const labels = { azul: "Azul", amarillo: "Naranja", verde: "Verde" };
   const input = [];
 
   challengeContent.innerHTML = `
@@ -2606,10 +2614,10 @@ function renderSequenceMemoryChallenge(id = 1) {
 
 function renderChooseCommandChallenge(id = 1) {
   const commands = {
-    avanzar: { label: "Avanzar", icon: "⬆️" },
-    derecha: { label: "Girar derecha", icon: "↪️" },
-    izquierda: { label: "Girar izquierda", icon: "↩️" },
-    esperar: { label: "Esperar", icon: "⏸️" },
+    avanzar: { label: "Avanzar", command: "Avanzar" },
+    derecha: { label: "Girar derecha", command: "Girar derecha" },
+    izquierda: { label: "Girar izquierda", command: "Girar izquierda" },
+    esperar: { label: "Esperar" },
   };
   const scenes = [
     {
@@ -2649,8 +2657,7 @@ function renderChooseCommandChallenge(id = 1) {
         <div class="choose-command-options">
           ${Object.entries(commands).map(([key, command]) => `
             <button type="button" data-command-choice="${key}">
-              <span>${command.icon}</span>
-              <strong>${command.label}</strong>
+              ${command.command ? renderCommand(command.command) : `<strong>${command.label}</strong>`}
             </button>
           `).join("")}
         </div>
@@ -2704,8 +2711,8 @@ function renderChooseCommandChallenge(id = 1) {
 
 function renderMatchingPairsChallenge(id = 1) {
   const cards = [
-    { key: "forward", label: "Avanzar", icon: "⬆️" },
-    { key: "right", label: "Derecha", icon: "↪️" },
+    { key: "forward", label: "Avanzar", command: "Avanzar" },
+    { key: "right", label: "Derecha", command: "Girar derecha" },
     { key: "battery", label: "Bateria", icon: "🔋" },
     { key: "flag", label: "Meta", icon: "🏁" },
   ].flatMap((item) => [item, item]);
@@ -2720,7 +2727,7 @@ function renderMatchingPairsChallenge(id = 1) {
       <p class="challenge-note">Objetivo: toca dos tarjetas. Si son iguales, quedan abiertas.</p>
       <div class="mini-card-grid mini-card-grid-4" data-pairs>
         ${order.map((card, index) => `
-          <button class="mini-flip-card" type="button" data-card="${index}" data-key="${card.key}" data-label="${card.label}" data-icon="${card.icon}">?</button>
+          <button class="mini-flip-card" type="button" data-card="${index}" data-key="${card.key}" data-label="${card.label}" data-icon="${card.icon || ""}" data-command-card="${card.command || ""}">?</button>
         `).join("")}
       </div>
       <p class="challenge-message" data-message>Busca una pareja. Recuerda donde aparece cada dibujo.</p>
@@ -2733,7 +2740,9 @@ function renderMatchingPairsChallenge(id = 1) {
       const index = Number(button.dataset.card);
       if (matched.has(index) || button.classList.contains("is-open")) return;
       button.classList.add("is-open");
-      button.innerHTML = `<span>${button.dataset.icon}</span><strong>${button.dataset.label}</strong>`;
+      button.innerHTML = button.dataset.commandCard
+        ? renderCommand(button.dataset.commandCard)
+        : `<span>${button.dataset.icon}</span><strong>${button.dataset.label}</strong>`;
 
       if (!first) {
         first = button;
@@ -3084,7 +3093,7 @@ function renderMirrorPatternChallenge(id = 1) {
 function renderEventActionChallenge(id = 1) {
   const scenes = [
     { event: "Si ves bateria", icon: "🔋", answer: "tomar", action: "Tomar" },
-    { event: "Si ves agua", icon: "💧", answer: "saltar", action: "Saltar" },
+    { event: "Si ves agua", icon: "💧", answer: "parar", action: "Parar" },
     { event: "Si ves bandera", icon: "🏁", answer: "parar", action: "Parar" },
     { event: "Si ves pared", icon: "🧱", answer: "girar", action: "Girar" },
   ];
@@ -3098,7 +3107,7 @@ function renderEventActionChallenge(id = 1) {
       <div class="event-layout">
         <div class="event-card" data-event></div>
         <div class="event-options">
-          ${["Tomar", "Saltar", "Parar", "Girar"].map((label) => `<button type="button" data-event-action="${label.toLowerCase()}">${label}</button>`).join("")}
+          ${["Tomar", "Parar", "Girar"].map((label) => `<button type="button" data-event-action="${label.toLowerCase()}">${label}</button>`).join("")}
         </div>
         <div class="choose-command-progress" data-progress></div>
       </div>
@@ -3139,7 +3148,7 @@ function renderEventActionChallenge(id = 1) {
 
 function renderOddOneOutChallenge(id = 1) {
   const scenes = [
-    { items: ["⬆️", "⬆️", "⬆️", "↪️"], answer: 3 },
+    { items: ["Avanzar", "Avanzar", "Avanzar", "Girar derecha"], answer: 3, commands: true },
     { items: ["🔋", "🔋", "⭐", "🔋"], answer: 2 },
     { items: ["💧", "💧", "🧱", "💧"], answer: 2 },
   ];
@@ -3157,7 +3166,12 @@ function renderOddOneOutChallenge(id = 1) {
   const oddNode = challengeContent.querySelector("[data-odd]");
 
   function renderOdd() {
-    oddNode.innerHTML = scenes[current].items.map((item, index) => `<button class="mini-choice-card" type="button" data-odd="${index}">${item}</button>`).join("");
+    const scene = scenes[current];
+    oddNode.innerHTML = scene.items.map((item, index) => `
+      <button class="mini-choice-card" type="button" data-odd="${index}">
+        ${scene.commands ? renderCommand(item) : item}
+      </button>
+    `).join("");
     oddNode.querySelectorAll("[data-odd]").forEach((button) => {
       button.addEventListener("click", () => {
         if (Number(button.dataset.odd) !== scenes[current].answer) {
@@ -3390,10 +3404,10 @@ function renderSizeOrderChallenge(id = 1) {
 
 function renderFindBugChallenge(id = 1) {
   const program = [
-    { label: "Avanzar", icon: "⬆️", bug: false },
-    { label: "Avanzar", icon: "⬆️", bug: false },
-    { label: "Girar izquierda", icon: "↩️", bug: true },
-    { label: "Avanzar", icon: "⬆️", bug: false },
+    { label: "Avanzar", command: "Avanzar", bug: false },
+    { label: "Avanzar", command: "Avanzar", bug: false },
+    { label: "Girar izquierda", command: "Girar izquierda", bug: true },
+    { label: "Avanzar", command: "Avanzar", bug: false },
   ];
 
   challengeContent.innerHTML = `
@@ -3403,8 +3417,7 @@ function renderFindBugChallenge(id = 1) {
       <div class="bug-program">
         ${program.map((step, index) => `
           <button type="button" data-bug="${step.bug}" data-index="${index}">
-            <span>${step.icon}</span>
-            <strong>${index + 1}. ${step.label}</strong>
+            ${renderCommand(step.command)}
           </button>
         `).join("")}
       </div>
@@ -3420,7 +3433,7 @@ function renderFindBugChallenge(id = 1) {
         return;
       }
       button.classList.add("is-correct");
-      button.innerHTML = "<span>↪️</span><strong>3. Girar derecha</strong>";
+      button.innerHTML = renderCommand("Girar derecha");
       setMessage("Bug encontrado y corregido. Ahora el programa mira hacia la salida.", "is-success");
       completeChallenge(id);
     });
@@ -3546,7 +3559,7 @@ function renderPatternChallengeV2(id = 4) {
       pattern: ["cmd-forward", "cmd-forward", "cmd-turn"],
       sequence: ["cmd-forward", "cmd-forward", null, "cmd-forward", null, "cmd-turn", null, "cmd-forward", "cmd-turn"],
       answers: ["cmd-turn", "cmd-forward", "cmd-forward"],
-      options: ["cmd-forward", "cmd-turn", "cmd-jump"],
+      options: ["cmd-forward", "cmd-turn", "turn-left"],
     },
   ];
   scenes.splice(0, scenes.length, {
@@ -3556,7 +3569,7 @@ function renderPatternChallengeV2(id = 4) {
     pattern: ["cmd-forward", "cmd-forward", "cmd-turn"],
     sequence: ["cmd-forward", "cmd-forward", null, "cmd-forward", null, "cmd-turn", null, "cmd-forward", "cmd-turn"],
     answers: ["cmd-turn", "cmd-forward", "cmd-forward"],
-    options: ["cmd-forward", "cmd-turn", "cmd-jump"],
+    options: ["cmd-forward", "cmd-turn", "turn-left"],
   });
   const labels = {
     "tile-blue": "Azul",
@@ -3579,12 +3592,10 @@ function renderPatternChallengeV2(id = 4) {
     leaf: "Hoja",
     "cmd-forward": "Avanzar",
     "cmd-turn": "Girar der.",
-    "cmd-jump": "Saltar",
   };
   const commandItems = {
     "cmd-forward": "Avanzar",
     "cmd-turn": "Girar der.",
-    "cmd-jump": "Saltar",
     "turn-right": "Girar der.",
     "turn-left": "Girar izq.",
   };
@@ -3594,7 +3605,7 @@ function renderPatternChallengeV2(id = 4) {
 
   function itemMarkup(kind) {
     if (commandItems[kind]) {
-      return `<span class="pattern-item kind-${kind} command-pattern-item">${renderCommand(commandItems[kind])}</span>`;
+      return `<span class="pattern-item kind-${kind} command-pattern-item has-command-image">${renderCommand(commandItems[kind])}</span>`;
     }
 
     return `<span class="pattern-item kind-${kind}"><i></i><strong>${labels[kind]}</strong></span>`;

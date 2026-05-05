@@ -1326,11 +1326,31 @@ body.has-scenario-modal {
   line-height: 0.9;
 }
 
+.command-image {
+  width: clamp(42px, 6vw, 64px);
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.inline-command {
+  display: inline-grid;
+  grid-template-rows: auto auto;
+  place-items: center;
+  gap: 2px;
+  vertical-align: middle;
+}
+
 .command-label {
   display: block;
   font-size: clamp(0.62rem, 1vw, 0.74rem);
   line-height: 1;
   text-align: center;
+}
+
+.command-label-only {
+  color: var(--color-primary);
+  font-weight: 900;
 }
 
 .command-placeholder {
@@ -1358,6 +1378,47 @@ body.has-scenario-modal {
   color: #ffffff;
   background: #08DBF7;
   box-shadow: inset 0 -5px 0 rgba(10, 122, 190, 0.24), 0 3px 0 rgba(10, 122, 190, 0.14);
+}
+
+.instruction-chip:has(.command-image),
+.sequence-slot.command-card[data-value]:has(.command-image),
+.command-bank button:has(.command-image),
+.program-list span:has(.command-image),
+.debug-line span:has(.command-image),
+.debug-options button:has(.command-image),
+.choose-command-options button:has(.command-image),
+.mini-flip-card:has(.command-image),
+.mini-choice-card:has(.command-image),
+.bug-program button:has(.command-image) {
+  border-color: transparent;
+  color: var(--color-primary);
+  background: transparent;
+  box-shadow: none;
+}
+
+.instruction-chip:has(.command-image)::before,
+.instruction-chip:has(.command-image)::after,
+.sequence-slot.command-card[data-value]:has(.command-image)::before,
+.sequence-slot.command-card[data-value]:has(.command-image)::after {
+  display: none;
+}
+
+.instruction-chip:has(.command-image) .command-symbol,
+.instruction-chip:has(.command-image) .command-label,
+.sequence-slot.command-card[data-value]:has(.command-image) .command-symbol,
+.sequence-slot.command-card[data-value]:has(.command-image) .command-label,
+.command-bank button:has(.command-image) .command-symbol,
+.command-bank button:has(.command-image) .command-label,
+.choose-command-options button:has(.command-image) .command-symbol,
+.choose-command-options button:has(.command-image) .command-label,
+.mini-flip-card:has(.command-image) .command-symbol,
+.mini-flip-card:has(.command-image) .command-label,
+.mini-choice-card:has(.command-image) .command-symbol,
+.mini-choice-card:has(.command-image) .command-label,
+.bug-program button:has(.command-image) .command-symbol,
+.bug-program button:has(.command-image) .command-label {
+  color: var(--color-primary);
+  text-shadow: none;
 }
 
 .sequence-slot.command-card[data-value].is-selected {
@@ -2740,6 +2801,22 @@ button:disabled {
 .bug-program button.is-wrong {
   color: #842029;
   background: #fde7ea;
+}
+
+.choose-command-options button:has(.command-image) .command-label,
+.mini-flip-card:has(.command-image) .command-label,
+.mini-choice-card:has(.command-image) .command-label,
+.bug-program button:has(.command-image) .command-label {
+  font-size: clamp(0.78rem, 1.2vw, 0.95rem);
+  line-height: 1.05;
+  max-width: 112px;
+}
+
+.choose-command-options button:has(.command-image) .command-image,
+.mini-flip-card:has(.command-image) .command-image,
+.mini-choice-card:has(.command-image) .command-image,
+.bug-program button:has(.command-image) .command-image {
+  width: clamp(50px, 6vw, 70px);
 }
 
 .kind-tile-blue i,
@@ -4686,6 +4763,31 @@ button:disabled {
   align-content: center;
   gap: 3px;
   padding: 6px 8px;
+}
+
+.pattern-theme-commands .command-pattern-item.has-command-image,
+.pattern-theme-commands .graphic-pattern-row .graphic-blank:has(.has-command-image),
+.pattern-theme-commands .graphic-options button:has(.has-command-image) {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.pattern-theme-commands .command-pattern-item.has-command-image::before,
+.pattern-theme-commands .command-pattern-item.has-command-image::after,
+.pattern-theme-commands .graphic-pattern-row .graphic-blank:has(.has-command-image)::before,
+.pattern-theme-commands .graphic-pattern-row .graphic-blank:has(.has-command-image)::after,
+.pattern-theme-commands .graphic-options button:has(.has-command-image)::before,
+.pattern-theme-commands .graphic-options button:has(.has-command-image)::after {
+  display: none;
+}
+
+.pattern-theme-commands .command-pattern-item.has-command-image .command-symbol,
+.pattern-theme-commands .command-pattern-item.has-command-image .command-label,
+.pattern-theme-commands .graphic-options button:has(.has-command-image) .command-symbol,
+.pattern-theme-commands .graphic-options button:has(.has-command-image) .command-label {
+  color: var(--color-primary);
+  text-shadow: none;
 }
 
 @media (max-width: 980px) {
