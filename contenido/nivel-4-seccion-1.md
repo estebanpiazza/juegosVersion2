@@ -7,7 +7,7 @@ Objetivo de la seccion: fortalecer pensamiento computacional y programacion inic
 Tipo: secuenciacion guiada, estilo Code.org inicial.
 
 Consigna para el alumno:
-¡Ayudalo! El robot camina derecho, pero para ganar tiene que doblar. ¿Para qué lado tiene que mirar? ¡Elegí la flecha!
+¡AYUDALO! EL ROBOT CAMINA DERECHO, PERO PARA GANAR TIENE QUE DOBLAR. ¿PARA QUÉ LADO TIENE QUE MIRAR? ¡ELEGÍ LA FLECHA!
 
 Objetivo:
 Practicar secuencias de instrucciones: avanzar, girar derecha y girar izquierda.

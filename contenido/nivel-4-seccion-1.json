@@ -8,7 +8,7 @@
       "titulo": "Secuencia de comandos",
       "tipo": "secuenciacion-guiada",
       "inspiracion": "Code.org inicial",
-      "consigna": "Ayudalo. El robot camina derecho, pero para ganar tiene que doblar. Para que lado tiene que mirar? Elige la flecha.",
+      "consigna": "AYUDALO. EL ROBOT CAMINA DERECHO, PERO PARA GANAR TIENE QUE DOBLAR. PARA QUE LADO TIENE QUE MIRAR? ELIGE LA FLECHA.",
       "objetivo": "Practicar secuencias de instrucciones: avanzar, girar derecha y girar izquierda.",
       "pantalla": "Mapa 6x6 con camino resaltado y tira de instrucciones con huecos vacios.",
       "interaccion": "Seleccionar cada hueco y asignar la accion correcta.",

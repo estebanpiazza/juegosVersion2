@@ -43,10 +43,12 @@ if (levelCardsContainer) {
       .map((levelNumber, index) => {
         const themeClass = levelThemes[index % levelThemes.length];
         const icon = levelIcons[index % levelIcons.length];
+        const href = levelNumber === 4 ? `etapas.html?nivel=${levelNumber}` : `nivel.html?nivel=${levelNumber}`;
+        const label = levelNumber === 4 ? `NIVEL ${levelNumber}` : `Nivel ${levelNumber}`;
         return `
-          <a class="level-card ${themeClass}" href="nivel.html?nivel=${levelNumber}">
+          <a class="level-card ${themeClass}" href="${href}">
             <span class="card-emoji" aria-hidden="true">${icon}</span>
-            <strong>Nivel ${levelNumber}</strong>
+            <strong>${label}</strong>
           </a>
         `;
       })

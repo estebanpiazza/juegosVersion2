@@ -36,7 +36,6 @@ body {
 .home-body {
   min-height: 100vh;
   background:
-    linear-gradient(90deg, rgba(247, 249, 252, 0.92), rgba(247, 249, 252, 0.72)),
     linear-gradient(180deg, rgba(36, 60, 143, 0.22), rgba(0, 174, 239, 0.14)),
     url("assets/fondo.jpeg") center / cover fixed;
 }
@@ -240,6 +239,190 @@ h2 {
   background: linear-gradient(145deg, #bc347a, #ef5da8);
 }
 
+.stages-body {
+  min-height: 100vh;
+}
+
+.stages-shell {
+  width: min(1180px, calc(100% - 32px));
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px 0 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stages-section {
+  flex: 1;
+  display: grid;
+  align-content: start;
+  gap: clamp(10px, 2vh, 18px);
+  padding: clamp(8px, 1.8vh, 18px) 0 0;
+}
+
+.stages-header {
+  max-width: 720px;
+  text-align: left;
+}
+
+.stages-header h1 {
+  margin-bottom: 0;
+  color: var(--color-primary);
+  font-size: clamp(1.7rem, 4vw, 2.7rem);
+}
+
+.stage-path {
+  position: relative;
+  isolation: isolate;
+  min-height: min(68vh, 500px);
+  padding: clamp(12px, 2vw, 24px) clamp(14px, 3vw, 38px);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(82px, 1fr));
+  align-items: center;
+  justify-items: center;
+  gap: clamp(12px, 2vh, 24px) clamp(20px, 4vw, 58px);
+}
+
+.stage-path::before {
+  position: absolute;
+  inset: clamp(36px, 5vw, 62px) clamp(42px, 6vw, 84px);
+  z-index: -1;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 8% 18%, rgba(255, 255, 255, 0.66) 0 7px, transparent 8px),
+    radial-gradient(circle at 22% 78%, rgba(255, 255, 255, 0.58) 0 5px, transparent 6px),
+    radial-gradient(circle at 48% 22%, rgba(255, 255, 255, 0.56) 0 6px, transparent 7px),
+    radial-gradient(circle at 73% 74%, rgba(255, 255, 255, 0.56) 0 5px, transparent 6px),
+    radial-gradient(circle at 92% 28%, rgba(255, 255, 255, 0.62) 0 7px, transparent 8px),
+    linear-gradient(90deg, rgba(36, 60, 143, 0.24), rgba(0, 174, 239, 0.36), rgba(36, 60, 143, 0.24));
+  clip-path: polygon(0 46%, 8% 38%, 18% 56%, 29% 34%, 42% 49%, 55% 65%, 69% 36%, 82% 54%, 94% 40%, 100% 48%, 100% 59%, 94% 51%, 82% 65%, 69% 47%, 55% 76%, 42% 60%, 29% 45%, 18% 68%, 8% 50%, 0 58%);
+  content: "";
+  filter: drop-shadow(0 8px 16px rgba(36, 60, 143, 0.12));
+}
+
+.stage-node {
+  position: relative;
+  width: clamp(58px, 6.5vw, 82px);
+  aspect-ratio: 1;
+  border: 6px solid rgba(255, 255, 255, 0.82);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: #17306f;
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.88) 0 13%, transparent 14%),
+    linear-gradient(145deg, #ffffff, #dff4ff 52%, #bfe6ff);
+  box-shadow:
+    inset 0 -7px 0 rgba(17, 121, 191, 0.12),
+    0 12px 0 rgba(36, 60, 143, 0.08),
+    0 20px 34px rgba(48, 69, 118, 0.18);
+  transition:
+    transform 220ms cubic-bezier(0.18, 0.9, 0.24, 1.18),
+    opacity 180ms ease,
+    filter 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.stage-node:nth-child(5n + 2),
+.stage-node:nth-child(5n + 4) {
+  transform: translateY(clamp(14px, 2.8vw, 30px));
+}
+
+.stage-node:nth-child(5n + 3) {
+  transform: translateY(clamp(-14px, -2vw, -22px));
+}
+
+.stage-node:nth-child(4n) {
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.88) 0 13%, transparent 14%),
+    linear-gradient(145deg, #fff8d7, #f4c542);
+}
+
+.stage-node:nth-child(4n + 2) {
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.88) 0 13%, transparent 14%),
+    linear-gradient(145deg, #e6f7ff, #00aeef);
+}
+
+.stage-node:nth-child(4n + 3) {
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.88) 0 13%, transparent 14%),
+    linear-gradient(145deg, #ffe7f3, #ef5da8);
+}
+
+.stage-node::before {
+  position: absolute;
+  inset: -14px;
+  z-index: -1;
+  border: 2px solid rgba(255, 255, 255, 0.62);
+  border-radius: 999px;
+  content: "";
+  opacity: 0;
+  transform: scale(0.88);
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.stage-node span {
+  font-size: clamp(1.2rem, 2.4vw, 1.85rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.stage-node:hover,
+.stage-node:focus-visible {
+  box-shadow:
+    inset 0 -7px 0 rgba(17, 121, 191, 0.12),
+    0 16px 0 rgba(36, 60, 143, 0.07),
+    0 28px 46px rgba(48, 69, 118, 0.22);
+}
+
+.stage-node:hover::before,
+.stage-node:focus-visible::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.stage-node:focus-visible {
+  outline: 3px solid rgba(244, 197, 66, 0.9);
+  outline-offset: 5px;
+}
+
+.stage-node.is-dimmed {
+  opacity: 0.18;
+  filter: blur(1px) saturate(0.6);
+}
+
+.stage-node.is-entering {
+  z-index: 4;
+  animation: stage-enter 520ms cubic-bezier(0.15, 0.9, 0.22, 1) forwards;
+}
+
+.stage-is-entering .stages-header,
+.stage-is-entering .brand-bar,
+.stage-is-entering .stage-path::before {
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+@keyframes stage-enter {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  45% {
+    opacity: 1;
+    transform: scale(1.28);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(18);
+  }
+}
+
 .game-body {
   width: 100%;
   height: 100vh;
@@ -247,6 +430,7 @@ h2 {
   min-height: 100vh;
   overflow: hidden;
   background: #edf7ff;
+  text-transform: uppercase;
 }
 
 .game-page {
@@ -460,13 +644,13 @@ h2 {
   height: 100dvh;
   min-height: 0;
   overflow: hidden;
-  padding: clamp(14px, 2.4dvh, 24px) clamp(12px, 1.6vw, 20px) clamp(10px, 1.4dvh, 16px) clamp(72px, 5.8vw, 96px);
+  padding: clamp(4px, 1dvh, 8px) clamp(6px, 0.8vw, 10px) clamp(6px, 1dvh, 10px) clamp(64px, 5.2vw, 78px);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   align-content: stretch;
   justify-items: center;
-  gap: clamp(8px, 1.4dvh, 14px);
+  gap: 0;
 }
 
 .selector-wrap {
@@ -574,17 +758,15 @@ h2 {
   display: block;
   align-self: stretch;
   overflow: hidden;
-  width: min(1180px, 100%);
+  width: 100%;
   height: 100%;
   min-height: 0;
   margin: 0 auto;
-  padding: clamp(8px, 1.2vw, 14px);
-  border-radius: 32px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(240, 249, 255, 0.66)),
-    linear-gradient(135deg, rgba(244, 197, 66, 0.18), rgba(0, 174, 239, 0.14), rgba(239, 93, 168, 0.1));
-  box-shadow: 0 18px 42px rgba(48, 69, 118, 0.13);
-  backdrop-filter: blur(8px);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .challenge-shell.is-open {
@@ -644,7 +826,8 @@ h2 {
 .challenge-card {
   height: 100%;
   min-height: 0;
-  max-width: 1120px;
+  width: 100%;
+  max-width: none;
   margin: 0 auto;
   padding: clamp(14px, 1.7vw, 22px);
   border: 1px solid rgba(255, 255, 255, 0.72);
@@ -3157,7 +3340,7 @@ button:disabled {
   }
 
   .challenge-shell {
-    padding: 6px;
+    padding: 0;
   }
 
   .challenge-content,
@@ -3167,7 +3350,7 @@ button:disabled {
   }
 
   .game-workspace {
-    padding-top: 42px;
+    padding-top: 6px;
     gap: 6px;
   }
 
@@ -3755,7 +3938,7 @@ button:disabled {
 
 @media (max-height: 720px) {
   .game-workspace {
-    padding-top: 36px;
+    padding-top: 4px;
     gap: 5px;
   }
 
@@ -3862,7 +4045,7 @@ button:disabled {
 
 @media (max-height: 560px) {
   .game-workspace {
-    padding-top: 32px;
+    padding-top: 4px;
   }
 
   .challenge-header p,
@@ -4054,7 +4237,7 @@ button:disabled {
   }
 
   .game-workspace {
-    padding: 10px 8px 64px;
+    padding: 6px 8px 64px;
     gap: 6px;
   }
 
@@ -4064,7 +4247,7 @@ button:disabled {
 
   .challenge-shell {
     border-radius: 22px;
-    padding: 6px;
+    padding: 0;
   }
 
   .challenge-card {
@@ -4231,14 +4414,17 @@ button:disabled {
   }
 }
 
+.challenge-card:has(.path-layout) .challenge-header,
 .challenge-card:has(.visual-sequence-layout) .challenge-header {
   margin-bottom: clamp(6px, 1dvh, 10px);
 }
 
+.challenge-card:has(.path-layout) .challenge-actions,
 .challenge-card:has(.visual-sequence-layout) .challenge-actions {
   margin-top: clamp(4px, 0.8dvh, 8px);
 }
 
+.path-layout,
 .visual-sequence-layout {
   width: min(100%, 1120px);
   grid-template-columns: minmax(430px, 480px) minmax(430px, 1fr);
@@ -4246,12 +4432,14 @@ button:disabled {
   flex: 0 0 auto;
 }
 
+.path-layout .path-map,
 .visual-sequence-layout .visual-map,
 .visual-sequence-layout .robot-grid.visual-map {
   width: min(100%, 440px);
   max-width: 440px;
 }
 
+.path-layout .path-map-cell,
 .visual-sequence-layout .path-map-cell,
 .visual-sequence-layout .robot-cell {
   border-radius: 14px;
@@ -4288,11 +4476,13 @@ button:disabled {
 }
 
 @media (max-width: 980px) {
+  .path-layout,
   .visual-sequence-layout {
     grid-template-columns: minmax(330px, 380px) minmax(0, 1fr);
     gap: 18px;
   }
 
+  .path-layout .path-map,
   .visual-sequence-layout .visual-map,
   .visual-sequence-layout .robot-grid.visual-map {
     width: min(100%, 370px);
@@ -4301,13 +4491,220 @@ button:disabled {
 }
 
 @media (max-width: 640px) {
+  .path-layout,
   .visual-sequence-layout {
     grid-template-columns: 1fr;
   }
 
+  .path-layout .path-map,
   .visual-sequence-layout .visual-map,
   .visual-sequence-layout .robot-grid.visual-map {
     width: min(100%, 290px);
     max-width: 290px;
+  }
+}
+
+/* Level 4 command pattern: use the same block-piece language as maps 1-3. */
+.pattern-theme-commands {
+  width: min(100%, 1040px);
+  gap: clamp(12px, 1.6dvh, 18px);
+}
+
+.pattern-theme-commands .graphic-pattern-row {
+  width: min(100%, 900px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pattern-theme-commands .pattern-preview,
+.pattern-theme-commands .graphic-options {
+  width: min(100%, 560px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pattern-theme-commands .pattern-preview {
+  grid-template-columns: repeat(3, minmax(118px, 1fr));
+  padding: 12px;
+  border: 2px dashed #d2def0;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 -5px 0 rgba(36, 60, 143, 0.04);
+}
+
+.pattern-theme-commands .graphic-pattern-row {
+  grid-template-columns: repeat(9, minmax(82px, 1fr));
+  gap: 10px;
+  padding: 12px;
+  border: 2px dashed #d2def0;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 -5px 0 rgba(36, 60, 143, 0.04);
+}
+
+.pattern-theme-commands .graphic-options {
+  grid-template-columns: repeat(3, minmax(118px, 1fr));
+  gap: 10px;
+}
+
+.pattern-theme-commands .command-pattern-item,
+.pattern-theme-commands .graphic-pattern-row .pattern-item,
+.pattern-theme-commands .graphic-pattern-row .graphic-blank:has(.command-pattern-item),
+.pattern-theme-commands .graphic-options button {
+  position: relative;
+  min-height: 64px;
+  border: 2px solid #118fcd;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  background: #1da1e8;
+  box-shadow: inset 0 -5px 0 rgba(0, 73, 128, 0.2), 0 4px 0 rgba(36, 60, 143, 0.12);
+  isolation: isolate;
+}
+
+.pattern-theme-commands .graphic-pattern-row .graphic-blank:has(.command-pattern-item) .command-pattern-item,
+.pattern-theme-commands .graphic-options button .command-pattern-item {
+  min-height: auto;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.pattern-theme-commands .graphic-pattern-row .graphic-blank:has(.command-pattern-item) .command-pattern-item::before,
+.pattern-theme-commands .graphic-pattern-row .graphic-blank:has(.command-pattern-item) .command-pattern-item::after,
+.pattern-theme-commands .graphic-options button .command-pattern-item::before,
+.pattern-theme-commands .graphic-options button .command-pattern-item::after {
+  display: none;
+}
+
+.pattern-theme-commands .command-pattern-item::after,
+.pattern-theme-commands .graphic-pattern-row .graphic-blank:has(.command-pattern-item)::after,
+.pattern-theme-commands .graphic-options button::after {
+  position: absolute;
+  right: -9px;
+  top: 8px;
+  bottom: 8px;
+  z-index: 0;
+  width: 20px;
+  border-radius: 999px;
+  background: #1da1e8;
+  box-shadow: inset 0 -4px 0 rgba(0, 73, 128, 0.18);
+  content: "";
+  pointer-events: none;
+}
+
+.pattern-theme-commands .command-pattern-item::before,
+.pattern-theme-commands .graphic-pattern-row .graphic-blank:has(.command-pattern-item)::before,
+.pattern-theme-commands .graphic-options button::before {
+  position: absolute;
+  left: -9px;
+  top: 8px;
+  bottom: 8px;
+  z-index: 0;
+  width: 20px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  content: "";
+  pointer-events: none;
+}
+
+.pattern-theme-commands .command-pattern-item > *,
+.pattern-theme-commands .graphic-options button > * {
+  position: relative;
+  z-index: 1;
+}
+
+.pattern-theme-commands .graphic-pattern-row .graphic-blank {
+  min-height: 64px;
+  border: 2px solid #cbd7ea;
+  border-radius: 16px;
+  color: var(--color-dark);
+  background: #f7fbff;
+  box-shadow: inset 0 -3px 0 rgba(36, 60, 143, 0.05);
+  font-size: 1.45rem;
+}
+
+.pattern-theme-commands .graphic-pattern-row .graphic-blank.is-selected {
+  border: 2px solid #00aeef;
+  background: #e9f8ff;
+  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.12), inset 0 -3px 0 rgba(36, 60, 143, 0.05);
+}
+
+.pattern-theme-commands .graphic-pattern-row .graphic-blank.is-correct {
+  border-color: #2fb36d;
+  background: #dff7ea;
+}
+
+.pattern-theme-commands .graphic-pattern-row .graphic-blank.is-wrong {
+  border-color: #ef5da8;
+  background: #ffeaf4;
+}
+
+.pattern-theme-commands .graphic-pattern-row .graphic-blank:has(.command-pattern-item) {
+  padding: 0;
+}
+
+.pattern-theme-commands .graphic-pattern-row .graphic-blank:has(.command-pattern-item).is-selected {
+  border-color: #00aeef;
+  box-shadow:
+    inset 0 -5px 0 rgba(0, 73, 128, 0.2),
+    0 0 0 3px rgba(244, 197, 66, 0.35),
+    0 4px 0 rgba(36, 60, 143, 0.12);
+}
+
+.pattern-theme-commands .command-pattern-item .command-symbol,
+.pattern-theme-commands .command-pattern-item .command-label {
+  color: #ffffff;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  text-shadow: 0 1px 0 rgba(0, 73, 128, 0.22);
+}
+
+.pattern-theme-commands .command-pattern-item .command-symbol {
+  font-size: clamp(1.55rem, 2.4vw, 2rem);
+  line-height: 0.9;
+}
+
+.pattern-theme-commands .command-pattern-item .command-label {
+  font-size: 0.74rem;
+  line-height: 1;
+  max-width: none;
+  overflow: visible;
+  white-space: nowrap;
+}
+
+.pattern-theme-commands .graphic-pattern-row .command-pattern-item,
+.pattern-theme-commands .pattern-preview .command-pattern-item,
+.pattern-theme-commands .graphic-options .command-pattern-item {
+  grid-template-rows: auto auto;
+  align-content: center;
+  gap: 3px;
+  padding: 6px 8px;
+}
+
+@media (max-width: 980px) {
+  .pattern-theme-commands .graphic-pattern-row {
+    grid-template-columns: repeat(5, minmax(72px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .pattern-theme-commands .pattern-preview,
+  .pattern-theme-commands .graphic-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pattern-theme-commands .graphic-pattern-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pattern-theme-commands .command-pattern-item,
+  .pattern-theme-commands .graphic-pattern-row .graphic-blank,
+  .pattern-theme-commands .graphic-options button {
+    min-height: 54px;
   }
 }

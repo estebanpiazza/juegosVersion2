@@ -1,5 +1,6 @@
 const params = new URLSearchParams(window.location.search);
 const requestedLevel = Number(params.get("nivel"));
+const requestedChallenge = Number(params.get("desafio"));
 const DEFAULT_LEVEL = 4;
 let level = Number.isInteger(requestedLevel) ? requestedLevel : DEFAULT_LEVEL;
 
@@ -423,6 +424,10 @@ function syncLevelHeading() {
   document.querySelectorAll("[data-current-level]").forEach((node) => {
     node.textContent = String(level);
   });
+  const backLink = document.querySelector(".back-link");
+  if (backLink) {
+    backLink.href = level === 4 ? `etapas.html?nivel=${level}` : "index.html";
+  }
   document.title = `Be Tech | Nivel ${level}`;
 }
 
@@ -661,7 +666,7 @@ function resetSpeechButton(button) {
   button.classList.remove("is-speaking");
   button.disabled = false;
   const label = button.querySelector("[data-speech-label]");
-  if (label) label.textContent = "Escuchar consigna";
+  if (label) label.textContent = "ESCUCHAR CONSIGNA";
 }
 
 let activeSpeechButton = null;
@@ -733,9 +738,9 @@ function renderChallengeHeader(kicker, title, instruction) {
       <p class="challenge-kicker">${kicker}</p>
       <div class="challenge-title-row">
         <h2>${title}</h2>
-        <button class="listen-consigna" type="button" data-speak-consigna aria-label="Escuchar consigna" title="Escuchar consigna">
+        <button class="listen-consigna" type="button" data-speak-consigna aria-label="ESCUCHAR CONSIGNA" title="ESCUCHAR CONSIGNA">
           <span aria-hidden="true" class="listen-consigna-icon">&#128266;</span>
-          <span data-speech-label>Escuchar consigna</span>
+          <span data-speech-label>ESCUCHAR CONSIGNA</span>
         </button>
       </div>
       <p data-consigna-text>${instruction}</p>
@@ -892,9 +897,9 @@ function renderPathChallenge(id = 1) {
   challengeContent.innerHTML = `
     <article class="challenge-card">
       ${renderHeader(id, getChallengeInstruction(id, "Mira el camino celeste y completa los giros para que el robot vaya desde INICIO hasta 🏁."))}
-      <div class="path-layout">
-        <div class="path-map" data-path-map></div>
-        ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup })}
+      <div class="visual-sequence-layout">
+        <div class="path-map visual-map" data-path-map></div>
+        ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>Comprobar</button>
@@ -4193,13 +4198,17 @@ async function initializeLevelPage() {
   buildSelectorButtons();
   wireSelectorButtons();
 
+  const initialChallenge = Number.isInteger(requestedChallenge)
+    ? Math.min(Math.max(requestedChallenge, 1), totalChallenges)
+    : 1;
+
   if (challenges.length) {
-    openChallenge(1);
+    openChallenge(initialChallenge);
     return;
   }
 
   if (level === 4) {
-    openChallenge(1);
+    openChallenge(initialChallenge);
     return;
   }
 
