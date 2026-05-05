@@ -4,13 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Be Tech | Nivel</title>
-    <link rel="stylesheet" href="estilos.css?v=13" />
+    <link rel="stylesheet" href="estilos.css?v=14" />
   </head>
   <body class="game-body">
     <main class="game-page">
       <section class="game-panel" aria-labelledby="game-title">
         <nav class="game-topbar" aria-label="Navegación principal">
-          <a class="back-link" href="index.html">Volver</a>
+          <a class="back-link" href="index.html" aria-label="Volver a niveles">
+            <span class="side-control-icon" aria-hidden="true">&larr;</span>
+            <span class="side-control-label">Volver</span>
+          </a>
         </nav>
 
         <h1 id="game-title" class="game-title">Nivel <span data-current-level>4</span></h1>
@@ -45,6 +48,6 @@
       </section>
     </main>
 
-    <script src="app.js?v=20"></script>
+    <script src="app.js?v=21"></script>
   </body>
 </html>

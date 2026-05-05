@@ -301,21 +301,48 @@ function initializeSoundControls() {
   controlGroup.className = "sound-controls";
   controlGroup.dataset.soundControl = "true";
   controlGroup.innerHTML = `
-    <div class="sound-control">
-      <span class="sound-control-icon" aria-hidden="true">&#128266;</span>
-      <label class="sound-control-label" for="sound-volume">Efectos</label>
-      <input id="sound-volume" type="range" min="0" max="100" step="1" data-sound-volume aria-label="Volumen de efectos de sonido" />
-      <span class="sound-control-value" data-sound-value></span>
-    </div>
-    <div class="sound-control">
-      <span class="sound-control-icon" aria-hidden="true">&#9835;</span>
-      <label class="sound-control-label" for="music-volume">Musica</label>
-      <input id="music-volume" type="range" min="0" max="100" step="1" data-music-volume aria-label="Volumen de musica de fondo" />
-      <span class="sound-control-value" data-music-value></span>
+    <button class="sound-toggle" type="button" aria-expanded="false" aria-controls="sound-panel" data-sound-toggle>
+      <span class="side-control-icon" aria-hidden="true">&#9835;</span>
+      <span class="side-control-label">Audio</span>
+    </button>
+    <div class="sound-panel" id="sound-panel" hidden>
+      <div class="sound-control">
+        <span class="sound-control-icon" aria-hidden="true">&#128266;</span>
+        <label class="sound-control-label" for="sound-volume">Efectos</label>
+        <input id="sound-volume" type="range" min="0" max="100" step="1" data-sound-volume aria-label="Volumen de efectos de sonido" />
+        <span class="sound-control-value" data-sound-value></span>
+      </div>
+      <div class="sound-control">
+        <span class="sound-control-icon" aria-hidden="true">&#9835;</span>
+        <label class="sound-control-label" for="music-volume">Musica</label>
+        <input id="music-volume" type="range" min="0" max="100" step="1" data-music-volume aria-label="Volumen de musica de fondo" />
+        <span class="sound-control-value" data-music-value></span>
+      </div>
     </div>
   `;
 
   topbar.append(controlGroup);
+  const soundToggle = controlGroup.querySelector("[data-sound-toggle]");
+  const soundPanel = controlGroup.querySelector("#sound-panel");
+  const setSoundPanelOpen = (isOpen) => {
+    if (!soundToggle || !soundPanel) return;
+    soundToggle.setAttribute("aria-expanded", String(isOpen));
+    soundPanel.hidden = !isOpen;
+    controlGroup.classList.toggle("is-open", isOpen);
+  };
+
+  soundToggle?.addEventListener("click", () => {
+    const isOpen = soundToggle.getAttribute("aria-expanded") === "true";
+    setSoundPanelOpen(!isOpen);
+    playSound("tap");
+  });
+  document.addEventListener("click", (event) => {
+    if (!controlGroup.contains(event.target)) setSoundPanelOpen(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setSoundPanelOpen(false);
+  });
+
   setSoundVolume(soundVolume);
   setMusicVolume(musicVolume);
   controlGroup.querySelector("[data-sound-volume]")?.addEventListener("input", (event) => {
