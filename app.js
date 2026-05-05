@@ -75,7 +75,7 @@ const challengeTypeRenderers = {
 const levelBackgrounds = [
   "assets/fondo.jpeg",
 ];
-const ROBOT_IMAGE_SRC = "articulos-622.jpeg";
+const ROBOT_IMAGE_SRC = `articulos-622.jpeg?v=${Date.now()}`;
 const robotDirectionRotations = {
   0: 180,
   1: -90,
@@ -902,8 +902,8 @@ function renderPathChallenge(id = 1) {
         ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
       </div>
       <div class="challenge-actions">
-        <button class="primary-action" type="button" data-check>Comprobar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Empeza por los pasos 3, 6 y 9. La ruta celeste te da una buena pista.</p>
     </article>
@@ -1072,8 +1072,8 @@ function renderBalanceChallenge(id = 2) {
         </div>
       </div>
       <div class="challenge-actions">
-        <button class="primary-action" type="button" data-check>Comprobar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Probemos la linea 1: necesita apuntar hacia 🏁.</p>
     </article>
@@ -1473,8 +1473,8 @@ function renderPatternChallenge(id = 4) {
         <button type="button" data-value="Saltar">${renderInlineCommand("Saltar")}</button>
       </div>
       <div class="challenge-actions">
-        <button class="primary-action" type="button" data-check>Comprobar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Mira el ritmo: Avanzar, Avanzar y Girar der. Se repite como una cancion.</p>
     </article>
@@ -1570,8 +1570,8 @@ function renderBalanceChallengeV2(id = 2) {
         ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
       </div>
       <div class="challenge-actions">
-        <button class="primary-action" type="button" data-check>Comprobar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Mira la ruta celeste: con dos giros bien elegidos el robot rodea el agua.</p>
     </article>
@@ -1756,7 +1756,7 @@ function renderRobotChallengeV2(id = 3) {
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>Ejecutar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Sigue la ruta celeste: junta las pilas de energia y termina en 🏁.</p>
     </article>
@@ -1984,7 +1984,7 @@ function renderRepeatRequiredChallenge(id = 1) {
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>Ejecutar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Busca los tramos largos: primero hay tres pasos rectos, despues otros tres y al final dos.</p>
     </article>
@@ -2185,7 +2185,7 @@ function renderArrowMazeChallenge(id = 1) {
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>Ejecutar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Mira la ruta celeste: cuando el camino cambia, gira al robot y despues avanza.</p>
     </article>
@@ -2394,8 +2394,8 @@ function renderOrderAlgorithmChallenge(id = 1) {
         <div class="algorithm-slots" data-slots></div>
       </div>
       <div class="challenge-actions">
-        <button class="primary-action" type="button" data-check>Comprobar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Primero el robot necesita encenderse; despues puede moverse y tomar energia.</p>
     </article>
@@ -2553,7 +2553,7 @@ function renderSequenceMemoryChallenge(id = 1) {
         </div>
       </div>
       <div class="challenge-actions">
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Mira el modelo visible arriba y repetilo con las luces de colores.</p>
     </article>
@@ -2869,7 +2869,7 @@ function renderBatteryMazeChallenge(id = 1) {
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>Ejecutar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>El robot arranca abajo a la derecha mirando hacia la izquierda.</p>
     </article>
@@ -3030,8 +3030,8 @@ function renderMirrorPatternChallenge(id = 1) {
         </div>
       </div>
       <div class="challenge-actions">
-        <button class="primary-action" type="button" data-check>Comprobar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Mira el espejo: el orden se da vuelta.</p>
     </article>
@@ -3267,7 +3267,7 @@ function renderColorRouteChallenge(id = 1) {
         <div class="choose-command-progress" data-progress></div>
       </div>
       <div class="challenge-actions">
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Empieza por la baldosa 1 y sigue hasta la 5.</p>
     </article>
@@ -3337,8 +3337,8 @@ function renderSizeOrderChallenge(id = 1) {
         <div class="size-slots" data-size-slots></div>
       </div>
       <div class="challenge-actions">
-        <button class="primary-action" type="button" data-check>Comprobar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Primero la chica, despues la mediana y al final la grande.</p>
     </article>
@@ -3444,8 +3444,8 @@ function renderEnergySwitchesChallenge(id = 1) {
         </div>
       </div>
       <div class="challenge-actions">
-        <button class="primary-action" type="button" data-check>Comprobar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>Prende abajo los mismos lugares que estan prendidos arriba.</p>
     </article>
@@ -3655,8 +3655,8 @@ function renderPatternChallengeV2(id = 4) {
           </section>
         </div>
         <div class="challenge-actions">
-          <button class="primary-action" type="button" data-check>Comprobar</button>
-          <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+          <button class="primary-action" type="button" data-check>COMPROBAR</button>
+          <button class="secondary-action" type="button" data-reset>REINICIAR</button>
         </div>
         <p class="challenge-message" data-message>${scene.hint}</p>
       </article>
@@ -3878,8 +3878,8 @@ function renderGraphicPatternLevel(config) {
         </div>
       </div>
       <div class="challenge-actions">
-        <button class="primary-action" type="button" data-check>Comprobar</button>
-        <button class="secondary-action" type="button" data-reset>Reiniciar</button>
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
       <p class="challenge-message" data-message>${config.hint}</p>
     </article>
@@ -4030,7 +4030,7 @@ function renderLevel8Circuit() {
         </div>
       </div>
       <div class="challenge-actions">
-        <button class="primary-action" type="button" data-check>Comprobar</button>
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
       </div>
       <p class="challenge-message" data-message>Enciende los switches para copiar las luces de arriba.</p>
     </article>
