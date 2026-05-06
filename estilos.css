@@ -918,6 +918,14 @@ h2 {
   line-height: 1.38;
 }
 
+@media (min-width: 981px) {
+  .challenge-header p {
+    font-size: clamp(1rem, 1.3vw, 1.18rem);
+    line-height: 2;
+    letter-spacing: 0.01em;
+  }
+}
+
 .challenge-note {
   margin: 0 0 clamp(6px, 1dvh, 10px);
   padding: 6px 10px;
@@ -4545,7 +4553,7 @@ button:disabled {
   position: fixed;
   bottom: 18px;
   right: 18px;
-  width: clamp(88px, 9vw, 140px);
+  width: clamp(110px, 11vw, 175px);
   height: auto;
   opacity: 0.82;
   z-index: 6;
@@ -4912,7 +4920,7 @@ button:disabled {
   color: #b9b9b9;
   font-size: clamp(0.76rem, 1vw, 0.94rem);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.8;
 }
 
 .challenge-card:has(.visual-sequence-layout) .listen-consigna,
@@ -5003,9 +5011,20 @@ button:disabled {
 
 .path-map-cell.is-start,
 .robot-cell.is-start {
-  color: #1498ad;
+  position: relative;
+  color: transparent;
   background: #c9f47e;
   box-shadow: none;
+  overflow: hidden;
+}
+
+.path-map-cell.is-start::after,
+.robot-cell.is-start::after {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: url("tarjetas movimiento/Entrada.png") center / contain no-repeat;
+  content: "";
 }
 
 .path-map-cell.is-robot,
@@ -5014,6 +5033,11 @@ button:disabled {
   background: #ffffff;
   transform: none;
   box-shadow: none;
+}
+
+.path-map-cell.is-robot::after,
+.robot-cell.is-robot::after {
+  display: none;
 }
 
 .path-map-cell.is-goal,
