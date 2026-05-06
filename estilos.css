@@ -839,7 +839,7 @@ h2 {
 }
 
 .challenge-header {
-  max-width: 860px;
+  max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: clamp(10px, 1.5dvh, 18px);
@@ -853,6 +853,7 @@ h2 {
   justify-content: center;
   flex-wrap: wrap;
   gap: 8px 12px;
+  margin-bottom: clamp(10px, 1.5dvh, 18px);
 }
 
 .challenge-kicker {
@@ -906,20 +907,20 @@ h2 {
 }
 
 .challenge-header p {
-  max-width: 760px;
+  max-width: 1060px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 0;
   color: #58595B;
-  font-size: clamp(0.9rem, 1.15vw, 1.05rem);
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
   font-weight: 800;
-  line-height: 1.38;
+  line-height: 1.4;
 }
 
 @media (min-width: 981px) {
   .challenge-header p {
-    font-size: clamp(1rem, 1.3vw, 1.18rem);
-    line-height: 2;
+    font-size: clamp(1.65rem, 2.5vw, 2.2rem);
+    line-height: 1.5;
     letter-spacing: 0.01em;
   }
 }
@@ -1547,7 +1548,7 @@ body.has-scenario-modal {
 
 .debug-list {
   display: grid;
-  gap: 8px;
+  gap: 18px;
   margin-top: 8px;
 }
 
@@ -4070,7 +4071,7 @@ button:disabled {
 
   .challenge-card {
     padding: 8px;
-    border-radius: 14px;
+    border-radius: 30px;
   }
 
   .challenge-kicker {
@@ -4097,6 +4098,10 @@ button:disabled {
   .secondary-action,
   .listen-consigna {
     font-size: 0.76rem;
+  }
+
+  .challenge-header p {
+    font-size: clamp(1.3rem, 1.9vw, 1.8rem);
   }
 
   .challenge-note,
@@ -4360,7 +4365,7 @@ button:disabled {
 
   .challenge-card {
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 30px;
   }
 
   .path-layout,
@@ -4574,7 +4579,7 @@ button:disabled {
   position: fixed;
   bottom: 18px;
   right: 18px;
-  width: clamp(110px, 11vw, 175px);
+  width: clamp(155px, 16vw, 230px);
   height: auto;
   opacity: 0.82;
   z-index: 6;
@@ -4921,7 +4926,8 @@ button:disabled {
 .challenge-card:has(.visual-sequence-layout) .challenge-header,
 .challenge-card:has(.path-layout) .challenge-header,
 .challenge-card:has(.robot-layout) .challenge-header {
-  margin-bottom: 12px;
+  margin-top: clamp(8px, 1.2dvh, 16px);
+  margin-bottom: 6px;
 }
 
 .challenge-card:has(.visual-sequence-layout) .challenge-header h2,
@@ -4929,7 +4935,7 @@ button:disabled {
 .challenge-card:has(.robot-layout) .challenge-header h2 {
   margin-bottom: 2px;
   color: #18cce1;
-  font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
   font-weight: 900;
   line-height: 1;
   text-transform: uppercase;
@@ -4939,9 +4945,9 @@ button:disabled {
 .challenge-card:has(.path-layout) .challenge-header p,
 .challenge-card:has(.robot-layout) .challenge-header p {
   color: #b9b9b9;
-  font-size: clamp(0.76rem, 1vw, 0.94rem);
+  font-size: clamp(1.3rem, 1.8vw, 1.75rem);
   font-weight: 700;
-  line-height: 1.8;
+  line-height: 1.2;
 }
 
 .challenge-card:has(.visual-sequence-layout) .listen-consigna,
@@ -5107,13 +5113,13 @@ button:disabled {
 .challenge-card:has(.visual-sequence-layout) .sequence-panel,
 .challenge-card:has(.path-layout) .sequence-panel,
 .challenge-card:has(.robot-layout) .sequence-panel {
-  gap: 16px;
+  gap: 8px;
 }
 
 .challenge-card:has(.visual-sequence-layout) .command-section,
 .challenge-card:has(.path-layout) .command-section,
 .challenge-card:has(.robot-layout) .command-section {
-  padding: 14px 16px;
+  padding: 8px 12px;
   border: 1px solid #e2e2e2;
   border-radius: 6px;
   background: #ffffff;
@@ -5135,9 +5141,9 @@ button:disabled {
 .challenge-card:has(.visual-sequence-layout) .command-section-title,
 .challenge-card:has(.path-layout) .command-section-title,
 .challenge-card:has(.robot-layout) .command-section-title {
-  margin-bottom: 9px;
+  margin-bottom: 5px;
   color: #1685c1;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
 }
 
 .challenge-card:has(.visual-sequence-layout) .command-section-title span,
@@ -5153,8 +5159,8 @@ button:disabled {
 .challenge-card:has(.visual-sequence-layout) .compact-sequence,
 .challenge-card:has(.path-layout) .compact-sequence,
 .challenge-card:has(.robot-layout) .compact-sequence {
-  grid-template-columns: repeat(6, minmax(44px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(6, minmax(38px, 1fr));
+  gap: 5px;
 }
 
 .challenge-card:has(.visual-sequence-layout) .compact-bank,
@@ -5197,7 +5203,7 @@ button:disabled {
 .challenge-card:has(.path-layout) .command-image,
 .challenge-card:has(.robot-layout) .command-image {
   display: block;
-  width: 58px;
+  width: clamp(34px, 3.5vw, 44px);
   max-width: 100%;
   height: auto;
 }
@@ -5213,7 +5219,7 @@ button:disabled {
 .challenge-card:has(.robot-layout) > .challenge-actions {
   width: min(100%, 300px);
   justify-content: center;
-  margin-top: 12px;
+  margin-top: 5px;
 }
 
 .challenge-card:has(.visual-sequence-layout),
@@ -5307,10 +5313,10 @@ button:disabled {
   gap: 0;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(6, 1fr);
-  width: min(100%, clamp(220px, 44vw, 480px));
-  max-width: 480px;
+  width: min(100%, clamp(180px, 34vw, 380px));
+  max-width: 380px;
   aspect-ratio: 1;
-  padding: clamp(22px, 4.2vw, 52px);
+  padding: clamp(16px, 3vw, 38px);
   border: none;
   border-radius: 12px;
   overflow: hidden;
@@ -5645,7 +5651,7 @@ body:has(.robot-layout) .game-workspace {
   .challenge-card:has(.path-layout) .challenge-header p,
   .challenge-card:has(.robot-layout) .challenge-header p {
     max-width: 760px;
-    font-size: clamp(0.9rem, 1.05vw, 1.08rem);
+    font-size: clamp(1.3rem, 1.6vw, 1.65rem);
   }
 
   .challenge-card:has(.visual-sequence-layout) .visual-sequence-layout,
@@ -5763,7 +5769,7 @@ body:has(.robot-layout) .game-workspace {
   .challenge-card:has(.visual-sequence-layout) .challenge-header p,
   .challenge-card:has(.path-layout) .challenge-header p,
   .challenge-card:has(.robot-layout) .challenge-header p {
-    font-size: clamp(0.78rem, 3.4vw, 1rem);
+    font-size: clamp(1.1rem, 3.4vw, 1.4rem);
   }
 
   .challenge-card:has(.visual-sequence-layout) .visual-sequence-layout,
@@ -6050,7 +6056,7 @@ body:has(.robot-layout) .game-workspace {
   .challenge-card:has(.path-layout) .challenge-header p,
   .challenge-card:has(.robot-layout) .challenge-header p {
     max-width: 760px;
-    font-size: clamp(0.8rem, 0.95vw, 0.96rem);
+    font-size: clamp(1.2rem, 1.45vw, 1.55rem);
   }
 
   .challenge-card:has(.visual-sequence-layout) .visual-sequence-layout,
