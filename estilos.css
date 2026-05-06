@@ -5436,7 +5436,7 @@ body:has(.robot-layout) .game-stage-bg {
 body:has(.visual-sequence-layout) .game-workspace,
 body:has(.path-layout) .game-workspace,
 body:has(.robot-layout) .game-workspace {
-  padding: clamp(4px, 1dvh, 8px) clamp(6px, 0.8vw, 10px) clamp(6px, 1dvh, 10px) clamp(64px, 5.2vw, 78px);
+  padding: clamp(8px, 2dvh, 24px) clamp(14px, 14.6vw, 175px) clamp(8px, 2dvh, 24px) clamp(64px, 14.6vw, 175px);
   background: transparent;
 }
 
@@ -5587,13 +5587,13 @@ body:has(.robot-layout) .game-workspace {
   .challenge-card:has(.visual-sequence-layout),
   .challenge-card:has(.path-layout),
   .challenge-card:has(.robot-layout) {
-    padding: clamp(18px, 3dvh, 28px) clamp(28px, 4vw, 48px) clamp(28px, 4dvh, 42px);
+    padding: clamp(28px, 6.5dvh, 55px) clamp(28px, 4vw, 48px) clamp(28px, 6.5dvh, 55px);
   }
 
   .challenge-card:has(.visual-sequence-layout) .challenge-header,
   .challenge-card:has(.path-layout) .challenge-header,
   .challenge-card:has(.robot-layout) .challenge-header {
-    margin-bottom: clamp(18px, 2.4dvh, 28px);
+    margin-bottom: clamp(22px, 6.5dvh, 55px);
   }
 
   .challenge-card:has(.visual-sequence-layout) .challenge-header h2,
@@ -5614,7 +5614,7 @@ body:has(.robot-layout) .game-workspace {
   .challenge-card:has(.robot-layout) .robot-layout {
     width: min(100%, 1210px);
     grid-template-columns: minmax(430px, 0.9fr) minmax(570px, 1.1fr);
-    gap: clamp(42px, 5vw, 70px);
+    gap: clamp(48px, 8.5vw, 102px);
     align-items: start;
   }
 
@@ -5634,7 +5634,7 @@ body:has(.robot-layout) .game-workspace {
   .challenge-card:has(.visual-sequence-layout) .sequence-panel,
   .challenge-card:has(.path-layout) .sequence-panel,
   .challenge-card:has(.robot-layout) .sequence-panel {
-    gap: clamp(18px, 2.5dvh, 26px);
+    gap: clamp(24px, 4.5dvh, 36px);
   }
 
   .challenge-card:has(.visual-sequence-layout) .command-section,
@@ -6019,7 +6019,7 @@ body:has(.robot-layout) .game-workspace {
   .challenge-card:has(.robot-layout) .robot-layout {
     width: min(100%, 1180px);
     grid-template-columns: minmax(450px, 0.88fr) minmax(560px, 1.12fr);
-    gap: clamp(38px, 4.5vw, 64px);
+    gap: clamp(42px, 7vw, 86px);
   }
 
   .challenge-card:has(.visual-sequence-layout) .path-map,
@@ -6038,7 +6038,7 @@ body:has(.robot-layout) .game-workspace {
   .challenge-card:has(.visual-sequence-layout) .sequence-panel,
   .challenge-card:has(.path-layout) .sequence-panel,
   .challenge-card:has(.robot-layout) .sequence-panel {
-    gap: clamp(12px, 1.8dvh, 18px);
+    gap: clamp(16px, 3dvh, 26px);
   }
 
   .challenge-card:has(.visual-sequence-layout) .command-section,
