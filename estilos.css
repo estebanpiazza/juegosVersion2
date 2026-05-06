@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap");
 
 :root {
   --brand-cyan: #08DBF7;
@@ -20,7 +20,7 @@
   --shadow-soft: 0 20px 55px rgba(10, 122, 190, 0.14);
   --shadow-card: 0 12px 30px rgba(10, 122, 190, 0.11);
   --shadow-squish: 0 8px 0 rgba(10, 122, 190, 0.08), 0 18px 34px rgba(10, 122, 190, 0.12);
-  font-family: "Nunito", "Trebuchet MS", Arial, sans-serif;
+  font-family: "Poppins", Arial, sans-serif;
 }
 
 * {
@@ -130,7 +130,7 @@ h2 {
   line-height: 1.05;
   letter-spacing: 0;
   color: var(--color-dark);
-  font-family: "Baloo 2", "Nunito", Arial, sans-serif;
+  font-family: "Poppins", Arial, sans-serif;
   font-weight: 800;
 }
 
@@ -4810,5 +4810,674 @@ button:disabled {
   .pattern-theme-commands .graphic-pattern-row .graphic-blank,
   .pattern-theme-commands .graphic-options button {
     min-height: 54px;
+  }
+}
+
+/* Map levels: reference style from the provided mockup. */
+.challenge-card:has(.visual-sequence-layout),
+.challenge-card:has(.path-layout),
+.challenge-card:has(.robot-layout) {
+  border: 0;
+  border-radius: 0;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.challenge-card:has(.visual-sequence-layout) .challenge-kicker,
+.challenge-card:has(.path-layout) .challenge-kicker,
+.challenge-card:has(.robot-layout) .challenge-kicker {
+  display: none;
+}
+
+.challenge-card:has(.visual-sequence-layout) .challenge-header,
+.challenge-card:has(.path-layout) .challenge-header,
+.challenge-card:has(.robot-layout) .challenge-header {
+  margin-bottom: 12px;
+}
+
+.challenge-card:has(.visual-sequence-layout) .challenge-header h2,
+.challenge-card:has(.path-layout) .challenge-header h2,
+.challenge-card:has(.robot-layout) .challenge-header h2 {
+  margin-bottom: 2px;
+  color: #18cce1;
+  font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.challenge-card:has(.visual-sequence-layout) .challenge-header p,
+.challenge-card:has(.path-layout) .challenge-header p,
+.challenge-card:has(.robot-layout) .challenge-header p {
+  color: #b9b9b9;
+  font-size: clamp(0.76rem, 1vw, 0.94rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.challenge-card:has(.visual-sequence-layout) .listen-consigna,
+.challenge-card:has(.path-layout) .listen-consigna,
+.challenge-card:has(.robot-layout) .listen-consigna {
+  width: 30px;
+  min-height: 30px;
+  margin-bottom: 0;
+  padding: 0;
+  border-radius: 999px;
+  color: #0a7abe;
+  background: #c5f4fb;
+}
+
+.challenge-card:has(.visual-sequence-layout) .listen-consigna [data-speech-label],
+.challenge-card:has(.path-layout) .listen-consigna [data-speech-label],
+.challenge-card:has(.robot-layout) .listen-consigna [data-speech-label] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.challenge-card:has(.visual-sequence-layout) .listen-consigna-icon,
+.challenge-card:has(.path-layout) .listen-consigna-icon,
+.challenge-card:has(.robot-layout) .listen-consigna-icon {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  font-size: 0.95rem;
+}
+
+.visual-sequence-layout,
+.path-layout,
+.robot-layout {
+  width: min(100%, 980px);
+  grid-template-columns: minmax(230px, 320px) minmax(330px, 1fr);
+  align-items: start;
+  gap: clamp(24px, 4vw, 44px);
+}
+
+.path-map,
+.visual-map,
+.robot-grid,
+.robot-grid.visual-map {
+  gap: 0;
+  width: min(100%, 300px);
+  max-width: 300px;
+  padding: 0;
+  border: 2px solid #18cce1;
+  border-radius: 7px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(10, 122, 190, 0.12);
+}
+
+.path-map-cell,
+.robot-cell {
+  position: relative;
+  border: 0;
+  border-right: 1px solid #80eaf1;
+  border-bottom: 1px solid #80eaf1;
+  border-radius: 0;
+  color: #1498ad;
+  background: #ffffff;
+  box-shadow: none;
+  font-size: 0.8rem;
+}
+
+.path-map-cell:nth-child(6n),
+.robot-cell:nth-child(6n) {
+  border-right: 0;
+}
+
+.path-map-cell:nth-last-child(-n + 6),
+.robot-cell:nth-last-child(-n + 6) {
+  border-bottom: 0;
+}
+
+.path-map-cell.is-route,
+.path-map-cell.is-trail,
+.robot-cell.is-route,
+.robot-cell.is-trail {
+  background: #c9f47e;
+}
+
+.path-map-cell.is-start,
+.robot-cell.is-start {
+  color: #1498ad;
+  background: #c9f47e;
+  box-shadow: none;
+}
+
+.path-map-cell.is-robot,
+.robot-cell.is-robot {
+  color: #58595b;
+  background: #ffffff;
+  transform: none;
+  box-shadow: none;
+}
+
+.path-map-cell.is-goal,
+.robot-cell.is-goal {
+  color: transparent;
+  background: #c9f47e;
+}
+
+.path-map-cell.is-goal::after,
+.robot-cell.is-goal::after {
+  width: 112%;
+  height: 112%;
+  display: block;
+  background: url("tarjetas movimiento/Vamos.png") center / contain no-repeat;
+  content: "";
+}
+
+.path-map-cell.is-obstacle,
+.robot-cell.is-obstacle {
+  color: #ffffff;
+  background: #ef5d5d;
+}
+
+.robot-cell.is-treasure {
+  color: #14532d;
+  background: #c9f47e;
+  font-size: clamp(1.12rem, 2.2vw, 1.55rem);
+  line-height: 1;
+  text-shadow:
+    -1px -1px 0 #111111,
+    1px -1px 0 #111111,
+    -1px 1px 0 #111111,
+    1px 1px 0 #111111,
+    0 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.robot-marker {
+  width: 92%;
+  height: 92%;
+  border-radius: 0;
+  object-fit: contain;
+}
+
+.challenge-card:has(.visual-sequence-layout) .sequence-panel,
+.challenge-card:has(.path-layout) .sequence-panel,
+.challenge-card:has(.robot-layout) .sequence-panel {
+  gap: 16px;
+}
+
+.challenge-card:has(.visual-sequence-layout) .command-section,
+.challenge-card:has(.path-layout) .command-section,
+.challenge-card:has(.robot-layout) .command-section {
+  padding: 14px 16px;
+  border: 1px solid #e2e2e2;
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.12);
+}
+
+.challenge-card:has(.visual-sequence-layout) .command-steps,
+.challenge-card:has(.path-layout) .command-steps,
+.challenge-card:has(.robot-layout) .command-steps {
+  border-style: solid;
+}
+
+.challenge-card:has(.visual-sequence-layout) .command-actions-bank,
+.challenge-card:has(.path-layout) .command-actions-bank,
+.challenge-card:has(.robot-layout) .command-actions-bank {
+  background: #ffffff;
+}
+
+.challenge-card:has(.visual-sequence-layout) .command-section-title,
+.challenge-card:has(.path-layout) .command-section-title,
+.challenge-card:has(.robot-layout) .command-section-title {
+  margin-bottom: 9px;
+  color: #1685c1;
+  font-size: 0.78rem;
+}
+
+.challenge-card:has(.visual-sequence-layout) .command-section-title span,
+.challenge-card:has(.path-layout) .command-section-title span,
+.challenge-card:has(.robot-layout) .command-section-title span {
+  width: 18px;
+  height: 18px;
+  color: #ffffff;
+  background: #18cce1;
+  font-size: 0.72rem;
+}
+
+.challenge-card:has(.visual-sequence-layout) .compact-sequence,
+.challenge-card:has(.path-layout) .compact-sequence,
+.challenge-card:has(.robot-layout) .compact-sequence {
+  grid-template-columns: repeat(6, minmax(44px, 1fr));
+  gap: 8px;
+}
+
+.challenge-card:has(.visual-sequence-layout) .compact-bank,
+.challenge-card:has(.path-layout) .compact-bank,
+.challenge-card:has(.robot-layout) .compact-bank {
+  gap: 8px;
+}
+
+.visual-sequence-layout .sequence-slot.command-card,
+.visual-sequence-layout .instruction-chip {
+  min-height: 42px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.challenge-card:has(.visual-sequence-layout) .sequence-slot.command-card.is-selected,
+.challenge-card:has(.path-layout) .sequence-slot.command-card.is-selected,
+.challenge-card:has(.robot-layout) .sequence-slot.command-card.is-selected {
+  outline: 2px solid #18cce1;
+  outline-offset: 2px;
+}
+
+.challenge-card:has(.visual-sequence-layout) .command-placeholder,
+.challenge-card:has(.path-layout) .command-placeholder,
+.challenge-card:has(.robot-layout) .command-placeholder {
+  width: 58px;
+  height: 42px;
+  border: 0;
+  border-radius: 0;
+  display: grid;
+  place-items: center;
+  color: transparent;
+  background: url("assets/Trjeta vacia.png") center / contain no-repeat;
+}
+
+.challenge-card:has(.visual-sequence-layout) .command-image,
+.challenge-card:has(.path-layout) .command-image,
+.challenge-card:has(.robot-layout) .command-image {
+  display: block;
+  width: 58px;
+  max-width: 100%;
+  height: auto;
+}
+
+.challenge-card:has(.visual-sequence-layout) .command-label,
+.challenge-card:has(.path-layout) .command-label,
+.challenge-card:has(.robot-layout) .command-label {
+  display: none;
+}
+
+.challenge-card:has(.visual-sequence-layout) > .challenge-actions,
+.challenge-card:has(.path-layout) > .challenge-actions,
+.challenge-card:has(.robot-layout) > .challenge-actions {
+  width: min(100%, 300px);
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.challenge-card:has(.visual-sequence-layout),
+.challenge-card:has(.path-layout),
+.challenge-card:has(.robot-layout) {
+  position: relative;
+}
+
+.challenge-card:has(.visual-sequence-layout) .primary-action,
+.challenge-card:has(.visual-sequence-layout) .secondary-action,
+.challenge-card:has(.path-layout) .primary-action,
+.challenge-card:has(.path-layout) .secondary-action,
+.challenge-card:has(.robot-layout) .primary-action,
+.challenge-card:has(.robot-layout) .secondary-action {
+  min-height: 25px;
+  padding: 0 18px;
+  border: 2px solid #18cce1;
+  font-size: 0.66rem;
+  font-weight: 900;
+  box-shadow: none;
+}
+
+.challenge-card:has(.visual-sequence-layout) .primary-action,
+.challenge-card:has(.path-layout) .primary-action,
+.challenge-card:has(.robot-layout) .primary-action {
+  color: #ffffff;
+  background: #18cce1;
+}
+
+.challenge-card:has(.visual-sequence-layout) .secondary-action,
+.challenge-card:has(.path-layout) .secondary-action,
+.challenge-card:has(.robot-layout) .secondary-action {
+  color: #18cce1;
+  background: #ffffff;
+}
+
+@media (max-width: 760px) {
+  .visual-sequence-layout,
+  .path-layout,
+  .robot-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .path-map,
+  .visual-map,
+  .robot-grid,
+  .robot-grid.visual-map,
+  .challenge-card:has(.visual-sequence-layout) > .challenge-actions,
+  .challenge-card:has(.path-layout) > .challenge-actions,
+  .challenge-card:has(.robot-layout) > .challenge-actions {
+    width: min(100%, 300px);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .compact-sequence,
+  .challenge-card:has(.path-layout) .compact-sequence,
+  .challenge-card:has(.robot-layout) .compact-sequence {
+    grid-template-columns: repeat(4, minmax(44px, 1fr));
+  }
+}
+
+/* Final specificity pass for the screenshot-style maps. */
+.challenge-card:has(.visual-sequence-layout) .visual-sequence-layout,
+.challenge-card:has(.path-layout) .path-layout,
+.challenge-card:has(.robot-layout) .robot-layout {
+  width: min(100%, 980px);
+  grid-template-columns: minmax(150px, 0.72fr) minmax(250px, 1.18fr);
+  gap: clamp(16px, 4vw, 40px);
+}
+
+.challenge-card:has(.visual-sequence-layout) .path-map,
+.challenge-card:has(.visual-sequence-layout) .visual-map,
+.challenge-card:has(.path-layout) .path-map,
+.challenge-card:has(.path-layout) .visual-map,
+.challenge-card:has(.robot-layout) .robot-grid,
+.challenge-card:has(.robot-layout) .visual-map,
+.challenge-card:has(.robot-layout) .robot-grid.visual-map {
+  gap: 0;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  width: min(100%, clamp(158px, 31vw, 300px));
+  max-width: 300px;
+  padding: 0;
+  border: 2px solid #18cce1;
+  border-radius: 7px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(10, 122, 190, 0.12);
+}
+
+.challenge-card:has(.visual-sequence-layout) .path-map-cell,
+.challenge-card:has(.visual-sequence-layout) .robot-cell,
+.challenge-card:has(.path-layout) .path-map-cell,
+.challenge-card:has(.path-layout) .robot-cell,
+.challenge-card:has(.robot-layout) .path-map-cell,
+.challenge-card:has(.robot-layout) .robot-cell {
+  position: relative;
+  border: 0;
+  border-right: 1px solid #80eaf1;
+  border-bottom: 1px solid #80eaf1;
+  border-radius: 0;
+  color: #1498ad;
+  background: #ffffff;
+  box-shadow: none;
+  font-size: 0.8rem;
+}
+
+.challenge-card:has(.visual-sequence-layout) .path-map-cell:nth-child(6n),
+.challenge-card:has(.visual-sequence-layout) .robot-cell:nth-child(6n),
+.challenge-card:has(.path-layout) .path-map-cell:nth-child(6n),
+.challenge-card:has(.path-layout) .robot-cell:nth-child(6n),
+.challenge-card:has(.robot-layout) .path-map-cell:nth-child(6n),
+.challenge-card:has(.robot-layout) .robot-cell:nth-child(6n) {
+  border-right: 0;
+}
+
+.challenge-card:has(.visual-sequence-layout) .path-map-cell:nth-last-child(-n + 6),
+.challenge-card:has(.visual-sequence-layout) .robot-cell:nth-last-child(-n + 6),
+.challenge-card:has(.path-layout) .path-map-cell:nth-last-child(-n + 6),
+.challenge-card:has(.path-layout) .robot-cell:nth-last-child(-n + 6),
+.challenge-card:has(.robot-layout) .path-map-cell:nth-last-child(-n + 6),
+.challenge-card:has(.robot-layout) .robot-cell:nth-last-child(-n + 6) {
+  border-bottom: 0;
+}
+
+.challenge-card:has(.visual-sequence-layout) .path-map-cell.is-route,
+.challenge-card:has(.visual-sequence-layout) .path-map-cell.is-trail,
+.challenge-card:has(.visual-sequence-layout) .robot-cell.is-route,
+.challenge-card:has(.visual-sequence-layout) .robot-cell.is-trail,
+.challenge-card:has(.path-layout) .path-map-cell.is-route,
+.challenge-card:has(.path-layout) .path-map-cell.is-trail,
+.challenge-card:has(.path-layout) .robot-cell.is-route,
+.challenge-card:has(.path-layout) .robot-cell.is-trail,
+.challenge-card:has(.robot-layout) .path-map-cell.is-route,
+.challenge-card:has(.robot-layout) .path-map-cell.is-trail,
+.challenge-card:has(.robot-layout) .robot-cell.is-route,
+.challenge-card:has(.robot-layout) .robot-cell.is-trail,
+.challenge-card:has(.visual-sequence-layout) .path-map-cell.is-start,
+.challenge-card:has(.visual-sequence-layout) .robot-cell.is-start,
+.challenge-card:has(.path-layout) .path-map-cell.is-start,
+.challenge-card:has(.path-layout) .robot-cell.is-start,
+.challenge-card:has(.robot-layout) .path-map-cell.is-start,
+.challenge-card:has(.robot-layout) .robot-cell.is-start {
+  background: #c9f47e;
+  box-shadow: none;
+}
+
+.challenge-card:has(.visual-sequence-layout) .path-map-cell.is-robot,
+.challenge-card:has(.visual-sequence-layout) .robot-cell.is-robot,
+.challenge-card:has(.path-layout) .path-map-cell.is-robot,
+.challenge-card:has(.path-layout) .robot-cell.is-robot,
+.challenge-card:has(.robot-layout) .path-map-cell.is-robot,
+.challenge-card:has(.robot-layout) .robot-cell.is-robot {
+  background: #ffffff;
+  transform: none;
+  box-shadow: none;
+}
+
+.challenge-card:has(.visual-sequence-layout) .path-map-cell.is-goal,
+.challenge-card:has(.visual-sequence-layout) .robot-cell.is-goal,
+.challenge-card:has(.path-layout) .path-map-cell.is-goal,
+.challenge-card:has(.path-layout) .robot-cell.is-goal,
+.challenge-card:has(.robot-layout) .path-map-cell.is-goal,
+.challenge-card:has(.robot-layout) .robot-cell.is-goal {
+  color: transparent;
+  background: #c9f47e;
+}
+
+.challenge-card:has(.visual-sequence-layout) .path-map-cell.is-goal::after,
+.challenge-card:has(.visual-sequence-layout) .robot-cell.is-goal::after,
+.challenge-card:has(.path-layout) .path-map-cell.is-goal::after,
+.challenge-card:has(.path-layout) .robot-cell.is-goal::after,
+.challenge-card:has(.robot-layout) .path-map-cell.is-goal::after,
+.challenge-card:has(.robot-layout) .robot-cell.is-goal::after {
+  width: 112%;
+  height: 112%;
+  display: block;
+  background: url("tarjetas movimiento/Vamos.png") center / contain no-repeat;
+  content: "";
+}
+
+@media (min-width: 431px) and (max-width: 760px) {
+  .challenge-card:has(.visual-sequence-layout) .visual-sequence-layout,
+  .challenge-card:has(.path-layout) .path-layout,
+  .challenge-card:has(.robot-layout) .robot-layout {
+    grid-template-columns: minmax(150px, 0.72fr) minmax(250px, 1.18fr);
+  }
+}
+
+@media (max-width: 430px) {
+  .challenge-card:has(.visual-sequence-layout) .visual-sequence-layout,
+  .challenge-card:has(.path-layout) .path-layout,
+  .challenge-card:has(.robot-layout) .robot-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.challenge-card:has(.visual-sequence-layout) .path-map,
+.challenge-card:has(.visual-sequence-layout) .robot-grid.visual-map,
+.challenge-card:has(.path-layout) .path-map,
+.challenge-card:has(.path-layout) .robot-grid.visual-map,
+.challenge-card:has(.robot-layout) .path-map,
+.challenge-card:has(.robot-layout) .robot-grid {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  grid-template-rows: repeat(6, minmax(0, 1fr)) !important;
+}
+
+body:has(.visual-sequence-layout) .game-topbar,
+body:has(.path-layout) .game-topbar,
+body:has(.robot-layout) .game-topbar {
+  display: flex;
+}
+
+body:has(.visual-sequence-layout) .challenge-kicker,
+body:has(.path-layout) .challenge-kicker,
+body:has(.robot-layout) .challenge-kicker {
+  display: none !important;
+}
+
+body:has(.visual-sequence-layout) .game-stage-bg,
+body:has(.path-layout) .game-stage-bg,
+body:has(.robot-layout) .game-stage-bg {
+  display: block;
+}
+
+body:has(.visual-sequence-layout) .game-workspace,
+body:has(.path-layout) .game-workspace,
+body:has(.robot-layout) .game-workspace {
+  padding: clamp(4px, 1dvh, 8px) clamp(6px, 0.8vw, 10px) clamp(6px, 1dvh, 10px) clamp(64px, 5.2vw, 78px);
+  background: transparent;
+}
+
+body:has(.visual-sequence-layout) .game-page,
+body:has(.visual-sequence-layout) .game-panel,
+body:has(.visual-sequence-layout) .game-frame,
+body:has(.visual-sequence-layout) .game-stage,
+body:has(.visual-sequence-layout) .game-workspace,
+body:has(.path-layout) .game-page,
+body:has(.path-layout) .game-panel,
+body:has(.path-layout) .game-frame,
+body:has(.path-layout) .game-stage,
+body:has(.path-layout) .game-workspace,
+body:has(.robot-layout) .game-page,
+body:has(.robot-layout) .game-panel,
+body:has(.robot-layout) .game-frame,
+body:has(.robot-layout) .game-stage,
+body:has(.robot-layout) .game-workspace {
+  height: 100vh;
+  min-height: 100vh;
+}
+
+.challenge-content:has(.visual-sequence-layout),
+.challenge-content:has(.path-layout),
+.challenge-content:has(.robot-layout) {
+  background: transparent;
+}
+
+.challenge-card:has(.visual-sequence-layout) > .challenge-message,
+.challenge-card:has(.path-layout) > .challenge-message,
+.challenge-card:has(.robot-layout) > .challenge-message {
+  display: none;
+}
+
+@media (max-height: 560px) {
+  body:has(.visual-sequence-layout) .challenge-kicker,
+  body:has(.path-layout) .challenge-kicker,
+  body:has(.robot-layout) .challenge-kicker {
+    display: none;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) {
+    padding: 9px 22px;
+    overflow: hidden;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .challenge-header p,
+  .challenge-card:has(.path-layout) .challenge-header p,
+  .challenge-card:has(.robot-layout) .challenge-header p {
+    display: block;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .challenge-header h2,
+  .challenge-card:has(.path-layout) .challenge-header h2,
+  .challenge-card:has(.robot-layout) .challenge-header h2 {
+    font-size: 1.08rem;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .challenge-header,
+  .challenge-card:has(.path-layout) .challenge-header,
+  .challenge-card:has(.robot-layout) .challenge-header {
+    margin-bottom: 9px;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .visual-sequence-layout,
+  .challenge-card:has(.path-layout) .path-layout,
+  .challenge-card:has(.robot-layout) .robot-layout {
+    gap: 32px;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .path-map,
+  .challenge-card:has(.visual-sequence-layout) .visual-map,
+  .challenge-card:has(.path-layout) .path-map,
+  .challenge-card:has(.path-layout) .visual-map,
+  .challenge-card:has(.robot-layout) .robot-grid,
+  .challenge-card:has(.robot-layout) .visual-map,
+  .challenge-card:has(.robot-layout) .robot-grid.visual-map {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    width: min(100%, 160px);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .command-section,
+  .challenge-card:has(.path-layout) .command-section,
+  .challenge-card:has(.robot-layout) .command-section {
+    padding: 5px 10px;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .command-actions-bank,
+  .challenge-card:has(.path-layout) .command-actions-bank,
+  .challenge-card:has(.robot-layout) .command-actions-bank {
+    height: auto;
+    overflow: visible;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .command-image,
+  .challenge-card:has(.path-layout) .command-image,
+  .challenge-card:has(.robot-layout) .command-image {
+    width: 36px;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .sequence-slot.command-card,
+  .challenge-card:has(.visual-sequence-layout) .instruction-chip,
+  .challenge-card:has(.path-layout) .sequence-slot.command-card,
+  .challenge-card:has(.path-layout) .instruction-chip,
+  .challenge-card:has(.robot-layout) .sequence-slot.command-card,
+  .challenge-card:has(.robot-layout) .instruction-chip {
+    min-height: 26px;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .compact-sequence,
+  .challenge-card:has(.path-layout) .compact-sequence,
+  .challenge-card:has(.robot-layout) .compact-sequence {
+    grid-template-columns: repeat(6, minmax(38px, 1fr));
+    gap: 3px;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .command-placeholder,
+  .challenge-card:has(.path-layout) .command-placeholder,
+  .challenge-card:has(.robot-layout) .command-placeholder {
+    width: 42px;
+    height: 30px;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) > .challenge-actions,
+  .challenge-card:has(.path-layout) > .challenge-actions,
+  .challenge-card:has(.robot-layout) > .challenge-actions {
+    position: absolute;
+    left: 25px;
+    bottom: 5px;
+    width: 180px;
+    flex-wrap: nowrap;
+    margin-top: 9px;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .primary-action,
+  .challenge-card:has(.visual-sequence-layout) .secondary-action,
+  .challenge-card:has(.path-layout) .primary-action,
+  .challenge-card:has(.path-layout) .secondary-action,
+  .challenge-card:has(.robot-layout) .primary-action,
+  .challenge-card:has(.robot-layout) .secondary-action {
+    padding: 0 8px;
+    font-size: 0.58rem;
   }
 }

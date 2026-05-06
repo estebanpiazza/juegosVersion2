@@ -75,17 +75,10 @@ const challengeTypeRenderers = {
 const levelBackgrounds = [
   "assets/fondo.jpeg",
 ];
-const ROBOT_IMAGE_SRC = `articulos-622.jpeg?v=${Date.now()}`;
-const robotDirectionRotations = {
-  0: 180,
-  1: -90,
-  2: 0,
-  3: 90,
-};
+const ROBOT_IMAGE_SRC = `PANDA%20FELIZ%20-%20copia.png?v=${Date.now()}`;
 
-function renderRobotMarker(direction = 2) {
-  const rotation = robotDirectionRotations[direction] ?? 0;
-  return `<img class="robot-marker" src="${ROBOT_IMAGE_SRC}" alt="Robot" style="--robot-rotation: ${rotation}deg" />`;
+function renderRobotMarker() {
+  return `<img class="robot-marker" src="${ROBOT_IMAGE_SRC}" alt="Panda feliz" style="--robot-rotation: 0deg" />`;
 }
 
 function readStoredSoundVolume() {
