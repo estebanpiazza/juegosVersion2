@@ -5385,7 +5385,7 @@ body:has(.robot-layout) .game-workspace {
   display: none;
 }
 
-@media (max-height: 560px) {
+@media (max-width: 840px) and (max-height: 560px) {
   body:has(.visual-sequence-layout) .challenge-kicker,
   body:has(.path-layout) .challenge-kicker,
   body:has(.robot-layout) .challenge-kicker {
@@ -5811,5 +5811,100 @@ body:has(.robot-layout) .game-workspace {
   .challenge-card:has(.robot-layout) .command-placeholder {
     width: 58px;
     height: 42px;
+  }
+}
+
+@media (min-width: 900px) and (max-height: 649px) {
+  .challenge-card:has(.visual-sequence-layout),
+  .challenge-card:has(.path-layout),
+  .challenge-card:has(.robot-layout) {
+    padding: clamp(12px, 2dvh, 18px) clamp(24px, 3vw, 38px) clamp(18px, 3dvh, 28px);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .challenge-header,
+  .challenge-card:has(.path-layout) .challenge-header,
+  .challenge-card:has(.robot-layout) .challenge-header {
+    margin-bottom: clamp(10px, 1.6dvh, 16px);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .challenge-header h2,
+  .challenge-card:has(.path-layout) .challenge-header h2,
+  .challenge-card:has(.robot-layout) .challenge-header h2 {
+    font-size: clamp(1.65rem, 2.25vw, 2.25rem);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .challenge-header p,
+  .challenge-card:has(.path-layout) .challenge-header p,
+  .challenge-card:has(.robot-layout) .challenge-header p {
+    max-width: 760px;
+    font-size: clamp(0.8rem, 0.95vw, 0.96rem);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .visual-sequence-layout,
+  .challenge-card:has(.path-layout) .path-layout,
+  .challenge-card:has(.robot-layout) .robot-layout {
+    width: min(100%, 1180px);
+    grid-template-columns: minmax(450px, 0.88fr) minmax(560px, 1.12fr);
+    gap: clamp(38px, 4.5vw, 64px);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .path-map,
+  .challenge-card:has(.visual-sequence-layout) .visual-map,
+  .challenge-card:has(.visual-sequence-layout) .robot-grid.visual-map,
+  .challenge-card:has(.path-layout) .path-map,
+  .challenge-card:has(.path-layout) .visual-map,
+  .challenge-card:has(.path-layout) .robot-grid.visual-map,
+  .challenge-card:has(.robot-layout) .path-map,
+  .challenge-card:has(.robot-layout) .visual-map,
+  .challenge-card:has(.robot-layout) .robot-grid {
+    width: min(100%, clamp(420px, 76dvh, 460px));
+    max-width: 460px;
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .sequence-panel,
+  .challenge-card:has(.path-layout) .sequence-panel,
+  .challenge-card:has(.robot-layout) .sequence-panel {
+    gap: clamp(12px, 1.8dvh, 18px);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .command-section,
+  .challenge-card:has(.path-layout) .command-section,
+  .challenge-card:has(.robot-layout) .command-section {
+    padding: clamp(12px, 1.7dvh, 16px) clamp(16px, 1.8vw, 22px);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .compact-sequence,
+  .challenge-card:has(.path-layout) .compact-sequence,
+  .challenge-card:has(.robot-layout) .compact-sequence {
+    gap: clamp(8px, 1.2dvh, 12px);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .sequence-slot.command-card,
+  .challenge-card:has(.visual-sequence-layout) .instruction-chip,
+  .challenge-card:has(.path-layout) .sequence-slot.command-card,
+  .challenge-card:has(.path-layout) .instruction-chip,
+  .challenge-card:has(.robot-layout) .sequence-slot.command-card,
+  .challenge-card:has(.robot-layout) .instruction-chip {
+    min-height: clamp(64px, 9.8dvh, 78px);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .command-image,
+  .challenge-card:has(.path-layout) .command-image,
+  .challenge-card:has(.robot-layout) .command-image {
+    width: clamp(66px, 8.8dvh, 82px);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) .command-placeholder,
+  .challenge-card:has(.path-layout) .command-placeholder,
+  .challenge-card:has(.robot-layout) .command-placeholder {
+    width: clamp(74px, 10dvh, 88px);
+    height: clamp(54px, 7.2dvh, 64px);
+  }
+
+  .challenge-card:has(.visual-sequence-layout) > .challenge-actions,
+  .challenge-card:has(.path-layout) > .challenge-actions,
+  .challenge-card:has(.robot-layout) > .challenge-actions {
+    width: min(100%, 460px);
+    margin-top: clamp(12px, 1.8dvh, 18px);
   }
 }
