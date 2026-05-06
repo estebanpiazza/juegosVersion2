@@ -4498,6 +4498,66 @@ button:disabled {
   margin-bottom: clamp(6px, 1dvh, 10px);
 }
 
+@media (min-width: 981px) {
+  .challenge-header {
+    margin-bottom: clamp(22px, 3dvh, 38px);
+  }
+
+  .challenge-card:has(.path-layout) .challenge-header,
+  .challenge-card:has(.visual-sequence-layout) .challenge-header {
+    margin-bottom: clamp(18px, 2.5dvh, 30px);
+  }
+
+  .challenge-card {
+    justify-content: center;
+  }
+
+  .path-layout,
+  .visual-sequence-layout,
+  .robot-layout,
+  .debug-layout,
+  .coord-layout,
+  .factory-layout,
+  .circuit-layout,
+  .lock-layout,
+  .memory-grid,
+  .pattern-visual-layout,
+  .pattern-row {
+    flex: 0 1 auto;
+  }
+
+  .path-layout,
+  .visual-sequence-layout,
+  .robot-layout,
+  .debug-layout {
+    align-items: center;
+  }
+
+  .path-layout .sequence-panel,
+  .visual-sequence-layout .sequence-panel,
+  .robot-layout .sequence-panel {
+    align-self: center;
+    justify-content: center;
+  }
+}
+
+.corner-logo {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  width: clamp(88px, 9vw, 140px);
+  height: auto;
+  opacity: 0.82;
+  z-index: 6;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .corner-logo {
+    display: none;
+  }
+}
+
 .challenge-card:has(.path-layout) .challenge-actions,
 .challenge-card:has(.visual-sequence-layout) .challenge-actions {
   margin-top: clamp(4px, 0.8dvh, 8px);
@@ -4958,14 +5018,16 @@ button:disabled {
 
 .path-map-cell.is-goal,
 .robot-cell.is-goal {
+  position: relative;
   color: transparent;
   background: #c9f47e;
+  overflow: hidden;
 }
 
 .path-map-cell.is-goal::after,
 .robot-cell.is-goal::after {
-  width: 112%;
-  height: 112%;
+  position: absolute;
+  inset: 0;
   display: block;
   background: url("tarjetas movimiento/Vamos.png") center / contain no-repeat;
   content: "";
@@ -5280,8 +5342,8 @@ button:disabled {
 .challenge-card:has(.path-layout) .robot-cell.is-goal::after,
 .challenge-card:has(.robot-layout) .path-map-cell.is-goal::after,
 .challenge-card:has(.robot-layout) .robot-cell.is-goal::after {
-  width: 112%;
-  height: 112%;
+  position: absolute;
+  inset: 0;
   display: block;
   background: url("tarjetas movimiento/Vamos.png") center / contain no-repeat;
   content: "";

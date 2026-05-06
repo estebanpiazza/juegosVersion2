@@ -925,7 +925,6 @@ function renderPathChallenge(id = 1) {
       if (routeCells.has(key)) cell.classList.add("is-route");
       if (key === "5-0") {
         cell.classList.add("is-start");
-        cell.textContent = "IN";
       }
       if (key === "1-4") {
         cell.classList.add("is-goal");
@@ -1145,7 +1144,6 @@ function renderBalanceChallenge(id = 2) {
         }
         if (row === start.row && col === start.col) {
           cell.classList.add("is-start");
-          cell.textContent = "IN";
         }
         if (row === goal.row && col === goal.col) {
           cell.classList.add("is-goal");
@@ -1604,7 +1602,6 @@ function renderBalanceChallengeV2(id = 2) {
         }
         if (key === route[0]) {
           cell.classList.add("is-start");
-          cell.textContent = "IN";
         }
         if (key === route[route.length - 1]) {
           cell.classList.add("is-goal");
@@ -1794,7 +1791,6 @@ function renderRobotChallengeV2(id = 3) {
         }
         if (key === route[0]) {
           cell.classList.add("is-start");
-          cell.textContent = "IN";
         }
         if (key === route[route.length - 1]) {
           cell.classList.add("is-goal");
@@ -2022,7 +2018,6 @@ function renderRepeatRequiredChallenge(id = 1) {
         }
         if (key === route[0]) {
           cell.classList.add("is-start");
-          cell.textContent = "IN";
         }
         if (key === route[route.length - 1]) {
           cell.classList.add("is-goal");
@@ -2217,7 +2212,6 @@ function renderArrowMazeChallenge(id = 1) {
         }
         if (key === route[0]) {
           cell.classList.add("is-start");
-          cell.textContent = "IN";
         }
         if (key === route[route.length - 1]) {
           cell.classList.add("is-goal");
@@ -2901,7 +2895,6 @@ function renderBatteryMazeChallenge(id = 1) {
         }
         if (key === route[0]) {
           cell.classList.add("is-start");
-          cell.textContent = "IN";
         }
         if (key === route[route.length - 1]) {
           cell.classList.add("is-goal");
