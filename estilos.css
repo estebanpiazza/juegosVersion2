@@ -829,15 +829,13 @@ h2 {
   margin: 0 auto;
   padding: clamp(14px, 1.7vw, 22px);
   border: 1px solid rgba(255, 255, 255, 0.72);
-  border-radius: 28px;
+  border-radius: 40px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(249, 253, 255, 0.82)),
-    rgba(255, 255, 255, 0.82);
-  box-shadow: inset 0 -8px 0 rgba(10, 122, 190, 0.035), 0 10px 28px rgba(10, 122, 190, 0.08);
+  background: #ffffff;
+  box-shadow: 0 16px 48px rgba(10, 122, 190, 0.13);
 }
 
 .challenge-header {
@@ -1171,34 +1169,37 @@ body.has-scenario-modal {
 .path-map {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: clamp(3px, 0.5vw, 6px);
-  padding: clamp(6px, 0.8vw, 10px);
-  border-radius: 14px;
+  gap: clamp(2px, 0.25vw, 3px);
+  padding: clamp(20px, 3.2vw, 52px);
+  border-radius: 12px;
   max-height: 100%;
   aspect-ratio: 1;
-  background: rgba(10, 122, 190, 0.08);
+  background-color: transparent;
+  background-image: url("assets/manta.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 
 .path-map-cell {
   aspect-ratio: 1;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(10, 122, 190, 0.14);
-  border-radius: 8px;
-  background: #d7efff;
+  border: none;
+  border-radius: 5px;
+  background: #ffffff;
   color: var(--color-primary);
   font-size: clamp(0.64rem, 1vw, 0.82rem);
   font-weight: 800;
-  box-shadow: inset 0 -3px 0 rgba(10, 122, 190, 0.08);
+  box-shadow: none;
 }
 
 .path-map-cell.is-route {
-  background: #b9f4fb;
+  background: rgba(136, 228, 0, 0.5);
 }
 
 .path-map-cell.is-trail,
 .robot-cell.is-route {
-  background: #b9f4fb;
+  background: rgba(136, 228, 0, 0.5);
 }
 
 .path-map-cell.is-obstacle {
@@ -3356,7 +3357,7 @@ button:disabled {
 
   .visual-map,
   .robot-grid.visual-map {
-    width: min(100%, 240px);
+    width: min(100%, 280px);
   }
 
   .compact-sequence {
@@ -3556,10 +3557,11 @@ button:disabled {
   .visual-map,
   .path-map,
   .robot-grid.visual-map {
-    width: min(46vw, 190px);
-    max-width: 190px;
+    width: min(54vw, 250px);
+    max-width: 250px;
     min-width: 0;
     justify-self: center;
+    padding: 22px;
   }
 
   .path-map-cell,
@@ -3804,13 +3806,13 @@ button:disabled {
 
   .path-map,
   .robot-grid.visual-map {
-    width: min(44vw, 168px);
-    max-width: 168px;
+    width: min(54vw, 220px);
+    max-width: 220px;
     min-width: 0;
     justify-self: center;
     grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 2px;
-    padding: 4px;
+    padding: 20px;
   }
 
   .path-map-cell,
@@ -4185,15 +4187,29 @@ button:disabled {
 }
 
 .visual-map,
-.path-map,
 .robot-grid.visual-map,
 .coord-grid {
-  width: min(100%, 310px);
+  width: min(100%, 420px);
   border-radius: 22px;
   padding: clamp(8px, 1vw, 12px);
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: inset 0 -6px 0 rgba(10, 122, 190, 0.05), 0 10px 20px rgba(10, 122, 190, 0.08);
+  background: #ffffff;
+  border: 4px solid #08dbf7;
+  box-shadow: 0 0 0 6px rgba(8, 219, 247, 0.14), 0 12px 28px rgba(8, 219, 247, 0.18);
   justify-self: center;
+}
+
+/* Manta: anula el border CSS — la imagen provee el marco */
+.path-map.visual-map {
+  width: min(100%, 420px);
+  justify-self: center;
+  border: none;
+  background-color: transparent;
+  background-image: url("assets/manta.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 16px 40px rgba(8, 219, 247, 0.22);
+  padding: clamp(20px, 3.2vw, 52px);
+  border-radius: 12px;
 }
 
 .path-layout,
@@ -4252,6 +4268,11 @@ button:disabled {
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.72);
   box-shadow: inset 0 -5px 0 rgba(10, 122, 190, 0.04);
+}
+
+/* Manta: celdas del mapa cuadradas y blancas */
+.path-map-cell {
+  border-radius: 5px;
 }
 
 .factory-layout,
@@ -4497,7 +4518,7 @@ button:disabled {
   .path-map,
   .robot-grid.visual-map,
   .coord-grid {
-    width: min(100%, 220px);
+    width: min(100%, 260px);
   }
 }
 
@@ -5262,9 +5283,7 @@ button:disabled {
   gap: clamp(16px, 4vw, 40px);
 }
 
-.challenge-card:has(.visual-sequence-layout) .path-map,
 .challenge-card:has(.visual-sequence-layout) .visual-map,
-.challenge-card:has(.path-layout) .path-map,
 .challenge-card:has(.path-layout) .visual-map,
 .challenge-card:has(.robot-layout) .robot-grid,
 .challenge-card:has(.robot-layout) .visual-map,
@@ -5280,6 +5299,26 @@ button:disabled {
   overflow: hidden;
   background: #ffffff;
   box-shadow: 0 2px 6px rgba(10, 122, 190, 0.12);
+}
+
+/* path-map usa la manta como fondo — valores propios */
+.challenge-card:has(.visual-sequence-layout) .path-map,
+.challenge-card:has(.path-layout) .path-map {
+  gap: 0;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  width: min(100%, clamp(220px, 44vw, 480px));
+  max-width: 480px;
+  aspect-ratio: 1;
+  padding: clamp(22px, 4.2vw, 52px);
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: transparent;
+  background-image: url("assets/manta.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 8px 28px rgba(8, 219, 247, 0.18);
 }
 
 .challenge-card:has(.visual-sequence-layout) .path-map-cell,
@@ -5436,7 +5475,7 @@ body:has(.robot-layout) .game-stage-bg {
 body:has(.visual-sequence-layout) .game-workspace,
 body:has(.path-layout) .game-workspace,
 body:has(.robot-layout) .game-workspace {
-  padding: clamp(8px, 2dvh, 24px) clamp(14px, 14.6vw, 175px) clamp(8px, 2dvh, 24px) clamp(64px, 14.6vw, 175px);
+  padding: 0 0 0 clamp(64px, 5.2vw, 78px);
   background: transparent;
 }
 
@@ -5627,8 +5666,8 @@ body:has(.robot-layout) .game-workspace {
   .challenge-card:has(.robot-layout) .path-map,
   .challenge-card:has(.robot-layout) .visual-map,
   .challenge-card:has(.robot-layout) .robot-grid {
-    width: min(100%, clamp(420px, 56dvh, 500px));
-    max-width: 500px;
+    width: min(100%, clamp(440px, 68dvh, 560px));
+    max-width: 560px;
   }
 
   .challenge-card:has(.visual-sequence-layout) .sequence-panel,
@@ -6031,8 +6070,8 @@ body:has(.robot-layout) .game-workspace {
   .challenge-card:has(.robot-layout) .path-map,
   .challenge-card:has(.robot-layout) .visual-map,
   .challenge-card:has(.robot-layout) .robot-grid {
-    width: min(100%, clamp(420px, 76dvh, 460px));
-    max-width: 460px;
+    width: min(100%, clamp(440px, 76dvh, 500px));
+    max-width: 500px;
   }
 
   .challenge-card:has(.visual-sequence-layout) .sequence-panel,
