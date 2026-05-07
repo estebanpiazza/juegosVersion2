@@ -6207,7 +6207,9 @@ body:has(.rain-challenge-card) .game-workspace {
 }
 
 .rain-challenge-card .path-map-cell.is-obstacle {
+  overflow: visible;
   background: #ffffff;
+  z-index: 1;
 }
 
 .rain-challenge-card .path-map-cell.is-goal.is-robot::after {
@@ -6216,9 +6218,12 @@ body:has(.rain-challenge-card) .game-workspace {
 
 .rain-puddle {
   display: block;
-  width: 82%;
-  height: 82%;
+  width: 150%;
+  height: 150%;
   object-fit: contain;
+  max-width: none;
+  max-height: none;
+  pointer-events: none;
 }
 
 .rain-goal {
