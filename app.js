@@ -1,6 +1,6 @@
 const params = new URLSearchParams(window.location.search);
-const requestedLevel = Number(params.get("nivel"));
-const requestedChallenge = Number(params.get("desafio"));
+const requestedLevel = Number(params.get("nivel") || Number.NaN);
+const requestedChallenge = Number(params.get("desafio") || Number.NaN);
 const DEFAULT_LEVEL = 4;
 let level = Number.isInteger(requestedLevel) ? requestedLevel : DEFAULT_LEVEL;
 
@@ -802,12 +802,30 @@ const commandAssets = {
   "Girar izquierda": "tarjetas%20movimiento/IZQUIERDA.png",
 };
 
-function renderCommand(command) {
-  const asset = commandAssets[command];
+const orangeCommandAssets = {
+  Avanzar: "tarjetas%20movimiento/AVANZAR.png",
+  "Girar der.": "assets/Naranja%202.png",
+  "Girar derecha": "assets/Naranja%202.png",
+  "Girar izq.": "assets/naranja%201.png",
+  "Girar izquierda": "assets/naranja%201.png",
+};
+
+const commandImageClasses = {
+  Avanzar: "command-image-avanzar",
+  "Girar der.": "command-image-turn-right",
+  "Girar derecha": "command-image-turn-right",
+  "Girar izq.": "command-image-turn-left",
+  "Girar izquierda": "command-image-turn-left",
+};
+
+function renderCommand(command, variant = "default") {
+  const asset = variant === "orange" ? orangeCommandAssets[command] : commandAssets[command];
+  const imageClass = commandImageClasses[command] || "";
+  const variantClass = variant === "orange" ? "command-image-orange" : "";
   if (asset) {
     return `
       <span class="command-symbol" aria-hidden="true">
-        <img class="command-image" src="${asset}" alt="" />
+        <img class="command-image ${imageClass} ${variantClass}" src="${asset}" alt="" />
       </span>
       <span class="command-label">${command}</span>
     `;
@@ -822,10 +840,10 @@ function renderInlineCommand(command) {
   return `<span class="inline-command">${renderCommand(command)}</span>`;
 }
 
-function renderCommandButton(command, className = "instruction-chip") {
+function renderCommandButton(command, className = "instruction-chip", variant = "default") {
   return `
     <button class="${className}" type="button" data-value="${command}" aria-label="${command}">
-      ${renderCommand(command)}
+      ${renderCommand(command, variant)}
     </button>
   `;
 }
@@ -1558,15 +1576,28 @@ function renderBalanceChallengeV2(id = 2) {
     ? renderSequenceStep(step)
     : renderSequenceBlank(index, selectedBlank, "Elegir giro")).join("");
   const actionsMarkup = ["Girar izq.", "Girar der.", "Avanzar"]
-    .map((command) => renderCommandButton(command))
+    .map((command) => renderCommandButton(command, "instruction-chip", "orange"))
     .join("");
 
+  const instruction = getChallengeInstruction(id, "Completa los giros para esquivar el agua y llegar a la bandera sin tocar los charcos.");
+
   challengeContent.innerHTML = `
-    <article class="challenge-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Completa los giros para esquivar el agua y llegar a 🏁."))}
-      <div class="visual-sequence-layout">
+    <article class="challenge-card rain-challenge-card">
+      <div class="rain-masthead">
+        <img class="rain-alert-title" src="assets/Alerta%20de%20lluvia.png" alt="Alerta de lluvia" />
+        <span class="rain-divider" aria-hidden="true"></span>
+        <p>${instruction}</p>
+      </div>
+      <div class="rain-accessible-header" hidden>
+        ${renderHeader(id, instruction)}
+      </div>
+      <div class="visual-sequence-layout rain-play-layout">
         <div class="path-map visual-map" data-map></div>
         ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
+        <div class="rain-helper" aria-hidden="true">
+          <img class="rain-speech" src="assets/Globo%20de%20Dialogo%201.png" alt="" />
+          <img class="rain-panda" src="assets/Panda%202.png" alt="" />
+        </div>
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>COMPROBAR</button>
@@ -1598,16 +1629,16 @@ function renderBalanceChallengeV2(id = 2) {
         if (routeCells.has(key)) cell.classList.add("is-route");
         if (obstacles.has(key)) {
           cell.classList.add("is-obstacle");
-          cell.textContent = "💧";
+          cell.innerHTML = `<img class="rain-puddle" src="assets/charco.png" alt="" />`;
         }
         if (key === route[0]) {
           cell.classList.add("is-start");
         }
         if (key === route[route.length - 1]) {
           cell.classList.add("is-goal");
-          cell.textContent = "🏁";
+          cell.innerHTML = `<img class="rain-goal" src="tarjetas%20movimiento/Vamos.png" alt="" />`;
         }
-        cell.dataset.baseText = cell.textContent;
+        cell.dataset.baseHtml = cell.innerHTML;
         cells.set(key, cell);
         map.append(cell);
       }
@@ -1617,7 +1648,7 @@ function renderBalanceChallengeV2(id = 2) {
   function paintRobot(key) {
     cells.forEach((cell) => {
       cell.classList.remove("is-robot", "is-trail");
-      cell.textContent = cell.dataset.baseText || "";
+      cell.innerHTML = cell.dataset.baseHtml || "";
     });
 
     for (const routeKey of route.slice(0, route.indexOf(key) + 1)) {

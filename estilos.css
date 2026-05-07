@@ -6127,3 +6127,352 @@ body:has(.robot-layout) .game-workspace {
     margin-top: clamp(12px, 1.8dvh, 18px);
   }
 }
+
+.command-image-orange.command-image-avanzar {
+  filter: hue-rotate(190deg) saturate(2.7) brightness(1.05);
+}
+
+body:has(.rain-challenge-card) .game-workspace {
+  padding: clamp(14px, 2vw, 28px);
+}
+
+.rain-challenge-card {
+  justify-content: center;
+  gap: clamp(14px, 2.1dvh, 24px);
+  padding: clamp(18px, 2.7dvh, 36px) clamp(20px, 3.2vw, 52px);
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 36px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 20px 55px rgba(88, 89, 91, 0.16);
+  backdrop-filter: blur(4px);
+}
+
+.rain-accessible-header {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.rain-masthead {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(220px, 390px) 2px minmax(340px, 1fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 52px);
+}
+
+.rain-alert-title {
+  display: block;
+  width: 100%;
+  max-height: clamp(92px, 14dvh, 145px);
+  object-fit: contain;
+}
+
+.rain-divider {
+  width: 2px;
+  height: min(100%, 128px);
+  background: #18cce1;
+}
+
+.rain-masthead p {
+  margin: 0;
+  max-width: 780px;
+  color: rgba(88, 89, 91, 0.62);
+  font-size: clamp(1.12rem, 1.7vw, 1.78rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.rain-challenge-card .rain-play-layout {
+  position: relative;
+  width: min(100%, 1220px) !important;
+  grid-template-columns: minmax(380px, 0.88fr) minmax(460px, 1fr) minmax(240px, 0.5fr) !important;
+  align-items: center;
+  gap: clamp(20px, 2.7vw, 44px);
+  flex: 0 0 auto;
+}
+
+.rain-challenge-card .path-map {
+  width: min(100%, clamp(360px, 42dvh, 470px)) !important;
+  max-width: 470px !important;
+  padding: clamp(28px, 3.5dvh, 42px);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(8, 219, 247, 0.18);
+}
+
+.rain-challenge-card .path-map-cell.is-obstacle {
+  background: #ffffff;
+}
+
+.rain-challenge-card .path-map-cell.is-goal.is-robot::after {
+  display: none;
+}
+
+.rain-puddle {
+  display: block;
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+}
+
+.rain-goal {
+  display: block;
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+}
+
+.rain-challenge-card .sequence-panel {
+  gap: clamp(14px, 2.1dvh, 22px);
+}
+
+.rain-challenge-card .command-section {
+  padding: clamp(12px, 1.6dvh, 18px) clamp(14px, 1.8vw, 24px);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 10px 12px 12px rgba(88, 89, 91, 0.22);
+}
+
+.rain-challenge-card .command-steps {
+  border: 0;
+}
+
+.rain-challenge-card .command-actions-bank {
+  width: min(100%, 520px);
+}
+
+.rain-challenge-card .command-section-title {
+  margin-bottom: clamp(10px, 1.4dvh, 16px);
+  font-size: clamp(0.88rem, 1.25vw, 1.2rem);
+}
+
+.rain-challenge-card .command-section-title span {
+  width: clamp(26px, 3.1dvh, 34px);
+  height: clamp(26px, 3.1dvh, 34px);
+  color: #ffffff;
+  background: #18cce1;
+}
+
+.rain-challenge-card .compact-sequence {
+  grid-template-columns: repeat(6, minmax(60px, 1fr));
+  gap: clamp(7px, 1.1dvh, 11px) clamp(9px, 1.1vw, 15px);
+}
+
+.rain-challenge-card .compact-bank {
+  gap: clamp(10px, 1.5vw, 18px);
+}
+
+.rain-challenge-card .sequence-slot.command-card,
+.rain-challenge-card .instruction-chip {
+  min-height: clamp(54px, 6.6dvh, 74px);
+  border: 0;
+  background: transparent;
+}
+
+.rain-challenge-card .sequence-slot.command-card:not([data-value]) {
+  background: transparent url("assets/Trjeta%20vacia.png") center / contain no-repeat;
+}
+
+.rain-challenge-card .sequence-slot.command-card.is-selected {
+  outline: 3px solid rgba(245, 146, 10, 0.62);
+  outline-offset: 3px;
+}
+
+.rain-challenge-card .sequence-slot.command-card.is-wrong {
+  outline-color: #e25353;
+}
+
+.rain-challenge-card .command-placeholder {
+  color: rgba(10, 122, 190, 0.72);
+}
+
+.rain-challenge-card .command-image {
+  width: clamp(62px, 7dvh, 82px);
+}
+
+.rain-helper {
+  position: relative;
+  width: min(100%, 360px);
+  min-width: 250px;
+  align-self: end;
+  justify-self: end;
+  transform: translateY(18px);
+  pointer-events: none;
+}
+
+.rain-speech {
+  position: absolute;
+  right: 32%;
+  bottom: 56%;
+  width: 108%;
+  object-fit: contain;
+}
+
+.rain-panda {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 54%;
+  margin-left: auto;
+}
+
+.rain-challenge-card > .challenge-actions {
+  width: min(100%, 590px) !important;
+  margin-top: 0 !important;
+  justify-content: center;
+  gap: clamp(12px, 1.6vw, 22px);
+}
+
+.rain-challenge-card .primary-action,
+.rain-challenge-card .secondary-action {
+  min-height: 40px !important;
+  min-width: 190px;
+  padding: 0 24px !important;
+  border-width: 3px !important;
+  border-radius: 999px;
+  font-size: 0.88rem !important;
+}
+
+@media (max-width: 1400px) {
+  .rain-challenge-card .rain-play-layout {
+    width: min(100%, 1110px) !important;
+    grid-template-columns: minmax(330px, 0.86fr) minmax(500px, 1fr) !important;
+    gap: 26px;
+    transform: translateX(-102px);
+  }
+
+  .rain-challenge-card .sequence-panel {
+    position: relative;
+  }
+
+  .rain-challenge-card .command-steps .compact-sequence {
+    grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+    gap: 5px;
+  }
+
+  .rain-challenge-card .command-steps {
+    width: calc(100% - 42px);
+    transform: translate(-50px, -42px);
+  }
+
+  .rain-challenge-card .command-steps .sequence-slot.command-card {
+    min-height: 48px;
+  }
+
+  .rain-challenge-card .command-steps .command-image {
+    width: 52px;
+  }
+
+  .rain-challenge-card .command-steps .command-placeholder {
+    width: 52px;
+    height: 41px;
+  }
+
+  .rain-challenge-card .command-actions-bank {
+    width: min(100%, 360px);
+    max-width: calc(100% - 220px);
+    transform: translate(-50px, -24px);
+  }
+
+  .rain-masthead {
+    grid-template-columns: minmax(220px, 360px) 2px minmax(300px, 1fr);
+  }
+
+  .rain-helper {
+    position: absolute;
+    right: -112px;
+    bottom: -20px;
+    display: block;
+    width: 218px;
+    min-width: 0;
+    transform: none;
+  }
+
+  .rain-speech {
+    right: -4%;
+    bottom: 82%;
+    width: 116%;
+  }
+
+  .rain-panda {
+    width: 62%;
+  }
+
+  body:has(.rain-challenge-card) .corner-logo {
+    right: 22px;
+    bottom: 26px;
+  }
+}
+
+@media (max-width: 840px) {
+  .rain-helper {
+    display: none;
+  }
+
+  .rain-challenge-card {
+    justify-content: flex-start;
+    padding: 18px 14px 24px;
+    border-radius: 28px;
+    overflow-y: auto;
+  }
+
+  .rain-masthead {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .rain-divider {
+    display: none;
+  }
+
+  .rain-alert-title {
+    max-height: 112px;
+  }
+
+  .rain-masthead p {
+    font-size: clamp(1rem, 4.2vw, 1.3rem);
+  }
+
+  .rain-challenge-card .rain-play-layout {
+    width: min(100%, 340px) !important;
+    grid-template-columns: 1fr !important;
+    gap: 18px;
+  }
+
+  .rain-challenge-card .path-map {
+    width: min(100%, 300px) !important;
+    max-width: 300px !important;
+    padding: 28px;
+  }
+
+  .rain-challenge-card .command-section {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .rain-challenge-card .command-section-title {
+    font-size: 1rem;
+  }
+
+  .rain-challenge-card .compact-sequence {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .rain-challenge-card .command-image {
+    width: clamp(54px, 15vw, 70px);
+  }
+
+  .rain-challenge-card .primary-action,
+  .rain-challenge-card .secondary-action {
+    min-width: 150px;
+    min-height: 42px !important;
+    font-size: 0.84rem !important;
+  }
+}
