@@ -498,6 +498,121 @@ function renderLevelRating(challengeId, nextScenario) {
   `;
 }
 
+const FINAL_SUCCESS_ASSET_DIR = "tarjetas%20finalizacion%20nivel/LO%20LOGRASTE";
+const FINAL_FAILURE_ASSET_DIR = "tarjetas%20finalizacion%20nivel/NO%20LO%20LOGRASTE";
+const FINAL_SUCCESS_RATING_OPTIONS = [
+  { value: 1, label: "No me gusto", asset: "No%20me%20gusto.png" },
+  { value: 2, label: "Mas o menos", asset: "Maso.png" },
+  { value: 3, label: "Estuvo bien", asset: "bien.png" },
+  { value: 5, label: "Me encanto", asset: "Me%20encanto.png" },
+];
+const FINAL_FAILURE_RATING_OPTIONS = [
+  { value: 1, label: "No me gusto", asset: "No%20me%20gust%C3%B3.png" },
+  { value: 2, label: "Mas o menos", asset: "Maso.png" },
+  { value: 3, label: "Estuvo bien", asset: "bien.png" },
+  { value: 5, label: "Me encanto", asset: "Me%20encanto.png" },
+];
+
+function finalSuccessAsset(fileName) {
+  return `${FINAL_SUCCESS_ASSET_DIR}/${fileName}`;
+}
+
+function finalFailureAsset(fileName) {
+  return `${FINAL_FAILURE_ASSET_DIR}/${fileName}`;
+}
+
+function renderFinalSuccessRating(challengeId) {
+  const savedRating = readLevelRating(challengeId);
+
+  return `
+    <section class="final-rating" aria-labelledby="final-rating-title" data-rating-challenge="${challengeId}">
+      <img class="final-rating-title" id="final-rating-title" src="${finalSuccessAsset("Te%20gusto.png")}" alt="Te gusto esta mision?" />
+      <div class="final-rating-scale" role="group" aria-label="Te gusto esta mision?">
+        ${FINAL_SUCCESS_RATING_OPTIONS.map((option) => {
+          const isSelected = option.value === savedRating;
+          return `
+            <button class="final-rating-button ${isSelected ? "is-selected" : ""}" type="button" data-rating-value="${option.value}" aria-label="${option.label}" aria-pressed="${isSelected ? "true" : "false"}">
+              <img src="${finalSuccessAsset(option.asset)}" alt="" aria-hidden="true" />
+            </button>
+          `;
+        }).join("")}
+      </div>
+      <p class="final-rating-status" data-rating-status>${savedRating ? "Gracias por contarme." : "Elegi una opcion para responder."}</p>
+    </section>
+  `;
+}
+
+function renderFinalFailureRating(challengeId) {
+  const savedRating = readLevelRating(challengeId);
+
+  return `
+    <section class="final-rating" aria-labelledby="final-rating-title" data-rating-challenge="${challengeId}">
+      <img class="final-rating-title" id="final-rating-title" src="${finalFailureAsset("te%20gusto.png")}" alt="Te gusto esta mision?" />
+      <div class="final-rating-scale" role="group" aria-label="Te gusto esta mision?">
+        ${FINAL_FAILURE_RATING_OPTIONS.map((option) => {
+          const isSelected = option.value === savedRating;
+          return `
+            <button class="final-rating-button ${isSelected ? "is-selected" : ""}" type="button" data-rating-value="${option.value}" aria-label="${option.label}" aria-pressed="${isSelected ? "true" : "false"}">
+              <img src="${finalFailureAsset(option.asset)}" alt="" aria-hidden="true" />
+            </button>
+          `;
+        }).join("")}
+      </div>
+      <p class="final-rating-status" data-rating-status>${savedRating ? "Gracias por contarme." : "Elegi una opcion para responder."}</p>
+    </section>
+  `;
+}
+
+function renderFinalSuccessCard(id, nextScenario) {
+  const nextAction = nextScenario
+    ? `<button class="final-action final-action-next" type="button" data-next-scenario="${nextScenario}" aria-label="Siguiente mision">
+        <img src="${finalSuccessAsset("Boton%20turqeuza.png")}" alt="" aria-hidden="true" />
+      </button>`
+    : `<a class="final-action final-action-next" href="index.html" aria-label="Volver a grados">
+        <span>Volver a grados</span>
+      </a>`;
+
+  return `
+    <article class="final-success-card" aria-labelledby="scenario-modal-title">
+      <img class="final-success-bg" src="${finalSuccessAsset("Fondo.png")}" alt="" aria-hidden="true" />
+      <img class="final-success-title" src="${finalSuccessAsset("LO%20LOGRASTE.png")}" alt="" aria-hidden="true" />
+      <img class="final-success-robot" src="${finalSuccessAsset("Nano.png")}" alt="" aria-hidden="true" />
+      <h2 class="sr-only" id="scenario-modal-title">Lo lograste</h2>
+      <img class="final-success-subtitle" src="${finalSuccessAsset("Desafio.png")}" alt="Desafio completado" />
+      <div class="final-success-divider" aria-hidden="true"></div>
+      ${renderFinalSuccessRating(id)}
+      <div class="final-success-actions">
+        ${nextAction}
+        <button class="final-action final-action-replay" type="button" data-replay-scenario="${id}" aria-label="Volver a jugar">
+          <img src="${finalSuccessAsset("Boton%20azul.png")}" alt="" aria-hidden="true" />
+        </button>
+      </div>
+    </article>
+  `;
+}
+
+function renderFinalFailureCard(id) {
+  return `
+    <article class="final-success-card final-failure-card" aria-labelledby="scenario-modal-title">
+      <img class="final-success-bg" src="${finalFailureAsset("No%20lo%20lograste.png")}" alt="" aria-hidden="true" />
+      <img class="final-success-title final-failure-title" src="${finalFailureAsset("UPSS.png")}" alt="" aria-hidden="true" />
+      <img class="final-success-robot final-failure-robot" src="${finalFailureAsset("nANO.png")}" alt="" aria-hidden="true" />
+      <h2 class="sr-only" id="scenario-modal-title">Ups, casi lo logras</h2>
+      <img class="final-success-subtitle final-failure-subtitle" src="${finalFailureAsset("Sigue%20jugando.png")}" alt="Sigue jugando" />
+      <div class="final-success-divider" aria-hidden="true"></div>
+      ${renderFinalFailureRating(id)}
+      <div class="final-success-actions">
+        <a class="final-action final-action-next" href="index.html" aria-label="Volver al inicio">
+          <img src="${finalFailureAsset("Boton%20turquesa.png")}" alt="" aria-hidden="true" />
+        </a>
+        <button class="final-action final-action-replay" type="button" data-replay-scenario="${id}" aria-label="Volver a jugar">
+          <img src="${finalFailureAsset("Boton%20azul.png")}" alt="" aria-hidden="true" />
+        </button>
+      </div>
+    </article>
+  `;
+}
+
 function createScenarioModal() {
   const modal = document.createElement("div");
   modal.className = "scenario-modal";
@@ -538,10 +653,18 @@ function createScenarioModal() {
     }
 
     const nextControl = event.target.closest("[data-next-scenario]");
-    if (!nextControl) return;
-    const nextScenario = Number(nextControl.dataset.nextScenario);
+    if (nextControl) {
+      const nextScenario = Number(nextControl.dataset.nextScenario);
+      closeScenarioModal();
+      goToScenario(nextScenario);
+      return;
+    }
+
+    const replayControl = event.target.closest("[data-replay-scenario]");
+    if (!replayControl) return;
+    const replayScenario = Number(replayControl.dataset.replayScenario);
     closeScenarioModal();
-    goToScenario(nextScenario);
+    openChallenge(replayScenario);
   });
 
   document.addEventListener("keydown", (event) => {
@@ -558,26 +681,27 @@ function showScenarioCompleteModal(id) {
   if (!scenarioModal) scenarioModal = createScenarioModal();
 
   const nextScenario = id < totalChallenges ? id + 1 : null;
-  const title = challengeTitles[id] || `Escenario ${id}`;
   const content = scenarioModal.querySelector("[data-scenario-modal-content]");
-  content.innerHTML = `
-    <p class="challenge-kicker">Logro desbloqueado</p>
-    <h2 id="scenario-modal-title">Lo hiciste genial</h2>
-    <p>${nextScenario
-      ? `Completaste el nivel. Tu robot ya esta listo para el proximo desafio.`
-      : `Completaste todos los desafios de este grado. Gran recorrido.`}</p>
-    ${renderLevelRating(id, nextScenario)}
-    <div class="scenario-modal-actions">
-      ${nextScenario
-        ? `<button class="primary-action" type="button" data-next-scenario="${nextScenario}">Ir al siguiente desafio</button>`
-        : `<a class="primary-action" href="index.html">Volver a grados</a>`}
-      <button class="secondary-action" type="button" data-close-scenario-modal>Quedarme aqui</button>
-    </div>
-  `;
+  content.innerHTML = renderFinalSuccessCard(id, nextScenario);
 
   scenarioModal.hidden = false;
   document.body.classList.add("has-scenario-modal");
   scenarioModal.querySelector(".scenario-modal-panel")?.focus();
+}
+
+function showScenarioFailureModal(id) {
+  if (!scenarioModal) scenarioModal = createScenarioModal();
+
+  const content = scenarioModal.querySelector("[data-scenario-modal-content]");
+  content.innerHTML = renderFinalFailureCard(id);
+
+  scenarioModal.hidden = false;
+  document.body.classList.add("has-scenario-modal");
+  scenarioModal.querySelector(".scenario-modal-panel")?.focus();
+}
+
+function shouldShowFailureModal(text) {
+  return !/(faltan|todavia|primero agrega|ya usaste|proba ejecutarlo|navegador no tiene|proximamente)/i.test(text);
 }
 
 function completeChallenge(id) {
@@ -651,7 +775,15 @@ function setMessage(text, tone = "") {
   message.textContent = text;
   message.className = `challenge-message ${tone}`;
   if (tone === "is-success") playSound("win");
-  if (tone === "is-error") playSound("lose");
+  if (tone === "is-error") {
+    playSound("lose");
+    if (shouldShowFailureModal(text) && scenarioModal?.hidden !== false) {
+      window.setTimeout(() => {
+        if (scenarioModal?.hidden === false) return;
+        showScenarioFailureModal(activeChallengeId);
+      }, 450);
+    }
+  }
 }
 
 function resetSpeechButton(button) {
@@ -766,6 +898,158 @@ document.addEventListener("click", (event) => {
 
   playSound("tap");
 });
+
+function enableMissingPieceDrag(container) {
+  if (!container || container.dataset.dragPiecesEnabled) return;
+  container.dataset.dragPiecesEnabled = "true";
+
+  const missingPieceSourceSelector = ".instruction-chip, .option-bank button, .graphic-options button";
+  const coordinateSourceSelector = ".coord-bank button";
+  const sourceSelector = `${missingPieceSourceSelector}, ${coordinateSourceSelector}`;
+  const blankTargetSelector = "[data-blank]";
+  const coordinateTargetSelector = ".coord-cell";
+  const dragThreshold = 7;
+  let dragState = null;
+  let highlightedTarget = null;
+
+  function clearHighlightedTarget() {
+    highlightedTarget?.classList.remove("is-drag-over");
+    highlightedTarget = null;
+  }
+
+  function suppressNextNativeClick() {
+    const suppress = (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    };
+
+    document.addEventListener("click", suppress, { capture: true, once: true });
+    window.setTimeout(() => document.removeEventListener("click", suppress, { capture: true }), 0);
+  }
+
+  function createDragGhost(source, event) {
+    const ghost = source.cloneNode(true);
+    const sourceRect = source.getBoundingClientRect();
+    ghost.classList.add("piece-drag-ghost");
+    ghost.style.width = `${sourceRect.width}px`;
+    ghost.style.height = `${sourceRect.height}px`;
+    document.body.append(ghost);
+    moveDragGhost(ghost, event.clientX, event.clientY);
+    return ghost;
+  }
+
+  function moveDragGhost(ghost, clientX, clientY) {
+    ghost.style.transform = `translate(${clientX}px, ${clientY}px) translate(-50%, -50%)`;
+  }
+
+  function targetFromPoint(clientX, clientY, source) {
+    const element = document.elementFromPoint(clientX, clientY);
+    const targetSelector = source.matches(coordinateSourceSelector) ? coordinateTargetSelector : blankTargetSelector;
+    const target = element?.closest(targetSelector);
+    return target && container.contains(target) && !target.disabled ? target : null;
+  }
+
+  function updateDropTarget(event) {
+    const nextTarget = targetFromPoint(event.clientX, event.clientY, dragState.source);
+    if (nextTarget === highlightedTarget) return nextTarget;
+    clearHighlightedTarget();
+    highlightedTarget = nextTarget;
+    highlightedTarget?.classList.add("is-drag-over");
+    return nextTarget;
+  }
+
+  function cleanupDrag() {
+    dragState?.ghost?.remove();
+    document.body.classList.remove("is-dragging-piece");
+    clearHighlightedTarget();
+    dragState = null;
+  }
+
+  function dispatchClick(element) {
+    element.dispatchEvent(new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      view: window,
+    }));
+  }
+
+  function dropPiece(source, target) {
+    if (source.matches(coordinateSourceSelector)) {
+      dispatchClick(source);
+      dispatchClick(target);
+    } else {
+      dispatchClick(target);
+      dispatchClick(source);
+    }
+    playSound("place");
+  }
+
+  container.addEventListener("pointerdown", (event) => {
+    const source = event.target.closest(sourceSelector);
+    if (!source || !container.contains(source) || source.disabled || event.button > 0) return;
+
+    dragState = {
+      source,
+      startX: event.clientX,
+      startY: event.clientY,
+      isDragging: false,
+      ghost: null,
+    };
+
+    const handlePointerMove = (moveEvent) => {
+      if (!dragState) return;
+      const distanceX = moveEvent.clientX - dragState.startX;
+      const distanceY = moveEvent.clientY - dragState.startY;
+      const distance = Math.hypot(distanceX, distanceY);
+
+      if (!dragState.isDragging && distance < dragThreshold) return;
+
+      if (!dragState.isDragging) {
+        dragState.isDragging = true;
+        dragState.ghost = createDragGhost(dragState.source, moveEvent);
+        dragState.source.classList.add("is-drag-source");
+        document.body.classList.add("is-dragging-piece");
+      }
+
+      moveEvent.preventDefault();
+      moveDragGhost(dragState.ghost, moveEvent.clientX, moveEvent.clientY);
+      updateDropTarget(moveEvent);
+    };
+
+    const handlePointerUp = (upEvent) => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerCancel);
+
+      if (!dragState) return;
+      const { source, isDragging } = dragState;
+      source.classList.remove("is-drag-source");
+
+      if (isDragging) {
+        upEvent.preventDefault();
+        const target = updateDropTarget(upEvent);
+        if (target) dropPiece(source, target);
+        suppressNextNativeClick();
+      }
+
+      cleanupDrag();
+    };
+
+    const handlePointerCancel = () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerCancel);
+      dragState?.source.classList.remove("is-drag-source");
+      cleanupDrag();
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, { passive: false });
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerCancel);
+  });
+}
+
+enableMissingPieceDrag(challengeContent);
 
 function renderHeader(id, instruction) {
   const headerId = Number.isInteger(id) ? id : activeChallengeId;
