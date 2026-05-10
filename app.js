@@ -76,9 +76,21 @@ const levelBackgrounds = [
   "assets/fondo.jpeg",
 ];
 const ROBOT_IMAGE_SRC = `PANDA%20FELIZ%20-%20copia.png?v=${Date.now()}`;
+const DESIGN_D1_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%201";
+const DESIGN_D1_ROBOT_IMAGE_SRC = `${DESIGN_D1_ASSET_BASE}/Robot%20Nani.png?v=${Date.now()}`;
+const DESIGN_D2_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%202";
+const DESIGN_D2_ROBOT_IMAGE_SRC = `${DESIGN_D2_ASSET_BASE}/cara%20Nano.png?v=${Date.now()}`;
 
 function renderRobotMarker() {
   return `<img class="robot-marker" src="${ROBOT_IMAGE_SRC}" alt="Panda feliz" style="--robot-rotation: 0deg" />`;
+}
+
+function renderDesignRobotMarker() {
+  return `<img class="robot-marker design-d1-robot" src="${DESIGN_D1_ROBOT_IMAGE_SRC}" alt="Robot Nani" />`;
+}
+
+function renderDesignRainRobotMarker() {
+  return `<img class="robot-marker design-d2-robot" src="${DESIGN_D2_ROBOT_IMAGE_SRC}" alt="Nano" />`;
 }
 
 function readStoredSoundVolume() {
@@ -1195,12 +1207,16 @@ function renderPathChallenge(id = 1) {
     ? renderSequenceStep(step)
     : renderSequenceBlank(index, selectedBlank)).join("");
   const actionsMarkup = ["Girar der.", "Girar izq."]
-    .map((command) => renderCommandButton(command))
+    .map((command) => renderCommandButton(command, "instruction-chip", "orange"))
     .join("");
+  const instruction = getChallengeInstruction(id, "El robot avanza, pero tiene que girar. Observa el camino y elige la tarjeta correcta para completar la instruccion.");
 
   challengeContent.innerHTML = `
-    <article class="challenge-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Mira el camino celeste y completa los giros para que el robot vaya desde INICIO hasta 🏁."))}
+    <article class="challenge-card design-challenge-v1">
+      <header class="challenge-header design-d1-header">
+        <img class="design-d1-title-image" src="${DESIGN_D1_ASSET_BASE}/Titulo%20y%20aonsigna.png" alt="Secuencia de comandos. A programar. El robot avanza, pero tiene que girar. Observa el camino y elige la tarjeta correcta para completar la instruccion. Buena suerte." />
+        <p class="sr-only" data-consigna-text>${instruction}</p>
+      </header>
       <div class="visual-sequence-layout">
         <div class="path-map visual-map" data-path-map></div>
         ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
@@ -1209,6 +1225,7 @@ function renderPathChallenge(id = 1) {
         <button class="primary-action" type="button" data-check>COMPROBAR</button>
         <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
+      <img class="design-d1-logo" src="${DESIGN_D1_ASSET_BASE}/Logo.png" alt="BeTech" />
       <p class="challenge-message" data-message>Empeza por los pasos 3, 6 y 9. La ruta celeste te da una buena pista.</p>
     </article>
   `;
@@ -1247,7 +1264,7 @@ function renderPathChallenge(id = 1) {
     const robotCell = mapCells.get(key);
     if (!robotCell) return;
     robotCell.classList.add("is-robot");
-    robotCell.innerHTML = renderRobotMarker(directionForRouteKey(routePath, key));
+    robotCell.innerHTML = renderDesignRobotMarker();
   }
 
   async function runRobotAnimation(routeLimit = routePath.length - 1) {
@@ -1866,11 +1883,11 @@ function renderBalanceChallengeV2(id = 2) {
   const instruction = getChallengeInstruction(id, "Completa los giros para esquivar el agua y llegar a la bandera sin tocar los charcos.");
 
   challengeContent.innerHTML = `
-    <article class="challenge-card rain-challenge-card">
-      <div class="rain-masthead">
-        <img class="rain-alert-title" src="assets/Alerta%20de%20lluvia.png" alt="Alerta de lluvia" />
-        <span class="rain-divider" aria-hidden="true"></span>
-        <p>${instruction}</p>
+    <article class="challenge-card rain-challenge-card design-challenge-v2">
+      <div class="rain-masthead design-d2-masthead">
+        <img class="rain-alert-title design-d2-title" src="${DESIGN_D2_ASSET_BASE}/titulo.png" alt="Alerta de lluvia" />
+        <img class="design-d2-consigna" src="${DESIGN_D2_ASSET_BASE}/cuadro%20de%20consigna.png" alt="El robot no sabe como llegar. Aplica la logica y elige las tarjetas para completar el algoritmo." />
+        <p class="sr-only">${instruction}</p>
       </div>
       <div class="rain-accessible-header" hidden>
         ${renderHeader(id, instruction)}
@@ -1879,14 +1896,14 @@ function renderBalanceChallengeV2(id = 2) {
         <div class="path-map visual-map" data-map></div>
         ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
         <div class="rain-helper" aria-hidden="true">
-          <img class="rain-speech" src="assets/Globo%20de%20Dialogo%201.png" alt="" />
-          <img class="rain-panda" src="assets/Panda%202.png" alt="" />
+          <img class="design-d2-helper" src="${DESIGN_D2_ASSET_BASE}/Nano%20con%20dialogo.png" alt="" />
         </div>
       </div>
       <div class="challenge-actions">
         <button class="primary-action" type="button" data-check>COMPROBAR</button>
         <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
+      <img class="design-d2-logo" src="${DESIGN_D2_ASSET_BASE}/logo.png" alt="BeTech" />
       <p class="challenge-message" data-message>Mira la ruta celeste: con dos giros bien elegidos el robot rodea el agua.</p>
     </article>
   `;
@@ -1913,7 +1930,7 @@ function renderBalanceChallengeV2(id = 2) {
         if (routeCells.has(key)) cell.classList.add("is-route");
         if (obstacles.has(key)) {
           cell.classList.add("is-obstacle");
-          cell.innerHTML = `<img class="rain-puddle" src="assets/charco.png" alt="" />`;
+          cell.innerHTML = `<img class="rain-puddle design-d2-puddle" src="${DESIGN_D2_ASSET_BASE}/charco.png" alt="" />`;
         }
         if (key === route[0]) {
           cell.classList.add("is-start");
@@ -1942,7 +1959,7 @@ function renderBalanceChallengeV2(id = 2) {
     const robotCell = cells.get(key);
     if (!robotCell) return;
     robotCell.classList.add("is-robot");
-    robotCell.innerHTML = renderRobotMarker(directionForRouteKey(route, key));
+    robotCell.innerHTML = renderDesignRainRobotMarker();
   }
 
   async function animateRoute(routeLimit = route.length - 1) {

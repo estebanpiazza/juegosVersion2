@@ -6439,6 +6439,1712 @@ body:has(.robot-layout) .game-workspace {
   filter: hue-rotate(190deg) saturate(2.7) brightness(1.05);
 }
 
+/* Desafio 1: rebuilt from the new reference artwork. */
+body:has(.design-challenge-v1) .game-topbar,
+body:has(.design-challenge-v1) .game-title {
+  display: none;
+}
+
+body:has(.design-challenge-v1) .game-stage-bg {
+  display: block;
+  opacity: 0.56;
+}
+
+body:has(.design-challenge-v1) .game-workspace {
+  padding: clamp(12px, 2.2dvh, 24px) clamp(28px, 4.4vw, 70px) clamp(10px, 1.5dvh, 18px);
+  background: transparent;
+}
+
+body:has(.design-challenge-v1) .corner-logo {
+  display: none;
+}
+
+.design-challenge-v1 {
+  --design-cyan: #13cde0;
+  --design-blue: #1777bd;
+  --design-orange: #f79412;
+  width: min(100%, 1500px);
+  height: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  padding: 0;
+  display: grid;
+  grid-template-rows: minmax(106px, 18dvh) minmax(0, 1fr) clamp(58px, 9dvh, 86px);
+  gap: clamp(8px, 1.6dvh, 16px);
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+}
+
+.design-d1-header {
+  position: relative;
+  width: min(100%, 1320px);
+  height: 100%;
+  margin: 0 auto;
+  padding-left: clamp(110px, 24vw, 310px);
+  display: flex;
+  align-items: center;
+}
+
+.design-d1-header::before {
+  position: absolute;
+  left: 0;
+  bottom: -10%;
+  width: clamp(112px, 23vw, 300px);
+  aspect-ratio: 1;
+  background: url("diseño de niveles/DESAFIO 1/Robot Nani.png") center / contain no-repeat;
+  filter: drop-shadow(0 8px 7px rgba(88, 89, 91, 0.22));
+  content: "";
+}
+
+.design-d1-title-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+  filter: drop-shadow(0 6px 0 rgba(88, 89, 91, 0.22));
+}
+
+.design-challenge-v1 .visual-sequence-layout {
+  width: min(100%, 1320px);
+  max-width: 1320px;
+  min-height: 0;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(360px, 0.88fr) minmax(520px, 1.12fr);
+  gap: clamp(28px, 4.8vw, 78px);
+  align-items: start;
+  overflow: visible;
+}
+
+.design-challenge-v1 .path-map {
+  width: min(100%, clamp(360px, 49dvh, 570px));
+  max-width: 570px;
+  aspect-ratio: 2786 / 2785;
+  padding: 8.9% 9.2% 9.2% 9.4%;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent url("diseño de niveles/DESAFIO 1/Manta.png") center / 100% 100% no-repeat;
+  box-shadow: none;
+}
+
+.design-challenge-v1 .path-map-cell {
+  border: 0 !important;
+  color: transparent;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.design-challenge-v1 .path-map-cell::after {
+  display: none !important;
+}
+
+.design-challenge-v1 .path-map-cell.is-robot {
+  display: grid;
+  place-items: center;
+  overflow: visible;
+}
+
+.design-challenge-v1 .design-d1-robot {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 4px rgba(88, 89, 91, 0.28));
+}
+
+.design-challenge-v1 .sequence-panel {
+  width: 100%;
+  max-width: 720px;
+  gap: clamp(14px, 2.4dvh, 24px);
+}
+
+.design-challenge-v1 .command-section {
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  box-shadow: none;
+}
+
+.design-challenge-v1 .command-section-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.design-challenge-v1 .command-steps {
+  aspect-ratio: 3587 / 1743;
+  padding: clamp(78px, 12.7vw, 126px) clamp(24px, 3.7vw, 44px) clamp(22px, 3.2vw, 40px);
+  background-image: url("diseño de niveles/DESAFIO 1/Cuadro de algoritmo.png");
+}
+
+.design-challenge-v1 .command-actions-bank {
+  aspect-ratio: 3587 / 941;
+  padding: clamp(56px, 8.8vw, 88px) clamp(26px, 4vw, 52px) clamp(18px, 2.4vw, 30px);
+  background-image: url("diseño de niveles/DESAFIO 1/Cuadro de Tarjetas de programacion.png");
+}
+
+.design-challenge-v1 .compact-sequence {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(8px, 1.2vw, 14px);
+  align-items: center;
+}
+
+.design-challenge-v1 .compact-bank {
+  justify-content: flex-start;
+  gap: clamp(16px, 2.4vw, 30px);
+}
+
+.design-challenge-v1 .sequence-slot.command-card,
+.design-challenge-v1 .instruction-chip {
+  min-height: 0;
+  aspect-ratio: 1.08;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+}
+
+.design-challenge-v1 .instruction-chip {
+  width: clamp(82px, 10.3vw, 142px);
+}
+
+.design-challenge-v1 .sequence-slot.command-card.is-selected,
+.design-challenge-v1 .sequence-slot.command-card.is-drag-over {
+  outline: 4px solid rgba(19, 205, 224, 0.55);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+.design-challenge-v1 .sequence-slot.is-wrong {
+  outline-color: rgba(226, 83, 83, 0.8);
+}
+
+.design-challenge-v1 .command-image {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  display: block;
+  filter: none;
+}
+
+.design-challenge-v1 .command-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: clamp(54px, 6.8vw, 82px);
+  color: transparent;
+  background: url("diseño de niveles/DESAFIO 1/Tarjeta en blanco.png") center / contain no-repeat;
+}
+
+.design-challenge-v1 > .challenge-actions {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 620px);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 3vw, 42px);
+}
+
+.design-challenge-v1 .primary-action,
+.design-challenge-v1 .secondary-action {
+  width: clamp(180px, 20vw, 300px);
+  min-height: 0;
+  aspect-ratio: 4;
+  padding: 0;
+  border: 0;
+  color: transparent;
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+.design-challenge-v1 .primary-action {
+  background-image: url("diseño de niveles/DESAFIO 1/Boton turqueza.png");
+}
+
+.design-challenge-v1 .secondary-action {
+  background-image: url("diseño de niveles/DESAFIO 1/Boton blanco.png");
+}
+
+.design-d1-logo {
+  position: fixed;
+  right: clamp(24px, 5.4vw, 86px);
+  bottom: clamp(12px, 2.4dvh, 28px);
+  z-index: 3;
+  width: clamp(170px, 19vw, 310px);
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 6px rgba(88, 89, 91, 0.22));
+}
+
+.design-challenge-v1 > .challenge-message {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .design-challenge-v1 {
+    grid-template-rows: auto 1fr auto;
+    overflow-y: auto;
+    padding-bottom: 18px;
+  }
+
+  .design-d1-header {
+    min-height: 102px;
+    padding-left: clamp(84px, 23vw, 170px);
+  }
+
+  .design-d1-header::before {
+    width: clamp(86px, 22vw, 164px);
+  }
+
+  .design-challenge-v1 .visual-sequence-layout {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 20px;
+  }
+
+  .design-challenge-v1 .sequence-panel {
+    max-width: 620px;
+  }
+
+  .design-challenge-v1 > .challenge-actions {
+    width: 100%;
+    margin: 16px auto 0;
+  }
+
+  .design-d1-logo {
+    display: none;
+  }
+}
+
+/* Final sizing pass for the exported Desafio 1 and 2 mockups. */
+@media (min-width: 981px) {
+  body:has(.design-challenge-v1) .game-workspace,
+  body:has(.design-challenge-v2) .game-workspace {
+    padding: 10px clamp(26px, 3.4vw, 54px) 8px;
+  }
+
+  article.challenge-card.design-challenge-v1 {
+    width: min(100%, 1450px) !important;
+    grid-template-rows: clamp(146px, 20dvh, 168px) minmax(0, 1fr) clamp(72px, 9.8dvh, 86px) !important;
+    gap: clamp(4px, 0.9dvh, 8px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header {
+    width: min(100%, 1400px) !important;
+    padding-left: clamp(210px, 25vw, 330px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header::before {
+    width: clamp(205px, 19.5vw, 278px) !important;
+    bottom: -12% !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-title-image {
+    max-height: clamp(128px, 18dvh, 155px) !important;
+    object-fit: contain !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .visual-sequence-layout {
+    width: min(100%, 1240px) !important;
+    grid-template-columns: minmax(430px, 500px) minmax(600px, 640px) !important;
+    gap: clamp(36px, 4.2vw, 58px) !important;
+    justify-content: center !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .path-map {
+    width: min(100%, clamp(430px, 58dvh, 515px)) !important;
+    max-width: 515px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .sequence-panel {
+    max-width: 640px !important;
+    margin-top: clamp(76px, 10.4dvh, 92px) !important;
+    gap: clamp(10px, 1.7dvh, 16px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-steps {
+    padding: clamp(76px, 10.2vw, 92px) clamp(28px, 3.2vw, 38px) clamp(20px, 2.5vw, 30px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-actions-bank {
+    width: min(100%, 520px) !important;
+    padding: clamp(48px, 6.8vw, 64px) clamp(28px, 3.6vw, 42px) clamp(18px, 2.4vw, 26px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .instruction-chip {
+    width: clamp(78px, 7.4vw, 102px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .compact-sequence {
+    gap: clamp(8px, 1vw, 12px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 > .challenge-actions {
+    width: clamp(470px, 43vw, 590px) !important;
+    justify-content: flex-start !important;
+    margin-left: clamp(120px, 13.5vw, 200px) !important;
+    gap: clamp(22px, 3vw, 38px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .primary-action,
+  article.challenge-card.design-challenge-v1 .secondary-action {
+    width: clamp(210px, 19vw, 275px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-logo {
+    width: clamp(235px, 22vw, 340px) !important;
+    right: clamp(26px, 4vw, 64px) !important;
+    bottom: clamp(10px, 1.5dvh, 18px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 {
+    width: min(100%, 1450px) !important;
+    grid-template-rows: clamp(128px, 18dvh, 152px) minmax(0, 1fr) clamp(70px, 9.5dvh, 84px) !important;
+    gap: clamp(5px, 1dvh, 10px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-masthead {
+    width: min(100%, 1370px) !important;
+    grid-template-columns: minmax(330px, 420px) minmax(760px, 1fr) !important;
+    gap: clamp(18px, 2vw, 34px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-title {
+    max-height: clamp(112px, 16dvh, 136px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-consigna {
+    max-height: clamp(110px, 15.5dvh, 132px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-play-layout {
+    width: min(100%, 1240px) !important;
+    grid-template-columns: minmax(430px, 500px) minmax(610px, 650px) minmax(120px, 160px) !important;
+    gap: clamp(28px, 3.4vw, 48px) !important;
+    justify-content: center !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .path-map {
+    width: min(100%, clamp(430px, 58dvh, 510px)) !important;
+    max-width: 510px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .sequence-panel {
+    max-width: 650px !important;
+    margin-top: clamp(62px, 9dvh, 78px) !important;
+    gap: clamp(10px, 1.55dvh, 14px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-steps {
+    padding: clamp(62px, 8vw, 82px) clamp(26px, 3vw, 36px) clamp(18px, 2.2vw, 28px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-actions-bank {
+    width: min(100%, 455px) !important;
+    max-width: 455px !important;
+    padding: clamp(48px, 6.2vw, 62px) clamp(28px, 3.2vw, 38px) clamp(16px, 2vw, 24px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .instruction-chip {
+    width: clamp(70px, 6.8vw, 94px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-helper {
+    right: clamp(-48px, -2.4vw, -24px) !important;
+    bottom: clamp(-92px, -10.5dvh, -58px) !important;
+    width: clamp(210px, 20vw, 300px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 > .challenge-actions {
+    width: clamp(470px, 43vw, 590px) !important;
+    margin-left: clamp(520px, 44vw, 660px) !important;
+    gap: clamp(22px, 3vw, 38px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .primary-action,
+  article.challenge-card.design-challenge-v2 .secondary-action {
+    width: clamp(210px, 19vw, 275px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-logo {
+    width: clamp(235px, 22vw, 340px) !important;
+    left: clamp(28px, 4vw, 68px) !important;
+    bottom: clamp(10px, 1.5dvh, 18px) !important;
+  }
+}
+
+@media (min-width: 981px) {
+  article.challenge-card.design-challenge-v1 .design-d1-header {
+    padding-left: clamp(220px, 22vw, 285px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 > .challenge-actions {
+    bottom: 2px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-logo {
+    bottom: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-actions-bank {
+    position: relative !important;
+    z-index: 2 !important;
+    display: block !important;
+    background-image: url("diseño de niveles/DESAFIO 1/Cuadro de Tarjetas de programacion.png") !important;
+    background-position: center !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-masthead {
+    width: min(100%, 1250px) !important;
+    grid-template-columns: clamp(360px, 29vw, 410px) minmax(700px, 760px) !important;
+    transform: none !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-title {
+    position: fixed !important;
+    left: clamp(78px, 8.8vw, 130px) !important;
+    top: clamp(18px, 3dvh, 30px) !important;
+    width: clamp(340px, 29vw, 410px) !important;
+    height: auto !important;
+    max-height: none !important;
+    z-index: 7 !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-consigna {
+    position: fixed !important;
+    left: clamp(380px, 30.5vw, 420px) !important;
+    right: auto !important;
+    top: clamp(38px, 5.3dvh, 46px) !important;
+    width: clamp(820px, 66vw, 900px) !important;
+    min-width: 0 !important;
+    max-width: 900px !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    z-index: 6 !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .sequence-panel {
+    transform: translateY(clamp(-52px, -6.5dvh, -44px)) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-helper {
+    position: fixed !important;
+    overflow: visible !important;
+    z-index: 4 !important;
+    width: clamp(390px, 33vw, 455px) !important;
+    left: clamp(800px, 60vw, 830px) !important;
+    right: auto !important;
+    bottom: clamp(-52px, -5.4dvh, -34px) !important;
+    transform: none !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-helper {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-puddle,
+  article.challenge-card.design-challenge-v2 .design-d2-puddle {
+    display: block !important;
+    width: 118% !important;
+    height: 118% !important;
+    max-width: none !important;
+    object-fit: contain !important;
+    transform: translate(-9%, -5%) !important;
+    filter: drop-shadow(0 4px 4px rgba(88, 89, 91, 0.16)) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-goal {
+    display: block !important;
+    width: 82% !important;
+    height: 82% !important;
+    object-fit: contain !important;
+  }
+}
+
+/* Los obstaculos de agua del Desafio 2 deben verse en todos los tamanos. */
+article.challenge-card.design-challenge-v2 .rain-puddle,
+article.challenge-card.design-challenge-v2 .design-d2-puddle {
+  display: block !important;
+  width: 142% !important;
+  height: 142% !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  transform: translate(-18%, -15%) !important;
+  filter: drop-shadow(0 4px 4px rgba(88, 89, 91, 0.16)) !important;
+}
+
+article.challenge-card.design-challenge-v2 .path-map-cell.is-obstacle {
+  overflow: visible !important;
+}
+
+article.challenge-card.design-challenge-v2 .rain-goal {
+  display: block !important;
+  width: 82% !important;
+  height: 82% !important;
+  object-fit: contain !important;
+}
+
+/* Ajuste final real solo para Desafio 1: escala mas contenida. */
+@media (min-width: 981px) {
+  article.challenge-card.design-challenge-v1 {
+    grid-template-rows: 140px minmax(0, 1fr) 58px !important;
+    gap: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header {
+    width: 900px !important;
+    padding-left: 210px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header::before {
+    width: 205px !important;
+    bottom: -6% !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-title-image {
+    max-height: 114px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .visual-sequence-layout {
+    width: 930px !important;
+    max-width: 930px !important;
+    grid-template-columns: 356px 500px !important;
+    gap: 44px !important;
+    transform: translateY(2px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .path-map {
+    width: 356px !important;
+    max-width: 356px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .sequence-panel {
+    max-width: 500px !important;
+    gap: 10px !important;
+    margin-top: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-steps {
+    width: 100% !important;
+    height: 204px !important;
+    aspect-ratio: auto !important;
+    padding: 55px 22px 16px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-actions-bank {
+    width: 100% !important;
+    max-width: 500px !important;
+    height: 112px !important;
+    aspect-ratio: auto !important;
+    padding: 36px 24px 12px !important;
+    background-image: url("diseño de niveles/DESAFIO 1/Cuadro de Tarjetas de programacion.png") !important;
+    background-position: center !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .compact-sequence,
+  article.challenge-card.design-challenge-v1 .compact-bank {
+    gap: 8px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .instruction-chip,
+  article.challenge-card.design-challenge-v1 .sequence-slot.command-card {
+    width: 64px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 > .challenge-actions {
+    position: fixed !important;
+    left: 210px !important;
+    bottom: 7px !important;
+    z-index: 8 !important;
+    width: 400px !important;
+    gap: 22px !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .primary-action,
+  article.challenge-card.design-challenge-v1 .secondary-action {
+    width: 188px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-logo {
+    width: 205px !important;
+    right: 92px !important;
+    bottom: 8px !important;
+  }
+}
+
+/* Ajuste final real solo para Desafio 2: escala mas contenida. */
+@media (min-width: 981px) {
+  article.challenge-card.design-challenge-v2 {
+    grid-template-rows: 136px minmax(0, 1fr) 56px !important;
+    gap: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-title {
+    left: 98px !important;
+    top: 24px !important;
+    width: 290px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-consigna {
+    left: 410px !important;
+    top: 46px !important;
+    width: 760px !important;
+    max-width: 760px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-play-layout {
+    width: 980px !important;
+    max-width: 980px !important;
+    grid-template-columns: 330px 520px 50px !important;
+    gap: 40px !important;
+    transform: translateY(4px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .path-map {
+    width: 330px !important;
+    max-width: 330px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .sequence-panel {
+    max-width: 520px !important;
+    gap: 18px !important;
+    margin-top: 0 !important;
+    transform: translateY(-24px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-steps {
+    width: 100% !important;
+    height: 184px !important;
+    aspect-ratio: auto !important;
+    padding: 46px 20px 14px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-actions-bank {
+    width: 338px !important;
+    max-width: 338px !important;
+    height: 116px !important;
+    aspect-ratio: auto !important;
+    padding: 34px 20px 12px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .compact-sequence,
+  article.challenge-card.design-challenge-v2 .compact-bank {
+    gap: 8px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .instruction-chip,
+  article.challenge-card.design-challenge-v2 .sequence-slot.command-card {
+    width: 62px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-puddle,
+  article.challenge-card.design-challenge-v2 .design-d2-puddle {
+    width: 76% !important;
+    height: 76% !important;
+    transform: translate(14%, 8%) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-helper {
+    position: fixed !important;
+    overflow: visible !important;
+    z-index: 4 !important;
+    width: 305px !important;
+    left: 890px !important;
+    right: auto !important;
+    bottom: -24px !important;
+    transform: none !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-helper {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  article.challenge-card.design-challenge-v2 > .challenge-actions {
+    position: fixed !important;
+    left: 610px !important;
+    bottom: 8px !important;
+    z-index: 8 !important;
+    width: 400px !important;
+    gap: 22px !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .primary-action,
+  article.challenge-card.design-challenge-v2 .secondary-action {
+    width: 188px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-logo {
+    width: 205px !important;
+    left: 54px !important;
+    bottom: 8px !important;
+  }
+}
+
+/* Ajuste final real solo para Desafio 2: escala mas contenida. */
+@media (min-width: 981px) {
+  article.challenge-card.design-challenge-v2 {
+    grid-template-rows: 136px minmax(0, 1fr) 56px !important;
+    gap: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-title {
+    left: 98px !important;
+    top: 24px !important;
+    width: 290px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-consigna {
+    left: 410px !important;
+    top: 46px !important;
+    width: 760px !important;
+    max-width: 760px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-play-layout {
+    width: 980px !important;
+    max-width: 980px !important;
+    grid-template-columns: 330px 520px 50px !important;
+    gap: 40px !important;
+    transform: translateY(4px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .path-map {
+    width: 330px !important;
+    max-width: 330px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .sequence-panel {
+    max-width: 520px !important;
+    gap: 18px !important;
+    margin-top: 0 !important;
+    transform: translateY(-24px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-steps {
+    width: 100% !important;
+    height: 184px !important;
+    aspect-ratio: auto !important;
+    padding: 46px 20px 14px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-actions-bank {
+    width: 338px !important;
+    max-width: 338px !important;
+    height: 116px !important;
+    aspect-ratio: auto !important;
+    padding: 34px 20px 12px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .compact-sequence,
+  article.challenge-card.design-challenge-v2 .compact-bank {
+    gap: 8px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .instruction-chip,
+  article.challenge-card.design-challenge-v2 .sequence-slot.command-card {
+    width: 62px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-puddle,
+  article.challenge-card.design-challenge-v2 .design-d2-puddle {
+    width: 76% !important;
+    height: 76% !important;
+    transform: translate(14%, 8%) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-helper {
+    position: fixed !important;
+    overflow: visible !important;
+    z-index: 4 !important;
+    width: 305px !important;
+    left: 890px !important;
+    right: auto !important;
+    bottom: -24px !important;
+    transform: none !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-helper {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  article.challenge-card.design-challenge-v2 > .challenge-actions {
+    position: fixed !important;
+    left: 610px !important;
+    bottom: 8px !important;
+    z-index: 8 !important;
+    width: 400px !important;
+    gap: 22px !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .primary-action,
+  article.challenge-card.design-challenge-v2 .secondary-action {
+    width: 188px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-logo {
+    width: 205px !important;
+    left: 54px !important;
+    bottom: 8px !important;
+  }
+}
+
+/* Ajuste final real solo para Desafio 1: escala mas contenida. */
+@media (min-width: 981px) {
+  article.challenge-card.design-challenge-v1 {
+    grid-template-rows: 140px minmax(0, 1fr) 58px !important;
+    gap: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header {
+    width: 900px !important;
+    padding-left: 210px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header::before {
+    width: 205px !important;
+    bottom: -6% !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-title-image {
+    max-height: 114px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .visual-sequence-layout {
+    width: 930px !important;
+    max-width: 930px !important;
+    grid-template-columns: 356px 500px !important;
+    gap: 44px !important;
+    transform: translateY(2px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .path-map {
+    width: 356px !important;
+    max-width: 356px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .sequence-panel {
+    max-width: 500px !important;
+    gap: 10px !important;
+    margin-top: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-steps {
+    width: 100% !important;
+    height: 204px !important;
+    aspect-ratio: auto !important;
+    padding: 55px 22px 16px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-actions-bank {
+    width: 100% !important;
+    max-width: 500px !important;
+    height: 112px !important;
+    aspect-ratio: auto !important;
+    padding: 36px 24px 12px !important;
+    background-image: url("diseño de niveles/DESAFIO 1/Cuadro de Tarjetas de programacion.png") !important;
+    background-position: center !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .compact-sequence,
+  article.challenge-card.design-challenge-v1 .compact-bank {
+    gap: 8px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .instruction-chip,
+  article.challenge-card.design-challenge-v1 .sequence-slot.command-card {
+    width: 64px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 > .challenge-actions {
+    position: fixed !important;
+    left: 210px !important;
+    bottom: 7px !important;
+    z-index: 8 !important;
+    width: 400px !important;
+    gap: 22px !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .primary-action,
+  article.challenge-card.design-challenge-v1 .secondary-action {
+    width: 188px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-logo {
+    width: 205px !important;
+    right: 92px !important;
+    bottom: 8px !important;
+  }
+}
+
+/* Correccion de proporcion general: bajar escala y normalizar obstaculos. */
+@media (min-width: 981px) {
+  body:has(.design-challenge-v1) .game-workspace,
+  body:has(.design-challenge-v2) .game-workspace {
+    padding: 8px 34px 8px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 {
+    grid-template-rows: 154px minmax(0, 1fr) 62px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header {
+    width: min(100%, 980px) !important;
+    padding-left: 232px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header::before {
+    width: 230px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-title-image {
+    max-height: 128px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .visual-sequence-layout {
+    width: 1025px !important;
+    max-width: 1025px !important;
+    grid-template-columns: 395px 535px !important;
+    gap: 54px !important;
+    transform: translateY(10px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .path-map {
+    width: 395px !important;
+    max-width: 395px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .sequence-panel {
+    max-width: 535px !important;
+    gap: 12px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-steps {
+    height: 226px !important;
+    padding: 62px 24px 18px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-actions-bank {
+    height: 128px !important;
+    padding: 42px 26px 14px !important;
+    background-image: url("diseño de niveles/DESAFIO 1/Cuadro de Tarjetas de programacion.png") !important;
+    background-position: center !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .instruction-chip,
+  article.challenge-card.design-challenge-v1 .sequence-slot.command-card {
+    width: 72px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 > .challenge-actions {
+    display: flex !important;
+    position: fixed !important;
+    left: 218px !important;
+    bottom: 6px !important;
+    z-index: 8 !important;
+    width: 470px !important;
+    gap: 28px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .primary-action,
+  article.challenge-card.design-challenge-v1 .secondary-action {
+    width: 210px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-logo {
+    width: 230px !important;
+    right: 78px !important;
+    bottom: 8px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 {
+    grid-template-rows: 148px minmax(0, 1fr) 62px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-title {
+    left: 88px !important;
+    top: 22px !important;
+    width: 315px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-consigna {
+    left: 390px !important;
+    top: 42px !important;
+    width: 820px !important;
+    max-width: 820px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-play-layout {
+    width: 1090px !important;
+    max-width: 1090px !important;
+    grid-template-columns: 370px 575px 60px !important;
+    gap: 44px !important;
+    transform: translateY(6px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .path-map {
+    width: 370px !important;
+    max-width: 370px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .sequence-panel {
+    max-width: 575px !important;
+    gap: 22px !important;
+    transform: translateY(-34px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-steps {
+    height: 206px !important;
+    padding: 52px 24px 16px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-actions-bank {
+    width: 370px !important;
+    max-width: 370px !important;
+    height: 132px !important;
+    padding: 42px 24px 14px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .instruction-chip,
+  article.challenge-card.design-challenge-v2 .sequence-slot.command-card {
+    width: 70px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-puddle,
+  article.challenge-card.design-challenge-v2 .design-d2-puddle {
+    width: 88% !important;
+    height: 88% !important;
+    transform: translate(6%, 2%) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-helper {
+    width: 330px !important;
+    left: 860px !important;
+    bottom: -28px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 > .challenge-actions {
+    display: flex !important;
+    position: fixed !important;
+    left: 600px !important;
+    bottom: 7px !important;
+    z-index: 8 !important;
+    width: 460px !important;
+    gap: 26px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .primary-action,
+  article.challenge-card.design-challenge-v2 .secondary-action {
+    width: 210px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-logo {
+    width: 230px !important;
+    left: 44px !important;
+    bottom: 8px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  article.challenge-card.design-challenge-v1 .path-map,
+  article.challenge-card.design-challenge-v2 .path-map {
+    width: min(100%, 350px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-steps,
+  article.challenge-card.design-challenge-v1 .command-actions-bank,
+  article.challenge-card.design-challenge-v2 .command-steps,
+  article.challenge-card.design-challenge-v2 .command-actions-bank {
+    width: min(100%, 360px) !important;
+  }
+}
+
+/* Desafio 2: artwork pass from the new rain reference. */
+body:has(.design-challenge-v2) .game-topbar,
+body:has(.design-challenge-v2) .game-title {
+  display: none;
+}
+
+body:has(.design-challenge-v2) .game-stage-bg {
+  display: block;
+  opacity: 0.58;
+}
+
+body:has(.design-challenge-v2) .game-workspace {
+  padding: clamp(8px, 1.6dvh, 18px) clamp(24px, 4vw, 64px) clamp(8px, 1.4dvh, 16px);
+  background: transparent;
+}
+
+body:has(.design-challenge-v2) .corner-logo {
+  display: none;
+}
+
+article.challenge-card.design-challenge-v2 {
+  width: min(100%, 1500px);
+  height: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  padding: 0 !important;
+  display: grid;
+  grid-template-rows: minmax(92px, 16dvh) minmax(0, 1fr) clamp(54px, 8.2dvh, 78px);
+  gap: clamp(8px, 1.4dvh, 14px);
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+article.challenge-card.design-challenge-v2 .design-d2-masthead {
+  position: relative;
+  z-index: 3;
+  width: min(100%, 1360px);
+  height: 100%;
+  margin: 0 auto;
+  display: grid !important;
+  grid-template-columns: minmax(250px, 390px) minmax(520px, 1fr);
+  gap: clamp(18px, 2.8vw, 42px);
+  align-items: center;
+}
+
+article.challenge-card.design-challenge-v2 .design-d2-title,
+article.challenge-card.design-challenge-v2 .design-d2-consigna {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  filter: drop-shadow(0 7px 6px rgba(88, 89, 91, 0.24));
+}
+
+article.challenge-card.design-challenge-v2 .design-d2-consigna {
+  object-position: left center;
+}
+
+article.challenge-card.design-challenge-v2 .rain-play-layout {
+  position: relative;
+  width: min(100%, 1360px) !important;
+  margin: 0 auto;
+  display: grid !important;
+  grid-template-columns: minmax(360px, 0.88fr) minmax(560px, 1.12fr) minmax(180px, 0.32fr) !important;
+  gap: clamp(28px, 4.8vw, 72px) !important;
+  align-items: start;
+  transform: none !important;
+}
+
+article.challenge-card.design-challenge-v2 .path-map {
+  width: min(100%, clamp(360px, 50dvh, 560px)) !important;
+  max-width: 560px !important;
+  aspect-ratio: 1 !important;
+  padding: 8.5% 8.7% 8.8% 8.7% !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background-color: transparent !important;
+  background-image: url("diseño de niveles/DESAFIO 2/Manta.png") !important;
+  background-position: center !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v2 .path-map-cell,
+article.challenge-card.design-challenge-v2 .path-map-cell.is-route,
+article.challenge-card.design-challenge-v2 .path-map-cell.is-trail,
+article.challenge-card.design-challenge-v2 .path-map-cell.is-start,
+article.challenge-card.design-challenge-v2 .path-map-cell.is-goal,
+article.challenge-card.design-challenge-v2 .path-map-cell.is-obstacle,
+article.challenge-card.design-challenge-v2 .path-map-cell.is-robot {
+  border: 0 !important;
+  color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v2 .path-map-cell::after {
+  display: none !important;
+}
+
+article.challenge-card.design-challenge-v2 .rain-puddle,
+article.challenge-card.design-challenge-v2 .rain-goal {
+  display: none !important;
+}
+
+article.challenge-card.design-challenge-v2 .design-d2-robot {
+  width: 68%;
+  height: 68%;
+  object-fit: contain;
+  border-radius: 999px;
+  filter: drop-shadow(0 5px 5px rgba(88, 89, 91, 0.24));
+}
+
+article.challenge-card.design-challenge-v2 .sequence-panel {
+  width: 100%;
+  max-width: 620px !important;
+  margin-top: clamp(58px, 9dvh, 76px) !important;
+  gap: clamp(10px, 1.7dvh, 16px) !important;
+  position: relative;
+}
+
+article.challenge-card.design-challenge-v2 .command-section {
+  width: 100% !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background-color: transparent !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100% !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+article.challenge-card.design-challenge-v2 .command-section-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+article.challenge-card.design-challenge-v2 .command-steps {
+  aspect-ratio: 3977 / 1498 !important;
+  padding: clamp(58px, 8.8vw, 82px) clamp(22px, 3.2vw, 36px) clamp(18px, 2.4vw, 28px) !important;
+  background-image: url("diseño de niveles/DESAFIO 2/cuadro de tu algoritmo.png") !important;
+}
+
+article.challenge-card.design-challenge-v2 .command-actions-bank {
+  width: min(100%, 430px) !important;
+  max-width: 430px !important;
+  aspect-ratio: 2046 / 940 !important;
+  padding: clamp(48px, 7vw, 62px) clamp(24px, 3.2vw, 34px) clamp(16px, 2.2vw, 24px) !important;
+  background-image: url("diseño de niveles/DESAFIO 2/cuadro con tarjetas de programacion.png") !important;
+}
+
+article.challenge-card.design-challenge-v2 .compact-sequence {
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: clamp(9px, 1.25vw, 14px) !important;
+}
+
+article.challenge-card.design-challenge-v2 .compact-bank {
+  gap: clamp(10px, 1.4vw, 16px) !important;
+  justify-content: flex-start;
+}
+
+article.challenge-card.design-challenge-v2 .sequence-slot.command-card,
+article.challenge-card.design-challenge-v2 .instruction-chip {
+  min-height: 0 !important;
+  aspect-ratio: 1.08 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v2 .instruction-chip {
+  width: clamp(68px, 6.7vw, 90px);
+}
+
+article.challenge-card.design-challenge-v2 .command-image {
+  width: 100% !important;
+  max-width: none;
+  height: auto;
+  filter: none;
+}
+
+article.challenge-card.design-challenge-v2 .command-placeholder {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: clamp(54px, 6.5vw, 78px) !important;
+  color: transparent !important;
+  background: url("diseño de niveles/DESAFIO 2/tarjeta interrogracion.png") center / contain no-repeat !important;
+}
+
+article.challenge-card.design-challenge-v2 .sequence-slot.command-card.is-selected,
+article.challenge-card.design-challenge-v2 .sequence-slot.command-card.is-drag-over {
+  outline: 4px solid rgba(19, 205, 224, 0.55);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+article.challenge-card.design-challenge-v2 .sequence-slot.command-card.is-wrong {
+  outline-color: rgba(226, 83, 83, 0.8);
+}
+
+article.challenge-card.design-challenge-v2 .rain-helper {
+  position: absolute !important;
+  right: clamp(-74px, -4vw, -24px) !important;
+  bottom: clamp(-108px, -13dvh, -62px) !important;
+  z-index: 2;
+  display: block;
+  width: clamp(170px, 18vw, 300px);
+  min-width: 0;
+  transform: none !important;
+}
+
+.design-d2-helper {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+article.challenge-card.design-challenge-v2 > .challenge-actions {
+  position: relative;
+  z-index: 4;
+  width: min(100%, 600px) !important;
+  margin: 0 auto 0 clamp(370px, 35vw, 560px) !important;
+  justify-content: center;
+  gap: clamp(18px, 2.6vw, 38px);
+}
+
+article.challenge-card.design-challenge-v2 .primary-action,
+article.challenge-card.design-challenge-v2 .secondary-action {
+  width: clamp(160px, 17vw, 240px) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  aspect-ratio: 4 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  color: transparent !important;
+  background-color: transparent !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v2 .primary-action {
+  background-image: url("diseño de niveles/DESAFIO 2/boton turqeusa.png") !important;
+}
+
+article.challenge-card.design-challenge-v2 .secondary-action {
+  background-image: url("diseño de niveles/DESAFIO 2/boton blanco.png") !important;
+}
+
+.design-d2-logo {
+  position: fixed;
+  left: clamp(24px, 4.6vw, 72px);
+  bottom: clamp(12px, 2.4dvh, 26px);
+  z-index: 3;
+  width: clamp(170px, 18vw, 300px);
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 6px rgba(88, 89, 91, 0.22));
+}
+
+article.challenge-card.design-challenge-v2 > .challenge-message {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  article.challenge-card.design-challenge-v2 {
+    height: auto !important;
+    min-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-masthead {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    min-height: 130px;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-title {
+    max-height: 72px;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-consigna {
+    max-height: 72px;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-play-layout {
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+    gap: 20px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .sequence-panel {
+    max-width: 620px !important;
+    margin-top: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-helper,
+  .design-d2-logo {
+    display: none;
+  }
+
+  article.challenge-card.design-challenge-v2 > .challenge-actions {
+    width: 100% !important;
+    margin: 16px auto 0 !important;
+  }
+}
+
+@media (max-width: 560px) {
+  body:has(.design-challenge-v2) .game-workspace {
+    padding: 10px 10px 16px;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-masthead {
+    min-height: 116px;
+  }
+
+  article.challenge-card.design-challenge-v2 .path-map {
+    width: min(100%, 330px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-steps,
+  article.challenge-card.design-challenge-v2 .command-actions-bank {
+    width: min(100%, 340px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .compact-sequence {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .instruction-chip {
+    width: clamp(70px, 24vw, 92px);
+  }
+
+  article.challenge-card.design-challenge-v2 .primary-action,
+  article.challenge-card.design-challenge-v2 .secondary-action {
+    width: min(42vw, 170px) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  body:has(.design-challenge-v1) .game-workspace {
+    padding: 10px 10px 16px;
+  }
+
+  .design-d1-header {
+    min-height: 86px;
+    padding-left: 0;
+  }
+
+  .design-d1-header::before {
+    display: none;
+  }
+
+  .design-challenge-v1 .path-map {
+    width: min(100%, 320px);
+  }
+
+  .design-challenge-v1 .command-steps,
+  .design-challenge-v1 .command-actions-bank {
+    width: min(100%, 340px);
+  }
+
+  .design-challenge-v1 .compact-sequence {
+    gap: 5px;
+  }
+
+  .design-challenge-v1 .instruction-chip {
+    width: clamp(70px, 24vw, 92px);
+  }
+
+  .design-challenge-v1 .primary-action,
+  .design-challenge-v1 .secondary-action {
+    width: min(42vw, 170px);
+  }
+}
+
+article.challenge-card.design-challenge-v1 {
+  height: 100%;
+  min-height: 0;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v1 .visual-sequence-layout {
+  width: min(100%, 1320px) !important;
+  max-width: 1320px !important;
+  grid-template-columns: minmax(360px, 0.88fr) minmax(520px, 1.12fr) !important;
+  gap: clamp(28px, 4.8vw, 78px) !important;
+}
+
+article.challenge-card.design-challenge-v1 .path-map {
+  width: min(100%, clamp(360px, 49dvh, 570px)) !important;
+  max-width: 570px !important;
+  aspect-ratio: 2786 / 2785 !important;
+  padding: 8.9% 9.2% 9.2% 9.4% !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background-color: transparent !important;
+  background-image: url("diseño de niveles/DESAFIO 1/Manta.png") !important;
+  background-position: center !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v1 .path-map-cell,
+article.challenge-card.design-challenge-v1 .path-map-cell.is-route,
+article.challenge-card.design-challenge-v1 .path-map-cell.is-start,
+article.challenge-card.design-challenge-v1 .path-map-cell.is-goal,
+article.challenge-card.design-challenge-v1 .path-map-cell.is-robot {
+  border: 0 !important;
+  color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v1 .path-map-cell::after {
+  display: none !important;
+}
+
+article.challenge-card.design-challenge-v1 .sequence-panel {
+  max-width: 720px !important;
+  margin-top: clamp(92px, 14.5dvh, 118px) !important;
+  gap: clamp(14px, 2.4dvh, 24px) !important;
+}
+
+article.challenge-card.design-challenge-v1 .command-section {
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background-color: transparent !important;
+  background-position: center !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v1 .command-steps {
+  aspect-ratio: 3587 / 1743 !important;
+  padding: clamp(78px, 12.7vw, 126px) clamp(24px, 3.7vw, 44px) clamp(22px, 3.2vw, 40px) !important;
+  background-image: url("diseño de niveles/DESAFIO 1/Cuadro de algoritmo.png") !important;
+}
+
+article.challenge-card.design-challenge-v1 .command-actions-bank {
+  aspect-ratio: 3587 / 941 !important;
+  padding: clamp(56px, 8.8vw, 88px) clamp(26px, 4vw, 52px) clamp(18px, 2.4vw, 30px) !important;
+  background-image: url("diseño de niveles/DESAFIO 1/Cuadro de Tarjetas de programacion.png") !important;
+}
+
+article.challenge-card.design-challenge-v1 .sequence-slot.command-card,
+article.challenge-card.design-challenge-v1 .instruction-chip {
+  min-height: 0 !important;
+  aspect-ratio: 1.08 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v1 .command-placeholder {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: clamp(54px, 6.8vw, 82px) !important;
+  color: transparent !important;
+  background: url("diseño de niveles/DESAFIO 1/Tarjeta en blanco.png") center / contain no-repeat !important;
+}
+
+article.challenge-card.design-challenge-v1 > .challenge-actions {
+  width: min(100%, 620px) !important;
+  margin: 0 !important;
+}
+
+article.challenge-card.design-challenge-v1 .primary-action,
+article.challenge-card.design-challenge-v1 .secondary-action {
+  width: clamp(160px, 17vw, 240px) !important;
+  min-height: 0 !important;
+  aspect-ratio: 4 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  color: transparent !important;
+  background-color: transparent !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v1 .primary-action {
+  background-image: url("diseño de niveles/DESAFIO 1/Boton turqueza.png") !important;
+}
+
+article.challenge-card.design-challenge-v1 .secondary-action {
+  background-image: url("diseño de niveles/DESAFIO 1/Boton blanco.png") !important;
+}
+
+@media (max-width: 980px) {
+  article.challenge-card.design-challenge-v1 {
+    height: auto !important;
+    min-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .visual-sequence-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  article.challenge-card.design-challenge-v1 > .challenge-actions {
+    width: 100% !important;
+    margin: 16px auto 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .sequence-panel {
+    margin-top: 0 !important;
+  }
+}
+
 body:has(.rain-challenge-card) .game-workspace {
   padding: clamp(14px, 2vw, 28px);
 }
@@ -6792,5 +8498,367 @@ body:has(.rain-challenge-card) .game-workspace {
     min-width: 150px;
     min-height: 42px !important;
     font-size: 0.84rem !important;
+  }
+}
+
+/* Ajuste final de escala para las referencias nuevas de Desafio 1 y 2. */
+@media (min-width: 981px) {
+  body:has(.design-challenge-v1) .game-workspace,
+  body:has(.design-challenge-v2) .game-workspace {
+    padding: 8px clamp(22px, 3vw, 46px) 8px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 {
+    width: min(100%, 1450px) !important;
+    grid-template-rows: clamp(164px, 22dvh, 182px) minmax(0, 1fr) clamp(58px, 8dvh, 70px) !important;
+    gap: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header {
+    width: min(100%, 1180px) !important;
+    padding-left: clamp(270px, 26vw, 330px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header::before {
+    width: clamp(230px, 22vw, 300px) !important;
+    bottom: -8% !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-title-image {
+    max-height: clamp(138px, 19dvh, 154px) !important;
+    object-position: left center !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .visual-sequence-layout {
+    width: min(100%, 1150px) !important;
+    max-width: 1150px !important;
+    grid-template-columns: clamp(448px, 34vw, 470px) clamp(590px, 44vw, 610px) !important;
+    gap: clamp(62px, 5.8vw, 80px) !important;
+    justify-content: center !important;
+    transform: translateY(clamp(22px, 3.6dvh, 30px)) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .path-map {
+    width: clamp(448px, 34vw, 470px) !important;
+    max-width: 470px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .sequence-panel {
+    max-width: 610px !important;
+    margin-top: 0 !important;
+    gap: clamp(16px, 2.1dvh, 22px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-steps {
+    width: 100% !important;
+    height: clamp(252px, 35dvh, 278px) !important;
+    aspect-ratio: auto !important;
+    padding: clamp(72px, 9.2dvh, 84px) clamp(26px, 3vw, 36px) clamp(18px, 2.4dvh, 28px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-actions-bank {
+    width: 100% !important;
+    max-width: 610px !important;
+    height: clamp(144px, 19dvh, 166px) !important;
+    aspect-ratio: auto !important;
+    padding: clamp(50px, 6.8dvh, 62px) clamp(28px, 3.4vw, 42px) clamp(14px, 2dvh, 20px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .instruction-chip {
+    width: clamp(78px, 7.2vw, 98px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 > .challenge-actions {
+    position: fixed !important;
+    left: clamp(150px, 17.8vw, 245px) !important;
+    bottom: clamp(12px, 1.9dvh, 18px) !important;
+    z-index: 4 !important;
+    width: clamp(510px, 44vw, 610px) !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+    gap: clamp(24px, 2.8vw, 38px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .primary-action,
+  article.challenge-card.design-challenge-v1 .secondary-action {
+    width: clamp(230px, 19.6vw, 282px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-logo {
+    width: clamp(250px, 20vw, 292px) !important;
+    right: clamp(46px, 7vw, 96px) !important;
+    bottom: clamp(12px, 1.9dvh, 18px) !important;
+    z-index: 3 !important;
+  }
+
+  article.challenge-card.design-challenge-v2 {
+    width: min(100%, 1450px) !important;
+    grid-template-rows: clamp(160px, 22dvh, 178px) minmax(0, 1fr) clamp(58px, 8dvh, 70px) !important;
+    gap: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-masthead {
+    width: min(100%, 1260px) !important;
+    grid-template-columns: clamp(360px, 29vw, 420px) minmax(760px, 1fr) !important;
+    gap: clamp(20px, 2.6vw, 36px) !important;
+    transform: translateX(clamp(34px, 4.8vw, 70px)) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-title {
+    max-height: clamp(138px, 19dvh, 160px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-consigna {
+    max-height: clamp(120px, 17dvh, 144px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-play-layout {
+    width: min(100%, 1225px) !important;
+    max-width: 1225px !important;
+    grid-template-columns: clamp(410px, 31vw, 425px) clamp(640px, 48vw, 670px) minmax(60px, 90px) !important;
+    gap: clamp(46px, 4.4vw, 62px) !important;
+    justify-content: center !important;
+    transform: translateY(clamp(14px, 2.2dvh, 20px)) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .path-map {
+    width: clamp(410px, 31vw, 425px) !important;
+    max-width: 425px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .sequence-panel {
+    max-width: 670px !important;
+    margin-top: 0 !important;
+    gap: clamp(28px, 4dvh, 36px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-steps {
+    width: 100% !important;
+    height: clamp(230px, 31.8dvh, 248px) !important;
+    aspect-ratio: auto !important;
+    padding: clamp(58px, 7.4dvh, 68px) clamp(28px, 3.1vw, 38px) clamp(18px, 2.3dvh, 26px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-actions-bank {
+    width: clamp(390px, 32vw, 430px) !important;
+    max-width: 430px !important;
+    height: clamp(146px, 20dvh, 166px) !important;
+    aspect-ratio: auto !important;
+    padding: clamp(48px, 6.7dvh, 58px) clamp(24px, 3vw, 34px) clamp(14px, 2dvh, 20px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .instruction-chip {
+    width: clamp(76px, 7vw, 96px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-helper {
+    width: clamp(330px, 29vw, 410px) !important;
+    right: clamp(26px, 5vw, 76px) !important;
+    bottom: clamp(-26px, -2dvh, -12px) !important;
+    z-index: 3 !important;
+  }
+
+  article.challenge-card.design-challenge-v2 > .challenge-actions {
+    position: fixed !important;
+    left: clamp(360px, 43.5vw, 595px) !important;
+    bottom: clamp(14px, 2.1dvh, 20px) !important;
+    z-index: 5 !important;
+    width: clamp(500px, 43vw, 600px) !important;
+    margin: 0 !important;
+    gap: clamp(24px, 2.8vw, 38px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .primary-action,
+  article.challenge-card.design-challenge-v2 .secondary-action {
+    width: clamp(230px, 19.6vw, 282px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-logo {
+    width: clamp(250px, 20vw, 292px) !important;
+    left: clamp(32px, 4.2vw, 58px) !important;
+    bottom: clamp(12px, 1.9dvh, 18px) !important;
+    z-index: 4 !important;
+  }
+}
+
+/* Override definitivo: queda despues de los estilos heredados de lluvia. */
+@media (min-width: 981px) {
+  article.challenge-card.design-challenge-v1 .design-d1-header {
+    padding-left: clamp(220px, 22vw, 285px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 > .challenge-actions {
+    bottom: 2px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-logo {
+    bottom: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-masthead {
+    width: min(100%, 1250px) !important;
+    grid-template-columns: clamp(360px, 29vw, 410px) minmax(700px, 760px) !important;
+    transform: none !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-title {
+    position: fixed !important;
+    left: clamp(78px, 8.8vw, 130px) !important;
+    top: clamp(18px, 3dvh, 30px) !important;
+    z-index: 7 !important;
+    width: clamp(340px, 29vw, 410px) !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-consigna {
+    position: fixed !important;
+    left: clamp(380px, 30.5vw, 420px) !important;
+    right: auto !important;
+    top: clamp(38px, 5.3dvh, 46px) !important;
+    z-index: 6 !important;
+    width: clamp(820px, 66vw, 900px) !important;
+    min-width: 0 !important;
+    max-width: 900px !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .sequence-panel {
+    transform: translateY(clamp(-52px, -6.5dvh, -44px)) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-helper {
+    position: fixed !important;
+    overflow: visible !important;
+    z-index: 4 !important;
+    width: clamp(390px, 33vw, 455px) !important;
+    left: clamp(800px, 60vw, 830px) !important;
+    right: auto !important;
+    bottom: clamp(-52px, -5.4dvh, -34px) !important;
+    transform: none !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-helper {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* Override final real: los obstaculos de agua del Desafio 2 no se ocultan. */
+article.challenge-card.design-challenge-v2 .rain-puddle,
+article.challenge-card.design-challenge-v2 .design-d2-puddle {
+  display: block !important;
+  width: 142% !important;
+  height: 142% !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  transform: translate(-18%, -15%) !important;
+  filter: drop-shadow(0 4px 4px rgba(88, 89, 91, 0.16)) !important;
+}
+
+article.challenge-card.design-challenge-v2 .path-map-cell.is-obstacle {
+  overflow: visible !important;
+}
+
+article.challenge-card.design-challenge-v2 .rain-goal {
+  display: block !important;
+  width: 82% !important;
+  height: 82% !important;
+  object-fit: contain !important;
+}
+
+/* Ajuste final real solo para Desafio 1: escala mas contenida. */
+@media (min-width: 981px) {
+  article.challenge-card.design-challenge-v1 {
+    grid-template-rows: 140px minmax(0, 1fr) 58px !important;
+    gap: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header {
+    width: 900px !important;
+    padding-left: 210px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-header::before {
+    width: 205px !important;
+    bottom: -6% !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-title-image {
+    max-height: 114px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .visual-sequence-layout {
+    width: 930px !important;
+    max-width: 930px !important;
+    grid-template-columns: 356px 500px !important;
+    gap: 44px !important;
+    transform: translateY(2px) !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .path-map {
+    width: 356px !important;
+    max-width: 356px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .sequence-panel {
+    max-width: 500px !important;
+    gap: 10px !important;
+    margin-top: 0 !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-steps {
+    width: 100% !important;
+    height: 204px !important;
+    aspect-ratio: auto !important;
+    padding: 55px 22px 16px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .command-actions-bank {
+    width: 100% !important;
+    max-width: 500px !important;
+    height: 112px !important;
+    aspect-ratio: auto !important;
+    padding: 36px 24px 12px !important;
+    background-image: url("diseño de niveles/DESAFIO 1/Cuadro de Tarjetas de programacion.png") !important;
+    background-position: center !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .compact-sequence,
+  article.challenge-card.design-challenge-v1 .compact-bank {
+    gap: 8px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .instruction-chip,
+  article.challenge-card.design-challenge-v1 .sequence-slot.command-card {
+    width: 64px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 > .challenge-actions {
+    position: fixed !important;
+    left: 210px !important;
+    bottom: 7px !important;
+    z-index: 8 !important;
+    width: 400px !important;
+    gap: 22px !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .primary-action,
+  article.challenge-card.design-challenge-v1 .secondary-action {
+    width: 188px !important;
+  }
+
+  article.challenge-card.design-challenge-v1 .design-d1-logo {
+    width: 205px !important;
+    right: 92px !important;
+    bottom: 8px !important;
   }
 }
