@@ -9519,29 +9519,45 @@ article.challenge-card.design-challenge-v2 .rain-goal {
 
   article.challenge-card.design-challenge-v2 {
     width: min(100%, 1360px) !important;
-    grid-template-rows: clamp(140px, 18dvh, 160px) minmax(0, 1fr) clamp(56px, 7.5dvh, 68px) !important;
+    grid-template-rows: clamp(140px, 18dvh, 160px) minmax(0, 1fr) clamp(70px, 9dvh, 84px) !important;
     gap: 0 !important;
     overflow: hidden !important;
   }
 
   article.challenge-card.design-challenge-v2 .design-d2-masthead {
+    position: relative !important;
+    display: block !important;
     width: min(100%, 1200px) !important;
-    grid-template-columns: clamp(320px, 27vw, 390px) minmax(0, 1fr) !important;
-    gap: clamp(14px, 2vw, 26px) !important;
+    height: 100% !important;
     transform: none !important;
   }
 
   article.challenge-card.design-challenge-v2 .design-d2-title,
   article.challenge-card.design-challenge-v2 .design-d2-consigna {
-    position: static !important;
-    width: 100% !important;
     height: auto !important;
     max-height: clamp(120px, 15dvh, 146px) !important;
     object-fit: contain !important;
   }
 
+  article.challenge-card.design-challenge-v2 .design-d2-title {
+    position: absolute !important;
+    left: clamp(70px, 8.4vw, 118px) !important;
+    top: clamp(4px, 1.4dvh, 12px) !important;
+    z-index: 3 !important;
+    width: clamp(310px, 31vw, 420px) !important;
+    transform: none !important;
+  }
+
   article.challenge-card.design-challenge-v2 .design-d2-consigna {
+    position: absolute !important;
+    left: clamp(300px, 25vw, 350px) !important;
+    right: clamp(22px, 3.8vw, 54px) !important;
+    top: clamp(20px, 3.6dvh, 34px) !important;
+    z-index: 2 !important;
+    width: calc(100% - clamp(300px, 25vw, 350px) - clamp(22px, 3.8vw, 54px)) !important;
+    max-width: none !important;
     object-position: left center !important;
+    transform: none !important;
   }
 
   article.challenge-card.design-challenge-v2 .rain-play-layout {
@@ -9585,7 +9601,7 @@ article.challenge-card.design-challenge-v2 .rain-goal {
     max-width: 410px !important;
     height: auto !important;
     aspect-ratio: 2046 / 940 !important;
-    padding: clamp(44px, 6dvh, 58px) clamp(22px, 3vw, 34px) clamp(14px, 2dvh, 20px) !important;
+    padding: clamp(66px, 8.4dvh, 78px) clamp(22px, 3vw, 34px) clamp(8px, 1.1dvh, 14px) !important;
   }
 
   article.challenge-card.design-challenge-v2 .compact-sequence,
@@ -9612,15 +9628,40 @@ article.challenge-card.design-challenge-v2 .rain-goal {
     overflow: hidden !important;
   }
 
-  article.challenge-card.design-challenge-v2 .rain-helper,
+  article.challenge-card.design-challenge-v2 .rain-helper {
+    position: fixed !important;
+    display: block !important;
+    overflow: visible !important;
+    z-index: 6 !important;
+    width: clamp(310px, 30vw, 405px) !important;
+    right: clamp(-8px, 0.8vw, 14px) !important;
+    bottom: clamp(10px, 2.6dvh, 26px) !important;
+    transform: none !important;
+    pointer-events: none !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-helper {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
   article.challenge-card.design-challenge-v2 .design-d2-logo {
-    display: none !important;
+    position: fixed !important;
+    display: block !important;
+    z-index: 6 !important;
+    width: clamp(215px, 20.5vw, 292px) !important;
+    left: clamp(34px, 4.5vw, 62px) !important;
+    bottom: clamp(8px, 1.5dvh, 16px) !important;
+    height: auto !important;
+    pointer-events: none !important;
   }
 
   article.challenge-card.design-challenge-v2 > .challenge-actions {
     position: static !important;
     width: min(100%, 520px) !important;
-    margin: 14px auto 0 !important;
+    margin: 4px auto 0 !important;
     justify-content: center !important;
     gap: clamp(16px, 2.2vw, 28px) !important;
   }
@@ -9633,58 +9674,194 @@ article.challenge-card.design-challenge-v2 .rain-goal {
 
 @media (max-width: 980px) {
   body:has(.design-challenge-v2) .game-workspace {
-    padding: 8px 10px 16px !important;
+    padding: clamp(4px, 1dvh, 8px) clamp(6px, 1.8vw, 14px) !important;
+    overflow: hidden !important;
   }
 
   article.challenge-card.design-challenge-v2 {
-    height: auto !important;
-    min-height: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    overflow-y: auto !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-rows: clamp(92px, 16dvh, 128px) minmax(0, 1fr) clamp(40px, 6dvh, 48px) !important;
+    gap: clamp(4px, 1dvh, 8px) !important;
+    overflow: hidden !important;
   }
 
   article.challenge-card.design-challenge-v2 .design-d2-masthead {
-    grid-template-columns: 1fr !important;
-    min-height: 116px !important;
-    gap: 6px !important;
+    width: min(100%, 920px) !important;
+    min-height: 0 !important;
+    grid-template-columns: minmax(120px, 0.95fr) minmax(160px, 1.05fr) !important;
+    gap: clamp(6px, 1.6vw, 14px) !important;
+    align-items: center !important;
   }
 
   article.challenge-card.design-challenge-v2 .design-d2-title,
   article.challenge-card.design-challenge-v2 .design-d2-consigna {
-    max-height: 72px !important;
+    max-height: clamp(58px, 12dvh, 86px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-play-layout {
+    width: min(100%, 880px) !important;
+    grid-template-columns: minmax(160px, 0.9fr) minmax(220px, 1.1fr) !important;
+    justify-items: center !important;
+    align-items: start !important;
+    gap: clamp(6px, 1.8vw, 16px) !important;
+    overflow: hidden !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .path-map {
+    width: min(42vw, 43dvh, 300px) !important;
+    max-width: 300px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .sequence-panel {
+    width: 100% !important;
+    max-width: min(56vw, 430px) !important;
+    margin-top: 0 !important;
+    gap: clamp(4px, 0.9dvh, 8px) !important;
+    transform: none !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-steps {
+    width: 100% !important;
+    height: clamp(142px, 27dvh, 190px) !important;
+    aspect-ratio: auto !important;
+    padding: clamp(34px, 5.7dvh, 46px) clamp(10px, 2.4vw, 18px) clamp(8px, 1.7dvh, 14px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .command-actions-bank {
+    width: min(100%, 290px) !important;
+    height: clamp(78px, 14dvh, 100px) !important;
+    aspect-ratio: auto !important;
+    padding: clamp(34px, 5.9dvh, 44px) clamp(10px, 2.4vw, 18px) clamp(6px, 1dvh, 10px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .compact-sequence {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: clamp(4px, 1vw, 8px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .compact-bank {
+    gap: clamp(4px, 1.2vw, 8px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .instruction-chip,
+  article.challenge-card.design-challenge-v2 .sequence-slot.command-card {
+    width: clamp(36px, 8vw, 54px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-helper {
+    position: fixed !important;
+    display: block !important;
+    z-index: 6 !important;
+    width: clamp(146px, 28vw, 238px) !important;
+    right: clamp(4px, 1.2vw, 12px) !important;
+    bottom: clamp(30px, 5.2dvh, 44px) !important;
+    pointer-events: none !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-helper {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-logo {
+    position: fixed !important;
+    display: block !important;
+    z-index: 6 !important;
+    width: clamp(100px, 24vw, 170px) !important;
+    left: clamp(8px, 2.5vw, 20px) !important;
+    bottom: clamp(4px, 1dvh, 8px) !important;
+    pointer-events: none !important;
+  }
+
+  article.challenge-card.design-challenge-v2 > .challenge-actions {
+    position: static !important;
+    width: min(68vw, 320px) !important;
+    margin: 0 auto !important;
+    gap: clamp(8px, 2vw, 14px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .primary-action,
+  article.challenge-card.design-challenge-v2 .secondary-action {
+    width: clamp(96px, 25vw, 142px) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  article.challenge-card.design-challenge-v2 {
+    grid-template-rows: clamp(118px, 16dvh, 136px) minmax(0, 1fr) clamp(40px, 5.6dvh, 48px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-masthead {
+    position: relative !important;
+    display: block !important;
+    grid-template-columns: 1fr !important;
+    gap: 2px !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-title {
+    position: absolute !important;
+    left: 50% !important;
+    top: 0 !important;
+    z-index: 3 !important;
+    width: clamp(205px, 60vw, 250px) !important;
+    max-height: clamp(62px, 8.6dvh, 76px) !important;
+    transform: translateX(-50%) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .design-d2-consigna {
+    position: absolute !important;
+    left: 8px !important;
+    right: 8px !important;
+    top: clamp(56px, 7.4dvh, 64px) !important;
+    z-index: 2 !important;
+    width: calc(100% - 16px) !important;
+    max-height: clamp(42px, 6dvh, 50px) !important;
+    transform: none !important;
   }
 
   article.challenge-card.design-challenge-v2 .rain-play-layout {
     grid-template-columns: 1fr !important;
-    justify-items: center !important;
-    gap: 16px !important;
+    gap: clamp(6px, 1dvh, 10px) !important;
   }
 
   article.challenge-card.design-challenge-v2 .path-map {
-    width: min(100%, 320px) !important;
-    max-width: 320px !important;
+    width: min(72vw, 29dvh, 280px) !important;
+    max-width: 280px !important;
   }
 
   article.challenge-card.design-challenge-v2 .sequence-panel {
-    max-width: 620px !important;
-    margin-top: 0 !important;
-    transform: none !important;
+    max-width: min(88vw, 340px) !important;
   }
 
-  article.challenge-card.design-challenge-v2 .command-steps,
+  article.challenge-card.design-challenge-v2 .command-steps {
+    height: clamp(150px, 21dvh, 178px) !important;
+    padding: clamp(32px, 4.7dvh, 42px) 12px 10px !important;
+  }
+
   article.challenge-card.design-challenge-v2 .command-actions-bank {
-    width: min(100%, 340px) !important;
+    width: min(100%, 280px) !important;
+    height: clamp(74px, 11.5dvh, 92px) !important;
+    padding: clamp(32px, 5dvh, 40px) 12px 6px !important;
   }
 
-  article.challenge-card.design-challenge-v2 .rain-helper,
+  article.challenge-card.design-challenge-v2 .instruction-chip,
+  article.challenge-card.design-challenge-v2 .sequence-slot.command-card {
+    width: clamp(42px, 13vw, 58px) !important;
+  }
+
+  article.challenge-card.design-challenge-v2 .rain-helper {
+    width: clamp(136px, 39vw, 172px) !important;
+    right: 0 !important;
+    bottom: clamp(32px, 5dvh, 42px) !important;
+  }
+
   article.challenge-card.design-challenge-v2 .design-d2-logo {
-    display: none !important;
-  }
-
-  article.challenge-card.design-challenge-v2 > .challenge-actions {
-    width: 100% !important;
-    margin: 16px auto 0 !important;
+    width: clamp(70px, 22vw, 86px) !important;
+    left: 6px !important;
+    bottom: 6px !important;
   }
 }
 

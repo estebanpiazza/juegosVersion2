@@ -1930,7 +1930,6 @@ function renderBalanceChallengeV2(id = 2) {
         if (routeCells.has(key)) cell.classList.add("is-route");
         if (obstacles.has(key)) {
           cell.classList.add("is-obstacle");
-          cell.innerHTML = `<img class="rain-puddle design-d2-puddle" src="${DESIGN_D2_ASSET_BASE}/charco.png" alt="" />`;
         }
         if (key === route[0]) {
           cell.classList.add("is-start");
