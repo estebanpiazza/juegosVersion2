@@ -2805,6 +2805,11 @@ button:disabled {
   font-size: clamp(1.25rem, 2vw, 1.7rem);
 }
 
+.sort-current-icon {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 1;
+}
+
 .sort-bins,
 .sort-progress {
   display: grid;
@@ -2816,10 +2821,35 @@ button:disabled {
   min-height: 64px;
   border: 0;
   border-radius: 12px;
+  display: grid;
+  place-items: center;
+  gap: 4px;
   color: var(--color-primary);
   background: #d8f8fd;
   font-weight: 900;
   cursor: pointer;
+}
+
+.sort-bins button span {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+.sort-bin-azul span {
+  background: #0A7ABE;
+}
+
+.sort-bin-amarillo span {
+  background: #F5920A;
+}
+
+.sort-bin-verde span {
+  background: #25D366;
 }
 
 .sort-progress span {
@@ -3027,6 +3057,14 @@ button:disabled {
   font-size: 2rem;
 }
 
+.mini-choice-card.is-icon-only .command-label {
+  display: none;
+}
+
+.mini-choice-card.is-icon-only .command-image {
+  width: clamp(62px, 9vw, 88px);
+}
+
 .mini-flip-card.is-open,
 .mini-flip-card.is-matched,
 .bug-program button.is-correct {
@@ -3130,6 +3168,13 @@ button:disabled {
   place-items: center;
   background: var(--color-white);
   font-size: 2.4rem;
+}
+
+.event-card p {
+  margin: 4px 0 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  line-height: 1.15;
 }
 
 .symbol-clues {

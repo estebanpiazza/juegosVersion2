@@ -5,244 +5,323 @@
   "desafios": [
     {
       "id": "n4-s1-d1",
-      "titulo": "Secuencia de comandos",
+      "titulo": "\u00a1A programar!",
       "tipo": "secuenciacion-guiada",
       "inspiracion": "Code.org inicial",
-      "consigna": "AYUDALO. EL ROBOT CAMINA DERECHO, PERO PARA GANAR TIENE QUE DOBLAR. PARA QUE LADO TIENE QUE MIRAR? ELIGE LA FLECHA.",
+      "consigna": "\u00a1A programar! Nano avanza, pero tiene que girar. Observa el camino y elige la tarjeta correcta para completar la instrucci\u00f3n. \u00a1Buena suerte!",
       "objetivo": "Practicar secuencias de instrucciones: avanzar, girar derecha y girar izquierda.",
       "pantalla": "Mapa 6x6 con camino resaltado y tira de instrucciones con huecos vacios.",
       "interaccion": "Seleccionar cada hueco y asignar la accion correcta.",
       "feedback": "Confirma si el robot sigue el camino y da pistas sobre los pasos de giro.",
-      "variantes": ["Accion distractora extra", "Resolver con menos pasos", "Mostrar previsualizacion del recorrido"]
+      "variantes": [
+        "Accion distractora extra",
+        "Resolver con menos pasos",
+        "Mostrar previsualizacion del recorrido"
+      ]
     },
     {
       "id": "n4-s1-d2",
-      "titulo": "Depura el programa",
+      "titulo": "\u00a1Alerta de lluvia!",
       "tipo": "depuracion-inicial",
       "inspiracion": "Pensamiento computacional",
-      "consigna": "Completa el camino con las flechas que faltan. Haz que el robot doble y camine para llegar a la bandera sin tocar los charcos. Tu eres el capitan del robot.",
+      "consigna": "\u00a1Alerta de lluvia! Nano no sabe c\u00f3mo llegar. Aplica la l\u00f3gica y elige las tarjetas para completar el algoritmo. \u00a1Recuerda ayudarlo a avanzar y girar sin pisar los charcos que son obst\u00e1culos!",
       "objetivo": "Reconocer y corregir errores en secuencias cortas.",
       "pantalla": "Lista de lineas de programa con un error y banco de reemplazos.",
       "interaccion": "Seleccionar una linea y asignar la accion correcta.",
       "feedback": "Confirma si el algoritmo fue depurado y da pista puntual en la linea de giro.",
-      "variantes": ["Dos lineas incorrectas", "Cambios limitados", "Agregar simulacion de ejecucion"]
+      "variantes": [
+        "Dos lineas incorrectas",
+        "Cambios limitados",
+        "Agregar simulacion de ejecucion"
+      ]
     },
     {
       "id": "n4-s1-d3",
-      "titulo": "Programa al robot",
+      "titulo": "\u00a1Misi\u00f3n laberinto!",
       "tipo": "programacion-por-bloques",
       "inspiracion": "Code.org",
-      "consigna": "Cuidado con el agua. Programa al robot para llegar al tesoro: carga la bateria y evita los charcos para no mojarlo.",
+      "consigna": "\u00a1Misi\u00f3n laberinto! Nano te necesita. Crea la secuencia exacta: pasa por la bater\u00eda para obtener energ\u00eda, llega al tesoro y \u00a1esquiva los obst\u00e1culos!",
       "objetivo": "Practicar secuenciacion, orientacion espacial, depuracion y conteo de pasos.",
       "pantalla": "Grilla de 6 x 6 con robot, tesoro, obstaculos y casilleros especiales.",
       "interaccion": "Armar un programa con bloques: avanzar, girar derecha y girar izquierda.",
       "feedback": "El robot ejecuta la secuencia paso a paso. Si choca, se detiene y marca el bloque donde fallo.",
-      "variantes": ["Maximo de 8 bloques", "Visitar numeros en orden"]
+      "variantes": [
+        "Maximo de 8 bloques",
+        "Visitar numeros en orden"
+      ]
     },
     {
       "id": "n4-s1-d4",
-      "titulo": "Patrones de algoritmo",
+      "titulo": "\u00a1A descubrir el patr\u00f3n!",
       "tipo": "patrones-de-comandos",
       "inspiracion": "Mixto",
-      "consigna": "Completa el patron del robot. Mira con atencion como se mueve y repite el mismo orden. Que falta para terminar la serie?",
+      "consigna": "\u00a1A descubrir el patr\u00f3n! Completa la serie l\u00f3gica y elige las tarjetas correctas para terminar el algoritmo. Observa los pasos de Nano: avanzar, avanzar y girar.",
       "objetivo": "Reconocer repeticion en algoritmos cortos.",
       "pantalla": "Cinta con acciones del robot, espacios vacios y banco de comandos.",
       "interaccion": "Elegir comandos del banco y colocarlos en los huecos.",
       "feedback": "Valida el patron correcto y da pista sobre el bloque repetido.",
-      "variantes": ["Patron mas largo", "Mezclar comandos y colores", "Inventar el siguiente bloque"]
+      "variantes": [
+        "Patron mas largo",
+        "Mezclar comandos y colores",
+        "Inventar el siguiente bloque"
+      ]
     },
     {
       "id": "n4-s1-d5",
-      "titulo": "Actividad a revisar",
+      "titulo": "VER",
       "tipo": "mapa-en-grilla",
       "inspiracion": "Pensamiento computacional",
-      "consigna": "Actividad a revisar: inviable para primer grado.",
+      "consigna": "VER",
       "observacion": "INVIABLE PARA PRIMER GRADO",
       "objetivo": "Planear rutas simples usando grillas de filas y columnas.",
       "pantalla": "Mapa en grilla A-F y 1-6 con tarjetas: inicio, bateria, llave y meta.",
       "interaccion": "Seleccionar cada punto y ubicarlo en su coordenada.",
       "feedback": "Resalta aciertos y da pistas cuando se confunde columna con fila.",
-      "variantes": ["Trazar ruta completa", "Cambiar orientacion del mapa", "Intentos limitados"]
+      "variantes": [
+        "Trazar ruta completa",
+        "Cambiar orientacion del mapa",
+        "Intentos limitados"
+      ]
     },
     {
       "id": "n4-s1-d6",
-      "titulo": "Laberinto con giros",
+      "titulo": "\u00a1Misi\u00f3n laberinto!",
       "tipo": "laberinto-flechas",
       "inspiracion": "Laberintos de programacion",
-      "consigna": "Ayuda al robot a encontrar la salida. Elige los pasitos para armar el camino, juntar las pilas y no tocar las cruces rojas. A jugar.",
+      "consigna": "\u00a1Misi\u00f3n laberinto! Crea tu propia secuencia: ayuda a Nano a pasar por la bater\u00eda para cargar energ\u00eda y encuentra la salida sin tocar los obst\u00e1culos. \u00a1A jugar!",
       "objetivo": "Planear una ruta usando comandos relativos: avanzar, girar derecha y girar izquierda.",
       "pantalla": "Grilla 6x6 con paredes, antenas, inicio, salida y espacios de comandos.",
       "interaccion": "Completar cada paso con avanzar o un giro y ejecutar el recorrido.",
       "feedback": "El robot gira o avanza hasta el primer paso que debe revisarse.",
-      "variantes": ["Paredes nuevas", "Antenas como hitos", "Ruta sin camino resaltado"]
+      "variantes": [
+        "Paredes nuevas",
+        "Antenas como hitos",
+        "Ruta sin camino resaltado"
+      ]
     },
     {
       "id": "n4-s1-d7",
-      "titulo": "Ordena la rutina",
+      "titulo": "Taller de Nano",
       "tipo": "ordenar-algoritmo",
       "inspiracion": "Algoritmos cotidianos",
-      "consigna": "Mira el recorrido del taller. Observa con atencion la secuencia para conocer el camino del robot. Coloca las tarjetas en el mismo orden para que el robot pueda encontrar la salida.",
+      "consigna": "Nano te necesita en el taller. Observa con atenci\u00f3n y coloca las tarjetas en el mismo orden. \u00a1Completa la secuencia l\u00f3gica!",
       "objetivo": "Comprender que un algoritmo tiene un orden logico usando una guia visual de acciones.",
       "pantalla": "Recorrido visual del taller, banco de tarjetas con iconos y cinco espacios numerados.",
       "interaccion": "Tocar tarjetas para ubicarlas en la secuencia y tocar espacios para quitarlas.",
       "feedback": "Marca el primer paso que no respeta el orden esperado.",
-      "variantes": ["Rutina de encendido", "Rutina de carga", "Rutina de salida"]
+      "variantes": [
+        "Rutina de encendido",
+        "Rutina de carga",
+        "Rutina de salida"
+      ]
     },
     {
       "id": "n4-s1-d8",
-      "titulo": "Clasifica el taller",
+      "titulo": "\u00a1Misi\u00f3n EcoNano!",
       "tipo": "clasificacion-reglas",
       "inspiracion": "Reglas de clasificacion",
-      "consigna": "Vamos a ordenar el taller. Mira la tarjeta de arriba y elige el cajon donde va guardada. Es de Energia, es una Herramienta o es una Alerta? A acomodar.",
-      "objetivo": "Aplicar reglas simples para separar informacion por categoria.",
-      "pantalla": "Tarjeta actual, depositos de clasificacion y progreso.",
-      "interaccion": "Elegir el deposito correcto para cada tarjeta.",
-      "feedback": "Confirma el deposito o da una pista sobre la regla.",
-      "variantes": ["Clasificar por funcion", "Clasificar por color", "Clasificar por riesgo"]
+      "consigna": "\u00a1Misi\u00f3n EcoNano! Mira el objeto y elige el contenedor donde va guardado. \u00bfEs papel, pl\u00e1stico o metal? \u00a1A reciclar!",
+      "objetivo": "Clasificar residuos por material: papel, pl\u00e1stico o metal.",
+      "pantalla": "Objeto a reciclar y tres tachos de colores: verde, amarillo y azul.",
+      "interaccion": "Elegir el tacho correcto para cada objeto.",
+      "feedback": "Confirma el material correcto o da una pista sobre el residuo.",
+      "variantes": [
+        "Clasificar por funcion",
+        "Clasificar por color",
+        "Clasificar por riesgo"
+      ]
     },
     {
       "id": "n4-s1-d9",
-      "titulo": "Memoria de luces",
+      "titulo": "\u00a1Alerta de colores!",
       "tipo": "memoria-secuencia",
       "inspiracion": "Secuencias tipo Simon",
-      "consigna": "Mira con mucha atencion. Arriba se encendio un camino de colores. Puedes repetirlo tocando los botones de abajo? Copia los colores en el mismo orden. Tu puedes.",
+      "consigna": "\u00a1Alerta de colores! Arriba se encendi\u00f3 un patr\u00f3n luminoso. Mira con mucha atenci\u00f3n y ayuda a Nano tocando los botones de abajo para crear la misma secuencia. \u00a1Copia los colores en el orden exacto!",
       "objetivo": "Entrenar memoria de trabajo, orden y lectura de secuencias.",
       "pantalla": "Modelo temporal, espacios de respuesta y botones de colores.",
       "interaccion": "Observar la secuencia y tocar las luces para repetirla.",
       "feedback": "Valida cada luz en el orden en que fue ingresada.",
-      "variantes": ["Secuencia mas larga", "Modelo visible menos tiempo", "Mas colores"]
+      "variantes": [
+        "Secuencia mas larga",
+        "Modelo visible menos tiempo",
+        "Mas colores"
+      ]
     },
     {
       "id": "n4-s1-d10",
-      "titulo": "Elige el comando",
+      "titulo": "\u00a1Alerta de sensores!",
       "tipo": "elige-comando",
       "inspiracion": "Decisiones simples",
-      "consigna": "Observa con atencion lo que necesita el robot y elige la accion que lo ayude a cumplir su mision. Que debe hacer ahora? Tu puedes.",
+      "consigna": "\u00a1Alerta de sensores! Nano detect\u00f3 algo en su camino. Observa con atenci\u00f3n y descubre qu\u00e9 necesita. Elige el comando correcto para que pueda continuar. \u00a1A programar!",
       "objetivo": "Relacionar una situacion visual con una accion concreta del robot.",
       "pantalla": "Tarjeta de situacion, cuatro comandos con emojis y progreso por escenas.",
       "interaccion": "Elegir avanzar, girar derecha, girar izquierda o esperar segun la pista.",
       "feedback": "Confirma cada decision correcta y avanza a la siguiente situacion.",
-      "variantes": ["Mas situaciones", "Cambiar obstaculos", "Agregar bateria o puerta"]
+      "variantes": [
+        "Mas situaciones",
+        "Cambiar obstaculos",
+        "Agregar bateria o puerta"
+      ]
     },
     {
       "id": "n4-s1-d11",
-      "titulo": "Parejas del robot",
+      "titulo": "\u00a1Misi\u00f3n memoria!",
       "tipo": "parejas-robot",
       "inspiracion": "Memoria visual",
-      "consigna": "Busca los comandos y objetos iguales. Toca dos tarjetas para abrirlas y encuentra todas las parejas del robot.",
+      "consigna": "\u00a1Misi\u00f3n memoria! Busca los comandos y objetos iguales. Toca dos tarjetas para abrirlas y encuentra todas las parejas de Nano. \u00a1A jugar!",
       "objetivo": "Practicar memoria visual y reconocimiento de simbolos.",
       "pantalla": "Ocho tarjetas boca abajo con comandos y objetos repetidos.",
       "interaccion": "Tocar dos tarjetas por turno para encontrar pares.",
       "feedback": "Deja abiertas las parejas correctas y oculta las incorrectas.",
-      "variantes": ["Mas parejas", "Solo comandos", "Objetos del taller"]
+      "variantes": [
+        "Mas parejas",
+        "Solo comandos",
+        "Objetos del taller"
+      ]
     },
     {
       "id": "n4-s1-d12",
-      "titulo": "Cuenta baterias",
+      "titulo": "\u00a1Misi\u00f3n energ\u00eda!",
       "tipo": "conteo-baterias",
       "inspiracion": "Conteo inicial",
-      "consigna": "Mira la fila. Cuenta cuantas baterias hay y toca el numero correcto para cargarlas todas.",
+      "consigna": "\u00a1Misi\u00f3n energ\u00eda! Mira la fila con atenci\u00f3n. Cuenta cu\u00e1ntas bater\u00edas hay y toca el n\u00famero correcto para cargar a Nano. \u00a1A sumar!",
       "objetivo": "Relacionar cantidad visual con numero.",
       "pantalla": "Filas cortas con baterias y espacios vacios.",
       "interaccion": "Elegir una respuesta numerica.",
       "feedback": "Confirma el conteo y pasa a otra fila.",
-      "variantes": ["Filas mas largas", "Mas objetos distractores", "Conteo por grupos"]
+      "variantes": [
+        "Filas mas largas",
+        "Mas objetos distractores",
+        "Conteo por grupos"
+      ]
     },
     {
       "id": "n4-s1-d13",
-      "titulo": "Laberinto de baterias",
+      "titulo": "\u00a1Misi\u00f3n energ\u00eda!",
       "tipo": "laberinto-baterias",
       "inspiracion": "Rutas con objetivos",
-      "consigna": "El robot necesita energia. Mira hacia donde apunta y elige las acciones para atrapar las baterias. Llevalo hasta el final del camino.",
+      "consigna": "\u00a1Misi\u00f3n energ\u00eda! Nano necesita energ\u00eda. Analiza el camino y elige los comandos para atrapar las bater\u00edas. \u00a1Ll\u00e9valo hasta el final!",
       "objetivo": "Planear una ruta nueva usando comandos relativos del robot y evitando paredes.",
       "pantalla": "Grilla 6x6 con inicio, salida, paredes y baterias.",
       "interaccion": "Completar una secuencia con avanzar y giros, y ejecutarla.",
       "feedback": "Anima la ruta hasta el primer paso que necesita revision.",
-      "variantes": ["Mas baterias", "Menos ruta marcada", "Otro punto de inicio"]
+      "variantes": [
+        "Mas baterias",
+        "Menos ruta marcada",
+        "Otro punto de inicio"
+      ]
     },
     {
       "id": "n4-s1-d14",
-      "titulo": "Espejo de patron",
+      "titulo": "\u00a1Misi\u00f3n espejo!",
       "tipo": "espejo-patron",
       "inspiracion": "Patrones simetricos",
-      "consigna": "¡Mira el patrón! Completa el lado derecho como si fuera un espejo. Copia los comandos y objetos en el orden correcto",
+      "consigna": "\u00a1Misi\u00f3n espejo! El sistema de Nano necesita equilibrio. Mira el patr\u00f3n de la pantalla y completa el lado derecho como si fuera un espejo. \u00a1Copia los comandos y objetos en el orden correcto para resolver el algoritmo!",
       "objetivo": "Reconocer que un patron puede invertirse.",
       "pantalla": "Fila izquierda, linea de espejo y huecos a completar.",
       "interaccion": "Elegir simbolos para completar el lado derecho.",
       "feedback": "Marca si el orden del espejo no coincide.",
-      "variantes": ["Menos simbolos", "Mas simbolos", "Espejo vertical"]
+      "variantes": [
+        "Menos simbolos",
+        "Mas simbolos",
+        "Espejo vertical"
+      ]
     },
     {
       "id": "n4-s1-d15",
-      "titulo": "Evento y accion",
+      "titulo": "Parejas correctas",
       "tipo": "evento-accion",
       "inspiracion": "Si-entonces inicial",
-      "consigna": "Observa el evento y elige la acción que debe realizar el robot. ¡Conecta la respuesta correcta!",
-      "objetivo": "Relacionar una condicion simple con una accion.",
-      "pantalla": "Tarjeta de evento y banco de acciones.",
-      "interaccion": "Elegir tomar, parar o girar.",
-      "feedback": "Confirma la regla correcta y avanza a otro evento.",
-      "variantes": ["Mas eventos", "Eventos con colores", "Acciones con comandos"]
+      "consigna": "Observa la situaci\u00f3n y une las parejas correctas. \u00a1A jugar!",
+      "objetivo": "Relacionar problemas visuales cotidianos con su soluci\u00f3n.",
+      "pantalla": "Problema visual y opciones de soluci\u00f3n: paraguas, abrigo, cepillo y agua.",
+      "interaccion": "Elegir la soluci\u00f3n que corresponde a cada situaci\u00f3n.",
+      "feedback": "Confirma la pareja correcta y avanza al siguiente problema.",
+      "variantes": [
+        "Mas eventos",
+        "Eventos con colores",
+        "Acciones con comandos"
+      ]
     },
     {
       "id": "n4-s1-d16",
-      "titulo": "Encuentra el intruso",
+      "titulo": "Intruso visual",
       "tipo": "intruso-secuencia",
       "inspiracion": "Clasificacion visual",
-      "consigna": "Observa los comandos y objetos. Encuentra la acción que no pertenece al grupo y tocala para sacarla",
-      "objetivo": "Comparar elementos y detectar diferencias simples.",
-      "pantalla": "Grupos de cuatro tarjetas con una distinta.",
-      "interaccion": "Tocar la tarjeta que no pertenece al grupo.",
-      "feedback": "Indica si la tarjeta elegida es el intruso.",
-      "variantes": ["Comandos", "Objetos", "Obstaculos"]
+      "consigna": "Observa los dibujos con atenci\u00f3n y encuentra el que es diferente. \u00a1T\u00f3calo para sacarlo del grupo!",
+      "objetivo": "Comparar filas de cuatro elementos y detectar el intruso.",
+      "pantalla": "Cuatro grupos: comandos de movimiento, hardware, manta La Ciudad y emociones de Nano.",
+      "interaccion": "Tocar el elemento diferente en cada grupo.",
+      "feedback": "Indica si el elemento elegido es el intruso.",
+      "variantes": [
+        "Comandos",
+        "Objetos",
+        "Obstaculos"
+      ]
     },
     {
       "id": "n4-s1-d17",
-      "titulo": "Codigo de simbolos",
+      "titulo": "\u00a1Misi\u00f3n Secreta!",
       "tipo": "codigo-simbolos",
       "inspiracion": "Conteo y codigo",
-      "consigna": "¡Hay un código escondido en estos objetos! Contalos en orden y armá la clave para que el robot pueda avanzar",
-      "objetivo": "Transformar cantidades pequenas en un codigo de tres numeros.",
-      "pantalla": "Tres grupos de simbolos, display y teclado numerico.",
-      "interaccion": "Ingresar los numeros que resultan de contar cada grupo.",
-      "feedback": "Valida si el codigo coincide con las cantidades.",
-      "variantes": ["Otros simbolos", "Codigo mas corto", "Grupos desordenados"]
+      "consigna": "\u00a1Misi\u00f3n Secreta! Nano necesita una clave para avanzar. Observa los dibujos, cuenta cu\u00e1ntos hay en cada grupo y toca los n\u00fameros en orden para armar el c\u00f3digo. \u00a1T\u00fa puedes!",
+      "objetivo": "Contar bater\u00edas, una tuerca o engranaje y destornilladores para formar una clave.",
+      "pantalla": "Tres grupos de objetos con teclado num\u00e9rico.",
+      "interaccion": "Ingresar los n\u00fameros en orden para armar el c\u00f3digo.",
+      "feedback": "Valida si el c\u00f3digo coincide con las cantidades.",
+      "variantes": [
+        "Otros simbolos",
+        "Codigo mas corto",
+        "Grupos desordenados"
+      ]
     },
     {
       "id": "n4-s1-d18",
-      "titulo": "Ruta de colores",
+      "titulo": "\u00a1Misi\u00f3n de exploraci\u00f3n!",
       "tipo": "ruta-colores",
       "inspiracion": "Secuencias visuales",
-      "consigna": "Busca las baldosas numeradas y toca el camino en orden: 1, 2, 3, 4 y 5.",
+      "consigna": "\u00a1Misi\u00f3n de exploraci\u00f3n! Nano est\u00e1 listo para avanzar. Observa los n\u00fameros y toca las baldosas en orden del 1 al 5. \u00a1Sigue la secuencia correcta!",
       "objetivo": "Seguir una ruta espacial en una grilla usando numeros como guia.",
       "pantalla": "Grilla de baldosas de colores con una ruta numerada y baldosas distractoras.",
       "interaccion": "Tocar las baldosas numeradas en orden creciente.",
       "feedback": "Confirma cada paso correcto y marca cuando se toca una baldosa antes de tiempo.",
-      "variantes": ["Mas baldosas", "Ruta mas larga", "Numeros parcialmente ocultos"]
+      "variantes": [
+        "Mas baldosas",
+        "Ruta mas larga",
+        "Numeros parcialmente ocultos"
+      ]
     },
     {
       "id": "n4-s1-d19",
-      "titulo": "Ordena por tamano",
+      "titulo": "\u00a1Misi\u00f3n espacial!",
       "tipo": "orden-tamano",
       "inspiracion": "Ordenamiento inicial",
-      "consigna": "Ordena las baterias de chica a grande.",
-      "objetivo": "Practicar ordenamiento por atributo visual.",
-      "pantalla": "Tres tarjetas de baterias con tamanos diferentes y espacios de orden.",
-      "interaccion": "Tocar las baterias en orden creciente.",
-      "feedback": "Valida si el orden respeta chica, mediana y grande.",
-      "variantes": ["Orden inverso", "Mas tamanos", "Otros objetos"]
+      "consigna": "\u00a1Misi\u00f3n espacial! Nano explora el universo. Observa los planetas y toca las tarjetas para ordenarlos del m\u00e1s chico al m\u00e1s grande.",
+      "objetivo": "Ordenar planetas por tama\u00f1o de menor a mayor.",
+      "pantalla": "Tarjetas de Mercurio, Tierra y Saturno desordenadas y tres espacios de orden.",
+      "interaccion": "Tocar primero Mercurio, luego la Tierra y finalmente Saturno.",
+      "feedback": "Valida si el orden respeta chico, mediano y grande.",
+      "variantes": [
+        "Orden inverso",
+        "Mas tamanos",
+        "Otros objetos"
+      ]
     },
     {
       "id": "n4-s1-d20",
-      "titulo": "Encuentra el bug",
+      "titulo": "\u00a1Alerta en el c\u00f3digo!",
       "tipo": "encuentra-bug",
       "inspiracion": "Depuracion inicial",
-      "consigna": "Encuentra la tarjeta que rompe el programa del robot.",
-      "objetivo": "Detectar un error simple en una secuencia de comandos.",
-      "pantalla": "Programa de cuatro tarjetas con un giro incorrecto.",
-      "interaccion": "Tocar la tarjeta que contiene el bug.",
+      "consigna": "\u00a1Alerta en el c\u00f3digo! Nano quiere llegar a su base, pero hay un error en su camino. Observa las flechas, encuentra la que est\u00e1 equivocada y \u00a1t\u00f3cala para sacarla!",
+      "objetivo": "Detectar un comando incorrecto en una secuencia hacia la base.",
+      "pantalla": "Camino de Nano a su base y cuatro fichas, con una de girar como bug.",
+      "interaccion": "Tocar la flecha equivocada para corregir el programa.",
       "feedback": "Corrige visualmente el comando cuando se encuentra el error.",
-      "variantes": ["Bug de avance", "Bug de giro", "Programa mas largo"]
+      "variantes": [
+        "Bug de avance",
+        "Bug de giro",
+        "Programa mas largo"
+      ]
     }
   ]
 }
