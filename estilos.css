@@ -10676,14 +10676,23 @@ article.challenge-card.design-challenge-v4 .design-d4-blank::after {
 }
 
 article.challenge-card.design-challenge-v4 .design-d4-token-art {
+  position: absolute;
+  inset: 0;
   display: block;
-  width: 100%;
-  height: auto !important;
-  aspect-ratio: 1.1;
+  width: 100% !important;
+  height: 100% !important;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
   filter: none;
+  pointer-events: none;
+}
+
+article.challenge-card.design-challenge-v4 .graphic-options button .design-d4-token,
+article.challenge-card.design-challenge-v4 .design-d4-blank .design-d4-token {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
 }
 
 article.challenge-card.design-challenge-v4 .kind-turn-left .design-d4-token-art {
@@ -10929,5 +10938,228 @@ article.challenge-card.design-challenge-v4 > .challenge-message {
     width: clamp(76px, 22vw, 92px);
     right: 6px;
     bottom: 6px;
+  }
+}
+
+/* Correccion D4: layout estable sin offsets absolutos fragiles. */
+article.challenge-card.design-challenge-v4 {
+  grid-template-rows: clamp(118px, 17dvh, 150px) minmax(0, 1fr) clamp(64px, 8.6dvh, 78px) !important;
+  overflow: hidden !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-masthead {
+  width: min(calc(100vw - 104px), 1180px) !important;
+  display: grid !important;
+  grid-template-columns: minmax(230px, 0.4fr) minmax(520px, 0.86fr);
+  align-items: center;
+  gap: clamp(22px, 3.8vw, 54px);
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-speech,
+article.challenge-card.design-challenge-v4 .design-d4-title {
+  position: static !important;
+  width: 100% !important;
+  max-height: clamp(96px, 15dvh, 132px) !important;
+  transform: none !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-layout {
+  width: min(calc(100vw - 112px), 1180px) !important;
+  max-width: min(calc(100vw - 112px), 1180px) !important;
+  height: 100% !important;
+  margin: 0 auto !important;
+  display: grid !important;
+  grid-template-columns: minmax(210px, 300px) minmax(0, 1fr);
+  grid-template-rows: auto auto auto;
+  align-content: center;
+  align-items: center;
+  gap: clamp(8px, 1.4dvh, 14px) clamp(22px, 3.6vw, 48px);
+  overflow: visible !important;
+}
+
+article.challenge-card.design-challenge-v4 .pattern-section {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  transform: none !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-robot {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  grid-column: 1;
+  grid-row: 1 / 4;
+  align-self: center;
+  justify-self: center;
+  width: min(100%, clamp(190px, 22vw, 310px)) !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-pattern-panel,
+article.challenge-card.design-challenge-v4 .design-d4-sequence-panel,
+article.challenge-card.design-challenge-v4 .design-d4-options-panel {
+  grid-column: 2;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-pattern-panel {
+  max-width: 800px;
+  aspect-ratio: 3993 / 971 !important;
+  padding: clamp(46px, 6.5dvh, 62px) clamp(44px, 4.8vw, 70px) clamp(16px, 2dvh, 22px) !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-sequence-panel {
+  max-width: 920px;
+  aspect-ratio: 7000 / 998 !important;
+  height: auto !important;
+  padding: clamp(36px, 5.3dvh, 50px) clamp(42px, 4.4vw, 68px) clamp(10px, 1.4dvh, 16px) !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-options-panel {
+  width: min(100%, 540px) !important;
+  justify-self: center;
+  aspect-ratio: 2593 / 822 !important;
+  padding: clamp(50px, 6.8dvh, 64px) clamp(30px, 3.4vw, 44px) clamp(12px, 1.7dvh, 18px) !important;
+}
+
+article.challenge-card.design-challenge-v4 .pattern-preview,
+article.challenge-card.design-challenge-v4 .graphic-pattern-row,
+article.challenge-card.design-challenge-v4 .graphic-options {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+article.challenge-card.design-challenge-v4 .graphic-pattern-row {
+  display: grid !important;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: clamp(5px, 0.8vw, 11px) !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-token,
+article.challenge-card.design-challenge-v4 .design-d4-blank,
+article.challenge-card.design-challenge-v4 .graphic-options button {
+  width: 100% !important;
+  max-width: 80px;
+  justify-self: center;
+}
+
+article.challenge-card.design-challenge-v4 .pattern-preview .design-d4-token {
+  width: clamp(72px, 8vw, 108px) !important;
+  max-width: 108px;
+}
+
+article.challenge-card.design-challenge-v4 > .challenge-actions {
+  margin: 0 auto !important;
+}
+
+@media (max-width: 980px) {
+  article.challenge-card.design-challenge-v4 {
+    grid-template-rows: clamp(82px, 14dvh, 112px) minmax(0, 1fr) clamp(42px, 6dvh, 52px) !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-masthead {
+    width: min(calc(100vw - 24px), 920px) !important;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-speech {
+    display: none !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-title {
+    width: min(100%, 640px) !important;
+    max-height: clamp(72px, 12dvh, 96px) !important;
+    justify-self: center;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-layout {
+    width: min(calc(100vw - 24px), 760px) !important;
+    max-width: min(calc(100vw - 24px), 760px) !important;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-content: center;
+    gap: clamp(8px, 1.2dvh, 12px);
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-robot {
+    display: none !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-pattern-panel,
+  article.challenge-card.design-challenge-v4 .design-d4-sequence-panel,
+  article.challenge-card.design-challenge-v4 .design-d4-options-panel {
+    grid-column: 1;
+    justify-self: center;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-pattern-panel {
+    width: min(100%, 560px) !important;
+    padding: clamp(32px, 5dvh, 46px) clamp(28px, 5vw, 46px) 10px !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-sequence-panel {
+    width: min(100%, 640px) !important;
+    padding: clamp(30px, 4.8dvh, 42px) clamp(20px, 4vw, 34px) 10px !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-options-panel {
+    width: min(82vw, 360px) !important;
+    padding: clamp(34px, 5.5dvh, 46px) clamp(18px, 4vw, 28px) 10px !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .graphic-pattern-row {
+    gap: clamp(4px, 1vw, 8px) !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-token,
+  article.challenge-card.design-challenge-v4 .design-d4-blank,
+  article.challenge-card.design-challenge-v4 .graphic-options button {
+    max-width: 54px;
+  }
+}
+
+@media (max-width: 560px) {
+  article.challenge-card.design-challenge-v4 .design-d4-title {
+    width: calc(100% - 20px) !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-layout {
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-pattern-panel {
+    width: min(92vw, 342px) !important;
+    padding: 34px 22px 10px !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-sequence-panel {
+    width: min(94vw, 358px) !important;
+    min-height: 100px;
+    aspect-ratio: auto !important;
+    padding: 34px 14px 10px !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-options-panel {
+    width: min(78vw, 296px) !important;
+    padding: 34px 16px 8px !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .graphic-pattern-row {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    justify-items: center;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-token,
+  article.challenge-card.design-challenge-v4 .design-d4-blank,
+  article.challenge-card.design-challenge-v4 .graphic-options button {
+    max-width: 38px;
+  }
+
+  article.challenge-card.design-challenge-v4 .pattern-preview .design-d4-token {
+    width: clamp(42px, 13vw, 56px) !important;
   }
 }
