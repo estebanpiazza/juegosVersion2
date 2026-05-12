@@ -11165,20 +11165,36 @@ article.challenge-card.design-challenge-v4 > .challenge-actions {
 }
 
 /* Ajuste D4: Nano arriba y paneles principales a todo el ancho util. */
+article.challenge-card.design-challenge-v4 {
+  grid-template-rows: clamp(104px, 15dvh, 132px) minmax(0, 1fr) clamp(56px, 7.5dvh, 68px) !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-masthead {
+  width: min(calc(100vw - 180px), 1040px) !important;
+  grid-template-columns: minmax(200px, 0.38fr) minmax(460px, 0.78fr) !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-speech,
+article.challenge-card.design-challenge-v4 .design-d4-title {
+  max-height: clamp(86px, 13dvh, 114px) !important;
+}
+
 article.challenge-card.design-challenge-v4 .design-d4-layout {
+  width: min(calc(100vw - 180px), 1040px) !important;
+  max-width: min(calc(100vw - 180px), 1040px) !important;
   grid-template-columns: 1fr !important;
   grid-template-rows: auto auto auto !important;
   align-content: start !important;
-  gap: clamp(10px, 1.7dvh, 18px) !important;
-  padding-top: clamp(4px, 1dvh, 10px);
+  gap: clamp(8px, 1.35dvh, 14px) !important;
+  padding-top: clamp(2px, 0.7dvh, 7px);
 }
 
 article.challenge-card.design-challenge-v4 .design-d4-robot {
   position: absolute !important;
-  left: clamp(-88px, -6vw, -54px) !important;
-  top: clamp(-54px, -6dvh, -36px) !important;
+  left: clamp(-72px, -5vw, -46px) !important;
+  top: clamp(-46px, -5dvh, -30px) !important;
   z-index: 4;
-  width: clamp(165px, 19vw, 250px) !important;
+  width: clamp(145px, 17vw, 220px) !important;
   max-width: none !important;
   pointer-events: none;
 }
@@ -11196,20 +11212,20 @@ article.challenge-card.design-challenge-v4 .design-d4-options-panel {
 article.challenge-card.design-challenge-v4 .design-d4-pattern-panel {
   width: 100% !important;
   max-width: none !important;
-  padding-left: clamp(46px, 5vw, 76px) !important;
-  padding-right: clamp(46px, 5vw, 76px) !important;
+  padding-left: clamp(40px, 4.5vw, 66px) !important;
+  padding-right: clamp(40px, 4.5vw, 66px) !important;
 }
 
 article.challenge-card.design-challenge-v4 .design-d4-sequence-panel {
   width: 100% !important;
   max-width: none !important;
-  padding-left: clamp(40px, 4.8vw, 70px) !important;
-  padding-right: clamp(40px, 4.8vw, 70px) !important;
+  padding-left: clamp(34px, 4.2vw, 58px) !important;
+  padding-right: clamp(34px, 4.2vw, 58px) !important;
 }
 
 article.challenge-card.design-challenge-v4 .design-d4-options-panel {
-  width: min(62%, 560px) !important;
-  max-width: 560px !important;
+  width: min(56%, 500px) !important;
+  max-width: 500px !important;
   justify-self: center !important;
   margin-right: clamp(130px, 18vw, 260px);
 }
@@ -11225,12 +11241,21 @@ article.challenge-card.design-challenge-v4 .graphic-pattern-row {
 article.challenge-card.design-challenge-v4 .design-d4-token,
 article.challenge-card.design-challenge-v4 .design-d4-blank,
 article.challenge-card.design-challenge-v4 .graphic-options button {
-  max-width: 86px !important;
+  max-width: 74px !important;
 }
 
 article.challenge-card.design-challenge-v4 .pattern-preview .design-d4-token {
-  width: clamp(84px, 8.5vw, 116px) !important;
-  max-width: 116px !important;
+  width: clamp(72px, 7vw, 100px) !important;
+  max-width: 100px !important;
+}
+
+article.challenge-card.design-challenge-v4 .primary-action,
+article.challenge-card.design-challenge-v4 .secondary-action {
+  width: clamp(158px, 14vw, 200px) !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-logo {
+  width: clamp(185px, 17vw, 250px);
 }
 
 @media (max-width: 980px) {
@@ -11258,7 +11283,8 @@ article.challenge-card.design-challenge-v4 .pattern-preview .design-d4-token {
   article.challenge-card.design-challenge-v4 .design-d4-layout {
     align-content: center !important;
     padding-top: 0;
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   article.challenge-card.design-challenge-v4 .design-d4-robot {
@@ -11274,13 +11300,13 @@ article.challenge-card.design-challenge-v4 .pattern-preview .design-d4-token {
   }
 
   article.challenge-card.design-challenge-v4 .design-d4-options-panel {
-    width: min(82vw, 360px) !important;
+    width: min(78vw, 330px) !important;
   }
 
   article.challenge-card.design-challenge-v4 .design-d4-token,
   article.challenge-card.design-challenge-v4 .design-d4-blank,
   article.challenge-card.design-challenge-v4 .graphic-options button {
-    max-width: 54px !important;
+    max-width: 48px !important;
   }
 }
 
@@ -11291,15 +11317,15 @@ article.challenge-card.design-challenge-v4 .pattern-preview .design-d4-token {
 
   article.challenge-card.design-challenge-v4 .design-d4-masthead,
   article.challenge-card.design-challenge-v4 .design-d4-layout {
-    width: min(calc(100vw - 24px), 366px) !important;
-    max-width: 366px !important;
+    width: min(calc(100vw - 34px), 344px) !important;
+    max-width: 344px !important;
     margin-left: 0 !important;
     margin-right: auto !important;
   }
 
   article.challenge-card.design-challenge-v4 .design-d4-title {
-    max-height: clamp(82px, 13dvh, 104px) !important;
-    width: min(100%, 340px) !important;
+    max-height: clamp(74px, 12dvh, 94px) !important;
+    width: min(100%, 316px) !important;
     justify-self: start;
   }
 
@@ -11326,11 +11352,25 @@ article.challenge-card.design-challenge-v4 .pattern-preview .design-d4-token {
   article.challenge-card.design-challenge-v4 .design-d4-token,
   article.challenge-card.design-challenge-v4 .design-d4-blank,
   article.challenge-card.design-challenge-v4 .graphic-options button {
-    max-width: 38px !important;
+    max-width: 34px !important;
   }
 
   article.challenge-card.design-challenge-v4 .pattern-preview .design-d4-token {
-    width: clamp(42px, 13vw, 56px) !important;
-    max-width: 56px !important;
+    width: clamp(38px, 12vw, 50px) !important;
+    max-width: 50px !important;
+  }
+
+  article.challenge-card.design-challenge-v4 > .challenge-actions {
+    width: min(78vw, 286px) !important;
+    gap: 8px !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .primary-action,
+  article.challenge-card.design-challenge-v4 .secondary-action {
+    width: clamp(112px, 31vw, 132px) !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-logo {
+    width: clamp(68px, 20vw, 84px);
   }
 }
