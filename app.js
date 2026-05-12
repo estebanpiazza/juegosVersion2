@@ -80,6 +80,9 @@ const DESIGN_D1_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%201";
 const DESIGN_D1_ROBOT_IMAGE_SRC = `${DESIGN_D1_ASSET_BASE}/Robot%20Nani.png?v=${Date.now()}`;
 const DESIGN_D2_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%202";
 const DESIGN_D2_ROBOT_IMAGE_SRC = `${DESIGN_D2_ASSET_BASE}/cara%20Nano.png?v=${Date.now()}`;
+const DESIGN_D3_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%203";
+const DESIGN_D3_ROBOT_IMAGE_SRC = `${DESIGN_D3_ASSET_BASE}/cara%20Nano.png?v=${Date.now()}`;
+const DESIGN_D4_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%204";
 
 function renderRobotMarker() {
   return `<img class="robot-marker" src="${ROBOT_IMAGE_SRC}" alt="Panda feliz" style="--robot-rotation: 0deg" />`;
@@ -91,6 +94,10 @@ function renderDesignRobotMarker() {
 
 function renderDesignRainRobotMarker() {
   return `<img class="robot-marker design-d2-robot" src="${DESIGN_D2_ROBOT_IMAGE_SRC}" alt="Nano" />`;
+}
+
+function renderDesignEnergyRobotMarker() {
+  return `<img class="robot-marker design-d3-robot" src="${DESIGN_D3_ROBOT_IMAGE_SRC}" alt="Nano" />`;
 }
 
 function readStoredSoundVolume() {
@@ -2072,22 +2079,63 @@ function renderRobotChallengeV2(id = 3) {
   const expectedCommands = Array.from({ length: 9 }, (_, index) => expected[index]);
   let selectedBlank = 0;
   let isAnimating = false;
-  const stepsMarkup = Array.from({ length: 9 }, (_, index) => renderSequenceBlank(index, selectedBlank)).join("");
-  const actionsMarkup = ["Avanzar", "Girar izq.", "Girar der."]
-    .map((command) => renderCommandButton(command))
+  const instruction = getChallengeInstruction(id, "Nano te necesita. Crea la secuencia exacta: pasa por la bateria para obtener energia, llega al tesoro y esquiva los obstaculos.");
+  const stepsMarkup = Array.from({ length: 9 }, (_, index) => renderDesignD3Blank(index)).join("");
+  const actionsMarkup = ["Girar izq.", "Girar der.", "Avanzar"]
+    .map((command) => renderDesignD3Button(command))
     .join("");
 
+  function renderDesignD3Command(command) {
+    if (command === "Avanzar") {
+      return `
+        <span class="command-symbol" aria-hidden="true">
+          <img class="command-image design-d3-command-image" src="${DESIGN_D3_ASSET_BASE}/Avanzar.png" alt="" />
+        </span>
+        <span class="command-label">${command}</span>
+      `;
+    }
+
+    const turnClass = command === "Girar izq." ? "is-turn-left" : "is-turn-right";
+    return `
+      <span class="command-symbol" aria-hidden="true">
+        <span class="design-d3-command-sprite ${turnClass}"></span>
+      </span>
+      <span class="command-label">${command}</span>
+    `;
+  }
+
+  function renderDesignD3Button(command) {
+    return `
+      <button class="instruction-chip" type="button" data-value="${command}" aria-label="${command}">
+        ${renderDesignD3Command(command)}
+      </button>
+    `;
+  }
+
+  function renderDesignD3Blank(index) {
+    return `
+      <button class="sequence-slot command-card ${index === selectedBlank ? "is-selected" : ""}" type="button" data-blank="${index}" aria-label="Elegir accion">
+        <span class="command-placeholder">${index + 1}</span>
+      </button>
+    `;
+  }
+
   challengeContent.innerHTML = `
-    <article class="challenge-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Arma la secuencia para juntar las baterias y llegar a 🏁."))}
+    <article class="challenge-card design-challenge-v3">
+      <div class="design-d3-masthead">
+        <img class="design-d3-helper" src="${DESIGN_D3_ASSET_BASE}/Nano%20cono%20bateria.png" alt="" />
+        <img class="design-d3-title" src="${DESIGN_D3_ASSET_BASE}/titulo%20y%20consigna.png" alt="Mision laberinto. Nano te necesita. Crea la secuencia exacta: pasa por la bateria para obtener energia, llega al tesoro y esquiva los obstaculos." />
+        <p class="sr-only">${instruction}</p>
+      </div>
       <div class="visual-sequence-layout">
-        <div class="robot-grid visual-map" data-map></div>
+        <div class="path-map visual-map design-d3-map" data-map></div>
         ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
       </div>
       <div class="challenge-actions">
-        <button class="primary-action" type="button" data-check>Ejecutar</button>
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
         <button class="secondary-action" type="button" data-reset>REINICIAR</button>
       </div>
+      <img class="design-d3-logo" src="${DESIGN_D3_ASSET_BASE}/logo.png" alt="BeTech" />
       <p class="challenge-message" data-message>Sigue la ruta celeste: junta las pilas de energia y termina en 🏁.</p>
     </article>
   `;
@@ -2111,24 +2159,25 @@ function renderRobotChallengeV2(id = 3) {
       for (let col = 0; col < 6; col += 1) {
         const key = cellKey(row, col);
         const cell = document.createElement("div");
-        cell.className = "robot-cell";
+        cell.className = "path-map-cell";
         if (routeCells.has(key)) cell.classList.add("is-route");
         if (obstacles.has(key)) {
           cell.classList.add("is-obstacle");
-          cell.textContent = "💧";
+          cell.innerHTML = `<img class="design-d3-puddle" src="${DESIGN_D3_ASSET_BASE}/charco.png" alt="" />`;
         }
         if (batteries.has(key)) {
           cell.classList.add("is-treasure");
-          cell.textContent = key === "5-2" ? "🔋" : "⚡";
+          const energyAsset = key === "5-2" ? "BATERIA.png" : "rayo.png";
+          cell.innerHTML = `<img class="design-d3-energy" src="${DESIGN_D3_ASSET_BASE}/${energyAsset}" alt="" />`;
         }
         if (key === route[0]) {
           cell.classList.add("is-start");
         }
         if (key === route[route.length - 1]) {
           cell.classList.add("is-goal");
-          cell.textContent = "🏁";
+          cell.innerHTML = `<img class="design-d3-goal" src="tarjetas%20movimiento/Vamos.png" alt="" />`;
         }
-        cell.dataset.baseText = cell.textContent;
+        cell.dataset.baseHtml = cell.innerHTML;
         cells.set(key, cell);
         map.append(cell);
       }
@@ -2142,7 +2191,7 @@ function renderRobotChallengeV2(id = 3) {
       cell.classList.remove("is-robot", "is-trail");
       const hasCollectedBattery = collectedBatteries.has(cellKeyValue);
       cell.classList.toggle("is-treasure", batteries.has(cellKeyValue) && !hasCollectedBattery);
-      cell.textContent = hasCollectedBattery ? "" : cell.dataset.baseText || "";
+      cell.innerHTML = hasCollectedBattery ? "" : cell.dataset.baseHtml || "";
     });
 
     for (const routeKey of route.slice(0, route.indexOf(key) + 1)) {
@@ -2152,7 +2201,7 @@ function renderRobotChallengeV2(id = 3) {
     const robotCell = cells.get(key);
     if (!robotCell) return;
     robotCell.classList.add("is-robot");
-    robotCell.innerHTML = renderRobotMarker(directionForRouteKey(route, key));
+    robotCell.innerHTML = renderDesignEnergyRobotMarker();
   }
 
   async function animateRoute(routeLimit = route.length - 1) {
@@ -2186,7 +2235,7 @@ function renderRobotChallengeV2(id = 3) {
       if (isAnimating) return;
       const target = blanks[selectedBlank];
       const command = button.dataset.value;
-      target.innerHTML = renderCommand(command);
+      target.innerHTML = renderDesignD3Command(command);
       target.dataset.value = command;
       target.classList.remove("is-wrong");
       const next = blanks.find((blank) => !blank.dataset.value);
@@ -4000,7 +4049,7 @@ function renderPatternChallengeV2(id = 4) {
     pattern: ["cmd-forward", "cmd-forward", "cmd-turn"],
     sequence: ["cmd-forward", "cmd-forward", null, "cmd-forward", null, "cmd-turn", null, "cmd-forward", "cmd-turn"],
     answers: ["cmd-turn", "cmd-forward", "cmd-forward"],
-    options: ["cmd-forward", "cmd-turn", "turn-left"],
+    options: ["turn-left", "cmd-turn", "cmd-forward"],
   });
   const labels = {
     "tile-blue": "Azul",
@@ -4036,7 +4085,12 @@ function renderPatternChallengeV2(id = 4) {
 
   function itemMarkup(kind) {
     if (commandItems[kind]) {
-      return `<span class="pattern-item kind-${kind} command-pattern-item has-command-image">${renderCommand(commandItems[kind])}</span>`;
+      return `
+        <span class="pattern-item kind-${kind} command-pattern-item design-d4-token" aria-label="${labels[kind]}">
+          <span class="design-d4-token-art" aria-hidden="true"></span>
+          <strong>${labels[kind]}</strong>
+        </span>
+      `;
     }
 
     return `<span class="pattern-item kind-${kind}"><i></i><strong>${labels[kind]}</strong></span>`;
@@ -4044,7 +4098,7 @@ function renderPatternChallengeV2(id = 4) {
 
   function blankMarkup(blankIndex, isSelected) {
     return `
-      <button type="button" class="pattern-blank graphic-blank ${isSelected ? "is-selected" : ""}" data-blank="${blankIndex}">
+      <button type="button" class="pattern-blank graphic-blank design-d4-blank ${isSelected ? "is-selected" : ""}" data-blank="${blankIndex}">
         ?
       </button>
     `;
@@ -4056,9 +4110,13 @@ function renderPatternChallengeV2(id = 4) {
     let blankIndex = 0;
 
     challengeContent.innerHTML = `
-      <article class="challenge-card">
-        ${renderChallengeHeader(`desafio ${id}`, challengeTitles[id] || scene.title, scene.hint)}
-        <div class="pattern-visual-layout pattern-scene pattern-theme-${scene.theme}">
+      <article class="challenge-card design-challenge-v4">
+        <div class="design-d4-masthead">
+          <img class="design-d4-speech" src="${DESIGN_D4_ASSET_BASE}/Burbubja%20de%20dialogo.png" alt="Observa los pasos Nano: avanzar, avanzar y girar." />
+          <img class="design-d4-title" src="${DESIGN_D4_ASSET_BASE}/titulo%20y%20consigna.png" alt="A descubrir el patron. Completa la serie logica y elige las tarjetas correctas para terminar el algoritmo." />
+          <p class="sr-only">${scene.hint}</p>
+        </div>
+        <div class="pattern-visual-layout pattern-scene pattern-theme-${scene.theme} design-d4-layout">
           ${scenes.length > 1 ? `
             <div class="pattern-progress" aria-label="Escenarios completados">
               ${scenes.map((item, index) => `
@@ -4068,13 +4126,14 @@ function renderPatternChallengeV2(id = 4) {
               `).join("")}
             </div>
           ` : ""}
-          <section class="pattern-section pattern-model-section" aria-labelledby="pattern-model-title">
+          <img class="design-d4-robot" src="${DESIGN_D4_ASSET_BASE}/Robto%20Nano.png" alt="" />
+          <section class="pattern-section pattern-model-section design-d4-pattern-panel" aria-labelledby="pattern-model-title">
             <h3 id="pattern-model-title">Patron</h3>
             <div class="pattern-preview" aria-label="Bloque que se repite">
               ${scene.pattern.map(itemMarkup).join("")}
             </div>
           </section>
-          <section class="pattern-section pattern-complete-section" aria-labelledby="pattern-complete-title">
+          <section class="pattern-section pattern-complete-section design-d4-sequence-panel" aria-labelledby="pattern-complete-title">
             <h3 id="pattern-complete-title">A completar</h3>
             <div class="pattern-row graphic-pattern-row">
               ${scene.sequence.map((kind) => {
@@ -4085,8 +4144,8 @@ function renderPatternChallengeV2(id = 4) {
   }).join("")}
             </div>
           </section>
-          <section class="pattern-section pattern-actions-section" aria-labelledby="pattern-actions-title">
-            <h3 id="pattern-actions-title">Acciones</h3>
+          <section class="pattern-section pattern-actions-section design-d4-options-panel" aria-labelledby="pattern-actions-title">
+            <h3 id="pattern-actions-title">Tarjetas de programacion</h3>
             <div class="option-bank compact-bank graphic-options">
               ${scene.options.map((kind) => `
                 <button type="button" data-option="${kind}">
@@ -4100,6 +4159,7 @@ function renderPatternChallengeV2(id = 4) {
           <button class="primary-action" type="button" data-check>COMPROBAR</button>
           <button class="secondary-action" type="button" data-reset>REINICIAR</button>
         </div>
+        <img class="design-d4-logo" src="${DESIGN_D4_ASSET_BASE}/Logo.png" alt="BeTech" />
         <p class="challenge-message" data-message>${scene.hint}</p>
       </article>
     `;

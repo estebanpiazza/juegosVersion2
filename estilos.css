@@ -9983,3 +9983,951 @@ article.challenge-card.design-challenge-v2 .rain-goal {
     top: 8px !important;
   }
 }
+
+/* Desafio 3: Mision laberinto con piezas de la referencia. */
+body:has(.design-challenge-v3) .game-stage-bg {
+  display: block;
+  opacity: 0.58;
+}
+
+body:has(.design-challenge-v3) .game-workspace {
+  padding: clamp(6px, 1.1dvh, 12px) clamp(18px, 3vw, 46px) 8px !important;
+  background: transparent;
+}
+
+body:has(.design-challenge-v3) .corner-logo {
+  display: none;
+}
+
+article.challenge-card.design-challenge-v3 {
+  width: min(100%, 1360px) !important;
+  height: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  padding: 0 !important;
+  display: grid !important;
+  grid-template-rows: clamp(132px, 18dvh, 156px) minmax(0, 1fr) clamp(68px, 9dvh, 82px);
+  gap: 0;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+article.challenge-card.design-challenge-v3 .design-d3-masthead {
+  position: relative;
+  z-index: 3;
+  width: min(100%, 1240px);
+  height: 100%;
+  margin: 0 auto;
+}
+
+article.challenge-card.design-challenge-v3 .design-d3-helper {
+  position: absolute;
+  left: clamp(18px, 3.2vw, 56px);
+  bottom: clamp(-8px, -0.7dvh, -2px);
+  z-index: 2;
+  width: clamp(150px, 16vw, 230px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 7px 6px rgba(88, 89, 91, 0.22));
+}
+
+article.challenge-card.design-challenge-v3 .design-d3-title {
+  position: absolute;
+  left: clamp(230px, 22vw, 310px);
+  right: clamp(12px, 2.4vw, 36px);
+  top: 50%;
+  width: auto;
+  max-height: clamp(116px, 16dvh, 146px);
+  height: auto;
+  display: block;
+  object-fit: contain;
+  transform: translateY(-50%);
+  filter: drop-shadow(0 7px 6px rgba(88, 89, 91, 0.18));
+}
+
+article.challenge-card.design-challenge-v3 .visual-sequence-layout {
+  width: min(100%, 1180px) !important;
+  max-width: 1180px !important;
+  margin: 0 auto;
+  display: grid !important;
+  grid-template-columns: clamp(340px, 29vw, 410px) minmax(0, 1fr) !important;
+  align-items: start;
+  justify-content: center;
+  gap: clamp(28px, 4.2vw, 56px) !important;
+  transform: none !important;
+}
+
+article.challenge-card.design-challenge-v3 .path-map {
+  width: clamp(340px, 29vw, 410px) !important;
+  max-width: 410px !important;
+  aspect-ratio: 1 !important;
+  padding: 8.55% !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  background-image: url("diseño de niveles/DESAFIO 3/Manta.png") !important;
+  background-position: center !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v3 .path-map-cell,
+article.challenge-card.design-challenge-v3 .path-map-cell.is-start,
+article.challenge-card.design-challenge-v3 .path-map-cell.is-obstacle,
+article.challenge-card.design-challenge-v3 .path-map-cell.is-treasure {
+  position: relative;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v3 .path-map-cell.is-route,
+article.challenge-card.design-challenge-v3 .path-map-cell.is-trail {
+  background: rgba(185, 239, 105, 0.86) !important;
+}
+
+article.challenge-card.design-challenge-v3 .path-map-cell.is-goal {
+  background: #63b842 !important;
+}
+
+article.challenge-card.design-challenge-v3 .path-map-cell.is-robot {
+  background: #ffc44f !important;
+  transform: none !important;
+}
+
+article.challenge-card.design-challenge-v3 .path-map-cell::after {
+  display: none !important;
+}
+
+article.challenge-card.design-challenge-v3 .design-d3-robot {
+  width: 98%;
+  height: 98%;
+  object-fit: contain;
+  border-radius: 0;
+  filter: drop-shadow(0 5px 5px rgba(88, 89, 91, 0.22));
+}
+
+article.challenge-card.design-challenge-v3 .design-d3-puddle,
+article.challenge-card.design-challenge-v3 .design-d3-energy,
+article.challenge-card.design-challenge-v3 .design-d3-goal {
+  display: block;
+  width: 88%;
+  height: 88%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 4px rgba(88, 89, 91, 0.16));
+}
+
+article.challenge-card.design-challenge-v3 .design-d3-puddle {
+  width: 112%;
+  height: 112%;
+}
+
+article.challenge-card.design-challenge-v3 .design-d3-energy {
+  width: 92%;
+  height: 92%;
+}
+
+article.challenge-card.design-challenge-v3 .sequence-panel {
+  width: 100%;
+  max-width: 620px !important;
+  margin-top: clamp(6px, 1.2dvh, 14px) !important;
+  gap: clamp(12px, 1.8dvh, 18px) !important;
+  position: relative;
+}
+
+article.challenge-card.design-challenge-v3 .command-section {
+  width: 100% !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100% !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v3 .command-section-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+article.challenge-card.design-challenge-v3 .command-steps {
+  aspect-ratio: 3587 / 1743 !important;
+  padding: clamp(54px, 7.3dvh, 68px) clamp(24px, 3.2vw, 36px) clamp(18px, 2.2dvh, 24px) !important;
+  background-image: url("diseño de niveles/DESAFIO 3/cuadro de tu algoritmo.png") !important;
+}
+
+article.challenge-card.design-challenge-v3 .command-actions-bank {
+  width: min(100%, 560px) !important;
+  aspect-ratio: 3587 / 941 !important;
+  padding: clamp(48px, 6.5dvh, 60px) clamp(28px, 3.4vw, 42px) clamp(14px, 1.8dvh, 20px) !important;
+  background-image: url("diseño de niveles/DESAFIO 3/cuadro de tarjetas de programacion.png") !important;
+}
+
+article.challenge-card.design-challenge-v3 .compact-sequence {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: clamp(8px, 1.15vw, 12px) !important;
+  margin-top: 0 !important;
+}
+
+article.challenge-card.design-challenge-v3 .compact-bank {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: clamp(16px, 2.6vw, 30px) !important;
+  margin-top: 0 !important;
+}
+
+article.challenge-card.design-challenge-v3 .sequence-slot.command-card,
+article.challenge-card.design-challenge-v3 .instruction-chip {
+  width: clamp(58px, 5.8vw, 78px) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  aspect-ratio: 1.08 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v3 .instruction-chip::before,
+article.challenge-card.design-challenge-v3 .instruction-chip::after,
+article.challenge-card.design-challenge-v3 .sequence-slot.command-card[data-value]::before,
+article.challenge-card.design-challenge-v3 .sequence-slot.command-card[data-value]::after {
+  display: none !important;
+}
+
+article.challenge-card.design-challenge-v3 .instruction-chip {
+  width: clamp(72px, 7.1vw, 96px) !important;
+}
+
+article.challenge-card.design-challenge-v3 .command-symbol {
+  width: 100%;
+  height: 100%;
+}
+
+article.challenge-card.design-challenge-v3 .command-image,
+article.challenge-card.design-challenge-v3 .design-d3-command-image {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none;
+  object-fit: contain;
+  filter: none;
+}
+
+article.challenge-card.design-challenge-v3 .design-d3-command-sprite {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-image: url("diseño de niveles/DESAFIO 3/tarjetas accion.png");
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+}
+
+article.challenge-card.design-challenge-v3 .design-d3-command-sprite.is-turn-left {
+  background-position: left center;
+}
+
+article.challenge-card.design-challenge-v3 .design-d3-command-sprite.is-turn-right {
+  background-position: right center;
+}
+
+article.challenge-card.design-challenge-v3 .command-placeholder {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: clamp(52px, 6.4vw, 78px) !important;
+  color: transparent !important;
+  background: url("diseño de niveles/DESAFIO 3/tarjetas de interrogacion.png") center / contain no-repeat !important;
+}
+
+article.challenge-card.design-challenge-v3 .command-label,
+article.challenge-card.design-challenge-v3 .command-label-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+article.challenge-card.design-challenge-v3 .sequence-slot.command-card.is-selected,
+article.challenge-card.design-challenge-v3 .sequence-slot.command-card.is-drag-over {
+  outline: 4px solid rgba(19, 205, 224, 0.55);
+  outline-offset: 3px;
+  border-radius: 12px !important;
+}
+
+article.challenge-card.design-challenge-v3 .sequence-slot.command-card.is-wrong {
+  outline-color: rgba(226, 83, 83, 0.85);
+}
+
+article.challenge-card.design-challenge-v3 > .challenge-actions {
+  position: relative;
+  z-index: 5;
+  width: min(100%, 520px) !important;
+  margin: 2px auto 0 clamp(140px, 17vw, 220px) !important;
+  justify-content: center;
+  gap: clamp(18px, 2.6vw, 32px);
+}
+
+article.challenge-card.design-challenge-v3 .primary-action,
+article.challenge-card.design-challenge-v3 .secondary-action {
+  width: clamp(180px, 16vw, 230px) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  aspect-ratio: 4 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  color: transparent !important;
+  background-color: transparent !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v3 .primary-action {
+  background-image: url("diseño de niveles/DESAFIO 3/boton turqeusa.png") !important;
+}
+
+article.challenge-card.design-challenge-v3 .secondary-action {
+  background-image: url("diseño de niveles/DESAFIO 3/boton blanco.png") !important;
+}
+
+article.challenge-card.design-challenge-v3 .design-d3-logo {
+  position: fixed;
+  right: clamp(36px, 5.6vw, 86px);
+  bottom: clamp(6px, 1.3dvh, 14px);
+  z-index: 4;
+  width: clamp(210px, 20vw, 290px);
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 6px rgba(88, 89, 91, 0.24));
+}
+
+article.challenge-card.design-challenge-v3 > .challenge-message {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  body:has(.design-challenge-v3) .game-workspace {
+    padding: clamp(4px, 1dvh, 8px) clamp(8px, 2vw, 14px) 8px !important;
+    overflow: hidden !important;
+  }
+
+  article.challenge-card.design-challenge-v3 {
+    grid-template-rows: clamp(84px, 15dvh, 118px) minmax(0, 1fr) clamp(40px, 6dvh, 50px);
+    gap: clamp(4px, 1dvh, 8px);
+  }
+
+  article.challenge-card.design-challenge-v3 .design-d3-title {
+    left: clamp(140px, 20vw, 190px);
+    right: clamp(6px, 1.8vw, 18px);
+    width: auto;
+    max-height: clamp(70px, 13dvh, 100px);
+  }
+
+  article.challenge-card.design-challenge-v3 .design-d3-helper {
+    left: clamp(8px, 2vw, 18px);
+    width: clamp(104px, 18vw, 150px);
+  }
+
+  article.challenge-card.design-challenge-v3 .visual-sequence-layout {
+    width: min(100%, 880px) !important;
+    grid-template-columns: minmax(160px, 0.9fr) minmax(220px, 1.1fr) !important;
+    gap: clamp(8px, 2vw, 18px) !important;
+    overflow: hidden !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .path-map {
+    width: min(42vw, 43dvh, 300px) !important;
+    max-width: 300px !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .sequence-panel {
+    max-width: min(56vw, 430px) !important;
+    gap: clamp(4px, 0.9dvh, 8px) !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .command-steps {
+    height: clamp(152px, 28dvh, 196px) !important;
+    aspect-ratio: auto !important;
+    padding: clamp(36px, 5.8dvh, 48px) clamp(12px, 2.5vw, 18px) clamp(8px, 1.4dvh, 12px) !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .command-actions-bank {
+    width: min(100%, 340px) !important;
+    height: clamp(82px, 14dvh, 104px) !important;
+    aspect-ratio: auto !important;
+    padding: clamp(34px, 5.7dvh, 44px) clamp(14px, 2.4vw, 20px) clamp(6px, 1dvh, 10px) !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .compact-sequence {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: clamp(4px, 1vw, 8px) !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .compact-bank {
+    gap: clamp(6px, 1.4vw, 10px) !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .instruction-chip,
+  article.challenge-card.design-challenge-v3 .sequence-slot.command-card {
+    width: clamp(38px, 8vw, 54px) !important;
+  }
+
+  article.challenge-card.design-challenge-v3 > .challenge-actions {
+    width: min(68vw, 320px) !important;
+    margin: 0 auto !important;
+    gap: clamp(8px, 2vw, 14px) !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .primary-action,
+  article.challenge-card.design-challenge-v3 .secondary-action {
+    width: clamp(96px, 25vw, 142px) !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .design-d3-logo {
+    width: clamp(100px, 24vw, 170px);
+    right: clamp(8px, 2vw, 18px);
+    bottom: clamp(4px, 1dvh, 8px);
+  }
+}
+
+@media (max-width: 560px) {
+  article.challenge-card.design-challenge-v3,
+  article.challenge-card.design-challenge-v3 .design-d3-masthead {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  article.challenge-card.design-challenge-v3 {
+    grid-template-rows: clamp(92px, 15dvh, 118px) minmax(0, 1fr) clamp(40px, 5.6dvh, 48px);
+  }
+
+  article.challenge-card.design-challenge-v3 .design-d3-title {
+    left: 12px;
+    right: 12px;
+    width: calc(100% - 24px);
+    max-height: clamp(74px, 12dvh, 96px);
+  }
+
+  article.challenge-card.design-challenge-v3 .design-d3-helper {
+    display: none;
+  }
+
+  article.challenge-card.design-challenge-v3 .visual-sequence-layout {
+    grid-template-columns: 1fr !important;
+    gap: clamp(6px, 1dvh, 10px) !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .path-map {
+    width: min(72vw, 29dvh, 280px) !important;
+    max-width: 280px !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .sequence-panel {
+    max-width: min(82vw, 312px) !important;
+    margin-inline: auto !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .command-steps {
+    width: min(100%, 312px) !important;
+    height: clamp(150px, 22dvh, 178px) !important;
+    padding: clamp(32px, 4.7dvh, 42px) 12px 10px !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .command-actions-bank {
+    width: min(100%, 276px) !important;
+    height: clamp(74px, 11.5dvh, 92px) !important;
+    padding: clamp(30px, 4.8dvh, 38px) 14px 6px !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .compact-sequence {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .instruction-chip,
+  article.challenge-card.design-challenge-v3 .sequence-slot.command-card {
+    width: clamp(42px, 13vw, 58px) !important;
+  }
+
+  article.challenge-card.design-challenge-v3 .design-d3-logo {
+    width: clamp(76px, 22vw, 92px);
+    right: 6px;
+    bottom: 6px;
+  }
+}
+
+/* Desafio 4: patron de comandos con piezas de la referencia. */
+body:has(.design-challenge-v4) .game-stage-bg {
+  display: block;
+  opacity: 0.58;
+}
+
+body:has(.design-challenge-v4) .game-workspace {
+  padding: clamp(6px, 1.1dvh, 12px) clamp(18px, 3vw, 44px) 8px !important;
+  background: transparent;
+}
+
+body:has(.design-challenge-v4) .corner-logo {
+  display: none;
+}
+
+article.challenge-card.design-challenge-v4 {
+  width: min(100%, 1360px) !important;
+  max-width: 1360px !important;
+  height: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  padding: 0 !important;
+  display: grid !important;
+  grid-template-rows: clamp(132px, 18dvh, 158px) minmax(0, 1fr) clamp(68px, 9dvh, 82px);
+  gap: 0;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-masthead {
+  position: relative;
+  z-index: 3;
+  width: min(100%, 1240px);
+  height: 100%;
+  margin: 0 auto;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-speech,
+article.challenge-card.design-challenge-v4 .design-d4-title {
+  position: absolute;
+  display: block;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 7px 6px rgba(88, 89, 91, 0.18));
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-speech {
+  left: clamp(6px, 1.8vw, 28px);
+  top: clamp(0px, 0.4dvh, 5px);
+  width: clamp(250px, 28vw, 390px);
+  max-height: clamp(112px, 17dvh, 150px);
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-title {
+  right: clamp(0px, 1.5vw, 24px);
+  top: clamp(5px, 1dvh, 12px);
+  width: clamp(570px, 64vw, 820px);
+  max-height: clamp(112px, 16dvh, 146px);
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-layout {
+  position: relative;
+  width: min(calc(100vw - 96px), 1180px) !important;
+  max-width: min(calc(100vw - 96px), 1180px) !important;
+  min-height: 0;
+  margin: 0 auto;
+  display: block !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-robot {
+  position: absolute;
+  left: clamp(0px, 1.5vw, 22px);
+  top: clamp(6px, 1.2dvh, 14px);
+  z-index: 2;
+  width: clamp(170px, 21vw, 285px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 7px 7px rgba(88, 89, 91, 0.22));
+  pointer-events: none;
+}
+
+article.challenge-card.design-challenge-v4 .pattern-section {
+  position: absolute;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100% !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v4 .pattern-section h3 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-pattern-panel {
+  right: clamp(10px, 2vw, 34px);
+  top: clamp(0px, 0.8dvh, 8px);
+  width: clamp(500px, 62vw, 790px);
+  aspect-ratio: 3993 / 971;
+  padding: clamp(56px, 7.5dvh, 72px) clamp(40px, 4.6vw, 62px) clamp(18px, 2.2dvh, 28px);
+  background-image: url("diseño de niveles/DESAFIO 4/Cuadro de Patrón.png") !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-sequence-panel {
+  left: clamp(150px, 16vw, 230px);
+  right: clamp(40px, 7vw, 100px);
+  top: clamp(172px, 25dvh, 210px);
+  aspect-ratio: 7000 / 998;
+  padding: clamp(58px, 7.8dvh, 78px) clamp(40px, 4vw, 58px) clamp(16px, 2.1dvh, 24px);
+  background-image: url("diseño de niveles/DESAFIO 4/cuadro de secuencia.png") !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-options-panel {
+  right: clamp(90px, 12vw, 150px);
+  bottom: clamp(2px, 1dvh, 12px);
+  width: clamp(360px, 42vw, 540px);
+  aspect-ratio: 2593 / 822;
+  padding: clamp(60px, 8dvh, 74px) clamp(28px, 3.5vw, 44px) clamp(16px, 2dvh, 24px);
+  background-image: url("diseño de niveles/DESAFIO 4/cuadro de Tarjetas de programacion.png") !important;
+}
+
+article.challenge-card.design-challenge-v4 .pattern-preview,
+article.challenge-card.design-challenge-v4 .graphic-pattern-row,
+article.challenge-card.design-challenge-v4 .graphic-options {
+  display: flex !important;
+  align-items: center;
+  margin: 0 !important;
+}
+
+article.challenge-card.design-challenge-v4 .pattern-preview {
+  justify-content: center;
+  gap: clamp(60px, 10vw, 128px);
+}
+
+article.challenge-card.design-challenge-v4 .graphic-pattern-row {
+  justify-content: space-between;
+  width: 100% !important;
+  gap: clamp(10px, 1.2vw, 18px);
+}
+
+article.challenge-card.design-challenge-v4 .graphic-options {
+  justify-content: center;
+  gap: clamp(20px, 3vw, 44px);
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-token,
+article.challenge-card.design-challenge-v4 .design-d4-blank,
+article.challenge-card.design-challenge-v4 .graphic-options button {
+  width: clamp(58px, 6.2vw, 86px) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  aspect-ratio: 1.08 !important;
+  padding: 0 !important;
+  display: inline-grid !important;
+  place-items: center;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v4 .pattern-preview .design-d4-token {
+  width: clamp(76px, 8.4vw, 118px) !important;
+}
+
+article.challenge-card.design-challenge-v4 .graphic-options button {
+  cursor: pointer;
+  touch-action: none;
+}
+
+article.challenge-card.design-challenge-v4 .graphic-options button::before,
+article.challenge-card.design-challenge-v4 .graphic-options button::after,
+article.challenge-card.design-challenge-v4 .command-pattern-item::before,
+article.challenge-card.design-challenge-v4 .command-pattern-item::after,
+article.challenge-card.design-challenge-v4 .graphic-pattern-row .graphic-blank:has(.command-pattern-item)::before,
+article.challenge-card.design-challenge-v4 .graphic-pattern-row .graphic-blank:has(.command-pattern-item)::after,
+article.challenge-card.design-challenge-v4 .design-d4-blank::before,
+article.challenge-card.design-challenge-v4 .design-d4-blank::after {
+  display: none !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-token-art {
+  display: block;
+  width: 100%;
+  height: auto !important;
+  aspect-ratio: 1.1;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  filter: none;
+}
+
+article.challenge-card.design-challenge-v4 .kind-turn-left .design-d4-token-art {
+  background-image: url("diseño de niveles/DESAFIO 4/d4-girar-izq.png");
+}
+
+article.challenge-card.design-challenge-v4 .kind-cmd-turn .design-d4-token-art,
+article.challenge-card.design-challenge-v4 .kind-turn-right .design-d4-token-art {
+  background-image: url("diseño de niveles/DESAFIO 4/d4-girar-der.png");
+}
+
+article.challenge-card.design-challenge-v4 .kind-cmd-forward .design-d4-token-art {
+  background-image: url("diseño de niveles/DESAFIO 4/d4-avanzar.png");
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-token strong {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-blank {
+  color: transparent !important;
+  background: url("diseño de niveles/DESAFIO 4/d4-interrogacion.png") center / contain no-repeat !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-blank.is-selected,
+article.challenge-card.design-challenge-v4 .design-d4-blank.is-drag-over {
+  outline: 4px solid rgba(19, 205, 224, 0.55);
+  outline-offset: 3px;
+  border-radius: 12px !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-blank.is-wrong {
+  outline-color: rgba(226, 83, 83, 0.85);
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-blank.is-correct {
+  outline-color: rgba(99, 184, 66, 0.85);
+}
+
+article.challenge-card.design-challenge-v4 > .challenge-actions {
+  position: relative;
+  z-index: 5;
+  width: min(100%, 520px) !important;
+  margin: 2px auto 0 clamp(92px, 12vw, 170px) !important;
+  justify-content: center;
+  gap: clamp(18px, 2.6vw, 32px);
+}
+
+article.challenge-card.design-challenge-v4 .primary-action,
+article.challenge-card.design-challenge-v4 .secondary-action {
+  width: clamp(180px, 16vw, 230px) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  aspect-ratio: 4 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  color: transparent !important;
+  background-color: transparent !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  box-shadow: none !important;
+}
+
+article.challenge-card.design-challenge-v4 .primary-action {
+  background-image: url("diseño de niveles/DESAFIO 4/botono turqeusa.png") !important;
+}
+
+article.challenge-card.design-challenge-v4 .secondary-action {
+  background-image: url("diseño de niveles/DESAFIO 4/Boton Blanco.png") !important;
+}
+
+article.challenge-card.design-challenge-v4 .design-d4-logo {
+  position: fixed;
+  right: clamp(36px, 5.6vw, 86px);
+  bottom: clamp(6px, 1.3dvh, 14px);
+  z-index: 4;
+  width: clamp(210px, 20vw, 290px);
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 6px rgba(88, 89, 91, 0.24));
+}
+
+article.challenge-card.design-challenge-v4 > .challenge-message {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  body:has(.design-challenge-v4) .game-workspace {
+    padding: clamp(4px, 1dvh, 8px) clamp(8px, 2vw, 14px) 8px !important;
+    overflow: hidden !important;
+  }
+
+  article.challenge-card.design-challenge-v4 {
+    grid-template-rows: clamp(96px, 17dvh, 130px) minmax(0, 1fr) clamp(40px, 6dvh, 50px);
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-speech {
+    left: clamp(4px, 1.4vw, 12px);
+    width: clamp(142px, 31vw, 220px);
+    max-height: clamp(82px, 15dvh, 116px);
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-title {
+    right: 6px;
+    width: clamp(250px, 64vw, 560px);
+    max-height: clamp(82px, 15dvh, 116px);
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-robot {
+    display: none;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-pattern-panel {
+    left: 50%;
+    right: auto;
+    top: 0;
+    width: min(92vw, 560px);
+    padding: clamp(40px, 6.3dvh, 54px) clamp(26px, 4vw, 38px) 12px;
+    transform: translateX(-50%);
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-sequence-panel {
+    left: 50%;
+    right: auto;
+    top: clamp(112px, 20dvh, 150px);
+    width: min(92vw, 620px);
+    padding: clamp(42px, 6.2dvh, 58px) clamp(18px, 3vw, 28px) 12px;
+    transform: translateX(-50%);
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-options-panel {
+    left: 50%;
+    right: auto;
+    bottom: clamp(8px, 2dvh, 18px);
+    width: min(76vw, 360px);
+    padding: clamp(40px, 6.5dvh, 52px) clamp(18px, 3vw, 28px) 12px;
+    transform: translateX(-50%);
+  }
+
+  article.challenge-card.design-challenge-v4 .pattern-preview {
+    gap: clamp(28px, 8vw, 60px);
+  }
+
+  article.challenge-card.design-challenge-v4 .graphic-pattern-row {
+    gap: clamp(6px, 1.4vw, 10px);
+  }
+
+  article.challenge-card.design-challenge-v4 .graphic-options {
+    gap: clamp(10px, 4vw, 20px);
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-token,
+  article.challenge-card.design-challenge-v4 .design-d4-blank,
+  article.challenge-card.design-challenge-v4 .graphic-options button {
+    width: clamp(36px, 8vw, 56px) !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .pattern-preview .design-d4-token {
+    width: clamp(50px, 11vw, 74px) !important;
+  }
+
+  article.challenge-card.design-challenge-v4 > .challenge-actions {
+    width: min(68vw, 320px) !important;
+    margin: 0 auto !important;
+    gap: clamp(8px, 2vw, 14px) !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .primary-action,
+  article.challenge-card.design-challenge-v4 .secondary-action {
+    width: clamp(96px, 25vw, 142px) !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-logo {
+    width: clamp(100px, 24vw, 170px);
+    right: clamp(8px, 2vw, 18px);
+    bottom: clamp(4px, 1dvh, 8px);
+  }
+}
+
+@media (max-width: 560px) {
+  article.challenge-card.design-challenge-v4,
+  article.challenge-card.design-challenge-v4 .design-d4-masthead,
+  article.challenge-card.design-challenge-v4 .design-d4-layout {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  article.challenge-card.design-challenge-v4 {
+    grid-template-rows: clamp(100px, 16dvh, 124px) minmax(0, 1fr) clamp(40px, 5.6dvh, 48px);
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-speech {
+    display: none;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-title {
+    left: 12px;
+    right: 12px;
+    width: calc(100% - 24px);
+    max-height: clamp(82px, 13dvh, 104px);
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-pattern-panel {
+    width: min(92vw, 340px);
+    padding: clamp(30px, 4.8dvh, 42px) 20px 10px;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-sequence-panel {
+    top: clamp(96px, 17dvh, 128px);
+    width: min(92vw, 350px);
+    height: clamp(92px, 12dvh, 108px) !important;
+    aspect-ratio: auto !important;
+    padding: clamp(32px, 5dvh, 42px) 12px 10px;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-options-panel {
+    width: min(76vw, 292px);
+    padding: clamp(32px, 5dvh, 42px) 16px 8px;
+  }
+
+  article.challenge-card.design-challenge-v4 .pattern-preview {
+    gap: clamp(18px, 7vw, 32px);
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-token,
+  article.challenge-card.design-challenge-v4 .design-d4-blank,
+  article.challenge-card.design-challenge-v4 .graphic-options button {
+    width: clamp(26px, 7.4vw, 32px) !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .pattern-preview .design-d4-token {
+    width: clamp(38px, 12vw, 52px) !important;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-logo {
+    width: clamp(76px, 22vw, 92px);
+    right: 6px;
+    bottom: 6px;
+  }
+}
