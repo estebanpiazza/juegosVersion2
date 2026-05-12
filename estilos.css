@@ -11166,17 +11166,17 @@ article.challenge-card.design-challenge-v4 > .challenge-actions {
 
 /* Ajuste D4: Nano arriba y paneles principales a todo el ancho util. */
 article.challenge-card.design-challenge-v4 {
-  grid-template-rows: clamp(104px, 15dvh, 132px) minmax(0, 1fr) clamp(56px, 7.5dvh, 68px) !important;
+  grid-template-rows: clamp(118px, 17dvh, 150px) minmax(0, 1fr) clamp(64px, 8.6dvh, 78px) !important;
 }
 
 article.challenge-card.design-challenge-v4 .design-d4-masthead {
-  width: min(calc(100vw - 180px), 1040px) !important;
-  grid-template-columns: minmax(200px, 0.38fr) minmax(460px, 0.78fr) !important;
+  width: min(calc(100vw - 104px), 1180px) !important;
+  grid-template-columns: minmax(230px, 0.4fr) minmax(520px, 0.86fr) !important;
 }
 
 article.challenge-card.design-challenge-v4 .design-d4-speech,
 article.challenge-card.design-challenge-v4 .design-d4-title {
-  max-height: clamp(86px, 13dvh, 114px) !important;
+  max-height: clamp(96px, 15dvh, 132px) !important;
 }
 
 article.challenge-card.design-challenge-v4 .design-d4-layout {
@@ -11315,18 +11315,24 @@ article.challenge-card.design-challenge-v4 .design-d4-logo {
     padding-inline: 12px !important;
   }
 
-  article.challenge-card.design-challenge-v4 .design-d4-masthead,
-  article.challenge-card.design-challenge-v4 .design-d4-layout {
-    width: min(calc(100vw - 34px), 344px) !important;
-    max-width: 344px !important;
+  article.challenge-card.design-challenge-v4 .design-d4-masthead {
+    width: min(calc(100vw - 24px), 366px) !important;
+    max-width: 366px !important;
     margin-left: 0 !important;
     margin-right: auto !important;
   }
 
   article.challenge-card.design-challenge-v4 .design-d4-title {
-    max-height: clamp(74px, 12dvh, 94px) !important;
-    width: min(100%, 316px) !important;
+    max-height: clamp(82px, 13dvh, 104px) !important;
+    width: min(100%, 340px) !important;
     justify-self: start;
+  }
+
+  article.challenge-card.design-challenge-v4 .design-d4-layout {
+    width: min(calc(100vw - 34px), 344px) !important;
+    max-width: 344px !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
   }
 
   article.challenge-card.design-challenge-v4 .design-d4-pattern-panel,
