@@ -55,7 +55,7 @@ const challengeTypeRenderers = {
   "patrones-de-comandos": (id) => renderPatternChallengeV2(id),
   "mapa-en-grilla": (id) => renderCoordinatesChallenge(id),
   "repeticion-obligatoria": (id) => renderRepeatRequiredChallenge(id),
-  "laberinto-flechas": (id) => renderArrowMazeChallenge(id),
+  "laberinto-flechas": (id) => renderDesignD6ArrowMazeChallenge(id),
   "ordenar-algoritmo": (id) => renderOrderAlgorithmChallenge(id),
   "clasificacion-reglas": (id) => renderSortingRulesChallenge(id),
   "memoria-secuencia": (id) => renderSequenceMemoryChallenge(id),
@@ -83,6 +83,8 @@ const DESIGN_D2_ROBOT_IMAGE_SRC = `${DESIGN_D2_ASSET_BASE}/cara%20Nano.png?v=${D
 const DESIGN_D3_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%203";
 const DESIGN_D3_ROBOT_IMAGE_SRC = `${DESIGN_D3_ASSET_BASE}/cara%20Nano.png?v=${Date.now()}`;
 const DESIGN_D4_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%204";
+const DESIGN_D6_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%206";
+const DESIGN_D6_ROBOT_IMAGE_SRC = `${DESIGN_D6_ASSET_BASE}/cara%20Nano.png?v=${Date.now()}`;
 
 function renderRobotMarker() {
   return `<img class="robot-marker" src="${ROBOT_IMAGE_SRC}" alt="Panda feliz" style="--robot-rotation: 0deg" />`;
@@ -98,6 +100,10 @@ function renderDesignRainRobotMarker() {
 
 function renderDesignEnergyRobotMarker() {
   return `<img class="robot-marker design-d3-robot" src="${DESIGN_D3_ROBOT_IMAGE_SRC}" alt="Nano" />`;
+}
+
+function renderDesignD6RobotMarker() {
+  return `<img class="robot-marker design-d6-robot" src="${DESIGN_D6_ROBOT_IMAGE_SRC}" alt="Nano" />`;
 }
 
 function readStoredSoundVolume() {
@@ -2739,6 +2745,266 @@ function renderArrowMazeChallenge(id = 1) {
 
   buildMap();
   paintRobot(route[0], startDirection);
+}
+
+function renderDesignD6ArrowMazeChallenge(id = 1) {
+  const route = ["5-0", "5-1", "5-2", "4-2", "3-2", "3-3", "2-3", "1-3", "1-4", "1-5"];
+  const routeCells = new Set(route);
+  const obstacles = new Set(["5-4", "4-4", "3-0", "3-1", "3-4", "2-0", "2-5", "1-1", "0-3", "0-5"]);
+  const batteries = new Set(["3-3"]);
+  const expected = [
+    "Girar der.",
+    "Avanzar",
+    "Avanzar",
+    "Girar izq.",
+    "Avanzar",
+    "Avanzar",
+    "Girar der.",
+    "Avanzar",
+    "Girar izq.",
+    "Avanzar",
+    "Avanzar",
+    "Girar der.",
+    "Avanzar",
+    "Avanzar",
+  ];
+  const startDirection = 0;
+  let selectedBlank = 0;
+  let isAnimating = false;
+  const collectedBatteries = new Set();
+  const instruction = getChallengeInstruction(id, "Crea tu propia secuencia: ayuda a Nano a pasar por la bateria para cargar energia y encuentra la salida sin tocar los obstaculos.");
+
+  function renderDesignD6Command(command) {
+    const commandClass = command === "Avanzar"
+      ? "is-forward"
+      : command === "Girar izq."
+        ? "is-turn-left"
+        : "is-turn-right";
+
+    return `
+      <span class="command-symbol" aria-hidden="true">
+        <span class="design-d6-command-sprite ${commandClass}"></span>
+      </span>
+      <span class="command-label">${command}</span>
+    `;
+  }
+
+  function renderDesignD6Button(command) {
+    return `
+      <button class="instruction-chip" type="button" data-value="${command}" aria-label="${command}">
+        ${renderDesignD6Command(command)}
+      </button>
+    `;
+  }
+
+  function renderDesignD6Blank(index) {
+    return `
+      <button class="sequence-slot command-card ${index === selectedBlank ? "is-selected" : ""}" type="button" data-blank="${index}" aria-label="Elegir accion">
+        <span class="command-placeholder">${index + 1}</span>
+      </button>
+    `;
+  }
+
+  const stepsMarkup = expected.map((_, index) => renderDesignD6Blank(index)).join("");
+  const actionsMarkup = ["Girar izq.", "Girar der.", "Avanzar"].map(renderDesignD6Button).join("");
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card design-challenge-v6">
+      <div class="design-d6-masthead">
+        <img class="design-d6-title" src="${DESIGN_D6_ASSET_BASE}/TITULO%20Y%20CONSIGNA.png" alt="Mision laberinto. Crea tu propia secuencia: ayuda a Nano a pasar por la bateria para cargar energia y encuentra la salida sin tocar los obstaculos. A jugar!" />
+        <p class="sr-only">${instruction}</p>
+      </div>
+      <div class="visual-sequence-layout design-d6-layout">
+        <div class="path-map visual-map design-d6-map" data-map></div>
+        ${renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact: true })}
+      </div>
+      <div class="challenge-actions">
+        <button class="primary-action" type="button" data-check>COMPROBAR</button>
+        <button class="secondary-action" type="button" data-reset>REINICIAR</button>
+      </div>
+      <img class="design-d6-logo" src="${DESIGN_D6_ASSET_BASE}/LOGO.png" alt="BeTech" />
+      <p class="challenge-message" data-message>Primero gira a Nano hacia el camino verde. Despues avanza, carga la bateria y llega a la salida.</p>
+    </article>
+  `;
+
+  const map = challengeContent.querySelector("[data-map]");
+  const blanks = [...challengeContent.querySelectorAll("[data-blank]")];
+  const checkButton = challengeContent.querySelector("[data-check]");
+  const resetButton = challengeContent.querySelector("[data-reset]");
+  const cells = new Map();
+
+  function buildMap() {
+    map.innerHTML = "";
+    cells.clear();
+
+    for (let row = 0; row < 6; row += 1) {
+      for (let col = 0; col < 6; col += 1) {
+        const key = `${row}-${col}`;
+        const cell = document.createElement("div");
+        cell.className = "path-map-cell";
+        if (routeCells.has(key)) cell.classList.add("is-route");
+        if (obstacles.has(key)) {
+          cell.classList.add("is-obstacle");
+          cell.innerHTML = `<img class="design-d6-virus" src="${DESIGN_D6_ASSET_BASE}/Virus%20tecnologico.png" alt="" />`;
+        }
+        if (batteries.has(key)) {
+          cell.classList.add("is-treasure");
+          cell.innerHTML = `<img class="design-d6-energy" src="${DESIGN_D6_ASSET_BASE}/BATERIA.png" alt="" />`;
+        }
+        if (key === route[0]) cell.classList.add("is-start");
+        if (key === route[route.length - 1]) cell.classList.add("is-goal");
+        cell.dataset.baseHtml = cell.innerHTML;
+        cells.set(key, cell);
+        map.append(cell);
+      }
+    }
+  }
+
+  function paintRobot(key) {
+    if (batteries.has(key)) collectedBatteries.add(key);
+
+    cells.forEach((cell, cellKeyValue) => {
+      cell.classList.remove("is-robot", "is-trail");
+      const hasCollectedBattery = collectedBatteries.has(cellKeyValue);
+      cell.classList.toggle("is-treasure", batteries.has(cellKeyValue) && !hasCollectedBattery);
+      cell.innerHTML = hasCollectedBattery ? "" : cell.dataset.baseHtml || "";
+    });
+
+    const routeIndex = route.indexOf(key);
+    if (routeIndex >= 0) {
+      for (const routeKey of route.slice(0, routeIndex + 1)) {
+        cells.get(routeKey)?.classList.add("is-trail");
+      }
+    }
+
+    const robotCell = cells.get(key);
+    if (!robotCell) return;
+    robotCell.classList.add("is-robot");
+    robotCell.innerHTML = renderDesignD6RobotMarker();
+  }
+
+  function getNextState(state, command) {
+    const [row, col] = state.key.split("-").map(Number);
+    if (command === "Girar der.") {
+      return { key: state.key, direction: (state.direction + 1) % 4 };
+    }
+    if (command === "Girar izq.") {
+      return { key: state.key, direction: (state.direction + 3) % 4 };
+    }
+    if (command !== "Avanzar") return state;
+
+    const deltas = [
+      [-1, 0],
+      [0, 1],
+      [1, 0],
+      [0, -1],
+    ];
+    const [rowDelta, colDelta] = deltas[state.direction];
+    return {
+      key: `${row + rowDelta}-${col + colDelta}`,
+      direction: state.direction,
+    };
+  }
+
+  async function animateCommands(commands = expected) {
+    isAnimating = true;
+    checkButton.disabled = true;
+    resetButton.disabled = true;
+    collectedBatteries.clear();
+
+    let state = { key: route[0], direction: startDirection };
+    paintRobot(state.key);
+    await new Promise((resolve) => setTimeout(resolve, 180));
+
+    for (const command of commands) {
+      const previousKey = state.key;
+      state = getNextState(state, command);
+      paintRobot(state.key);
+      if (command === "Avanzar" && state.key !== previousKey) playRobotMoveSound();
+      await new Promise((resolve) => setTimeout(resolve, 210));
+    }
+
+    isAnimating = false;
+    checkButton.disabled = false;
+    resetButton.disabled = false;
+  }
+
+  blanks.forEach((blank) => {
+    blank.addEventListener("click", () => {
+      if (isAnimating) return;
+      blanks.forEach((item) => item.classList.remove("is-selected"));
+      blank.classList.add("is-selected");
+      selectedBlank = Number(blank.dataset.blank);
+    });
+  });
+
+  challengeContent.querySelectorAll(".instruction-chip").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (isAnimating) return;
+      const target = blanks[selectedBlank];
+      const value = button.dataset.value;
+      target.innerHTML = renderDesignD6Command(value);
+      target.dataset.value = value;
+      target.classList.remove("is-wrong");
+      const next = blanks.find((blank) => !blank.dataset.value);
+      blanks.forEach((item) => item.classList.remove("is-selected"));
+      if (next) {
+        next.classList.add("is-selected");
+        selectedBlank = Number(next.dataset.blank);
+      } else {
+        target.classList.add("is-selected");
+      }
+    });
+  });
+
+  checkButton.addEventListener("click", () => {
+    if (isAnimating) return;
+
+    blanks.forEach((blank) => blank.classList.remove("is-wrong"));
+    const issue = findFirstSequenceIssue(blanks, expected);
+    if (issue) {
+      const stepIndex = Number(issue.dataset.blank);
+      const previewCommands = blanks
+        .slice(0, stepIndex + (issue.dataset.value ? 1 : 0))
+        .map((blank) => blank.dataset.value)
+        .filter(Boolean);
+      issue.classList.add("is-wrong", "is-selected");
+      blanks.forEach((blank) => {
+        if (blank !== issue) blank.classList.remove("is-selected");
+      });
+      selectedBlank = stepIndex;
+      setMessage(issue.dataset.value
+        ? "Ese comando cambia el camino de Nano. Mira la tarjeta marcada y prueba otra."
+        : `Buen avance. Falta completar el paso ${stepIndex + 1} para seguir.`,
+      issue.dataset.value ? "is-error" : "is-good");
+      animateCommands(previewCommands);
+      return;
+    }
+
+    setMessage("Programa listo. Vamos a ver a Nano girar, cargar energia y salir.", "is-good");
+    animateCommands().then(() => {
+      setMessage("Excelente: Nano cruzo el laberinto, cargo energia y encontro la salida.", "is-success");
+      completeChallenge(id);
+    });
+  });
+
+  resetButton.addEventListener("click", () => {
+    if (isAnimating) return;
+    blanks.forEach((blank, index) => {
+      blank.innerHTML = `<span class="command-placeholder">${Number(blank.dataset.blank) + 1}</span>`;
+      delete blank.dataset.value;
+      blank.classList.remove("is-wrong");
+      blank.classList.toggle("is-selected", index === 0);
+    });
+    selectedBlank = 0;
+    collectedBatteries.clear();
+    buildMap();
+    paintRobot(route[0]);
+    setMessage("Nuevo intento. Gira primero hacia el camino verde y usa Avanzar para moverte.");
+  });
+
+  buildMap();
+  paintRobot(route[0]);
 }
 
 function renderOrderAlgorithmChallenge(id = 1) {
