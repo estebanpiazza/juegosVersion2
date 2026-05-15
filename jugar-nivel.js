@@ -3,7 +3,70 @@
    ====================================================== */
 
 const PREVIEW_KEY = "betech-preview-level";
-const ROBOT_IMG   = "dise%C3%B1o%20de%20niveles/DESAFIO%203/cara%20Nano.png";
+const ROBOT_IMG   = "dise%C3%B1o%20de%20niveles/DESAFIO%206/cara%20Nano.png";
+
+// ── Themes ─────────────────────────────────────────────
+// Cada tema define las imágenes para el icono del header, enemigos e ítems.
+// Agregar nuevas temáticas aquí según se diseñen.
+const THEMES = {
+  "virus": {
+    icon:  "dise%C3%B1o%20de%20niveles/DESAFIO%206/Virus%20tecnologico.png",
+    enemy: "dise%C3%B1o%20de%20niveles/DESAFIO%206/Virus%20tecnologico.png",
+    item:  "dise%C3%B1o%20de%20niveles/DESAFIO%206/BATERIA.png",
+  },
+  "clima": {
+    icon:  "assets/Alerta%20de%20lluvia.png",
+    enemy: "assets/charco.png",
+    item:  "assets/Alerta%20de%20lluvia.png",
+  },
+};
+
+function getTheme(temaId) {
+  return THEMES[temaId] || {};
+}
+
+/** Pone el contenido visual correcto en una celda según su tipo y temática. */
+function setCellContent(el, type, temaId) {
+  // Limpiar contenido previo (excepto el robot)
+  const robotImg = el.querySelector(".play-robot-img");
+  el.innerHTML = "";
+  if (robotImg) el.appendChild(robotImg);
+
+  const theme = getTheme(temaId);
+  if (type === "enemy") {
+    if (theme.enemy) {
+      const img = document.createElement("img");
+      img.src = theme.enemy;
+      img.alt = "Enemigo";
+      img.className = "play-cell-img";
+      el.appendChild(img);
+    } else {
+      el.insertAdjacentText("beforeend", "👾");
+    }
+  } else if (type === "item") {
+    if (theme.item) {
+      const img = document.createElement("img");
+      img.src = theme.item;
+      img.alt = "Ítem";
+      img.className = "play-cell-img";
+      el.appendChild(img);
+    } else {
+      el.insertAdjacentText("beforeend", "🔋");
+    }
+  } else if (type === "goal") {
+    const imgGoal = document.createElement("img");
+    imgGoal.src = "tarjetas%20movimiento/Vamos.png";
+    imgGoal.alt = "Meta";
+    imgGoal.className = "play-cell-img";
+    el.appendChild(imgGoal);
+  } else if (type === "start") {
+    const imgStart = document.createElement("img");
+    imgStart.src = "tarjetas%20movimiento/Entrada.png";
+    imgStart.alt = "Entrada";
+    imgStart.className = "play-cell-img play-cell-img--start";
+    el.appendChild(imgStart);
+  }
+}
 
 const CARD_DEFS = [
   { id: "avanzar",          label: "Avanzar",       img: "tarjetas%20movimiento/AVANZAR.png" },
@@ -31,15 +94,12 @@ const bankEl      = document.getElementById("play-card-bank");
 const checkBtn    = document.getElementById("play-check");
 const resetBtn    = document.getElementById("play-reset");
 const modalEl     = document.getElementById("play-modal");
-const modalInner  = document.getElementById("play-modal-inner");
-const modalIcon   = document.getElementById("play-modal-icon");
-const modalTitle  = document.getElementById("play-modal-title");
-const modalMsg    = document.getElementById("play-modal-msg");
-const retryBtn    = document.getElementById("play-modal-retry");
-const homeBtn     = document.getElementById("play-modal-home");
+const modalWin    = document.getElementById("modal-win");
+const modalFail   = document.getElementById("modal-fail");
 const titleEl     = document.getElementById("play-title");
 const metaEl      = document.getElementById("play-meta");
 const consignaEl  = document.getElementById("play-consigna");
+const themeIconEl = document.getElementById("play-theme-icon");
 
 // ── Game state ─────────────────────────────────────────
 let levelData     = null;
@@ -72,9 +132,10 @@ let robotDir = 0;
       return;
     }
   } else {
-    const file = params.get("file");
+    const file   = params.get("file");
+    const carpeta = params.get("carpeta") || "contenido";
     if (file) {
-      fetch(`contenido/${encodeURIComponent(file)}`)
+      fetch(`${carpeta}/${encodeURIComponent(file)}`)
         .then((r) => r.json())
         .then((data) => { levelData = data; renderLevel(); })
         .catch(() => showLoadError());
@@ -109,8 +170,22 @@ function renderLevel() {
     consignaEl.hidden = false;
   }
 
+  // Theme icon en el header
+  if (themeIconEl) {
+    const theme = getTheme(levelData.tema);
+    if (theme.icon) {
+      themeIconEl.src    = theme.icon;
+      themeIconEl.alt    = levelData.tema || "";
+      themeIconEl.hidden = false;
+    } else {
+      themeIconEl.hidden = true;
+    }
+  }
+
   // Build grid
   gridEl.style.gridTemplateColumns = `repeat(${grilla.columnas}, 1fr)`;
+  gridEl.style.gridTemplateRows    = `repeat(${grilla.filas}, 1fr)`;
+  gridEl.style.height = "100%";
   gridEl.innerHTML = "";
   cellEls = {};
 
@@ -124,9 +199,7 @@ function renderLevel() {
       el.dataset.baseType = type;
       el.dataset.key     = key;
       el.setAttribute("role", "gridcell");
-      if (type === "enemy") el.textContent = "👾";
-      if (type === "item")  el.textContent = "🔋";
-      if (type === "goal")  el.textContent = "🏁";
+      setCellContent(el, type, levelData.tema);
       cellEls[key] = el;
       gridEl.appendChild(el);
 
@@ -148,8 +221,26 @@ function renderLevel() {
   // Events
   checkBtn.addEventListener("click", onCheck);
   resetBtn.addEventListener("click", onReset);
-  retryBtn.addEventListener("click", () => { hideModal(); onReset(); });
-  homeBtn.addEventListener("click",  () => { window.location.href = "index.html"; });
+
+  // Modal buttons
+  document.getElementById("modal-win-next").addEventListener("click", () => {
+    window.location.href = "niveles.html";
+  });
+  document.getElementById("modal-win-retry").addEventListener("click", () => { hideModal(); onReset(); });
+  document.getElementById("modal-fail-home").addEventListener("click", () => {
+    window.location.href = "index.html";
+  });
+  document.getElementById("modal-fail-retry").addEventListener("click", () => { hideModal(); onReset(); });
+
+  // Rating buttons (feedback visual)
+  modalEl.querySelectorAll(".modal-rating-grid").forEach(grid => {
+    grid.querySelectorAll(".modal-rating-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        grid.querySelectorAll(".modal-rating-btn").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+      });
+    });
+  });
 }
 
 // ── Slots ──────────────────────────────────────────────
@@ -373,7 +464,8 @@ function expandRepeatBlocks(slots) {
 }
 
 function applyCommand(cmd) {
-  // Returns: "ok" | "off-grid" | "empty" | "enemy"
+  // Returns: "ok" | "off-grid" | "enemy" | "path" | "item" | "start" | "goal" | "empty"
+  // Solo "off-grid" y "enemy" causan falla. Las celdas vacías (blancas) son válidas.
   if (cmd === "derecha") {
     robotDir = (robotDir + 1) % 4;
     return "ok";
@@ -391,10 +483,9 @@ function applyCommand(cmd) {
     if (nr < 0 || nr >= filas || nc < 0 || nc >= columnas) return "off-grid";
     const newPos = `${nr}-${nc}`;
     const type = levelData.grilla.celdas[newPos] || "empty";
-    if (type === "empty") return "empty";
     if (type === "enemy") return "enemy";
     robotPos = newPos;
-    return type; // "path" | "item" | "start" | "goal"
+    return type; // "path" | "item" | "start" | "goal" | "empty"
   }
   // entrada, vamos, etc. → no-op
   return "ok";
@@ -428,8 +519,8 @@ async function runSimulation() {
     placeRobot(robotPos);
     await sleep(210);
 
-    if (result === "off-grid" || result === "empty") {
-      failReason = "El robot salió del camino. Revisá la secuencia de movimientos.";
+    if (result === "off-grid") {
+      failReason = "El robot salió de la grilla. Revisá la secuencia de movimientos.";
       break;
     }
     if (result === "enemy") {
@@ -515,25 +606,22 @@ function resetRobotPosition() {
     const robotImg = cell.querySelector(".play-robot-img");
     if (robotImg) robotImg.remove();
     const baseType = cell.dataset.baseType;
-    if (baseType === "item") cell.textContent = "🔋";
-    if (baseType === "goal") cell.textContent = "🏁";
-    if (baseType === "enemy") cell.textContent = "👾";
+    setCellContent(cell, baseType, levelData.tema);
     cell.dataset.type = baseType;
   });
 }
 
 // ── Modal ──────────────────────────────────────────────
-function showModal(success, message) {
-  modalInner.className = "play-modal " + (success ? "play-modal-success" : "play-modal-fail");
-  modalIcon.textContent  = success ? "🎉" : "😔";
-  modalTitle.textContent = success ? "¡Lo lograste!" : "¡Casi!";
-  modalMsg.textContent   = success
-    ? "El robot llegó a la meta correctamente."
-    : (message || "Hubo un error en la secuencia. ¡Seguí intentando!");
-  modalEl.hidden = false;
-  modalEl.focus?.();
+function showModal(success) {
+  modalWin.hidden  = !success;
+  modalFail.hidden = success;
+  modalEl.hidden   = false;
+  // Reset rating selection
+  modalEl.querySelectorAll(".modal-rating-btn").forEach(b => b.classList.remove("selected"));
 }
 
 function hideModal() {
-  modalEl.hidden = true;
+  modalEl.hidden   = true;
+  modalWin.hidden  = true;
+  modalFail.hidden = true;
 }

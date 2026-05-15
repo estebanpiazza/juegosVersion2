@@ -41,8 +41,7 @@ const state = {
   totalSlots: 8,
   hints: [],        // [{slot, card}]
   availableCards: new Set(["avanzar", "derecha", "izquierda"]),
-  activePickerSlot: null,
-};
+  activePickerSlot: null,  tema: "",};
 
 // ── DOM refs ───────────────────────────────────────────
 const gridEl         = document.getElementById("gen-grid");
@@ -353,6 +352,7 @@ function showError(msg) {
 function buildLevelJSON() {
   const autor    = document.getElementById("gen-autor").value.trim();
   const tematica = document.getElementById("gen-tematica").value.trim();
+  const tema     = document.getElementById("gen-tema").value;
   const nivel    = Math.max(1, parseInt(document.getElementById("gen-nivel").value) || 1);
   const desafio  = Math.max(1, parseInt(document.getElementById("gen-desafio").value) || 1);
   const consigna = document.getElementById("gen-consigna").value.trim();
@@ -368,6 +368,7 @@ function buildLevelJSON() {
   return {
     autor,
     tematica,
+    tema,
     nivel,
     desafio,
     consigna,
@@ -449,6 +450,7 @@ function loadFromJSON(data) {
   // Metadata
   document.getElementById("gen-autor").value    = data.autor    || "";
   document.getElementById("gen-tematica").value = data.tematica || "";
+  document.getElementById("gen-tema").value     = data.tema     || "";
   document.getElementById("gen-nivel").value    = data.nivel    || 1;
   document.getElementById("gen-desafio").value  = data.desafio  || 1;
   document.getElementById("gen-consigna").value = data.consigna || "";

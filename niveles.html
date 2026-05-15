@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Be Tech | Niveles para probar</title>
+    <link rel="stylesheet" href="estilos.css?v=1" />
+  </head>
+  <body class="niv-body">
+    <main class="niv-shell">
+
+      <header class="niv-header">
+        <a class="niv-back" href="index.html" aria-label="Volver al inicio">← Volver</a>
+        <div>
+          <h1 class="niv-heading">🗂️ Niveles para probar</h1>
+          <p class="niv-subtitle">Elegí un nivel generado y jugalo directamente.</p>
+        </div>
+      </header>
+
+      <div class="niv-info-bar" id="niv-info-bar">
+        Cargando niveles…
+      </div>
+
+      <div class="niv-grid" id="niv-grid"></div>
+
+    </main>
+
+    <script>
+      // Rango de escaneo: niveles 4-10, desafíos 1-10
+      const LEVELS   = [4, 5, 6, 7, 8, 9, 10];
+      const DESAFIOS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+      const mkFilename = (n, d) => `nivel-${n}-desafio-${d}.json`;
+
+      async function scan() {
+        const pairs = [];
+        for (const n of LEVELS)
+          for (const d of DESAFIOS)
+            pairs.push({ n, d });
+
+        const results = await Promise.allSettled(
+          pairs.map(async ({ n, d }) => {
+            const fn  = mkFilename(n, d);
+            const res = await fetch(`niveles/${fn}`);
+            if (!res.ok) return null;
+            const data = await res.json();
+            return { n, d, fn, data };
+          })
+        );
+
+        const found = {};
+        for (const r of results)
+          if (r.status === "fulfilled" && r.value) {
+            const { n, d, fn, data } = r.value;
+            found[`${n}-${d}`] = { fn, data };
+          }
+        return found;
+      }
+
+      function renderGrid(found) {
+        const grid    = document.getElementById("niv-grid");
+        const infoBar = document.getElementById("niv-info-bar");
+        grid.innerHTML = "";
+
+        const total = Object.keys(found).length;
+        infoBar.textContent = total === 0
+          ? "No hay niveles todavía. Agregá archivos con el formato nivel-{N}-desafio-{D}.json en la carpeta niveles/."
+          : `${total} nivel${total !== 1 ? "es" : ""} disponible${total !== 1 ? "s" : ""}`;
+
+        // Fila de encabezado
+        const headRow = document.createElement("div");
+        headRow.className = "niv-row";
+        headRow.innerHTML = `<div class="niv-row-label"></div>`;
+        for (const d of DESAFIOS) {
+          const th = document.createElement("div");
+          th.className = "niv-col-head";
+          th.textContent = `D${d}`;
+          headRow.appendChild(th);
+        }
+        grid.appendChild(headRow);
+
+        // Filas por nivel
+        for (const n of LEVELS) {
+          const row   = document.createElement("div");
+          row.className = "niv-row";
+
+          const lbl = document.createElement("div");
+          lbl.className = "niv-row-label";
+          lbl.textContent = `Niv ${n}`;
+          row.appendChild(lbl);
+
+          for (const d of DESAFIOS) {
+            const entry = found[`${n}-${d}`];
+            const cell  = document.createElement("div");
+            cell.className = "niv-cell";
+
+            if (entry) {
+              const a = document.createElement("a");
+              a.className = "niv-btn niv-btn--on";
+              a.href  = `jugar-nivel.html?carpeta=niveles&file=${encodeURIComponent(entry.fn)}`;
+              a.title = entry.data.consigna || entry.data.tematica || `Nivel ${n} · Desafío ${d}`;
+              a.setAttribute("aria-label", `Nivel ${n} Desafío ${d}`);
+              a.textContent = d;
+              cell.appendChild(a);
+            } else {
+              const div = document.createElement("div");
+              div.className = "niv-btn niv-btn--off";
+              cell.appendChild(div);
+            }
+
+            row.appendChild(cell);
+          }
+          grid.appendChild(row);
+        }
+      }
+
+      async function init() {
+        document.getElementById("niv-info-bar").textContent = "Escaneando niveles…";
+        try {
+          const found = await scan();
+          renderGrid(found);
+        } catch (e) {
+          document.getElementById("niv-info-bar").textContent = "Error al escanear niveles.";
+          console.error(e);
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>

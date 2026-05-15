@@ -4,75 +4,140 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Be Tech | Jugar Nivel</title>
-    <link rel="stylesheet" href="estilos.css?v=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css?v=2" />
   </head>
   <body class="play-body">
-    <div class="play-page">
+    <!-- Header -->
+    <header class="play-header">
+      <div class="play-header-left">
+        <a class="play-back-btn" href="index.html">← Volver</a>
+        <img id="play-theme-icon" class="play-theme-icon" src="" alt="" hidden>
+      </div>
+      <div class="play-header-center">
+        <h1 class="play-title" id="play-title">¡Misión!</h1>
+        <p id="play-consigna" class="play-consigna" hidden></p>
+      </div>
+      <span class="play-meta" id="play-meta"></span>
+    </header>
 
-      <!-- Header -->
-      <header class="play-header">
-        <a class="play-back-btn" href="index.html" aria-label="Volver al inicio">
-          ← Volver
-        </a>
-        <h1 class="play-title" id="play-title">¡Misión Laberinto!</h1>
-        <span class="play-meta" id="play-meta"></span>
-      </header>
+    <!-- Main layout -->
+    <main class="play-main">
 
-      <!-- Stage -->
-      <div class="play-stage">
-        <div class="play-workspace">
+      <!-- Grilla -->
+      <section class="play-maze-panel" aria-label="Grilla del laberinto">
+        <div id="play-grid" class="play-grid" role="grid" aria-label="Laberinto"></div>
+      </section>
 
-          <!-- Grid -->
-          <div class="play-grid-wrap">
-            <div class="play-grid-label" id="play-grid-label-top">tin.bot</div>
-            <div id="play-grid" class="play-grid" role="grid" aria-label="Laberinto"></div>
-            <div class="play-grid-label">tin.bot</div>
+      <!-- Panel derecho -->
+      <div class="play-right-panel">
+        <div class="play-section play-section--algo">
+          <div class="play-section-title">
+            <span class="play-section-num">1</span>
+            <span class="play-section-label">Tu algoritmo</span>
           </div>
+          <div id="play-slots" class="play-algo-slots" role="list" aria-label="Casillas del algoritmo"></div>
+        </div>
 
-          <!-- Right panel -->
-          <div class="play-right-panel">
-              <p id="play-consigna" class="play-consigna" hidden></p>
-              <div class="play-section">
-              <div class="play-section-title">
-                <span class="play-section-num">1</span>
-                <strong>Tu algoritmo</strong>
-              </div>
-              <div id="play-slots" class="play-algo-slots" role="list" aria-label="Casillas del algoritmo"></div>
-            </div>
-
-            <div class="play-section">
-              <div class="play-section-title">
-                <span class="play-section-num">2</span>
-                <strong>Tarjetas de programación</strong>
-              </div>
-              <div id="play-card-bank" class="play-card-bank" role="list" aria-label="Tarjetas disponibles"></div>
-            </div>
+        <div class="play-section play-section--cards">
+          <div class="play-section-title">
+            <span class="play-section-num">2</span>
+            <span class="play-section-label">Tarjetas de programación</span>
           </div>
-
+          <div id="play-card-bank" class="play-card-bank" role="list" aria-label="Tarjetas disponibles"></div>
         </div>
       </div>
 
-      <!-- Footer -->
-      <footer class="play-footer">
-        <button id="play-check" class="play-check-btn" type="button">COMPROBAR</button>
-        <button id="play-reset" class="play-reset-btn" type="button">REINICIAR</button>
-      </footer>
+    </main>
 
-    </div>
+    <!-- Footer -->
+    <footer class="play-footer">
+      <button id="play-check" class="play-check-btn" type="button">COMPROBAR</button>
+      <button id="play-reset" class="play-reset-btn" type="button">REINICIAR</button>
+    </footer>
 
     <!-- Result modal -->
-    <div id="play-modal" class="play-modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="play-modal-title">
-      <div class="play-modal" id="play-modal-inner">
-        <div class="play-modal-icon" id="play-modal-icon" aria-hidden="true"></div>
-        <h2 id="play-modal-title"></h2>
-        <p id="play-modal-msg"></p>
-        <div class="play-modal-actions">
-          <button id="play-modal-retry" class="secondary-action" type="button">Reintentar</button>
-          <button id="play-modal-home" class="primary-action" type="button">Inicio</button>
+    <div id="play-modal" class="play-modal-overlay" hidden role="dialog" aria-modal="true">
+
+      <!-- ── WIN ── -->
+      <div class="modal-card" id="modal-win" hidden>
+        <div class="modal-top">
+          <div class="modal-text-group">
+            <img class="modal-title-img" src="tarjetas%20finalizacion%20nivel/LO%20LOGRASTE/LO%20LOGRASTE.png" alt="¡Lo lograste!">
+            <img class="modal-subtitle-img" src="tarjetas%20finalizacion%20nivel/LO%20LOGRASTE/Desafio.png" alt="¡Desafío completado!">
+          </div>
+          <img class="modal-nano" src="tarjetas%20finalizacion%20nivel/LO%20LOGRASTE/Nano.png" alt="Nano celebrando">
+        </div>
+        <div class="modal-rating">
+          <p class="modal-rating-q">⚡ ¿Te gustó esta misión? ⚡</p>
+          <div class="modal-rating-grid">
+            <button class="modal-rating-btn" type="button" aria-label="No me gustó">
+              <img src="tarjetas%20finalizacion%20nivel/LO%20LOGRASTE/No%20me%20gusto.png" alt="No me gustó">
+            </button>
+            <button class="modal-rating-btn" type="button" aria-label="Más o menos">
+              <img src="tarjetas%20finalizacion%20nivel/LO%20LOGRASTE/Maso.png" alt="Más o menos">
+            </button>
+            <button class="modal-rating-btn" type="button" aria-label="Estuvo bien">
+              <img src="tarjetas%20finalizacion%20nivel/LO%20LOGRASTE/bien.png" alt="Estuvo bien">
+            </button>
+            <button class="modal-rating-btn" type="button" aria-label="¡Me encantó!">
+              <img src="tarjetas%20finalizacion%20nivel/LO%20LOGRASTE/Me%20encanto.png" alt="¡Me encantó!">
+            </button>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-action-btn" id="modal-win-next" type="button">
+            <img src="tarjetas%20finalizacion%20nivel/LO%20LOGRASTE/Boton%20turqeuza.png" alt="Siguiente misión">
+          </button>
+          <button class="modal-action-btn" id="modal-win-retry" type="button">
+            <img src="tarjetas%20finalizacion%20nivel/LO%20LOGRASTE/Boton%20azul.png" alt="Volver a jugar">
+          </button>
+        </div>
+        <img class="modal-fondo" src="tarjetas%20finalizacion%20nivel/LO%20LOGRASTE/Fondo.png" alt="" aria-hidden="true">
+      </div>
+
+      <!-- ── FAIL ── -->
+      <div class="modal-card" id="modal-fail" hidden>
+        <div class="modal-top">
+          <div class="modal-text-group">
+            <img class="modal-title-img" src="tarjetas%20finalizacion%20nivel/NO%20LO%20LOGRASTE/UPSS.png" alt="¡Ups! Casi lo logras">
+            <img class="modal-subtitle-img" src="tarjetas%20finalizacion%20nivel/NO%20LO%20LOGRASTE/Sigue%20jugando.png" alt="¡Sigue jugando!">
+          </div>
+          <img class="modal-nano" src="tarjetas%20finalizacion%20nivel/NO%20LO%20LOGRASTE/nANO.png" alt="Nano">
+        </div>
+        <div class="modal-rating">
+          <p class="modal-rating-q">⚡ ¿Te gustó esta misión? ⚡</p>
+          <div class="modal-rating-grid">
+            <button class="modal-rating-btn" type="button" aria-label="No me gustó">
+              <img src="tarjetas%20finalizacion%20nivel/NO%20LO%20LOGRASTE/No%20me%20gust%C3%B3.png" alt="No me gustó">
+            </button>
+            <button class="modal-rating-btn" type="button" aria-label="Más o menos">
+              <img src="tarjetas%20finalizacion%20nivel/NO%20LO%20LOGRASTE/Maso.png" alt="Más o menos">
+            </button>
+            <button class="modal-rating-btn" type="button" aria-label="Estuvo bien">
+              <img src="tarjetas%20finalizacion%20nivel/NO%20LO%20LOGRASTE/bien.png" alt="Estuvo bien">
+            </button>
+            <button class="modal-rating-btn" type="button" aria-label="¡Me encantó!">
+              <img src="tarjetas%20finalizacion%20nivel/NO%20LO%20LOGRASTE/Me%20encanto.png" alt="¡Me encantó!">
+            </button>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-action-btn" id="modal-fail-home" type="button">
+            <img src="tarjetas%20finalizacion%20nivel/NO%20LO%20LOGRASTE/Boton%20turquesa.png" alt="Volver al inicio">
+          </button>
+          <button class="modal-action-btn" id="modal-fail-retry" type="button">
+            <img src="tarjetas%20finalizacion%20nivel/NO%20LO%20LOGRASTE/Boton%20azul.png" alt="Volver a jugar">
+          </button>
         </div>
       </div>
+
     </div>
 
-    <script src="jugar-nivel.js?v=1"></script>
+    <!-- Logo BeTech fijo abajo a la derecha -->
+    <img class="play-d6-logo" src="dise%C3%B1o%20de%20niveles/DESAFIO%206/LOGO.png" alt="BeTech" aria-hidden="true">
+
+    <script src="jugar-nivel.js?v=2"></script>
   </body>
 </html>
