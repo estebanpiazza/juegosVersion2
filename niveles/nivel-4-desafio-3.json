@@ -1,0 +1,37 @@
+{
+"autor": "ChatGPT",
+"tematica": "Escuela",
+"tema": "escuela",
+"nivel": 4,
+"desafio": 3,
+"consigna": "¡Lleva al robot hasta la biblioteca!",
+"grilla": {
+"filas": 4,
+"columnas": 4,
+"celdas": {
+"3-0": "start",
+"2-0": "path",
+"1-0": "path",
+"1-1": "goal"
+},
+"robotDireccionInicial": 0
+},
+"algoritmo": {
+"totalSlots": 4,
+"pistas": [
+{
+"slot": 0,
+"card": "avanzar"
+},
+{
+"slot": 1,
+"card": "avanzar"
+}
+],
+"tarjetasDisponibles": [
+"avanzar",
+"derecha",
+"izquierda"
+]
+}
+}

@@ -4,7 +4,7 @@
   "tema": "virus",
   "nivel": 4,
   "desafio": 1,
-  "consigna": "¡Ayuda a Nano a llegar a la escuela! ¿Cuantós pasos deberá dar?",
+  "consigna": "¡Cuidado con los virus! Nano debe esquivarlos para llegar a tiempo. ¿Hacia dónde tiene que girar?",
   "grilla": {
     "filas": 3,
     "columnas": 3,
@@ -25,7 +25,7 @@
     "totalSlots": 2,
     "pistas": [],
     "tarjetasDisponibles": [
-      "avanzar"
+      "avanzar","girar_derecha","derecha"
     ]
   }
 }
