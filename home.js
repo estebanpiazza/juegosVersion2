@@ -60,3 +60,30 @@ if (levelCardsContainer) {
     renderLevelCards(levels);
   });
 }
+
+// ── Import & play ──────────────────────────────────────
+const homeImportFile = document.getElementById("home-import-file");
+if (homeImportFile) {
+  homeImportFile.addEventListener("change", (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data || !data.grilla) throw new Error("formato inválido");
+        localStorage.setItem("betech-preview-level", JSON.stringify(data));
+        window.open("jugar-nivel.html?preview=true", "_blank");
+      } catch {
+        // Replace with inline message to avoid popup blockers
+        const label = homeImportFile.closest("label");
+        if (label) {
+          const prev = label.querySelector(".gen-entry-sub");
+          if (prev) { prev.textContent = "⚠ Archivo inválido. Intentá con otro JSON."; }
+        }
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  });
+}

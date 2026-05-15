@@ -48,6 +48,20 @@
           </a>
         </div>
       </section>
+
+      <section style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;padding:12px 0 24px">
+        <a class="gen-entry-btn" href="generador.html" aria-label="Ir al generador de niveles">
+          <span aria-hidden="true">⚙️</span>
+          <strong>Generador de Niveles</strong>
+          <span class="gen-entry-sub">Crea y exporta tus propios desafíos</span>
+        </a>
+        <label class="gen-import-entry-btn" for="home-import-file" role="button" aria-label="Importar nivel desde archivo JSON">
+          <span aria-hidden="true">📂</span>
+          <strong>Importar y Jugar</strong>
+          <span class="gen-entry-sub">Cargá un JSON y jugalo directo</span>
+          <input id="home-import-file" type="file" accept=".json,application/json" style="display:none" />
+        </label>
+      </section>
     </main>
 
     <script src="home.js?v=2"></script>

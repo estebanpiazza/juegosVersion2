@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Be Tech | Jugar Nivel</title>
+    <link rel="stylesheet" href="estilos.css?v=1" />
+  </head>
+  <body class="play-body">
+    <div class="play-page">
+
+      <!-- Header -->
+      <header class="play-header">
+        <a class="play-back-btn" href="index.html" aria-label="Volver al inicio">
+          ← Volver
+        </a>
+        <h1 class="play-title" id="play-title">¡Misión Laberinto!</h1>
+        <span class="play-meta" id="play-meta"></span>
+      </header>
+
+      <!-- Stage -->
+      <div class="play-stage">
+        <div class="play-workspace">
+
+          <!-- Grid -->
+          <div class="play-grid-wrap">
+            <div class="play-grid-label" id="play-grid-label-top">tin.bot</div>
+            <div id="play-grid" class="play-grid" role="grid" aria-label="Laberinto"></div>
+            <div class="play-grid-label">tin.bot</div>
+          </div>
+
+          <!-- Right panel -->
+          <div class="play-right-panel">
+              <p id="play-consigna" class="play-consigna" hidden></p>
+              <div class="play-section">
+              <div class="play-section-title">
+                <span class="play-section-num">1</span>
+                <strong>Tu algoritmo</strong>
+              </div>
+              <div id="play-slots" class="play-algo-slots" role="list" aria-label="Casillas del algoritmo"></div>
+            </div>
+
+            <div class="play-section">
+              <div class="play-section-title">
+                <span class="play-section-num">2</span>
+                <strong>Tarjetas de programación</strong>
+              </div>
+              <div id="play-card-bank" class="play-card-bank" role="list" aria-label="Tarjetas disponibles"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="play-footer">
+        <button id="play-check" class="play-check-btn" type="button">COMPROBAR</button>
+        <button id="play-reset" class="play-reset-btn" type="button">REINICIAR</button>
+      </footer>
+
+    </div>
+
+    <!-- Result modal -->
+    <div id="play-modal" class="play-modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="play-modal-title">
+      <div class="play-modal" id="play-modal-inner">
+        <div class="play-modal-icon" id="play-modal-icon" aria-hidden="true"></div>
+        <h2 id="play-modal-title"></h2>
+        <p id="play-modal-msg"></p>
+        <div class="play-modal-actions">
+          <button id="play-modal-retry" class="secondary-action" type="button">Reintentar</button>
+          <button id="play-modal-home" class="primary-action" type="button">Inicio</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="jugar-nivel.js?v=1"></script>
+  </body>
+</html>

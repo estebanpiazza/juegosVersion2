@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Be Tech | Generador de Niveles</title>
+    <link rel="stylesheet" href="estilos.css?v=1" />
+  </head>
+  <body class="gen-body">
+    <main class="gen-shell">
+
+      <!-- Topbar -->
+      <header class="gen-topbar">
+        <div class="brand-bar" style="gap:14px">
+          <a class="brand-mark" href="index.html" aria-label="Be Tech juegos">
+            <span class="brand-spark" aria-hidden="true"></span>
+            <span>Be Tech</span>
+          </a>
+          <span class="brand-tag">Juegos</span>
+        </div>
+        <h1 class="gen-topbar-title">⚙️ Generador de Niveles</h1>
+      </header>
+
+      <!-- Metadata -->
+      <section class="gen-panel" aria-label="Datos del nivel">
+        <p class="gen-panel-title">Datos del nivel</p>
+        <div class="gen-metadata">
+          <div class="gen-field">
+            <label for="gen-autor">Autor</label>
+            <input id="gen-autor" type="text" placeholder="Tu nombre" maxlength="80" autocomplete="off" />
+          </div>
+          <div class="gen-field">
+            <label for="gen-tematica">Temática</label>
+            <input id="gen-tematica" type="text" placeholder="Ej: Laberinto espacial" maxlength="100" autocomplete="off" />
+          </div>
+          <div class="gen-field">
+            <label for="gen-nivel">Nivel</label>
+            <input id="gen-nivel" type="number" min="1" max="20" value="5" />
+          </div>
+          <div class="gen-field">
+            <label for="gen-desafio">N° Desafío</label>
+            <input id="gen-desafio" type="number" min="1" max="99" value="1" />
+          </div>
+          <div class="gen-field gen-field-wide">
+            <label for="gen-consigna">Consigna</label>
+            <textarea id="gen-consigna" rows="2" placeholder="Escribí la consigna o descripción del desafío para el jugador..." maxlength="400"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main: grid designer + algorithm editor -->
+      <div class="gen-main">
+
+        <!-- Left: Grid designer -->
+        <section class="gen-panel" aria-label="Diseño de la grilla">
+          <p class="gen-panel-title">Diseño de la grilla</p>
+
+          <div class="gen-grid-controls">
+            <div class="gen-size-group">
+              <label for="gen-rows">Filas</label>
+              <input id="gen-rows" type="number" min="3" max="8" value="6" />
+            </div>
+            <div class="gen-size-group">
+              <label for="gen-cols">Columnas</label>
+              <input id="gen-cols" type="number" min="3" max="8" value="6" />
+            </div>
+            <button id="gen-grid-rebuild" class="secondary-action" type="button" style="min-height:34px;padding:0 14px;font-size:0.8rem">
+              Aplicar tamaño
+            </button>
+          </div>
+
+          <div class="gen-legend" aria-label="Leyenda de tipos de celda" role="list">
+            <span class="gen-legend-item" role="listitem" title="Clic para ciclar el tipo">
+              <span class="gen-legend-dot gen-legend-dot-empty"></span>Vacía
+            </span>
+            <span class="gen-legend-item" role="listitem">
+              <span class="gen-legend-dot gen-legend-dot-path"></span>Camino
+            </span>
+            <span class="gen-legend-item" role="listitem">
+              <span class="gen-legend-dot gen-legend-dot-enemy"></span>Enemigo
+            </span>
+            <span class="gen-legend-item" role="listitem">
+              <span class="gen-legend-dot gen-legend-dot-item"></span>Ítem
+            </span>
+            <span class="gen-legend-item" role="listitem">
+              <span class="gen-legend-dot gen-legend-dot-start"></span>Inicio
+            </span>
+            <span class="gen-legend-item" role="listitem">
+              <span class="gen-legend-dot gen-legend-dot-goal"></span>Meta
+            </span>
+          </div>
+          <p style="font-size:0.7rem;font-weight:700;color:var(--color-muted);margin:0 0 10px">
+            Clic en una celda para cambiar su tipo. Las celdas Vacías no son transitables.
+          </p>
+
+          <div class="gen-grid-wrap">
+            <div id="gen-grid" class="gen-grid" role="grid" aria-label="Grilla de diseño"></div>
+          </div>
+
+          <!-- Direction picker (appears when start exists) -->
+          <div id="gen-dir-section" hidden>
+            <div class="gen-dir-picker">
+              <span class="gen-dir-label">Dirección inicial del robot:</span>
+              <div class="gen-dir-btns" role="group" aria-label="Dirección">
+                <button class="gen-dir-btn" data-dir="0" type="button" title="Arriba">↑</button>
+                <button class="gen-dir-btn" data-dir="1" type="button" title="Derecha">→</button>
+                <button class="gen-dir-btn" data-dir="2" type="button" title="Abajo">↓</button>
+                <button class="gen-dir-btn" data-dir="3" type="button" title="Izquierda">←</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right: Algorithm editor -->
+        <section class="gen-panel" aria-label="Editor de algoritmo">
+          <p class="gen-panel-title">Algoritmo del jugador</p>
+
+          <div class="gen-slot-count-row">
+            <label for="gen-total-slots">Total de casillas:</label>
+            <input id="gen-total-slots" type="number" min="1" max="16" value="8" />
+            <span class="gen-slot-count-hint">Clic en una casilla para marcarla como pista pre-llenada</span>
+          </div>
+
+          <div id="gen-algo-slots" class="gen-algo-slots" role="list" aria-label="Casillas del algoritmo"></div>
+
+          <!-- Card picker popup (injected via JS) -->
+          <div id="gen-card-picker" class="gen-card-picker" hidden aria-label="Seleccionar tarjeta para pista"></div>
+
+          <hr style="border:none;border-top:1px solid rgba(10,122,190,0.1);margin:16px 0" />
+
+          <p class="gen-panel-title" style="margin-bottom:10px">Tarjetas disponibles para el jugador</p>
+          <p style="font-size:0.7rem;font-weight:700;color:var(--color-muted);margin:0 0 10px">
+            Seleccioná las tarjetas que el jugador podrá usar para completar el algoritmo.
+          </p>
+          <div id="gen-cards-grid" class="gen-cards-grid" role="group" aria-label="Tarjetas disponibles"></div>
+        </section>
+      </div>
+
+      <!-- Import section -->
+      <section class="gen-panel gen-import-section" aria-label="Importar nivel existente">
+        <p class="gen-panel-title">Importar nivel existente para editar</p>
+        <div class="gen-import-row">
+          <p class="gen-import-desc">Cargá un archivo .json generado anteriormente para editarlo acá.</p>
+          <label class="gen-import-label" for="gen-import-file">
+            📂 Importar JSON
+            <input id="gen-import-file" type="file" accept=".json,application/json" style="display:none" />
+          </label>
+        </div>
+      </section>
+
+      <!-- Error message -->
+      <div id="gen-error" class="gen-error-msg" role="alert" aria-live="polite"></div>
+
+      <!-- Action bar -->
+      <div class="gen-action-bar">
+        <button id="gen-preview-btn" class="secondary-action" type="button">
+          👁 Probar nivel
+        </button>
+        <button id="gen-download-btn" class="primary-action" type="button">
+          ⬇ Descargar JSON
+        </button>
+      </div>
+
+    </main>
+
+    <script src="generador.js?v=1"></script>
+  </body>
+</html>
