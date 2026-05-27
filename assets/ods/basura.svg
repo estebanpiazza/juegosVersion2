@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Residuo mezclado</title>
+  <rect width="128" height="128" rx="28" fill="#fff2f2"/>
+  <path d="M39 44h50l-5 66H44L39 44Z" fill="#58595b"/>
+  <path d="M35 36h58" stroke="#e25353" stroke-width="9" stroke-linecap="round"/>
+  <path d="M52 30h24" stroke="#e25353" stroke-width="8" stroke-linecap="round"/>
+  <path d="M55 57v37M73 57v37" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+  <path d="m35 22 58 90" stroke="#f5920a" stroke-width="10" stroke-linecap="round"/>
+</svg>

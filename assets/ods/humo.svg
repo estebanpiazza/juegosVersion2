@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Humo contaminante</title>
+  <rect width="128" height="128" rx="28" fill="#f4f7f9"/>
+  <rect x="72" y="60" width="25" height="47" rx="5" fill="#58595b"/>
+  <path d="M34 101h74" stroke="#0a7abe" stroke-width="9" stroke-linecap="round"/>
+  <path d="M48 53c-12-12 7-18-2-31M70 50c-11-10 8-18-1-30M91 54c-13-12 8-20-2-33" stroke="#8fa5b5" stroke-width="9" stroke-linecap="round"/>
+  <path d="M24 77c10-11 24-11 34 0 8-9 22-9 31 0" stroke="#e25353" stroke-width="8" stroke-linecap="round" fill="none"/>
+</svg>

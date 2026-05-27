@@ -1,0 +1,38 @@
+{
+  "autor": "BeTech",
+  "tematica": "ODS 4 - Programamos para aprender",
+  "tema": "ods-educacion",
+  "nivel": "ODS",
+  "desafio": 1,
+  "consigna": "Nano visita una estacion de aprendizaje. Programa el camino, recoge la idea colaborativa y llega al aula sin tocar los bloqueos.",
+  "grilla": {
+    "filas": 4,
+    "columnas": 4,
+    "celdas": {
+      "0-0": "enemy",
+      "0-1": "enemy",
+      "0-2": "path",
+      "0-3": "goal",
+      "1-0": "path",
+      "1-1": "item",
+      "1-2": "path",
+      "1-3": "enemy",
+      "2-0": "path",
+      "2-1": "enemy",
+      "2-2": "enemy",
+      "2-3": "enemy",
+      "3-0": "start",
+      "3-1": "enemy",
+      "3-2": "enemy",
+      "3-3": "enemy"
+    },
+    "robotDireccionInicial": 0
+  },
+  "algoritmo": {
+    "totalSlots": 9,
+    "pistas": [
+      { "slot": 0, "card": "avanzar" }
+    ],
+    "tarjetasDisponibles": ["avanzar", "derecha", "izquierda"]
+  }
+}

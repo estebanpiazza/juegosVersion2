@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Agua limpia</title>
+  <rect width="128" height="128" rx="28" fill="#f7fbff"/>
+  <path d="M64 16c17 22 34 45 34 69 0 19-15 34-34 34S30 104 30 85c0-24 17-47 34-69Z" fill="#08dbf7"/>
+  <path d="M49 82c0 9 7 16 16 16" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="79" cy="58" r="9" fill="#fff" opacity=".82"/>
+</svg>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Be Tech | Niveles ODS</title>
+    <link rel="stylesheet" href="estilos.css?v=21" />
+  </head>
+  <body class="niv-body ods-body">
+    <main class="niv-shell ods-shell">
+      <header class="niv-header ods-header">
+        <a class="niv-back" href="index.html" aria-label="Volver al inicio">&larr; Volver</a>
+        <div>
+          <h1 class="niv-heading">Niveles ODS</h1>
+          <p class="niv-subtitle">Robotica, grillas y laberintos para transformar el futuro.</p>
+        </div>
+      </header>
+
+      <div class="niv-info-bar" id="ods-info-bar">Cargando misiones ODS...</div>
+      <section class="ods-level-grid" id="ods-level-grid" aria-label="Misiones ODS"></section>
+    </main>
+
+    <script>
+      const ODS_FOLDER = "niveles-ods";
+      const odsGrid = document.getElementById("ods-level-grid");
+      const odsInfo = document.getElementById("ods-info-bar");
+
+      function playHref(file) {
+        const params = new URLSearchParams({
+          carpeta: ODS_FOLDER,
+          file,
+          volver: "niveles-ods.html",
+        });
+        return `jugar-nivel.html?${params.toString()}`;
+      }
+
+      function renderMiniGrid(level) {
+        const grilla = level && level.grilla;
+        if (!grilla || !grilla.filas || !grilla.columnas) return "";
+
+        const cells = [];
+        for (let r = 0; r < grilla.filas; r += 1) {
+          for (let c = 0; c < grilla.columnas; c += 1) {
+            const type = grilla.celdas?.[`${r}-${c}`] || "empty";
+            cells.push(`<span class="ods-mini-cell ods-mini-cell--${type}"></span>`);
+          }
+        }
+
+        return `
+          <div class="ods-mini-grid" style="grid-template-columns: repeat(${grilla.columnas}, 1fr)" aria-hidden="true">
+            ${cells.join("")}
+          </div>
+        `;
+      }
+
+      function renderCards(entries) {
+        odsGrid.innerHTML = entries.map(({ entry, level }) => `
+          <a class="ods-level-card" href="${playHref(entry.file)}" aria-label="Jugar ${entry.titulo}">
+            <span class="ods-card-kicker">${entry.estacion} &middot; ${entry.ods}</span>
+            <span class="ods-card-main">
+              <img class="ods-card-icon" src="${entry.icon}" alt="" aria-hidden="true">
+              <span>
+                <strong>${entry.titulo}</strong>
+                <span>${entry.descripcion}</span>
+              </span>
+            </span>
+            ${renderMiniGrid(level)}
+          </a>
+        `).join("");
+      }
+
+      async function loadLevel(entry) {
+        try {
+          const response = await fetch(`${ODS_FOLDER}/${entry.file}`, { cache: "no-store" });
+          if (!response.ok) return { entry, level: null };
+          return { entry, level: await response.json() };
+        } catch {
+          return { entry, level: null };
+        }
+      }
+
+      async function init() {
+        try {
+          const response = await fetch(`${ODS_FOLDER}/index.json`, { cache: "no-store" });
+          if (!response.ok) throw new Error("index");
+          const payload = await response.json();
+          const entries = Array.isArray(payload.niveles) ? payload.niveles : [];
+          const hydrated = await Promise.all(entries.map(loadLevel));
+          renderCards(hydrated);
+          odsInfo.textContent = `${entries.length} misiones disponibles`;
+        } catch (error) {
+          odsInfo.textContent = "No se pudieron cargar las misiones ODS.";
+          console.error(error);
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>

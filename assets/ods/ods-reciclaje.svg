@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Reciclaje</title>
+  <rect width="128" height="128" rx="28" fill="#f7fbff"/>
+  <path d="M61 20 44 48h15l8-14 8 14h15L73 20c-3-5-9-5-12 0Z" fill="#25d366"/>
+  <path d="M102 76 85 48l-8 13 9 14H69l-8 13h34c6 0 10-6 7-12Z" fill="#08dbf7"/>
+  <path d="M26 76 43 48l8 13-9 14h17l8 13H33c-6 0-10-6-7-12Z" fill="#f5920a"/>
+  <path d="M58 48h-9l9-16v16Zm29 22 5 8H73l14-8ZM41 70l-5 8h19l-14-8Z" fill="#fff"/>
+</svg>

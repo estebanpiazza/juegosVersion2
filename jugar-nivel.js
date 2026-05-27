@@ -19,6 +19,36 @@ const THEMES = {
     enemy: "assets/charco.png",
     item:  "assets/Alerta%20de%20lluvia.png",
   },
+  "ods-educacion": {
+    icon:  "assets/ods/ods-educacion.svg",
+    enemy: "assets/ods/enemigo-bloqueo.svg",
+    item:  "assets/ods/ods-educacion.svg",
+  },
+  "ods-agua": {
+    icon:  "assets/ods/ods-agua.svg",
+    enemy: "assets/ods/contaminacion.svg",
+    item:  "assets/ods/ods-agua.svg",
+  },
+  "ods-energia": {
+    icon:  "assets/ods/ods-energia.svg",
+    enemy: "assets/ods/derroche-energia.svg",
+    item:  "assets/ods/ods-energia.svg",
+  },
+  "ods-ciudad": {
+    icon:  "assets/ods/ods-ciudad.svg",
+    enemy: "assets/ods/trafico.svg",
+    item:  "assets/ods/ods-ciudad.svg",
+  },
+  "ods-reciclaje": {
+    icon:  "assets/ods/ods-reciclaje.svg",
+    enemy: "assets/ods/basura.svg",
+    item:  "assets/ods/ods-reciclaje.svg",
+  },
+  "ods-clima": {
+    icon:  "assets/ods/ods-clima.svg",
+    enemy: "assets/ods/humo.svg",
+    item:  "assets/ods/ods-clima.svg",
+  },
 };
 
 function getTheme(temaId) {
@@ -100,6 +130,7 @@ const titleEl     = document.getElementById("play-title");
 const metaEl      = document.getElementById("play-meta");
 const consignaEl  = document.getElementById("play-consigna");
 const themeIconEl = document.getElementById("play-theme-icon");
+const backBtn     = document.querySelector(".play-back-btn");
 
 // ── Game state ─────────────────────────────────────────
 let levelData     = null;
@@ -108,15 +139,27 @@ let slotEls       = [];       // DOM elements for algorithm slots
 let selectedSlot  = 0;        // currently active slot index
 let isAnimating   = false;
 let collectedItems = new Set();
+let returnPage = "niveles.html";
 
 // Robot runtime state
 let robotPos = null;  // "row-col"
 let robotDir = 0;
 
+function resolveReturnPage(requested, carpeta) {
+  const allowedPages = new Set(["index.html", "niveles.html", "niveles-ods.html"]);
+  if (allowedPages.has(requested)) return requested;
+  if (carpeta === "niveles-ods") return "niveles-ods.html";
+  if (carpeta === "niveles") return "niveles.html";
+  return "index.html";
+}
+
 // ── Load level ─────────────────────────────────────────
 (function init() {
   const params  = new URLSearchParams(window.location.search);
   const preview = params.get("preview") === "true";
+  const carpeta = params.get("carpeta") || "contenido";
+  returnPage = resolveReturnPage(params.get("volver"), carpeta);
+  if (backBtn) backBtn.href = returnPage;
 
   if (preview) {
     try {
@@ -133,7 +176,6 @@ let robotDir = 0;
     }
   } else {
     const file   = params.get("file");
-    const carpeta = params.get("carpeta") || "contenido";
     if (file) {
       fetch(`${carpeta}/${encodeURIComponent(file)}`)
         .then((r) => r.json())
@@ -224,7 +266,7 @@ function renderLevel() {
 
   // Modal buttons
   document.getElementById("modal-win-next").addEventListener("click", () => {
-    window.location.href = "niveles.html";
+    window.location.href = returnPage;
   });
   document.getElementById("modal-win-retry").addEventListener("click", () => { hideModal(); onReset(); });
   document.getElementById("modal-fail-home").addEventListener("click", () => {

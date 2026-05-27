@@ -1,0 +1,54 @@
+{
+  "titulo": "Robotica para Transformar el Futuro",
+  "subtitulo": "Misiones de laberintos inspiradas en ODS, grillas y programacion de Nano.",
+  "niveles": [
+    {
+      "file": "ods-01-educacion.json",
+      "estacion": "Estacion 1",
+      "ods": "ODS 4",
+      "titulo": "Programamos para aprender",
+      "descripcion": "Recorre una ruta educativa, recoge una idea colaborativa y llega al aula.",
+      "icon": "assets/ods/ods-educacion.svg"
+    },
+    {
+      "file": "ods-02-agua.json",
+      "estacion": "Estacion 2",
+      "ods": "ODS 6",
+      "titulo": "Guardianes del agua",
+      "descripcion": "Evita la contaminacion y lleva agua limpia a la comunidad.",
+      "icon": "assets/ods/ods-agua.svg"
+    },
+    {
+      "file": "ods-03-energia.json",
+      "estacion": "Estacion 3",
+      "ods": "ODS 7",
+      "titulo": "Energia del futuro",
+      "descripcion": "Carga energia renovable y encuentra una salida eficiente.",
+      "icon": "assets/ods/ods-energia.svg"
+    },
+    {
+      "file": "ods-04-ciudad.json",
+      "estacion": "Estacion 4",
+      "ods": "ODS 11",
+      "titulo": "Ciudad robotica sustentable",
+      "descripcion": "Traza una ruta urbana, esquiva obstaculos y activa puntos verdes.",
+      "icon": "assets/ods/ods-ciudad.svg"
+    },
+    {
+      "file": "ods-05-reciclaje.json",
+      "estacion": "Estacion 4",
+      "ods": "ODS 12",
+      "titulo": "Ruta del reciclaje",
+      "descripcion": "Recolecta residuos reciclables sin tocar basura mezclada.",
+      "icon": "assets/ods/ods-reciclaje.svg"
+    },
+    {
+      "file": "ods-06-clima.json",
+      "estacion": "Estacion 5",
+      "ods": "ODS 13",
+      "titulo": "Mision clima",
+      "descripcion": "Encuentra la ruta ecologica y evita zonas contaminadas.",
+      "icon": "assets/ods/ods-clima.svg"
+    }
+  ]
+}

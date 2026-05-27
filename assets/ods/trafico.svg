@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Obstaculo urbano</title>
+  <rect width="128" height="128" rx="28" fill="#fffaf2"/>
+  <path d="M28 86h72l-9-32H37l-9 32Z" fill="#e25353"/>
+  <path d="M41 54h46l-7-18H48l-7 18Z" fill="#f5920a"/>
+  <circle cx="44" cy="89" r="9" fill="#58595b"/>
+  <circle cx="84" cy="89" r="9" fill="#58595b"/>
+  <path d="M18 107h92" stroke="#0a7abe" stroke-width="8" stroke-linecap="round"/>
+</svg>

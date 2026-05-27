@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Energia renovable</title>
+  <rect width="128" height="128" rx="28" fill="#fffaf2"/>
+  <circle cx="42" cy="42" r="20" fill="#f5920a"/>
+  <path d="M80 18 50 72h27l-9 38 34-57H76l4-35Z" fill="#25d366"/>
+  <path d="M18 94h92" stroke="#0a7abe" stroke-width="8" stroke-linecap="round"/>
+  <path d="M30 82h64" stroke="#08dbf7" stroke-width="7" stroke-linecap="round"/>
+</svg>
