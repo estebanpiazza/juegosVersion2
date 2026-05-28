@@ -6621,7 +6621,7 @@ body:has(.design-challenge-v1) .game-title {
 
 body:has(.design-challenge-v1) .game-stage-bg {
   display: block;
-  opacity: 0.56;
+  opacity: 1;
 }
 
 body:has(.design-challenge-v1) .game-workspace {
@@ -8312,7 +8312,7 @@ body:has(.design-challenge-v2) .game-title {
 
 body:has(.design-challenge-v2) .game-stage-bg {
   display: block;
-  opacity: 0.58;
+  opacity: 1;
 }
 
 body:has(.design-challenge-v2) .game-workspace {
@@ -9996,7 +9996,7 @@ article.challenge-card.design-challenge-v2 .rain-goal {
 /* Desafio 3: Mision laberinto con piezas de la referencia. */
 body:has(.design-challenge-v3) .game-stage-bg {
   display: block;
-  opacity: 0.58;
+  opacity: 1;
 }
 
 body:has(.design-challenge-v3) .game-workspace {
@@ -11756,7 +11756,7 @@ article.challenge-card.design-challenge-v3 > .challenge-message {
 /* Desafio 4: patron de comandos con piezas de la referencia. */
 body:has(.design-challenge-v4) .game-stage-bg {
   display: block;
-  opacity: 0.58;
+  opacity: 1;
 }
 
 body:has(.design-challenge-v4) .game-workspace {
@@ -12673,7 +12673,7 @@ article.challenge-card.design-challenge-v4 .design-d4-logo {
 /* Desafio 6: Mision laberinto con los assets finales. */
 body:has(.design-challenge-v6) .game-stage-bg {
   display: block;
-  opacity: 0.66;
+  opacity: 1;
   object-fit: cover;
 }
 
@@ -13529,11 +13529,34 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
   background: transparent;
 }
 
+body:has(.n4-assembly-card) .game-workspace {
+  padding: 0;
+}
+
+body:has(.n4-assembly-card) .challenge-content {
+  overflow: hidden;
+}
+
+article.challenge-card.n4-assembly-card {
+  position: relative;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+body:has(.n4-assembly-card) .corner-logo {
+  width: clamp(125px, 13vw, 180px);
+  opacity: 0.58;
+}
+
 .n4-card .challenge-header {
   position: relative;
   z-index: 2;
-  width: min(100%, 980px);
-  margin: 0 auto 10px;
+  width: 100%;
+  margin: 0 0 10px;
   padding: 10px 14px;
   border: 2px solid rgba(8, 219, 247, 0.65);
   border-radius: 20px;
@@ -13542,13 +13565,20 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 }
 
 .n4-assembly-card .n4-assembly-header {
-  max-width: 980px;
-  margin: 0 auto 10px;
-  padding: 10px 14px;
-  border: 2px solid rgba(8, 219, 247, 0.35);
+  position: absolute;
+  left: 50%;
+  bottom: clamp(12px, 3vh, 28px);
+  z-index: 5;
+  width: min(64vw, 860px);
+  max-width: calc(100vw - 190px);
+  margin: 0;
+  padding: clamp(9px, 1.4vh, 15px) clamp(18px, 2.6vw, 34px);
+  border: 2px solid rgba(8, 219, 247, 0.82);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: 0 8px 16px rgba(10, 122, 190, 0.08);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 28px rgba(10, 122, 190, 0.16);
+  transform: translateX(-50%);
+  pointer-events: none;
 }
 
 .n4-assembly-card .n4-assembly-header h2 {
@@ -13557,10 +13587,40 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 }
 
 .n4-assembly-card .n4-assembly-header p[data-consigna-text] {
-  max-width: 820px;
-  margin-top: 4px;
-  font-size: clamp(0.82rem, 1.45vw, 1rem);
-  line-height: 1.25;
+  display: block;
+  max-width: 760px;
+  margin: 0 auto;
+  color: #0a7abe;
+  font-size: clamp(0.95rem, 1.7vw, 1.4rem);
+  line-height: 1.18;
+  text-align: center;
+}
+
+.n4-assembly-card .n4-assembly-header .challenge-kicker,
+.n4-assembly-card .n4-assembly-header .challenge-title-row {
+  display: none;
+}
+
+.n4-assembly-card > .challenge-message {
+  position: absolute;
+  left: clamp(82px, 7vw, 120px);
+  top: clamp(18px, 3vh, 34px);
+  z-index: 5;
+  max-width: min(34vw, 410px);
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid rgba(8, 219, 247, 0.42);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #0a7abe;
+  font-size: clamp(0.78rem, 1.1vw, 0.95rem);
+  line-height: 1.2;
+  text-align: left;
+  box-shadow: 0 10px 22px rgba(10, 122, 190, 0.12);
+}
+
+.n4-assembly-card > .challenge-message:not(.is-good):not(.is-error):not(.is-success) {
+  display: none;
 }
 
 .n4-assembly-layout,
@@ -13572,8 +13632,8 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 .n4-seq-scene,
 .n4-shape-scene {
   position: relative;
-  width: min(100%, 980px);
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   aspect-ratio: 16 / 9;
 }
 
@@ -13585,7 +13645,14 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 }
 
 .n4-assembly-layout.n4-assembly-layout-single {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100vw, 177.778vh);
+  height: max(56.25vw, 100vh);
   display: block;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .n4-piece-bank {
@@ -13640,6 +13707,8 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
   padding: 0;
   transform: translate(-50%, -50%);
   box-shadow: none;
+  touch-action: none;
+  pointer-events: auto;
 }
 
 .n4-piece-floating img {
@@ -13658,6 +13727,11 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
   box-shadow: 0 0 0 4px rgba(245, 146, 10, 0.2);
 }
 
+.n4-piece-floating.is-selected {
+  filter: drop-shadow(0 0 12px rgba(245, 146, 10, 0.92));
+  transform: translate(-50%, -50%) scale(1.07);
+}
+
 .n4-sort-item.is-collected {
   opacity: 0.35;
   transform: scale(0.96);
@@ -13666,11 +13740,14 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 .n4-assembly-stage {
   position: relative;
   aspect-ratio: 16 / 9;
+  width: 100%;
+  height: 100%;
   min-height: 0;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #071b2a;
-  box-shadow: inset 0 0 0 2px rgba(10, 122, 190, 0.1);
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: none;
 }
 
 .n4-assembly-bg,
@@ -13697,10 +13774,11 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 .n4-nano-silhouette {
   position: absolute;
   left: 50%;
-  top: 56%;
-  width: 28%;
+  top: 55%;
+  width: 22%;
   transform: translate(-50%, -50%);
-  opacity: 0.46;
+  opacity: 0.58;
+  filter: drop-shadow(0 0 18px rgba(8, 219, 247, 0.25));
   pointer-events: none;
 }
 
@@ -13708,19 +13786,37 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
   position: absolute;
   left: var(--x);
   top: var(--y);
-  width: var(--w);
-  height: var(--h);
-  border: 2px dashed rgba(10, 122, 190, 0.34);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
+  width: var(--hit-w, var(--w));
+  height: var(--hit-h, var(--h));
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
   transform: translate(-50%, -50%);
   cursor: pointer;
+  pointer-events: auto;
+}
+
+.n4-assembly-target::after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--img-w);
+  height: var(--img-h);
+  border: 2px solid transparent;
+  border-radius: inherit;
+  background: transparent;
+  transform: translate(-50%, -50%);
+  content: "";
 }
 
 .n4-assembly-target img {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--img-w);
+  height: var(--img-h);
   object-fit: contain;
+  transform: translate(-50%, -50%);
   pointer-events: none;
 }
 
@@ -13730,11 +13826,31 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
   box-shadow: none;
 }
 
+.n4-assembly-target.is-filled::after {
+  display: none;
+}
+
+.n4-assembly-target.is-available::after {
+  border-color: rgba(8, 219, 247, 0.5);
+  background: rgba(8, 219, 247, 0.1);
+  box-shadow: 0 0 14px rgba(8, 219, 247, 0.22);
+}
+
 .n4-drop-target.is-drag-over,
 .n4-sort-bin.is-drag-over,
 .n4-side-box.is-drag-over {
   border-color: #25d366;
   box-shadow: 0 0 0 5px rgba(37, 211, 102, 0.22);
+}
+
+.n4-assembly-target.is-drag-over {
+  box-shadow: none;
+}
+
+.n4-assembly-target.is-drag-over::after {
+  border-color: rgba(37, 211, 102, 0.85);
+  background: rgba(37, 211, 102, 0.12);
+  box-shadow: 0 0 18px rgba(37, 211, 102, 0.28);
 }
 
 .n4-assembly-target.is-wrong,
@@ -13753,9 +13869,9 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 .n4-sort-scene {
   min-height: 0;
   padding: 0;
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
-  background: #0a1f30;
+  background: transparent;
 }
 
 .n4-sort-items {
@@ -13830,9 +13946,9 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 
 .n4-hidden-scene {
   min-height: 0;
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
-  background: #0a1f30;
+  background: transparent;
 }
 
 .n4-hidden-part {
@@ -13866,20 +13982,21 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 .n4-arrow-scene,
 .n4-color-scene {
   min-height: 0;
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
   display: grid;
   align-content: end;
   gap: 18px;
   padding: 28px;
-  background: #0a1f30;
+  background: transparent;
 }
 
 .n4-arrow-route {
   position: relative;
   z-index: 1;
+  width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   gap: clamp(18px, 5vw, 58px);
   min-height: 210px;
@@ -13949,22 +14066,23 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 
 .n4-seq-scene {
   min-height: 0;
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
   display: grid;
   align-content: end;
   gap: 16px;
   padding: 20px;
-  background: #0a1f30;
+  background: transparent;
 }
 
 .n4-seq-route {
   position: relative;
   z-index: 1;
+  width: 100%;
   min-height: 190px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   gap: clamp(10px, 2.4vw, 20px);
 }
@@ -14025,13 +14143,13 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 
 .n4-shape-scene {
   min-height: 0;
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
   display: grid;
   align-content: end;
   gap: 16px;
   padding: 20px;
-  background: #0a1f30;
+  background: transparent;
 }
 
 .n4-shape-belt-wrap {
@@ -14043,7 +14161,7 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 }
 
 .n4-shape-belt {
-  width: min(100%, 760px);
+  width: 100%;
   object-fit: contain;
   filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.2));
 }
@@ -14086,9 +14204,9 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(3, minmax(66px, 1fr));
+  grid-template-columns: repeat(6, minmax(66px, 1fr));
   gap: 10px;
-  width: min(100%, 460px);
+  width: 100%;
   justify-self: center;
 }
 
@@ -14113,9 +14231,9 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 
 .n4-side-scene {
   min-height: 0;
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
-  background: #0a1f30;
+  background: transparent;
 }
 
 .n4-side-window {
@@ -14191,8 +14309,9 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 .n4-color-pattern {
   position: relative;
   z-index: 1;
+  width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   gap: clamp(10px, 3vw, 28px);
   min-height: 190px;
@@ -14229,6 +14348,22 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 }
 
 @media (max-width: 760px) {
+  body:has(.n4-assembly-card) .corner-logo {
+    display: none;
+  }
+
+  .n4-assembly-card .n4-assembly-header {
+    bottom: 12px;
+    width: min(92vw, 620px);
+    max-width: 92vw;
+    padding: 8px 12px;
+  }
+
+  .n4-assembly-card .n4-assembly-header p[data-consigna-text] {
+    font-size: clamp(0.72rem, 2.3vw, 0.9rem);
+    line-height: 1.1;
+  }
+
   .n4-assembly-layout {
     grid-template-columns: 1fr;
   }
@@ -14291,7 +14426,76 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
   }
 }
 
+
 @media (max-width: 500px) {
+  .n4-assembly-layout.n4-assembly-layout-single {
+    width: 100vw !important;
+    height: 100dvh !important;
+  }
+
+  .n4-nano-silhouette {
+    top: 48%;
+    width: 31%;
+  }
+
+  .n4-piece-floating {
+    width: calc(var(--mobile-sw, var(--sw)) * 1%);
+  }
+
+  .n4-piece-floating[data-piece="cabeza"] {
+    --sx: 87%;
+    --sy: 37%;
+    --mobile-sw: 16;
+  }
+
+  .n4-piece-floating[data-piece="cara"] {
+    --sx: 14%;
+    --sy: 31%;
+    --mobile-sw: 8;
+  }
+
+  .n4-piece-floating[data-piece="torzo"] {
+    --sx: 17%;
+    --sy: 70%;
+    --mobile-sw: 13;
+  }
+
+  .n4-piece-floating[data-piece="brazo-izquierdo"] {
+    --sx: 16%;
+    --sy: 49%;
+    --mobile-sw: 12;
+  }
+
+  .n4-piece-floating[data-piece="brazo-derecho"] {
+    --sx: 85%;
+    --sy: 60%;
+    --mobile-sw: 12;
+  }
+
+  .n4-piece-floating[data-piece="mano-izquierda"] {
+    --sx: 15%;
+    --sy: 39%;
+    --mobile-sw: 9;
+  }
+
+  .n4-piece-floating[data-piece="mano-derecha"] {
+    --sx: 83%;
+    --sy: 77%;
+    --mobile-sw: 9;
+  }
+
+  .n4-piece-floating[data-piece="pierna-izquierda"] {
+    --sx: 14%;
+    --sy: 59%;
+    --mobile-sw: 11;
+  }
+
+  .n4-piece-floating[data-piece="pierna-derecha"] {
+    --sx: 86%;
+    --sy: 48%;
+    --mobile-sw: 11;
+  }
+
   .n4-piece-bank,
   .n4-sort-items {
     grid-template-columns: repeat(2, minmax(72px, 1fr));
@@ -14334,6 +14538,76 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 
   .n4-shape-options {
     grid-template-columns: repeat(2, minmax(66px, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .n4-assembly-layout.n4-assembly-layout-single {
+    width: 100vw !important;
+    height: 100dvh !important;
+  }
+
+  .n4-nano-silhouette {
+    top: 48%;
+    width: 31%;
+  }
+
+  .n4-piece-floating {
+    width: calc(var(--mobile-sw, var(--sw)) * 1%);
+  }
+
+  .n4-piece-floating[data-piece="cabeza"] {
+    --sx: 87%;
+    --sy: 37%;
+    --mobile-sw: 16;
+  }
+
+  .n4-piece-floating[data-piece="cara"] {
+    --sx: 14%;
+    --sy: 31%;
+    --mobile-sw: 8;
+  }
+
+  .n4-piece-floating[data-piece="torzo"] {
+    --sx: 17%;
+    --sy: 70%;
+    --mobile-sw: 13;
+  }
+
+  .n4-piece-floating[data-piece="brazo-izquierdo"] {
+    --sx: 16%;
+    --sy: 49%;
+    --mobile-sw: 12;
+  }
+
+  .n4-piece-floating[data-piece="brazo-derecho"] {
+    --sx: 85%;
+    --sy: 60%;
+    --mobile-sw: 12;
+  }
+
+  .n4-piece-floating[data-piece="mano-izquierda"] {
+    --sx: 15%;
+    --sy: 39%;
+    --mobile-sw: 9;
+  }
+
+  .n4-piece-floating[data-piece="mano-derecha"] {
+    --sx: 83%;
+    --sy: 77%;
+    --mobile-sw: 9;
+  }
+
+  .n4-piece-floating[data-piece="pierna-izquierda"] {
+    --sx: 14%;
+    --sy: 59%;
+    --mobile-sw: 11;
+  }
+
+  .n4-piece-floating[data-piece="pierna-derecha"] {
+    --sx: 86%;
+    --sy: 48%;
+    --mobile-sw: 11;
   }
 }
 
