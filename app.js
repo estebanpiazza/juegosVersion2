@@ -1065,13 +1065,37 @@ function enableMissingPieceDrag(container) {
   }
 
   function targetFromPoint(clientX, clientY, source) {
-    const element = document.elementFromPoint(clientX, clientY);
     const targetSelector = source.matches(coordinateSourceSelector)
       ? coordinateTargetSelector
       : source.matches(n4SourceSelector)
         ? n4TargetSelector
         : blankTargetSelector;
-    const target = element?.closest(targetSelector);
+
+    // Cuando la pieza queda por encima del target, elementFromPoint puede devolver
+    // la propia pieza. elementsFromPoint permite buscar el primer drop target real.
+    const stack = document.elementsFromPoint
+      ? document.elementsFromPoint(clientX, clientY)
+      : [document.elementFromPoint(clientX, clientY)];
+
+    let target = null;
+    let fallbackTarget = null;
+    const sourcePieceId = source.matches(n4SourceSelector) ? source.dataset.piece : null;
+
+    for (const element of stack) {
+      if (!element || element === source || element.classList?.contains("piece-drag-ghost")) continue;
+      const maybeTarget = element.closest?.(targetSelector);
+      if (!maybeTarget) continue;
+
+      if (!fallbackTarget) fallbackTarget = maybeTarget;
+
+      if (!sourcePieceId || maybeTarget.dataset?.target === sourcePieceId) {
+        target = maybeTarget;
+        break;
+      }
+    }
+
+    if (!target) target = fallbackTarget;
+
     return target && container.contains(target) && !target.disabled ? target : null;
   }
 
@@ -1314,14 +1338,14 @@ function renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact = fals
 function renderNanoAssemblyChallenge(id = 1) {
   const pieces = [
     { id: "cabeza", label: "Cabeza", file: "cabeza.png", x: 50, y: 36.5, w: 18, h: 14, hitW: 24, hitH: 20, sx: 64, sy: 40, sw: 9.5 },
-    { id: "cara", label: "Cara", file: "Cara.png", x: 50, y: 40, w: 8, h: 7, hitW: 14, hitH: 12, sx: 25, sy: 38, sw: 4.5 },
-    { id: "torzo", label: "Torzo", file: "Torzo.png", x: 50, y: 53.5, w: 14, h: 21, hitW: 20, hitH: 25, sx: 23, sy: 71, sw: 7.2 },
-    { id: "brazo-izquierdo", label: "Brazo izquierdo", file: "Brazo izquierdo.png", x: 43.5, y: 50, w: 12, h: 16, hitW: 18, hitH: 22, sx: 34, sy: 60, sw: 6.8 },
+    { id: "cara", label: "Cara", file: "Cara.png", x: 50, y: 38.1, w: 8, h: 7, hitW: 14, hitH: 12, sx: 25, sy: 38, sw: 4.5 },
+    { id: "torzo", label: "Torzo", file: "Torzo.png", x: 50.2, y: 54.4, w: 16.2, h: 24.1, hitW: 27, hitH: 33, sx: 23, sy: 71, sw: 7.2, ox: -0.6, oy: 1.2 },
+    { id: "brazo-izquierdo", label: "Brazo izquierdo", file: "Brazo izquierdo.png", x: 41.8, y: 51.2, w: 11.1, h: 14.9, hitW: 18, hitH: 22, sx: 34, sy: 60, sw: 6.8 },
     { id: "brazo-derecho", label: "Brazo derecho", file: "Brazo derecho.png", x: 57.5, y: 55, w: 10, h: 22, hitW: 16, hitH: 27, sx: 69, sy: 64, sw: 6.8 },
-    { id: "mano-izquierda", label: "Mano izquierda", file: "Mano izquierdo.png", x: 41, y: 43, w: 10, h: 11, hitW: 16, hitH: 16, sx: 30, sy: 42, sw: 5.6 },
-    { id: "mano-derecha", label: "Mano derecha", file: "Mano drecha.png", x: 61, y: 61, w: 9, h: 11, hitW: 15, hitH: 16, sx: 79, sy: 69, sw: 5.6 },
-    { id: "pierna-izquierda", label: "Pierna izquierda", file: "Pierna izquierda.png", x: 47, y: 69.5, w: 9, h: 26, hitW: 14, hitH: 30, sx: 21, sy: 35, sw: 6.4 },
-    { id: "pierna-derecha", label: "Pierna derecha", file: "Pierna derecha.png", x: 53, y: 69.5, w: 9, h: 26, hitW: 14, hitH: 30, sx: 78, sy: 35, sw: 6.4 },
+    { id: "mano-izquierda", label: "Mano izquierda", file: "Mano izquierdo.png", x: 38.3, y: 47.2, w: 10, h: 11, hitW: 16, hitH: 16, sx: 30, sy: 42, sw: 5.6 },
+    { id: "mano-derecha", label: "Mano derecha", file: "Mano drecha.png", x: 59.5, y: 67, w: 9, h: 11, hitW: 15, hitH: 16, sx: 79, sy: 69, sw: 5.6 },
+    { id: "pierna-izquierda", label: "Pierna izquierda", file: "Pierna izquierda.png", x: 45.9, y: 74.8, w: 9.6, h: 27, hitW: 14, hitH: 30, sx: 21, sy: 35, sw: 6.4 },
+    { id: "pierna-derecha", label: "Pierna derecha", file: "Pierna derecha.png", x: 54.1, y: 74.8, w: 9.6, h: 27, hitW: 14, hitH: 30, sx: 78, sy: 35, sw: 6.4 },
   ];
   const placed = new Set();
   let selectedPiece = null;
@@ -1349,9 +1373,11 @@ function renderNanoAssemblyChallenge(id = 1) {
             </button>
           `).join("")}
 
-          ${pieces.map((piece) => `
-            <button class="n4-assembly-target n4-drop-target" type="button" data-target="${piece.id}" data-label="${piece.label}" style="--x:${piece.x}%;--y:${piece.y}%;--hit-w:${piece.hitW || piece.w}%;--hit-h:${piece.hitH || piece.h}%;--img-w:${(piece.w / (piece.hitW || piece.w)) * 100}%;--img-h:${(piece.h / (piece.hitH || piece.h)) * 100}%;" aria-label="Lugar de ${piece.label}"></button>
-          `).join("")}
+          <div class="n4-assembly-target-layer" aria-hidden="true">
+            ${pieces.map((piece) => `
+              <button class="n4-assembly-target n4-drop-target" type="button" data-target="${piece.id}" data-label="${piece.label}" style="--x:${piece.x}%;--y:${piece.y}%;--hit-w:${piece.hitW || piece.w}%;--hit-h:${piece.hitH || piece.h}%;--img-w:${(piece.w / (piece.hitW || piece.w)) * 100}%;--img-h:${(piece.h / (piece.hitH || piece.h)) * 100}%;--img-ox:${piece.ox || 0}%;--img-oy:${piece.oy || 0}%;" aria-label="Lugar de ${piece.label}"></button>
+            `).join("")}
+          </div>
         </section>
       </div>
       <p class="challenge-message" data-message>Elegí una pieza y llevala al lugar que coincide con la silueta.</p>
@@ -4006,6 +4032,7 @@ function renderMatchingPairsChallenge(id = 1) {
   const order = [0, 4, 1, 5, 2, 6, 3, 7].map((index) => cards[index]);
   let first = null;
   let locked = false;
+
   const matched = new Set();
 
   challengeContent.innerHTML = `
@@ -5582,8 +5609,20 @@ function renderLevel10Lock() {
   });
 }
 
+function isScratchStandaloneLevel(levelNumber) {
+  return levelNumber >= 7 && levelNumber <= 10;
+}
+
+function redirectToScratchLevel() {
+  window.location.replace(`scratch-desafio.html?nivel=${level}`);
+}
+
 function openStandaloneLevel() {
   challengeShell?.classList.add("is-open");
+  if (isScratchStandaloneLevel(level)) {
+    redirectToScratchLevel();
+    return;
+  }
   if (level === 5) renderCoordinatesChallenge();
   if (level === 6) renderLevel6Lights();
   if (level === 7) renderLevel7Factory();
@@ -5594,6 +5633,10 @@ function openStandaloneLevel() {
 
 async function initializeLevelPage() {
   initializeSoundControls();
+  if (isScratchStandaloneLevel(level)) {
+    redirectToScratchLevel();
+    return;
+  }
   const { discovered, dataByLevel } = await discoverLevelsFromJson();
   availableLevels = discovered;
   levelDataByNumber = dataByLevel;
