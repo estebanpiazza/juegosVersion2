@@ -57,6 +57,8 @@ const challengeTypeRenderers = {
   "elige-flecha-izquierda": (id) => renderArrowChoiceChallenge(id, "izquierda"),
   "arrastrar-derecha": (id) => renderDragRightChallenge(id),
   "patron-color": (id) => renderColorPatternChallenge(id),
+  "secuencia-tarjetas-n4": (id) => renderN4SequenceCardsChallenge(id),
+  "patron-formas-cinta": (id) => renderConveyorShapePatternChallenge(id),
   "secuenciacion-guiada": (id) => renderPathChallenge(id),
   "depuracion-inicial": (id) => renderBalanceChallengeV2(id),
   "programacion-por-bloques": (id) => renderRobotChallengeV2(id),
@@ -94,9 +96,13 @@ const DESIGN_D4_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%204";
 const DESIGN_D6_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%206";
 const DESIGN_D6_ROBOT_IMAGE_SRC = `${DESIGN_D6_ASSET_BASE}/cara%20Nano.png?v=${Date.now()}`;
 const N4_NEW_ASSET_BASE = "nuevos";
+const N4_ASSET_FOLDER_BY_CHALLENGE = {
+  10: "consigna 10",
+};
 
 function n4Asset(challengeNumber, fileName) {
-  return `${N4_NEW_ASSET_BASE}/CONSIGNA%20${challengeNumber}/${encodeURIComponent(fileName)}`;
+  const folder = N4_ASSET_FOLDER_BY_CHALLENGE[challengeNumber] || `CONSIGNA ${challengeNumber}`;
+  return `${N4_NEW_ASSET_BASE}/${encodeURIComponent(folder)}/${encodeURIComponent(fileName)}`;
 }
 
 function renderRobotMarker() {
@@ -1239,15 +1245,15 @@ function renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact = fals
 
 function renderNanoAssemblyChallenge(id = 1) {
   const pieces = [
-    { id: "cabeza", label: "Cabeza", file: "cabeza.png", x: 50, y: 24, w: 29, h: 21 },
-    { id: "cara", label: "Cara", file: "Cara.png", x: 50, y: 25, w: 17, h: 14 },
-    { id: "torzo", label: "Torzo", file: "Torzo.png", x: 50, y: 45, w: 22, h: 33 },
-    { id: "brazo-izquierdo", label: "Brazo izquierdo", file: "Brazo izquierdo.png", x: 36, y: 44, w: 20, h: 16 },
-    { id: "brazo-derecho", label: "Brazo derecho", file: "Brazo derecho.png", x: 64, y: 47, w: 15, h: 26 },
-    { id: "mano-izquierda", label: "Mano izquierda", file: "Mano izquierdo.png", x: 30, y: 52, w: 14, h: 14 },
-    { id: "mano-derecha", label: "Mano derecha", file: "Mano drecha.png", x: 70, y: 61, w: 12, h: 13 },
-    { id: "pierna-izquierda", label: "Pierna izquierda", file: "Pierna izquierda.png", x: 44, y: 75, w: 12, h: 35 },
-    { id: "pierna-derecha", label: "Pierna derecha", file: "Pierna derecha.png", x: 56, y: 75, w: 12, h: 35 },
+    { id: "cabeza", label: "Cabeza", file: "cabeza.png", x: 50, y: 24, w: 29, h: 21, sx: 72, sy: 27, sw: 15 },
+    { id: "cara", label: "Cara", file: "Cara.png", x: 50, y: 25, w: 17, h: 14, sx: 31, sy: 34, sw: 10 },
+    { id: "torzo", label: "Torzo", file: "Torzo.png", x: 50, y: 45, w: 22, h: 33, sx: 25, sy: 72, sw: 14 },
+    { id: "brazo-izquierdo", label: "Brazo izquierdo", file: "Brazo izquierdo.png", x: 36, y: 44, w: 20, h: 16, sx: 40, sy: 72, sw: 12 },
+    { id: "brazo-derecho", label: "Brazo derecho", file: "Brazo derecho.png", x: 64, y: 47, w: 15, h: 26, sx: 66, sy: 73, sw: 12 },
+    { id: "mano-izquierda", label: "Mano izquierda", file: "Mano izquierdo.png", x: 30, y: 52, w: 14, h: 14, sx: 39, sy: 40, sw: 8 },
+    { id: "mano-derecha", label: "Mano derecha", file: "Mano drecha.png", x: 70, y: 61, w: 12, h: 13, sx: 78, sy: 76, sw: 8 },
+    { id: "pierna-izquierda", label: "Pierna izquierda", file: "Pierna izquierda.png", x: 44, y: 75, w: 12, h: 35, sx: 18, sy: 45, sw: 10 },
+    { id: "pierna-derecha", label: "Pierna derecha", file: "Pierna derecha.png", x: 56, y: 75, w: 12, h: 35, sx: 82, sy: 45, sw: 10 },
   ];
   const placed = new Set();
   let selectedPiece = null;
@@ -1265,18 +1271,17 @@ function renderNanoAssemblyChallenge(id = 1) {
         </div>
         <p data-consigna-text>${getChallengeInstruction(id, "Observa las piezas y arrastralas a su lugar para armar a Nano.")}</p>
       </header>
-      <div class="n4-assembly-layout">
-        <section class="n4-piece-bank" aria-label="Piezas de Nano">
-          ${pieces.map((piece) => `
-            <button class="n4-piece n4-drag-source" type="button" data-piece="${piece.id}" aria-label="${piece.label}">
-              <img src="${n4Asset(1, piece.file)}" alt="" aria-hidden="true" />
-              <span>${piece.label}</span>
-            </button>
-          `).join("")}
-        </section>
+      <div class="n4-assembly-layout n4-assembly-layout-single">
         <section class="n4-assembly-stage" aria-label="Silueta de Nano">
           <img class="n4-assembly-bg" src="${n4Asset(1, "Ffondo.png")}" alt="" aria-hidden="true" />
           <img class="n4-nano-silhouette" src="${n4Asset(1, "Silueta.png")}" alt="Silueta de Nano" />
+
+          ${pieces.map((piece) => `
+            <button class="n4-piece n4-piece-floating n4-drag-source" type="button" data-piece="${piece.id}" data-label="${piece.label}" aria-label="${piece.label}" style="--sx:${piece.sx}%;--sy:${piece.sy}%;--sw:${piece.sw}%;">
+              <img src="${n4Asset(1, piece.file)}" alt="" aria-hidden="true" />
+            </button>
+          `).join("")}
+
           ${pieces.map((piece) => `
             <button class="n4-assembly-target n4-drop-target" type="button" data-target="${piece.id}" style="--x:${piece.x}%;--y:${piece.y}%;--w:${piece.w}%;--h:${piece.h}%;" aria-label="Lugar de ${piece.label}"></button>
           `).join("")}
@@ -1298,6 +1303,8 @@ function renderNanoAssemblyChallenge(id = 1) {
     if (target.dataset.target !== piece.id) {
       target.classList.add("is-wrong");
       window.setTimeout(() => target.classList.remove("is-wrong"), 480);
+      clearSelection();
+      selectedPiece = null;
       setMessage("Casi. Probá encastrar esa pieza en otra parte de la silueta.", "is-error");
       return;
     }
@@ -1305,6 +1312,9 @@ function renderNanoAssemblyChallenge(id = 1) {
     placed.add(piece.id);
     target.classList.add("is-filled");
     target.innerHTML = `<img src="${n4Asset(1, piece.file)}" alt="${piece.label}" />`;
+    selectedPiece.disabled = true;
+    selectedPiece.setAttribute("aria-disabled", "true");
+    selectedPiece.classList.remove("n4-drag-source");
     selectedPiece.hidden = true;
     selectedPiece = null;
     clearSelection();
@@ -1324,7 +1334,7 @@ function renderNanoAssemblyChallenge(id = 1) {
       selectedPiece = button;
       clearSelection();
       button.classList.add("is-selected");
-      setMessage(`Ahora buscá el lugar de ${button.textContent.trim()}.`, "is-good");
+      setMessage(`Ahora buscá el lugar de ${button.dataset.label || "esa pieza"}.`, "is-good");
     });
   });
 
@@ -1335,18 +1345,19 @@ function renderNanoAssemblyChallenge(id = 1) {
 
 function renderTechnologySortChallenge(id = 2) {
   const items = [
-    { id: "cable", label: "Cable USB", file: "Cable usb.png", kind: "tech" },
-    { id: "placa", label: "Parte de compu", file: "PARTE DE LA COMPU.png", kind: "tech" },
-    { id: "auriculares", label: "Auriculares", file: "AURICULARES.png", kind: "tech" },
-    { id: "tornillos", label: "Tornillos", file: "TORNILLOS.png", kind: "tech" },
-    { id: "robot", label: "Robot", file: "ROBOT.png", kind: "tech" },
-    { id: "oso", label: "Oso", file: "OSO.png", kind: "toy" },
-    { id: "pelota", label: "Pelota", file: "PEÑOTA.png", kind: "toy" },
-    { id: "patito", label: "Patito", file: "PATITO.png", kind: "toy" },
-    { id: "auto", label: "Auto", file: "AUTO.png", kind: "toy" },
+    { id: "cable", label: "Cable USB", file: "Cable usb.png", kind: "tech", x: 37, y: 73, w: 12 },
+    { id: "placa", label: "Parte de compu", file: "PARTE DE LA COMPU.png", kind: "tech", x: 66, y: 69, w: 11 },
+    { id: "auriculares", label: "Auriculares", file: "AURICULARES.png", kind: "tech", x: 46, y: 71, w: 10 },
+    { id: "tornillos", label: "Tornillos", file: "TORNILLOS.png", kind: "tech", x: 18, y: 57, w: 9 },
+    { id: "robot", label: "Robot", file: "ROBOT.png", kind: "tech", x: 74, y: 64, w: 10 },
+    { id: "oso", label: "Oso", file: "OSO.png", kind: "toy", x: 52, y: 43, w: 10 },
+    { id: "pelota", label: "Pelota", file: "PEÑOTA.png", kind: "toy", x: 86, y: 80, w: 10 },
+    { id: "patito", label: "Patito", file: "PATITO.png", kind: "toy", x: 42, y: 87, w: 8 },
+    { id: "auto", label: "Auto", file: "AUTO.png", kind: "toy", x: 84, y: 74, w: 9 },
   ];
   const needed = items.filter((item) => item.kind === "tech");
-  const placed = new Set();
+  const placedTech = new Set();
+  const parkedToys = new Set();
   let selectedItem = null;
 
   challengeContent.innerHTML = `
@@ -1356,15 +1367,18 @@ function renderTechnologySortChallenge(id = 2) {
         <img class="n4-scene-bg" src="${n4Asset(2, "Taller Mecanico.jpg")}" alt="" aria-hidden="true" />
         <div class="n4-sort-items" aria-label="Objetos del taller">
           ${items.map((item) => `
-            <button class="n4-sort-item n4-drag-source" type="button" data-item="${item.id}" data-kind="${item.kind}" aria-label="${item.label}">
+            <button class="n4-sort-item n4-drag-source" type="button" data-item="${item.id}" data-kind="${item.kind}" data-label="${item.label}" aria-label="${item.label}" style="--x:${item.x}%;--y:${item.y}%;--w:${item.w}%;">
               <img src="${n4Asset(2, item.file)}" alt="" aria-hidden="true" />
               <span>${item.label}</span>
             </button>
           `).join("")}
         </div>
-        <button class="n4-sort-bin n4-drop-target" type="button" data-bin="tech" aria-label="Caja de tecnologia">
+        <button class="n4-sort-bin n4-sort-bin-tech n4-drop-target" type="button" data-bin="tech" aria-label="Caja de tecnologia">
           <img src="${n4Asset(2, "caja de tecnologia.png")}" alt="" aria-hidden="true" />
           <strong data-count>0/${needed.length}</strong>
+        </button>
+        <button class="n4-sort-bin n4-sort-bin-toy n4-drop-target" type="button" data-bin="toy" aria-label="Caja de juguetes">
+          <img src="${n4Asset(2, "caja de juguetes.png")}" alt="" aria-hidden="true" />
         </button>
       </div>
       <p class="challenge-message" data-message>Seleccioná solo tecnologia: cables, partes y piezas de robot.</p>
@@ -1375,30 +1389,39 @@ function renderTechnologySortChallenge(id = 2) {
     challengeContent.querySelectorAll(".n4-sort-item").forEach((item) => item.classList.remove("is-selected"));
   }
 
-  function sendToBox() {
-    if (!selectedItem || placed.has(selectedItem.dataset.item)) return;
+  function sendToBox(targetKind) {
+    if (!selectedItem || selectedItem.disabled) return;
 
-    if (selectedItem.dataset.kind !== "tech") {
+    const itemKind = selectedItem.dataset.kind;
+    const itemId = selectedItem.dataset.item;
+
+    if (itemKind === "tech" && targetKind === "tech") {
+      placedTech.add(itemId);
+      selectedItem.classList.add("is-collected");
+      selectedItem.disabled = true;
+      challengeContent.querySelector("[data-count]").textContent = `${placedTech.size}/${needed.length}`;
+      playSound("success");
+
+      if (placedTech.size === needed.length) {
+        setMessage("Caja ordenada. Dejaste los juguetes fuera y guardaste la tecnologia.", "is-success");
+        completeChallenge(id);
+      } else {
+        setMessage(`Bien guardado. Faltan ${needed.length - placedTech.size} piezas tecnologicas.`, "is-good");
+      }
+    } else if (itemKind === "toy" && targetKind === "toy") {
+      parkedToys.add(itemId);
+      selectedItem.classList.add("is-collected");
+      selectedItem.disabled = true;
+      setMessage("Perfecto. Ese objeto va en la caja de juguetes.", "is-good");
+      playSound("success");
+    } else {
       selectedItem.classList.add("is-wrong");
       window.setTimeout(() => selectedItem.classList.remove("is-wrong"), 520);
-      setMessage("Ese objeto queda afuera: Nano solo necesita tecnologia en la caja.", "is-error");
-      return;
+      setMessage("Ups. Ese objeto no va en esa caja.", "is-error");
     }
 
-    placed.add(selectedItem.dataset.item);
-    selectedItem.classList.add("is-collected");
-    selectedItem.disabled = true;
     selectedItem = null;
     clearSelection();
-    challengeContent.querySelector("[data-count]").textContent = `${placed.size}/${needed.length}`;
-    playSound("success");
-
-    if (placed.size === needed.length) {
-      setMessage("Caja ordenada. Dejaste los juguetes fuera y guardaste la tecnologia.", "is-success");
-      completeChallenge(id);
-    } else {
-      setMessage(`Bien guardado. Faltan ${needed.length - placed.size} piezas tecnologicas.`, "is-good");
-    }
   }
 
   challengeContent.querySelectorAll(".n4-sort-item").forEach((button) => {
@@ -1410,7 +1433,9 @@ function renderTechnologySortChallenge(id = 2) {
     });
   });
 
-  challengeContent.querySelector(".n4-sort-bin").addEventListener("click", sendToBox);
+  challengeContent.querySelectorAll(".n4-sort-bin").forEach((bin) => {
+    bin.addEventListener("click", () => sendToBox(bin.dataset.bin));
+  });
 }
 
 function renderHiddenPartsChallenge(id = 3) {
@@ -1514,9 +1539,12 @@ function renderDragRightChallenge(id = 7) {
       ${renderHeader(id, getChallengeInstruction(id, "Arrastra la pieza hacia el lado derecho de la pantalla."))}
       <div class="n4-side-scene">
         <img class="n4-side-bg" src="${n4Asset(7, "FONDO.jpg")}" alt="" aria-hidden="true" />
-        <div class="n4-side-window" aria-hidden="true"></div>
-        <button class="n4-side-box n4-side-box-left n4-drop-target" type="button" data-side="left" aria-label="Caja izquierda"></button>
-        <button class="n4-side-box n4-side-box-right n4-drop-target" type="button" data-side="right" aria-label="Caja derecha"></button>
+        <button class="n4-side-box n4-side-box-left n4-drop-target" type="button" data-side="left" aria-label="Caja izquierda">
+          <img src="${n4Asset(2, "caja de tecnologia.png")}" alt="" aria-hidden="true" />
+        </button>
+        <button class="n4-side-box n4-side-box-right n4-drop-target" type="button" data-side="right" aria-label="Caja derecha">
+          <img src="${n4Asset(2, "caja de juguetes.png")}" alt="" aria-hidden="true" />
+        </button>
         <img class="n4-side-nano" src="${n4Asset(7, "Robot Nano.png")}" alt="Nano" />
         <button class="n4-side-piece n4-drag-source" type="button" data-piece="engranaje" aria-label="Engranaje">
           <img src="${n4Asset(7, "Engranaje.png")}" alt="" aria-hidden="true" />
@@ -1602,6 +1630,164 @@ function renderColorPatternChallenge(id = 9) {
         setMessage("Todavia no. El patron alterna naranja y azul.", "is-error");
       }
     });
+  });
+}
+
+function renderConveyorShapePatternChallenge(id = 10) {
+  const sequence = ["amarilla", "azul", "amarilla"];
+  const correct = "azul";
+  const pieces = [
+    { id: "azul", label: "Azul", file: "CAJA AZUL.png" },
+    { id: "amarilla", label: "Amarilla", file: "CAJA AMARILLA.png" },
+    { id: "turquesa", label: "Turquesa", file: "CAJA TURQUESA.png" },
+    { id: "naranja", label: "Naranja", file: "CAJA NARANJA.png" },
+    { id: "verde", label: "Verde", file: "CAJA VERDE.png" },
+    { id: "violeta", label: "Violeta", file: "CAJA VIOLETA.png" },
+  ];
+  let selectedPiece = null;
+  let completed = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-card n4-shape-card">
+      ${renderHeader(id, getChallengeInstruction(id, "Observa la serie de la cinta y arrastra la pieza que falta para completar el patron."))}
+      <div class="n4-shape-scene">
+        <img class="n4-shape-bg" src="${n4Asset(10, "FONDO.png")}" alt="" aria-hidden="true" />
+        <div class="n4-shape-belt-wrap" aria-label="Cinta transportadora">
+          <img class="n4-shape-belt" src="${n4Asset(10, "banda tranportadora.png")}" alt="" aria-hidden="true" />
+          <div class="n4-shape-series" aria-label="Serie">
+            ${sequence.map((color) => `<img src="${n4Asset(10, `CAJA ${color.toUpperCase()}.png`)}" alt="${color}" />`).join("")}
+            <button class="n4-shape-missing n4-drop-target" type="button" data-expected="${correct}" aria-label="Pieza faltante"></button>
+          </div>
+        </div>
+        <div class="n4-shape-options" aria-label="Inventario de piezas">
+          ${pieces.map((piece) => `
+            <button class="n4-shape-option n4-drag-source" type="button" data-piece="${piece.id}" aria-label="Caja ${piece.label}">
+              <img src="${n4Asset(10, piece.file)}" alt="" aria-hidden="true" />
+            </button>
+          `).join("")}
+        </div>
+      </div>
+      <p class="challenge-message" data-message>La serie es ABAB. Elegi la pieza correcta para completar el ultimo lugar.</p>
+    </article>
+  `;
+
+  function clearSelection() {
+    challengeContent.querySelectorAll(".n4-shape-option").forEach((item) => item.classList.remove("is-selected"));
+  }
+
+  function placeInGap(target) {
+    if (!selectedPiece || completed) return;
+
+    if (selectedPiece.dataset.piece !== target.dataset.expected) {
+      target.classList.add("is-wrong");
+      selectedPiece.classList.add("is-wrong");
+      window.setTimeout(() => {
+        target.classList.remove("is-wrong");
+        selectedPiece?.classList.remove("is-wrong");
+      }, 520);
+      setMessage("Casi. Revisa la secuencia: se repite en patron AB.", "is-error");
+      return;
+    }
+
+    completed = true;
+    target.classList.add("is-correct", "is-filled");
+    target.innerHTML = `<img src="${selectedPiece.querySelector("img")?.getAttribute("src") || ""}" alt="Pieza correcta" />`;
+    selectedPiece.hidden = true;
+    selectedPiece.disabled = true;
+    clearSelection();
+    selectedPiece = null;
+    setMessage("Perfecto. Completaste la serie de la cinta.", "is-success");
+    completeChallenge(id);
+  }
+
+  challengeContent.querySelectorAll(".n4-shape-option").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.disabled || completed) return;
+      selectedPiece = button;
+      clearSelection();
+      button.classList.add("is-selected");
+    });
+  });
+
+  challengeContent.querySelector(".n4-shape-missing")?.addEventListener("click", (event) => {
+    placeInGap(event.currentTarget);
+  });
+}
+
+function renderN4SequenceCardsChallenge(id = 8) {
+  const expected = "DERECHA.png";
+  const options = [
+    { id: "AVANZAR.png", label: "Avanzar", file: "AVANZAR.png" },
+    { id: "DERECHA.png", label: "Derecha", file: "DERECHA.png" },
+    { id: "IZQUIERDA.png", label: "Izquierda", file: "IZQUIERDA.png" },
+  ];
+  let selectedCard = null;
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-card n4-seq-card">
+      ${renderHeader(id, getChallengeInstruction(id, "Nano avanza y despues necesita girar. Completa la secuencia con la tarjeta correcta."))}
+      <div class="n4-seq-scene">
+        <img class="n4-seq-bg" src="${n4Asset(8, "FONDO.jpeg")}" alt="" aria-hidden="true" />
+        <div class="n4-seq-route" aria-label="Secuencia del recorrido">
+          <img src="${n4Asset(8, "Entrada.png")}" alt="Entrada" />
+          <img src="${n4Asset(8, "AVANZAR.png")}" alt="Avanzar" />
+          <button class="n4-seq-missing n4-drop-target" type="button" aria-label="Tarjeta faltante"></button>
+          <img src="${n4Asset(8, "AVANZAR.png")}" alt="Avanzar" />
+          <img src="${n4Asset(8, "Vamos.png")}" alt="Llegada" />
+        </div>
+        <div class="n4-seq-options" aria-label="Tarjetas disponibles">
+          ${options.map((option) => `
+            <button class="n4-seq-option n4-drag-source" type="button" data-card="${option.id}" aria-label="${option.label}">
+              <img src="${n4Asset(8, option.file)}" alt="" aria-hidden="true" />
+            </button>
+          `).join("")}
+        </div>
+      </div>
+      <p class="challenge-message" data-message>Completa el hueco con la tarjeta que hace que Nano doble bien.</p>
+    </article>
+  `;
+
+  function clearSelection() {
+    challengeContent.querySelectorAll(".n4-seq-option").forEach((item) => item.classList.remove("is-selected"));
+  }
+
+  function tryPlace(target) {
+    if (!selectedCard || solved) return;
+
+    if (selectedCard.dataset.card !== expected) {
+      selectedCard.classList.add("is-wrong");
+      target.classList.add("is-wrong");
+      window.setTimeout(() => {
+        selectedCard?.classList.remove("is-wrong");
+        target.classList.remove("is-wrong");
+      }, 520);
+      setMessage("Casi. Revisa el recorrido: en ese paso Nano debe girar a la derecha.", "is-error");
+      return;
+    }
+
+    solved = true;
+    target.classList.add("is-filled", "is-correct");
+    target.innerHTML = `<img src="${selectedCard.querySelector("img")?.getAttribute("src") || ""}" alt="Tarjeta correcta" />`;
+    selectedCard.disabled = true;
+    selectedCard.hidden = true;
+    clearSelection();
+    selectedCard = null;
+    setMessage("Excelente. Completaste la secuencia del algoritmo.", "is-success");
+    completeChallenge(id);
+  }
+
+  challengeContent.querySelectorAll(".n4-seq-option").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.disabled || solved) return;
+      selectedCard = button;
+      clearSelection();
+      button.classList.add("is-selected");
+    });
+  });
+
+  challengeContent.querySelector(".n4-seq-missing")?.addEventListener("click", (event) => {
+    tryPlace(event.currentTarget);
   });
 }
 

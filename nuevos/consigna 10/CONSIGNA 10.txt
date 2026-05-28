@@ -1,0 +1,3 @@
+Consigna 10: (Taller mecánico)¡Por la cinta pasan formas geométricas! Cuadrado, círculo, cuadrado... Arrastra la forma que falta para completar la serie.
+
+Mecánica: Una cinta transportadora en movimiento lento. Falta la última pieza de la secuencia AB. El niño arrastra la pieza correcta desde el inventario
