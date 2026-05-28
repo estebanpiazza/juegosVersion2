@@ -620,10 +620,10 @@ function renderFinalSuccessCard(id, nextScenario) {
       <div class="final-success-divider" aria-hidden="true"></div>
       ${renderFinalSuccessRating(id)}
       <div class="final-success-actions">
-        ${nextAction}
         <button class="final-action final-action-replay" type="button" data-replay-scenario="${id}" aria-label="Volver a jugar">
           <img src="${finalSuccessAsset("Boton%20azul.png")}" alt="" aria-hidden="true" />
         </button>
+        ${nextAction}
       </div>
     </article>
   `;
