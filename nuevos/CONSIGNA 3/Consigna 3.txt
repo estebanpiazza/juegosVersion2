@@ -1,0 +1,3 @@
+Consigna: (Taller mecánico) El taller está desordenado. Busca bien y toca las cinco piezas escondidas de Nano. ¡Encuéntralas todas!
+
+Mecánica: Un escenario estático estilo "Buscando a Wally" pero del Taller Be Tech. El niño debe hacer Tap sobre los 5 elementos ocultos entre cajas y herramientas. Cada vez que toca uno, hace un sonido de "recolección" (ding!) Los 5 objetos pueden ser: una batería, un chip, un engranaje, un tornillo y un cable brillante (sujeto a las modificaciones que deseen)

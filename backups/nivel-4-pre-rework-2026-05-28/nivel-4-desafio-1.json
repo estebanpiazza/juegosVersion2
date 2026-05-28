@@ -1,0 +1,31 @@
+{
+  "autor": "Esteban",
+  "tematica": "Escuela",
+  "tema": "virus",
+  "nivel": 4,
+  "desafio": 1,
+  "consigna": "¡Cuidado con los virus! Nano debe esquivarlos para llegar a tiempo. ¿Hacia dónde tiene que girar?",
+  "grilla": {
+    "filas": 3,
+    "columnas": 3,
+    "celdas": {
+      "0-0": "enemy",
+      "0-1": "enemy",
+      "0-2": "enemy",
+      "1-0": "start",
+      "1-1": "path",
+      "1-2": "goal",
+      "2-0": "enemy",
+      "2-1": "enemy",
+      "2-2": "enemy"
+    },
+    "robotDireccionInicial": 1
+  },
+  "algoritmo": {
+    "totalSlots": 2,
+    "pistas": [],
+    "tarjetasDisponibles": [
+      "avanzar","girar_derecha","derecha"
+    ]
+  }
+}

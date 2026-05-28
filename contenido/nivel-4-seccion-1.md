@@ -1,126 +1,57 @@
-# Nivel 4 - Seccion 1
+# Nivel 4 - Rework
 
-Objetivo de la seccion: fortalecer pensamiento computacional y programacion inicial (secuencias, depuracion, patrones de comandos y mapas en grilla) con desafíos breves para primer grado.
+Objetivo: rehacer el nivel 4 con las 9 consignas nuevas recibidas en `nuevos/`, manteniendo la navegacion actual y usando las imagenes nuevas como soporte visual principal.
 
-## desafío 1: Secuencia de comandos
+## desafio 1: A ensamblar
 
-Tipo: secuenciacion guiada, estilo Code.org inicial.
+Tipo: armado-nano.
 
-Consigna para el alumno:
-¡AYUDALO! EL ROBOT CAMINA DERECHO, PERO PARA GANAR TIENE QUE DOBLAR. ¿PARA QUÉ LADO TIENE QUE MIRAR? ¡ELEGÍ LA FLECHA!
+El alumno arrastra o selecciona piezas de Nano y las ubica sobre la silueta central.
 
-Objetivo:
-Practicar secuencias de instrucciones: avanzar, girar derecha y girar izquierda.
+## desafio 2: Caja de herramientas
 
-Pantalla:
-Un mapa 6 x 6 con camino resaltado y una tira de instrucciones con tres espacios vacios.
+Tipo: clasificar-tecnologia.
 
-Interaccion:
-El alumno selecciona cada hueco y elige la accion correcta del banco (girar derecha o izquierda).
+El alumno guarda solo elementos tecnologicos en la caja y deja juguetes u objetos distractores afuera.
 
-Feedback:
-Si la secuencia es correcta, confirma que el robot sigue el camino y llega a META. Si falla, marca que revise los pasos de giro.
+## desafio 3: Piezas escondidas
 
-Variantes:
-- Agregar una accion distractora extra.
-- Pedir resolver con menos pasos.
-- Mostrar una previsualizacion del recorrido.
+Tipo: buscar-piezas.
 
-## desafío 2: Depura el programa
+El alumno toca cinco piezas escondidas en el taller: bateria, chip, engranaje, tornillos y cable.
 
-Tipo: depuracion inicial, estilo pensamiento computacional.
+## desafio 4: Primer paso
 
-Consigna para el alumno:
-Completa el camino con las flechas que faltan. Haz que el robot doble y camine para llegar a la bandera sin tocar los charcos. ¡Tú eres el capitán del robot!
+Tipo: elige-flecha-avanzar.
 
-Objetivo:
-Reconocer errores en una secuencia y corregirlos.
+El alumno observa el camino de Nano y toca la tarjeta Avanzar.
 
-Pantalla:
-Lista de 5 lineas de programa, con una accion equivocada y botones de reemplazo.
+## desafio 5: Doblar a la derecha
 
-Interaccion:
-El alumno toca una linea y luego elige la accion correcta.
+Tipo: elige-flecha-derecha.
 
-Feedback:
-Confirma cuando la depuracion es correcta y da una pista puntual sobre la linea del giro.
+El alumno observa la orientacion de Nano y elige la tarjeta derecha.
 
-Variantes:
-- Incluir dos lineas incorrectas.
-- Limitar cantidad de cambios.
-- Agregar boton "ejecutar" para ver resultado.
+## desafio 6: Giro a la izquierda
 
-## desafío 3: Programa al robot
+Tipo: elige-flecha-izquierda.
 
-Tipo: programacion por bloques, estilo Code.org.
+El alumno toca la tarjeta que apunta a la izquierda.
 
-Consigna para el alumno:
-¡Cuidado con el agua! Programá al robot para llegar al tesoro: cargá la batería y evitá los charcos para no mojarlo.
+## desafio 7: Cerca de la ventana
 
-Objetivo:
-Practicar secuenciacion, orientacion espacial, depuracion y conteo de pasos.
+Tipo: arrastrar-derecha.
 
-Pantalla:
-Una grilla de 6 x 6 con robot, tesoro, obstaculos y casilleros especiales.
+El alumno arrastra o selecciona la pieza y la coloca en la caja derecha, cerca de la ventana.
 
-Interaccion:
-El alumno arma un programa con bloques: avanzar, girar derecha, girar izquierda, repetir 2 veces, repetir 3 veces.
+## desafio 8: A programar
 
-Feedback:
-El robot ejecuta la secuencia paso a paso. Si choca, se detiene y marca el bloque donde fallo.
+Tipo: secuenciacion-guiada.
 
-Variantes:
-- Resolver con un maximo de 8 bloques.
-- Incluir un bloque repetir obligatorio.
-- Agregar casilleros con numeros que deben visitarse en orden.
+Se reutiliza la mecanica de manta/programacion existente: completar los huecos con tarjetas de giro.
 
-## desafío 4: Patrones de algoritmo
+## desafio 9: Luces con ritmo
 
-Tipo: patrones de comandos, mixto visual.
+Tipo: patron-color.
 
-Consigna para el alumno:
-¡Completá el patrón del robot! 🤖✨ Mirá con atención cómo se mueve y repetí el mismo orden. ¿Qué falta para terminar la serie?
-
-Objetivo:
-Identificar repeticion en algoritmos cortos.
-
-Pantalla:
-Una cinta con comandos de robot y tres espacios vacios.
-
-Interaccion:
-El alumno elige acciones de un banco lateral y las coloca en los huecos.
-
-Feedback:
-Si completa el patron correctamente, valida el algoritmo. Si falla, da pista del bloque repetido.
-
-Variantes:
-- Aumentar largo del patron.
-- Mezclar comandos y colores.
-- Pedir inventar el siguiente bloque.
-
-## desafío 5: Actividad a revisar
-
-Tipo: mapa en grilla, pensamiento computacional.
-
-Consigna para el alumno:
-Actividad a revisar: inviable para primer grado.
-
-Observacion:
-INVIABLE PARA PRIMER GRADO.
-
-Objetivo:
-Leer una grilla simple y planear ruta por hitos (inicio, bateria, llave y meta).
-
-Pantalla:
-Mapa con columnas A-F y filas 1-6, con tarjetas de puntos para ubicar.
-
-Interaccion:
-El alumno selecciona una tarjeta y ubica cada punto en su coordenada.
-
-Feedback:
-El casillero correcto se ilumina. Si se equivoca, recibe pista de columna y fila.
-
-Variantes:
-- Pedir trazar la ruta completa luego de ubicar hitos.
-- Cambiar orientacion del tablero.
-- Resolver con limite de intentos.
+El alumno continua la secuencia alternada de colores. Si no hay rojo disponible, se usa naranja como equivalente visual.

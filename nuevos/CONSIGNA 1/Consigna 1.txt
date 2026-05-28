@@ -1,0 +1,3 @@
+Consigna 1: ¡A ensamblar! ¡Hola! Nano está desarmado. Observa las piezas y arrástralas a su lugar para armarlo. ¡Tú puedes!
+
+Descripcion del juego: En el centro hay una silueta translúcida de Nano. A los costados, piezas grandes flotando. El niño usa Drag & Drop para encastrarlas. Al terminar, Nano sonríe y hace un sonido de encendido
