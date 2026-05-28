@@ -13927,8 +13927,8 @@ body.is-dragging-piece .n4-assembly-target::after {
   position: absolute;
   bottom: 2.5%;
   z-index: 1;
-  width: clamp(180px, 23vw, 290px);
-  min-height: clamp(118px, 16vw, 208px);
+  width: clamp(195px, 24vw, 315px);
+  min-height: clamp(128px, 17vw, 220px);
   border: 3px dashed rgba(10, 122, 190, 0.34);
   border-radius: 8px;
   background: transparent;
@@ -13956,11 +13956,11 @@ body.is-dragging-piece .n4-assembly-target::after {
 }
 
 .n4-sort-bin-tech {
-  left: 3%;
+  left: 6.5%;
 }
 
 .n4-sort-bin-toy {
-  right: 3%;
+  right: 6.5%;
 }
 
 .n4-hidden-scene {
@@ -14426,8 +14426,8 @@ body.is-dragging-piece .n4-assembly-target::after {
   }
 
   .n4-sort-bin {
-    min-height: 128px;
-    width: min(100%, 220px);
+    min-height: 140px;
+    width: min(100%, 235px);
     justify-self: center;
   }
 

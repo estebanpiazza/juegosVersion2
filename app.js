@@ -1440,15 +1440,15 @@ function renderNanoAssemblyChallenge(id = 1) {
 
 function renderTechnologySortChallenge(id = 2) {
   const items = [
-    { id: "cable", label: "Cable USB", file: "Cable usb.png", kind: "tech", x: 37, y: 73, w: 12 },
-    { id: "placa", label: "Parte de compu", file: "PARTE DE LA COMPU.png", kind: "tech", x: 66, y: 69, w: 11 },
-    { id: "auriculares", label: "Auriculares", file: "AURICULARES.png", kind: "tech", x: 46, y: 71, w: 10 },
-    { id: "tornillos", label: "Tornillos", file: "TORNILLOS.png", kind: "tech", x: 18, y: 57, w: 9 },
-    { id: "robot", label: "Robot", file: "ROBOT.png", kind: "tech", x: 74, y: 64, w: 10 },
-    { id: "oso", label: "Oso", file: "OSO.png", kind: "toy", x: 52, y: 43, w: 10 },
-    { id: "pelota", label: "Pelota", file: "PEÑOTA.png", kind: "toy", x: 86, y: 80, w: 10 },
-    { id: "patito", label: "Patito", file: "PATITO.png", kind: "toy", x: 42, y: 87, w: 8 },
-    { id: "auto", label: "Auto", file: "AUTO.png", kind: "toy", x: 84, y: 74, w: 9 },
+    { id: "cable", label: "Cable USB", file: "Cable usb.png", kind: "tech", x: 36, y: 60, w: 10.5 },
+    { id: "placa", label: "Parte de compu", file: "PARTE DE LA COMPU.png", kind: "tech", x: 56, y: 56, w: 9.5 },
+    { id: "auriculares", label: "Auriculares", file: "AURICULARES.png", kind: "tech", x: 46, y: 61, w: 8.8 },
+    { id: "tornillos", label: "Tornillos", file: "TORNILLOS.png", kind: "tech", x: 28, y: 52, w: 7.8 },
+    { id: "robot", label: "Robot", file: "ROBOT.png", kind: "tech", x: 64, y: 54, w: 8.8 },
+    { id: "oso", label: "Oso", file: "OSO.png", kind: "toy", x: 50, y: 43, w: 8.8 },
+    { id: "pelota", label: "Pelota", file: "PEÑOTA.png", kind: "toy", x: 68, y: 63, w: 8.8 },
+    { id: "patito", label: "Patito", file: "PATITO.png", kind: "toy", x: 42, y: 67, w: 7 },
+    { id: "auto", label: "Auto", file: "AUTO.png", kind: "toy", x: 60, y: 61, w: 7.8 },
   ];
   const needed = items.filter((item) => item.kind === "tech");
   const placedTech = new Set();
