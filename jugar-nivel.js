@@ -115,6 +115,7 @@ const CARD_MAP = Object.fromEntries(CARD_DEFS.map((c) => [c.id, c]));
 
 // Direction: 0=↑ 1=→ 2=↓ 3=←
 const DIR_DELTA = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+const DIR_ROTATION = ["-90deg", "0deg", "90deg", "180deg"];
 const DIR_ARROW_ROTATION = ["0deg", "90deg", "180deg", "270deg"];
 
 // ── DOM refs ───────────────────────────────────────────
@@ -418,19 +419,35 @@ function buildBank(cardIds) {
 }
 
 function addFastActivation(el, handler) {
-  const FAST_ACTIVATION_WINDOW = 500;
-  let lastPointerActivation = 0;
+  const FAST_ACTIVATION_WINDOW = 700;
+  let lastFastActivation = 0;
 
-  el.addEventListener("pointerdown", (event) => {
+  const run = (event) => {
+    lastFastActivation = Date.now();
+    handler(event);
+  };
+
+  el.addEventListener("pointerup", (event) => {
     if (event.pointerType === "mouse" || event.button > 0) return;
     event.preventDefault();
-    lastPointerActivation = Date.now();
-    handler(event);
+    run(event);
+  });
+
+  el.addEventListener("touchend", (event) => {
+    if (window.PointerEvent) return;
+    event.preventDefault();
+    run(event);
+  }, { passive: false });
+
+  el.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    run(event);
   });
 
   el.addEventListener("click", (event) => {
-    if (Date.now() - lastPointerActivation < FAST_ACTIVATION_WINDOW) return;
-    handler(event);
+    if (Date.now() - lastFastActivation < FAST_ACTIVATION_WINDOW) return;
+    run(event);
   });
 }
 
@@ -459,20 +476,22 @@ function onCardClick(cardId) {
 }
 
 // ── Robot rendering ────────────────────────────────────
-function placeRobot(pos) {
+function placeRobot(pos, animateTurn = false) {
   // Remove robot from all cells
   Object.values(cellEls).forEach((cell) => {
-    cell.classList.remove("is-robot");
+    cell.classList.remove("is-robot", "is-turning");
     cell.querySelectorAll(".play-robot-img, .play-robot-direction").forEach((node) => node.remove());
   });
 
   if (!pos || !cellEls[pos]) return;
   const cell = cellEls[pos];
   cell.classList.add("is-robot");
+  cell.classList.toggle("is-turning", animateTurn);
   const img = document.createElement("img");
   img.className = "play-robot-img";
   img.src = ROBOT_IMG;
   img.alt = "Robot";
+  img.style.setProperty("--robot-rotation", DIR_ROTATION[robotDir]);
   cell.appendChild(img);
   const direction = document.createElement("span");
   direction.className = "play-robot-direction";
@@ -580,8 +599,9 @@ async function runSimulation() {
 
   for (const cmd of instructions) {
     markTrail(robotPos);
+    const isTurn = cmd === "derecha" || cmd === "izquierda";
     const result = applyCommand(cmd);
-    placeRobot(robotPos);
+    placeRobot(robotPos, isTurn);
     await sleep(210);
 
     if (result === "off-grid") {
