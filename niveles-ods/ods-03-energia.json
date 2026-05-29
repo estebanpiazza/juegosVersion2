@@ -34,9 +34,7 @@
   },
   "algoritmo": {
     "totalSlots": 11,
-    "pistas": [
-      { "slot": 0, "card": "avanzar" }
-    ],
+    "pistas": [],
     "tarjetasDisponibles": ["avanzar", "derecha", "izquierda"]
   }
 }

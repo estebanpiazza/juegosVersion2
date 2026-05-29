@@ -115,7 +115,7 @@ const CARD_MAP = Object.fromEntries(CARD_DEFS.map((c) => [c.id, c]));
 
 // Direction: 0=↑ 1=→ 2=↓ 3=←
 const DIR_DELTA = [[-1, 0], [0, 1], [1, 0], [0, -1]];
-const DIR_ROTATION = ["-90deg", "0deg", "90deg", "180deg"];
+const DIR_ARROW_ROTATION = ["0deg", "90deg", "180deg", "270deg"];
 
 // ── DOM refs ───────────────────────────────────────────
 const gridEl      = document.getElementById("play-grid");
@@ -203,6 +203,10 @@ function renderLevel() {
   if (!levelData) return;
 
   const { grilla, algoritmo } = levelData;
+  const isOdsLevel = levelData.nivel === "ODS" || String(levelData.tema || "").startsWith("ods-");
+  const isCompactOdsLevel = isOdsLevel;
+  document.body.classList.toggle("is-ods-level", isOdsLevel);
+  document.body.classList.toggle("is-ods-compact", isCompactOdsLevel);
 
   // Title & meta
   if (levelData.tematica) titleEl.textContent = `¡${levelData.tematica}!`;
@@ -325,7 +329,7 @@ function buildSlots(algoritmo) {
     }
 
     if (!hint) {
-      el.addEventListener("click", () => onSlotClick(i));
+      addFastActivation(el, () => onSlotClick(i));
     }
 
     slotEls.push(el);
@@ -408,8 +412,25 @@ function buildBank(cardIds) {
     lbl.textContent = card.label;
     btn.appendChild(lbl);
 
-    btn.addEventListener("click", () => onCardClick(id));
+    addFastActivation(btn, () => onCardClick(id));
     bankEl.appendChild(btn);
+  });
+}
+
+function addFastActivation(el, handler) {
+  const FAST_ACTIVATION_WINDOW = 500;
+  let lastPointerActivation = 0;
+
+  el.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse" || event.button > 0) return;
+    event.preventDefault();
+    lastPointerActivation = Date.now();
+    handler(event);
+  });
+
+  el.addEventListener("click", (event) => {
+    if (Date.now() - lastPointerActivation < FAST_ACTIVATION_WINDOW) return;
+    handler(event);
   });
 }
 
@@ -442,9 +463,7 @@ function placeRobot(pos) {
   // Remove robot from all cells
   Object.values(cellEls).forEach((cell) => {
     cell.classList.remove("is-robot");
-    if (cell.querySelector(".play-robot-img")) {
-      cell.querySelector(".play-robot-img").remove();
-    }
+    cell.querySelectorAll(".play-robot-img, .play-robot-direction").forEach((node) => node.remove());
   });
 
   if (!pos || !cellEls[pos]) return;
@@ -454,8 +473,12 @@ function placeRobot(pos) {
   img.className = "play-robot-img";
   img.src = ROBOT_IMG;
   img.alt = "Robot";
-  img.style.setProperty("--robot-rotation", DIR_ROTATION[robotDir]);
   cell.appendChild(img);
+  const direction = document.createElement("span");
+  direction.className = "play-robot-direction";
+  direction.style.setProperty("--robot-direction", DIR_ARROW_ROTATION[robotDir]);
+  direction.setAttribute("aria-hidden", "true");
+  cell.appendChild(direction);
 }
 
 function markTrail(pos) {
@@ -572,7 +595,16 @@ async function runSimulation() {
     if (result === "item") {
       collectedItems.add(robotPos);
       const cell = cellEls[robotPos];
-      if (cell) { cell.textContent = "✅"; cell.classList.add("is-collected"); }
+      if (cell) {
+        cell.querySelectorAll(".play-cell-img").forEach((node) => node.remove());
+        if (!cell.querySelector(".play-collected-check")) {
+          const check = document.createElement("span");
+          check.className = "play-collected-check";
+          check.textContent = "OK";
+          cell.appendChild(check);
+        }
+        cell.classList.add("is-collected");
+      }
     }
   }
 
@@ -645,8 +677,7 @@ function resetRobotPosition() {
   collectedItems.clear();
   Object.values(cellEls).forEach((cell) => {
     cell.classList.remove("is-trail", "is-robot", "is-collected");
-    const robotImg = cell.querySelector(".play-robot-img");
-    if (robotImg) robotImg.remove();
+    cell.querySelectorAll(".play-robot-img, .play-robot-direction, .play-collected-check").forEach((node) => node.remove());
     const baseType = cell.dataset.baseType;
     setCellContent(cell, baseType, levelData.tema);
     cell.dataset.type = baseType;

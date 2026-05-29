@@ -10988,17 +10988,49 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
 
 .play-robot-img {
   display: block;
-  width: 82%;
-  height: 82%;
+  width: 72%;
+  height: 72%;
   object-fit: contain;
   border-radius: 4px;
   pointer-events: none;
-  transform: rotate(var(--robot-rotation, 0deg));
   /* capa superior: absoluto centrado, no mueve otros contenidos */
   position: absolute;
   inset: 0;
   margin: auto;
   z-index: 2;
+}
+
+.play-robot-direction {
+  position: absolute;
+  inset: 0;
+  width: 26%;
+  aspect-ratio: 1;
+  margin: auto;
+  border-radius: 999px 999px 4px 4px;
+  background: #0A7ABE;
+  box-shadow: 0 0 0 2px white, 0 2px 8px rgba(10, 122, 190, 0.35);
+  clip-path: polygon(50% 0%, 100% 86%, 50% 64%, 0 86%);
+  pointer-events: none;
+  transform: translateY(-64%) rotate(var(--robot-direction, 0deg));
+  transform-origin: 50% 114%;
+  z-index: 3;
+}
+
+.play-collected-check {
+  position: absolute;
+  right: 4px;
+  bottom: 3px;
+  z-index: 4;
+  min-width: 18px;
+  padding: 1px 4px;
+  border-radius: 999px;
+  background: #59c800;
+  color: white;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1.2;
+  box-shadow: 0 0 0 2px white;
+  pointer-events: none;
 }
 
 /* Icono de entrada (celda start) — centrado, queda detrás del robot */
@@ -11081,6 +11113,7 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
   place-items: center;
   transition: border-color 120ms ease, background 120ms ease;
   overflow: hidden;
+  touch-action: manipulation;
 }
 
 .play-slot:hover:not(.is-hint) {
@@ -11159,6 +11192,7 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
   cursor: pointer;
   transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
   min-width: 58px;
+  touch-action: manipulation;
 }
 
 .play-card:hover {
@@ -11184,6 +11218,117 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
   color: var(--color-primary);
   text-align: center;
   line-height: 1.1;
+}
+
+.play-body.is-ods-compact .play-header {
+  padding: 6px 22px 4px;
+  gap: 10px;
+}
+
+.play-body.is-ods-compact .play-theme-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.play-body.is-ods-compact .play-header-center {
+  max-width: 58%;
+  padding: 5px 14px;
+  border-radius: 12px;
+}
+
+.play-body.is-ods-compact .play-title {
+  font-size: clamp(18px, 2vw, 26px);
+}
+
+.play-body.is-ods-compact .play-consigna {
+  max-height: 2.5em;
+  overflow: hidden;
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.play-body.is-ods-compact .play-main {
+  gap: 12px;
+  padding: 2px 22px 0;
+  max-width: 1280px;
+  align-items: center;
+}
+
+.play-body.is-ods-compact .play-maze-panel {
+  width: min(clamp(230px, 33vw, 430px), calc(100vh - 108px));
+  padding: clamp(22px, 2vw, 32px);
+}
+
+.play-body.is-ods-compact .play-right-panel {
+  gap: 6px;
+  align-self: center;
+  overflow: visible;
+  max-height: calc(100vh - 108px);
+}
+
+.play-body.is-ods-compact .play-section {
+  padding: 6px 10px;
+  border-width: 2px;
+  border-radius: 10px;
+}
+
+.play-body.is-ods-compact .play-section-title {
+  gap: 7px;
+  margin-bottom: 5px;
+}
+
+.play-body.is-ods-compact .play-section-num {
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+}
+
+.play-body.is-ods-compact .play-section-label {
+  font-size: 12px;
+}
+
+.play-body.is-ods-compact .play-algo-slots {
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.play-body.is-ods-compact .play-slot {
+  border-width: 1px;
+  border-radius: 5px;
+}
+
+.play-body.is-ods-compact .play-slot img {
+  width: 82%;
+  height: 82%;
+}
+
+.play-body.is-ods-compact .play-card-bank {
+  gap: 4px;
+}
+
+.play-body.is-ods-compact .play-card {
+  min-width: 48px;
+  padding: 3px 5px;
+  border-width: 1.5px;
+  border-radius: 7px;
+}
+
+.play-body.is-ods-compact .play-card img {
+  width: clamp(30px, 3.6vw, 42px);
+}
+
+.play-body.is-ods-compact .play-card span {
+  font-size: 0.48rem;
+}
+
+.play-body.is-ods-compact .play-footer {
+  gap: 14px;
+  padding: 2px 22px 6px;
+}
+
+.play-body.is-ods-compact .play-check-btn,
+.play-body.is-ods-compact .play-reset-btn {
+  width: clamp(112px, 12vw, 170px);
 }
 
 /* ── Footer ── */
@@ -13402,28 +13547,35 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
   background:
     linear-gradient(135deg, rgba(37, 211, 102, 0.16), rgba(8, 219, 247, 0.16)),
     url("assets/fondo.jpeg") center / cover fixed;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .ods-shell {
   max-width: 1120px;
+  min-height: 100vh;
+  padding: 14px 18px;
+  gap: 12px;
+  box-sizing: border-box;
 }
 
 .ods-header {
-  align-items: flex-start;
+  align-items: center;
 }
 
 .ods-level-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 14px;
+  gap: 10px;
+  min-height: 0;
 }
 
 .ods-level-card {
-  min-height: 236px;
-  padding: 16px;
+  min-height: 188px;
+  padding: 12px;
   display: grid;
   align-content: space-between;
-  gap: 14px;
+  gap: 9px;
   border: 2px solid rgba(10, 122, 190, 0.12);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.9);
@@ -13442,11 +13594,11 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 .ods-card-kicker {
   display: inline-flex;
   width: fit-content;
-  padding: 5px 9px;
+  padding: 4px 8px;
   border-radius: 999px;
   background: rgba(245, 146, 10, 0.14);
   color: #7a4700;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 900;
   line-height: 1;
   text-transform: uppercase;
@@ -13454,41 +13606,41 @@ article.challenge-card.design-challenge-v6 > .challenge-message {
 
 .ods-card-main {
   display: grid;
-  grid-template-columns: 64px 1fr;
-  gap: 12px;
+  grid-template-columns: 52px 1fr;
+  gap: 10px;
   align-items: center;
 }
 
 .ods-card-icon {
-  width: 64px;
-  height: 64px;
+  width: 52px;
+  height: 52px;
   object-fit: contain;
   filter: drop-shadow(0 8px 12px rgba(10, 122, 190, 0.12));
 }
 
 .ods-card-main strong {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
   color: var(--color-primary);
-  font-size: 1rem;
+  font-size: 0.9rem;
   line-height: 1.1;
 }
 
 .ods-card-main span span {
   display: block;
   color: var(--color-muted);
-  font-size: 0.76rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  line-height: 1.35;
+  line-height: 1.22;
 }
 
 .ods-mini-grid {
   display: grid;
   width: 100%;
-  max-width: 190px;
+  max-width: 148px;
   gap: 2px;
-  padding: 6px;
-  border-radius: 8px;
+  padding: 5px;
+  border-radius: 7px;
   background: rgba(10, 122, 190, 0.08);
 }
 
