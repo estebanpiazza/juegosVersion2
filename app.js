@@ -52,12 +52,12 @@ const challengeTypeRenderers = {
   "armado-nano": (id) => renderNanoAssemblyChallenge(id),
   "clasificar-tecnologia": (id) => renderTechnologySortChallenge(id),
   "buscar-piezas": (id) => renderHiddenPartsChallenge(id),
-  "elige-flecha-avanzar": (id) => renderArrowChoiceChallenge(id, "avanzar"),
-  "elige-flecha-derecha": (id) => renderArrowChoiceChallenge(id, "derecha"),
-  "elige-flecha-izquierda": (id) => renderArrowChoiceChallenge(id, "izquierda"),
+  "elige-flecha-avanzar": (id) => renderN4ProgrammingCarpetChallenge(id),
+  "elige-flecha-derecha": (id) => renderN4ProgrammingCarpetChallenge(id),
+  "elige-flecha-izquierda": (id) => renderN4ProgrammingCarpetChallenge(id),
   "arrastrar-derecha": (id) => renderDragRightChallenge(id),
   "patron-color": (id) => renderColorPatternChallenge(id),
-  "secuencia-tarjetas-n4": (id) => renderN4SequenceCardsChallenge(id),
+  "secuencia-tarjetas-n4": (id) => renderN4ProgrammingCarpetChallenge(id),
   "patron-formas-cinta": (id) => renderConveyorShapePatternChallenge(id),
   "secuenciacion-guiada": (id) => renderPathChallenge(id),
   "depuracion-inicial": (id) => renderBalanceChallengeV2(id),
@@ -1440,15 +1440,15 @@ function renderNanoAssemblyChallenge(id = 1) {
 
 function renderTechnologySortChallenge(id = 2) {
   const items = [
-    { id: "cable", label: "Cable USB", file: "Cable usb.png", kind: "tech", x: 36, y: 60, w: 10.5 },
-    { id: "placa", label: "Parte de compu", file: "PARTE DE LA COMPU.png", kind: "tech", x: 56, y: 56, w: 9.5 },
-    { id: "auriculares", label: "Auriculares", file: "AURICULARES.png", kind: "tech", x: 46, y: 61, w: 8.8 },
-    { id: "tornillos", label: "Tornillos", file: "TORNILLOS.png", kind: "tech", x: 28, y: 52, w: 7.8 },
-    { id: "robot", label: "Robot", file: "ROBOT.png", kind: "tech", x: 64, y: 54, w: 8.8 },
-    { id: "oso", label: "Oso", file: "OSO.png", kind: "toy", x: 50, y: 43, w: 8.8 },
-    { id: "pelota", label: "Pelota", file: "PEÑOTA.png", kind: "toy", x: 68, y: 63, w: 8.8 },
-    { id: "patito", label: "Patito", file: "PATITO.png", kind: "toy", x: 42, y: 67, w: 7 },
-    { id: "auto", label: "Auto", file: "AUTO.png", kind: "toy", x: 60, y: 61, w: 7.8 },
+    { id: "cable", label: "Cable USB", file: "Cable usb.png", kind: "tech", x: 25, y: 36, w: 10.5 },
+    { id: "oso", label: "Oso", file: "OSO.png", kind: "toy", x: 39, y: 36, w: 8.8 },
+    { id: "placa", label: "Parte de compu", file: "PARTE DE LA COMPU.png", kind: "tech", x: 53, y: 36, w: 9.5 },
+    { id: "pelota", label: "Pelota", file: "PEÑOTA.png", kind: "toy", x: 67, y: 36, w: 8.8 },
+    { id: "robot", label: "Robot", file: "ROBOT.png", kind: "tech", x: 82, y: 38, w: 8.8 },
+    { id: "tornillos", label: "Tornillos", file: "TORNILLOS.png", kind: "tech", x: 32, y: 58, w: 7.8 },
+    { id: "auriculares", label: "Auriculares", file: "AURICULARES.png", kind: "tech", x: 46, y: 58, w: 8.8 },
+    { id: "auto", label: "Auto", file: "AUTO.png", kind: "toy", x: 60, y: 58, w: 7.8 },
+    { id: "patito", label: "Patito", file: "PATITO.png", kind: "toy", x: 70, y: 59, w: 7 },
   ];
   const needed = items.filter((item) => item.kind === "tech");
   const placedTech = new Set();
@@ -1622,19 +1622,568 @@ function renderArrowChoiceChallenge(id, correct) {
   });
 }
 
+function renderCarpetArrowChoiceChallenge(id, correct) {
+  const challengeNumber = correct === "avanzar" ? 4 : correct === "derecha" ? 5 : 6;
+  const labels = {
+    avanzar: "Avanzar",
+    derecha: "Derecha",
+    izquierda: "Izquierda",
+  };
+  const files = {
+    avanzar: "AVANZAR.png",
+    derecha: "DERECHA.png",
+    izquierda: "IZQUIERDA.png",
+  };
+  const routes = {
+    avanzar: {
+      start: { row: 4, col: 2, facing: "up" },
+      targets: [
+        { row: 3, col: 2, expected: "avanzar" },
+        { row: 2, col: 2, expected: "avanzar" },
+      ],
+      goal: { row: 1, col: 2 },
+      prompt: "Arma el camino hacia adelante con las tarjetas de avance.",
+      success: "Muy bien. Nano siguio el camino hacia adelante.",
+    },
+    derecha: {
+      start: { row: 3, col: 1, facing: "right" },
+      targets: [
+        { row: 3, col: 2, expected: "derecha" },
+        { row: 3, col: 3, expected: "derecha" },
+      ],
+      goal: { row: 3, col: 4 },
+      prompt: "Arma el camino hacia la derecha de Nano.",
+      success: "Perfecto. Nano reconocio el camino de la derecha.",
+    },
+    izquierda: {
+      start: { row: 3, col: 4, facing: "left" },
+      targets: [
+        { row: 3, col: 3, expected: "izquierda" },
+        { row: 3, col: 2, expected: "izquierda" },
+      ],
+      goal: { row: 3, col: 1 },
+      prompt: "Arma el camino hacia la izquierda de Nano.",
+      success: "Excelente. Nano giro su atencion hacia la izquierda.",
+    },
+  };
+  const route = routes[correct] || routes.avanzar;
+  const options = correct === "avanzar"
+    ? [
+      { id: "izquierda", label: "Izquierda", file: "IZQUIERDA.png" },
+      { id: "avanzar", label: "Avanzar", file: "AVANZAR.png" },
+      { id: "derecha", label: "Derecha", file: "DERECHA.png" },
+    ]
+    : [
+      { id: "izquierda", label: "Izquierda", file: "IZQUIERDA.png" },
+      { id: "derecha", label: "Derecha", file: "DERECHA.png" },
+    ];
+  const startKey = `${route.start.row}-${route.start.col}`;
+  const goalKey = `${route.goal.row}-${route.goal.col}`;
+  const targetByKey = new Map(route.targets.map((target, index) => [`${target.row}-${target.col}`, { ...target, index }]));
+  const routeKeys = new Set([startKey, goalKey, ...route.targets.map((target) => `${target.row}-${target.col}`)]);
+  let selectedPiece = null;
+  let completed = false;
+
+  function renderCarpetCell(row, col) {
+    const key = `${row}-${col}`;
+    const target = targetByKey.get(key);
+
+    if (key === startKey) {
+      return `
+        <div class="n4-carpet-cell n4-carpet-start is-route" style="--row:${row + 1};--col:${col + 1};">
+          <img class="n4-carpet-start-badge" src="${n4Asset(challengeNumber, "Entrada.png")}" alt="" aria-hidden="true" />
+          <img class="n4-carpet-nano faces-${route.start.facing}" src="${n4Asset(1, "Robot Nano.png")}" alt="Nano" />
+        </div>
+      `;
+    }
+
+    if (key === goalKey) {
+      return `
+        <div class="n4-carpet-cell n4-carpet-goal is-route" style="--row:${row + 1};--col:${col + 1};">
+          <img src="${n4Asset(challengeNumber, "Vamos.png")}" alt="Llegada" />
+        </div>
+      `;
+    }
+
+    if (target) {
+      return `
+        <button class="n4-carpet-cell n4-carpet-drop n4-drop-target is-route" type="button" data-step="${target.index}" data-expected="${target.expected}" style="--row:${row + 1};--col:${col + 1};" aria-label="Casillero ${target.index + 1}: ${labels[target.expected]}">
+          <span>${target.index + 1}</span>
+        </button>
+      `;
+    }
+
+    return `<div class="n4-carpet-cell ${routeKeys.has(key) ? "is-route" : ""}" style="--row:${row + 1};--col:${col + 1};"></div>`;
+  }
+
+  const gridMarkup = Array.from({ length: 36 }, (_, index) => {
+    const row = Math.floor(index / 6);
+    const col = index % 6;
+    return renderCarpetCell(row, col);
+  }).join("");
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-card n4-arrow-card">
+      ${renderHeader(id, getChallengeInstruction(id, "Observa a Nano y toca la tarjeta correcta."))}
+      <div class="n4-arrow-scene">
+        <div class="n4-carpet-layout">
+          <div class="n4-carpet-map" aria-label="Alfombra cuadriculada">
+            <div class="n4-carpet-grid">
+              ${gridMarkup}
+            </div>
+          </div>
+        </div>
+        <div class="n4-arrow-options" aria-label="Tarjetas">
+          ${options.map((option) => `
+            <button class="n4-arrow-option n4-carpet-option n4-drag-source" type="button" data-piece="${option.id}" aria-label="${option.label}">
+              <img src="${n4Asset(challengeNumber, option.file)}" alt="" aria-hidden="true" />
+            </button>
+          `).join("")}
+        </div>
+      </div>
+      <p class="challenge-message" data-message>${route.prompt}</p>
+    </article>
+  `;
+
+  function clearSelection() {
+    challengeContent.querySelectorAll(".n4-carpet-option").forEach((button) => button.classList.remove("is-selected"));
+  }
+
+  function filledTargets() {
+    return [...challengeContent.querySelectorAll(".n4-carpet-drop")].filter((target) => target.dataset.value === target.dataset.expected);
+  }
+
+  function placePiece(target) {
+    if (completed || target.disabled) return;
+    if (!selectedPiece) {
+      setMessage("Primero elegi una tarjeta para ponerla en el caminito.", "is-error");
+      return;
+    }
+
+    const chosen = selectedPiece.dataset.piece;
+    const expected = target.dataset.expected;
+
+    if (chosen !== expected) {
+      const wrongPiece = selectedPiece;
+      target.classList.add("is-wrong");
+      wrongPiece.classList.add("is-wrong");
+      window.setTimeout(() => {
+        target.classList.remove("is-wrong");
+        wrongPiece.classList.remove("is-wrong");
+      }, 520);
+      setMessage(`Casi. Ese casillero necesita ${labels[expected].toLowerCase()}.`, "is-error");
+      return;
+    }
+
+    target.dataset.value = chosen;
+    target.disabled = true;
+    target.classList.add("is-filled", "is-correct");
+    target.innerHTML = `<img src="${n4Asset(challengeNumber, files[chosen])}" alt="${labels[chosen]}" />`;
+    playSound("success");
+
+    if (filledTargets().length === route.targets.length) {
+      completed = true;
+      clearSelection();
+      selectedPiece = null;
+      setMessage(route.success, "is-success");
+      completeChallenge(id);
+      return;
+    }
+
+    setMessage("Bien. Segui completando el camino.", "is-good");
+  }
+
+  challengeContent.querySelectorAll(".n4-carpet-option").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (completed) return;
+      selectedPiece = button;
+      clearSelection();
+      button.classList.add("is-selected");
+      setMessage(`Tarjeta ${labels[button.dataset.piece].toLowerCase()} lista para colocar.`, "is-good");
+    });
+  });
+
+  challengeContent.querySelectorAll(".n4-carpet-drop").forEach((target) => {
+    target.addEventListener("click", () => placePiece(target));
+  });
+}
+
+const N4_PROGRAM_CARDS = {
+  avanzar: { label: "Avanzar", file: "AVANZAR.png" },
+  derecha: { label: "Derecha", file: "DERECHA.png" },
+  izquierda: { label: "Izquierda", file: "IZQUIERDA.png" },
+};
+const N4_PROGRAM_DELTAS = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+const N4_PROGRAM_ROBOT_ROTATION = ["-90deg", "0deg", "90deg", "180deg"];
+const N4_PROGRAM_ARROW_ROTATION = ["0deg", "90deg", "180deg", "270deg"];
+
+function getN4ProgrammingConfig(id) {
+  const configs = {
+    4: {
+      assetChallenge: 4,
+      rows: 4,
+      cols: 4,
+      start: { row: 2, col: 1, dir: 1 },
+      goal: { row: 2, col: 2 },
+      route: ["2-1", "2-2"],
+      solution: ["avanzar"],
+      availableCards: ["avanzar", "derecha", "izquierda"],
+      fallbackInstruction: "Nano quiere dar su primer paso. Coloca una sola tarjeta Avanzar en el algoritmo y comproba el camino.",
+      initialMessage: "El camino tiene un solo paso. Pone Avanzar en el timeline.",
+      missingMessage: "Falta completar el timeline con una tarjeta.",
+      failureMessage: "Casi. Para el primer paso solo va la tarjeta Avanzar.",
+      successMessage: "Muy bien. Nano dio su primer paso.",
+    },
+    5: {
+      assetChallenge: 5,
+      rows: 4,
+      cols: 4,
+      start: { row: 2, col: 1, dir: 0 },
+      goal: { row: 2, col: 2 },
+      route: ["2-1", "2-2"],
+      solution: ["derecha", "avanzar"],
+      availableCards: ["avanzar", "derecha", "izquierda"],
+      fallbackInstruction: "Nano llega a un cruce. Coloca Girar derecha y luego Avanzar para seguir el camino.",
+      initialMessage: "Primero gira a la derecha, despues avanza.",
+      missingMessage: "Completa los dos pasos del algoritmo.",
+      failureMessage: "Revisa el orden: para doblar a la derecha, primero va Derecha y despues Avanzar.",
+      successMessage: "Perfecto. Nano doblo a la derecha y siguio el camino.",
+    },
+    6: {
+      assetChallenge: 6,
+      rows: 4,
+      cols: 4,
+      start: { row: 2, col: 2, dir: 0 },
+      goal: { row: 2, col: 1 },
+      route: ["2-2", "2-1"],
+      solution: ["izquierda", "avanzar"],
+      availableCards: ["avanzar", "derecha", "izquierda"],
+      fallbackInstruction: "Nano llega a un cruce. Coloca Girar izquierda y luego Avanzar para ir al parque.",
+      initialMessage: "Primero gira a la izquierda, despues avanza.",
+      missingMessage: "Completa los dos pasos del algoritmo.",
+      failureMessage: "Revisa el orden: para ir a la izquierda, primero va Izquierda y despues Avanzar.",
+      successMessage: "Excelente. Nano doblo a la izquierda y llego al camino.",
+    },
+    8: {
+      assetChallenge: 8,
+      rows: 5,
+      cols: 5,
+      start: { row: 3, col: 1, dir: 0 },
+      goal: { row: 2, col: 2 },
+      route: ["3-1", "2-1", "2-2"],
+      solution: ["avanzar", "derecha", "avanzar"],
+      availableCards: ["avanzar", "derecha", "izquierda"],
+      fallbackInstruction: "Nano avanza y despues necesita girar. Arma el algoritmo con Avanzar, Derecha y Avanzar.",
+      initialMessage: "Completa el timeline para que Nano avance, gire a la derecha y avance otra vez.",
+      missingMessage: "Completa los tres pasos del algoritmo.",
+      failureMessage: "Casi. El camino es Avanzar, Derecha y Avanzar.",
+      successMessage: "Excelente. Completaste el camino de la alfombra.",
+    },
+  };
+
+  return configs[id] || configs[4];
+}
+
+function renderN4ProgrammingCarpetChallenge(id = 4) {
+  const config = getN4ProgrammingConfig(id);
+  const routeSet = new Set(config.route);
+  const goalKey = `${config.goal.row}-${config.goal.col}`;
+  const startKey = `${config.start.row}-${config.start.col}`;
+  let selectedSlot = 0;
+  let isAnimating = false;
+  let robotState = { ...config.start };
+
+  function cardAsset(cardId) {
+    const card = N4_PROGRAM_CARDS[cardId];
+    return card ? n4Asset(config.assetChallenge, card.file) : "";
+  }
+
+  function renderProgramCell(row, col) {
+    const key = `${row}-${col}`;
+    const isStart = key === startKey;
+    const isGoal = key === goalKey;
+    const isRoute = routeSet.has(key);
+    const cellType = isStart ? "start" : isGoal ? "goal" : isRoute ? "path" : "empty";
+    const content = [
+      isStart ? `<img class="play-cell-img play-cell-img--start" src="${n4Asset(config.assetChallenge, "Entrada.png")}" alt="Entrada" />` : "",
+      isGoal ? `<img class="play-cell-img" src="${n4Asset(config.assetChallenge, "Vamos.png")}" alt="Llegada" />` : "",
+    ].join("");
+
+    return `
+      <div class="play-cell n4-program-cell ${isRoute ? "is-route" : ""}" data-n4-cell="${key}" data-base-type="${cellType}" role="gridcell">
+        ${content}
+      </div>
+    `;
+  }
+
+  function renderProgramSlot(index) {
+    return `
+      <button class="play-slot n4-play-slot" type="button" data-slot="${index}" aria-label="Paso ${index + 1}">
+        <span class="play-slot-num">${index + 1}</span>
+        <span class="play-slot-q">?</span>
+      </button>
+    `;
+  }
+
+  function renderProgramCard(cardId) {
+    const card = N4_PROGRAM_CARDS[cardId];
+    if (!card) return "";
+
+    return `
+      <button class="play-card n4-play-card" type="button" data-card="${cardId}" aria-label="${card.label}">
+        <img src="${cardAsset(cardId)}" alt="" aria-hidden="true" />
+        <span>${card.label}</span>
+      </button>
+    `;
+  }
+
+  const gridMarkup = Array.from({ length: config.rows * config.cols }, (_, index) => {
+    const row = Math.floor(index / config.cols);
+    const col = index % config.cols;
+    return renderProgramCell(row, col);
+  }).join("");
+  const slotsMarkup = Array.from({ length: config.solution.length }, (_, index) => renderProgramSlot(index)).join("");
+  const cardsMarkup = config.availableCards.map(renderProgramCard).join("");
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-card n4-program-card">
+      ${renderHeader(id, getChallengeInstruction(id, config.fallbackInstruction))}
+      <div class="n4-program-play" data-n4-program>
+        <main class="play-main n4-play-main">
+          <section class="play-maze-panel n4-play-maze-panel" aria-label="Alfombra cuadriculada">
+            <div class="play-grid n4-play-grid" role="grid" aria-label="Camino de Nano" style="grid-template-columns: repeat(${config.cols}, 1fr); grid-template-rows: repeat(${config.rows}, 1fr);">
+              ${gridMarkup}
+            </div>
+          </section>
+          <div class="play-right-panel n4-play-right-panel">
+            <section class="play-section n4-play-section" aria-label="Tu algoritmo">
+              <div class="play-section-title">
+                <span class="play-section-num">1</span>
+                <span class="play-section-label">Tu algoritmo</span>
+              </div>
+              <div class="play-algo-slots n4-play-slots" role="list" aria-label="Timeline del algoritmo" style="--slot-count:${config.solution.length};">
+                ${slotsMarkup}
+              </div>
+            </section>
+            <section class="play-section n4-play-section" aria-label="Tarjetas de programacion">
+              <div class="play-section-title">
+                <span class="play-section-num">2</span>
+                <span class="play-section-label">Tarjetas de programacion</span>
+              </div>
+              <div class="play-card-bank n4-play-card-bank" role="list" aria-label="Tarjetas disponibles">
+                ${cardsMarkup}
+              </div>
+            </section>
+          </div>
+        </main>
+        <footer class="play-footer n4-play-footer">
+          <button class="play-check-btn n4-play-check" type="button">COMPROBAR</button>
+          <button class="play-reset-btn n4-play-reset" type="button">REINICIAR</button>
+        </footer>
+      </div>
+      <p class="challenge-message" data-message>${config.initialMessage}</p>
+    </article>
+  `;
+
+  const programRoot = challengeContent.querySelector("[data-n4-program]");
+  const slots = [...programRoot.querySelectorAll(".n4-play-slot")];
+  const cardButtons = [...programRoot.querySelectorAll(".n4-play-card")];
+  const checkButton = programRoot.querySelector(".n4-play-check");
+  const resetButton = programRoot.querySelector(".n4-play-reset");
+
+  function wait(ms) {
+    return new Promise((resolve) => window.setTimeout(resolve, ms));
+  }
+
+  function setSelectedSlot(index) {
+    slots.forEach((slot) => slot.classList.remove("is-selected"));
+    selectedSlot = Math.max(0, Math.min(index, slots.length - 1));
+    slots[selectedSlot]?.classList.add("is-selected");
+  }
+
+  function selectNextFreeSlot(afterIndex) {
+    for (let index = afterIndex + 1; index < slots.length; index += 1) {
+      if (!slots[index].dataset.card) {
+        setSelectedSlot(index);
+        return;
+      }
+    }
+    setSelectedSlot(afterIndex);
+  }
+
+  function clearSlot(slot) {
+    if (!slot) return;
+    const index = Number(slot.dataset.slot);
+    delete slot.dataset.card;
+    slot.classList.remove("is-wrong");
+    slot.innerHTML = `
+      <span class="play-slot-num">${index + 1}</span>
+      <span class="play-slot-q">?</span>
+    `;
+  }
+
+  function fillSlot(slot, cardId) {
+    const card = N4_PROGRAM_CARDS[cardId];
+    if (!slot || !card) return;
+    const index = Number(slot.dataset.slot);
+    slot.dataset.card = cardId;
+    slot.classList.remove("is-wrong");
+    slot.innerHTML = `
+      <span class="play-slot-num">${index + 1}</span>
+      <img src="${cardAsset(cardId)}" alt="${card.label}" />
+    `;
+    selectNextFreeSlot(index);
+  }
+
+  function getCell(row, col) {
+    return programRoot.querySelector(`[data-n4-cell="${row}-${col}"]`);
+  }
+
+  function placeRobot(animateTurn = false) {
+    programRoot.querySelectorAll(".play-cell").forEach((cell) => {
+      cell.classList.remove("is-robot", "is-turning");
+      cell.querySelectorAll(".play-robot-img, .play-robot-direction").forEach((node) => node.remove());
+    });
+
+    const cell = getCell(robotState.row, robotState.col);
+    if (!cell) return;
+    cell.classList.add("is-robot");
+    cell.classList.toggle("is-turning", animateTurn);
+    cell.insertAdjacentHTML("beforeend", `
+      <img class="play-robot-img n4-program-robot" src="${DESIGN_D6_ROBOT_IMAGE_SRC}" alt="Nano" style="--robot-rotation: ${N4_PROGRAM_ROBOT_ROTATION[robotState.dir]};" />
+      <span class="play-robot-direction" aria-hidden="true" style="--robot-direction: ${N4_PROGRAM_ARROW_ROTATION[robotState.dir]};"></span>
+    `);
+  }
+
+  function resetRobot() {
+    robotState = { ...config.start };
+    programRoot.querySelectorAll(".play-cell").forEach((cell) => {
+      cell.classList.remove("is-trail", "is-robot", "is-turning", "is-wrong");
+      cell.querySelectorAll(".play-robot-img, .play-robot-direction").forEach((node) => node.remove());
+    });
+    placeRobot();
+  }
+
+  function getSlotValues() {
+    return slots.map((slot) => slot.dataset.card || null);
+  }
+
+  function clearWrongSlots() {
+    slots.forEach((slot) => slot.classList.remove("is-wrong"));
+  }
+
+  async function runSimulation(commands) {
+    resetRobot();
+    await wait(100);
+
+    for (const command of commands) {
+      const currentCell = getCell(robotState.row, robotState.col);
+      currentCell?.classList.add("is-trail");
+
+      if (command === "derecha" || command === "izquierda") {
+        robotState.dir = command === "derecha"
+          ? (robotState.dir + 1) % 4
+          : (robotState.dir + 3) % 4;
+        placeRobot(true);
+        await wait(190);
+        continue;
+      }
+
+      if (command === "avanzar") {
+        const [rowDelta, colDelta] = N4_PROGRAM_DELTAS[robotState.dir];
+        const nextRow = robotState.row + rowDelta;
+        const nextCol = robotState.col + colDelta;
+        if (nextRow < 0 || nextRow >= config.rows || nextCol < 0 || nextCol >= config.cols) {
+          currentCell?.classList.add("is-wrong");
+          return false;
+        }
+        robotState = { ...robotState, row: nextRow, col: nextCol };
+        placeRobot();
+        await wait(190);
+      }
+    }
+
+    return `${robotState.row}-${robotState.col}` === goalKey;
+  }
+
+  async function checkProgram() {
+    if (isAnimating) return;
+    const values = getSlotValues();
+    clearWrongSlots();
+
+    const firstMissing = values.findIndex((value) => !value);
+    if (firstMissing >= 0) {
+      setSelectedSlot(firstMissing);
+      setMessage(config.missingMessage, "is-error is-soft-error");
+      return;
+    }
+
+    isAnimating = true;
+    checkButton.disabled = true;
+    resetButton.disabled = true;
+    const reachedGoal = await runSimulation(values);
+    const firstWrong = values.findIndex((value, index) => value !== config.solution[index]);
+    isAnimating = false;
+    checkButton.disabled = false;
+    resetButton.disabled = false;
+
+    if (firstWrong >= 0 || !reachedGoal) {
+      const slotToMark = firstWrong >= 0 ? firstWrong : values.length - 1;
+      slots[slotToMark]?.classList.add("is-wrong");
+      setSelectedSlot(slotToMark);
+      setMessage(config.failureMessage, "is-error is-soft-error");
+      return;
+    }
+
+    setMessage(config.successMessage, "is-success");
+    completeChallenge(id);
+  }
+
+  function resetProgram() {
+    if (isAnimating) return;
+    slots.forEach(clearSlot);
+    clearWrongSlots();
+    setSelectedSlot(0);
+    resetRobot();
+    setMessage(config.initialMessage);
+  }
+
+  slots.forEach((slot, index) => {
+    slot.addEventListener("click", () => {
+      if (isAnimating) return;
+      if (selectedSlot === index && slot.dataset.card) {
+        clearSlot(slot);
+      }
+      setSelectedSlot(index);
+    });
+  });
+
+  cardButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (isAnimating) return;
+      fillSlot(slots[selectedSlot], button.dataset.card);
+    });
+  });
+
+  checkButton.addEventListener("click", checkProgram);
+  resetButton.addEventListener("click", resetProgram);
+  setSelectedSlot(0);
+  resetRobot();
+}
+
 function renderDragRightChallenge(id = 7) {
   let selectedPiece = null;
   let completed = false;
 
   challengeContent.innerHTML = `
     <article class="challenge-card n4-card n4-side-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Arrastra la pieza hacia el lado derecho de la pantalla."))}
+      ${renderHeader(id, getChallengeInstruction(id, "Arrastra la pieza hacia la caja que esta lejos de la ventana."))}
       <div class="n4-side-scene">
-        <button class="n4-side-box n4-side-box-left n4-drop-target" type="button" data-side="left" aria-label="Caja izquierda">
+        <button class="n4-side-box n4-side-box-left n4-drop-target" type="button" data-side="left" aria-label="Caja de tecnologia izquierda">
           <img src="${n4Asset(2, "caja de tecnologia.png")}" alt="" aria-hidden="true" />
         </button>
-        <button class="n4-side-box n4-side-box-right n4-drop-target" type="button" data-side="right" aria-label="Caja derecha">
-          <img src="${n4Asset(2, "caja de juguetes.png")}" alt="" aria-hidden="true" />
+        <button class="n4-side-box n4-side-box-right n4-drop-target" type="button" data-side="right" aria-label="Caja de tecnologia derecha">
+          <img src="${n4Asset(2, "caja de tecnologia.png")}" alt="" aria-hidden="true" />
         </button>
         <img class="n4-side-nano" src="${n4Asset(7, "Robot Nano.png")}" alt="Nano" />
         <button class="n4-side-piece n4-drag-source" type="button" data-piece="engranaje" aria-label="Engranaje">
@@ -1647,6 +2196,11 @@ function renderDragRightChallenge(id = 7) {
 
   function clearSelection() {
     challengeContent.querySelectorAll(".n4-side-piece").forEach((item) => item.classList.remove("is-selected"));
+  }
+
+  const sideMessage = challengeContent.querySelector("[data-message]");
+  if (sideMessage) {
+    sideMessage.textContent = "La ventana esta del lado izquierdo. Lleva la pieza a la caja de tecnologia que queda lejos de la ventana.";
   }
 
   challengeContent.querySelector(".n4-side-piece").addEventListener("click", (event) => {
@@ -1664,6 +2218,7 @@ function renderDragRightChallenge(id = 7) {
         box.classList.add("is-wrong");
         window.setTimeout(() => box.classList.remove("is-wrong"), 520);
         setMessage("Ese es el lado izquierdo. Buscá la caja que esta cerca de la ventana.", "is-error");
+        setMessage("Esa caja esta cerca de la ventana. Busca la caja de tecnologia que queda mas lejos.", "is-error");
         return;
       }
 
@@ -1673,6 +2228,7 @@ function renderDragRightChallenge(id = 7) {
       selectedPiece.hidden = true;
       selectedPiece.classList.remove("is-selected");
       setMessage("Perfecto. La pieza quedo en el lado derecho.", "is-success");
+      setMessage("Perfecto. La pieza quedo lejos de la ventana.", "is-success");
       completeChallenge(id);
     });
   });
@@ -1682,10 +2238,10 @@ function renderColorPatternChallenge(id = 9) {
   const sequence = ["naranja", "azul", "naranja"];
   const correct = "azul";
   const colors = [
+    { id: "verde", label: "Verde", file: "verde.png" },
     { id: "naranja", label: "Naranja", file: "naranja.png" },
     { id: "azul", label: "Azul", file: "azul.png" },
     { id: "turquesa", label: "Turquesa", file: "turquesa.png" },
-    { id: "verde", label: "Verde", file: "verde.png" },
   ];
 
   challengeContent.innerHTML = `
@@ -1803,7 +2359,7 @@ function renderConveyorShapePatternChallenge(id = 10) {
   });
 }
 
-function renderN4SequenceCardsChallenge(id = 8) {
+function renderN4SequenceCardsChallengeLegacy(id = 8) {
   const expected = "DERECHA.png";
   const options = [
     { id: "AVANZAR.png", label: "Avanzar", file: "AVANZAR.png" },
@@ -1876,6 +2432,150 @@ function renderN4SequenceCardsChallenge(id = 8) {
 
   challengeContent.querySelector(".n4-seq-missing")?.addEventListener("click", (event) => {
     tryPlace(event.currentTarget);
+  });
+}
+
+function renderN4SequenceCardsChallenge(id = 8) {
+  const expected = "DERECHA.png";
+  const labels = {
+    "AVANZAR.png": "Avanzar",
+    "DERECHA.png": "Derecha",
+    "IZQUIERDA.png": "Izquierda",
+  };
+  const options = [
+    { id: "AVANZAR.png", label: "Avanzar", file: "AVANZAR.png" },
+    { id: "DERECHA.png", label: "Derecha", file: "DERECHA.png" },
+    { id: "IZQUIERDA.png", label: "Izquierda", file: "IZQUIERDA.png" },
+  ];
+  const start = { row: 4, col: 1, facing: "up" };
+  const goal = { row: 2, col: 3 };
+  const fixedCards = [
+    { row: 3, col: 1, card: "AVANZAR.png" },
+    { row: 2, col: 2, card: "AVANZAR.png" },
+  ];
+  const target = { row: 2, col: 1, expected };
+  const startKey = `${start.row}-${start.col}`;
+  const goalKey = `${goal.row}-${goal.col}`;
+  const targetKey = `${target.row}-${target.col}`;
+  const fixedByKey = new Map(fixedCards.map((card) => [`${card.row}-${card.col}`, card]));
+  const routeKeys = new Set([startKey, goalKey, targetKey, ...fixedCards.map((card) => `${card.row}-${card.col}`)]);
+  let selectedCard = null;
+  let solved = false;
+
+  function renderCell(row, col) {
+    const key = `${row}-${col}`;
+    const fixedCard = fixedByKey.get(key);
+
+    if (key === startKey) {
+      return `
+        <div class="n4-carpet-cell n4-carpet-start is-route" style="--row:${row + 1};--col:${col + 1};">
+          <img class="n4-carpet-start-badge" src="${n4Asset(8, "Entrada.png")}" alt="" aria-hidden="true" />
+          <img class="n4-carpet-nano faces-${start.facing}" src="${n4Asset(1, "Robot Nano.png")}" alt="Nano" />
+        </div>
+      `;
+    }
+
+    if (key === goalKey) {
+      return `
+        <div class="n4-carpet-cell n4-carpet-goal is-route" style="--row:${row + 1};--col:${col + 1};">
+          <img src="${n4Asset(8, "Vamos.png")}" alt="Llegada" />
+        </div>
+      `;
+    }
+
+    if (key === targetKey) {
+      return `
+        <button class="n4-carpet-cell n4-carpet-drop n4-drop-target is-route" type="button" data-expected="${target.expected}" style="--row:${row + 1};--col:${col + 1};" aria-label="Tarjeta faltante: ${labels[target.expected]}">
+          <span>?</span>
+        </button>
+      `;
+    }
+
+    if (fixedCard) {
+      return `
+        <div class="n4-carpet-cell n4-carpet-fixed is-route" style="--row:${row + 1};--col:${col + 1};">
+          <img src="${n4Asset(8, fixedCard.card)}" alt="${labels[fixedCard.card]}" />
+        </div>
+      `;
+    }
+
+    return `<div class="n4-carpet-cell ${routeKeys.has(key) ? "is-route" : ""}" style="--row:${row + 1};--col:${col + 1};"></div>`;
+  }
+
+  const gridMarkup = Array.from({ length: 36 }, (_, index) => {
+    const row = Math.floor(index / 6);
+    const col = index % 6;
+    return renderCell(row, col);
+  }).join("");
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-card n4-seq-card">
+      ${renderHeader(id, getChallengeInstruction(id, "Nano avanza y despues necesita girar. Completa la secuencia con la tarjeta correcta."))}
+      <div class="n4-seq-scene n4-seq-carpet-scene">
+        <div class="n4-carpet-layout">
+          <div class="n4-carpet-map" aria-label="Alfombra cuadriculada">
+            <div class="n4-carpet-grid">
+              ${gridMarkup}
+            </div>
+          </div>
+        </div>
+        <div class="n4-seq-options" aria-label="Tarjetas disponibles">
+          ${options.map((option) => `
+            <button class="n4-seq-option n4-drag-source" type="button" data-piece="${option.id}" aria-label="${option.label}">
+              <img src="${n4Asset(8, option.file)}" alt="" aria-hidden="true" />
+            </button>
+          `).join("")}
+        </div>
+      </div>
+      <p class="challenge-message" data-message>Completa la alfombra: despues de avanzar, Nano necesita girar a la derecha.</p>
+    </article>
+  `;
+
+  function clearSelection() {
+    challengeContent.querySelectorAll(".n4-seq-option").forEach((item) => item.classList.remove("is-selected"));
+  }
+
+  function placeCard(dropTarget) {
+    if (!selectedCard || solved) return;
+    const chosen = selectedCard.dataset.piece;
+
+    if (chosen !== dropTarget.dataset.expected) {
+      const wrongCard = selectedCard;
+      wrongCard.classList.add("is-wrong");
+      dropTarget.classList.add("is-wrong");
+      window.setTimeout(() => {
+        wrongCard.classList.remove("is-wrong");
+        dropTarget.classList.remove("is-wrong");
+      }, 520);
+      setMessage("Casi. En esa esquina Nano necesita la tarjeta de girar a la derecha.", "is-error");
+      return;
+    }
+
+    solved = true;
+    dropTarget.dataset.value = chosen;
+    dropTarget.disabled = true;
+    dropTarget.classList.add("is-filled", "is-correct");
+    dropTarget.innerHTML = `<img src="${n4Asset(8, chosen)}" alt="${labels[chosen]}" />`;
+    selectedCard.disabled = true;
+    selectedCard.hidden = true;
+    clearSelection();
+    selectedCard = null;
+    setMessage("Excelente. Completaste el camino de la alfombra.", "is-success");
+    completeChallenge(id);
+  }
+
+  challengeContent.querySelectorAll(".n4-seq-option").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.disabled || solved) return;
+      selectedCard = button;
+      clearSelection();
+      button.classList.add("is-selected");
+      setMessage(`Tarjeta ${labels[button.dataset.piece].toLowerCase()} lista para colocar.`, "is-good");
+    });
+  });
+
+  challengeContent.querySelector(".n4-carpet-drop")?.addEventListener("click", (event) => {
+    placeCard(event.currentTarget);
   });
 }
 

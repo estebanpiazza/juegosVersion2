@@ -1,0 +1,2 @@
+Consigna 11:(Taller mecánico) Nano ordena sus piezas: tornillo, tuerca, tornillo... Toca la herramienta que sigue en la fila
+Mecánica: Visualmente en la pantalla hay una fila de elementos de hardware. En la posición final hay un signo de interrogación [ ? ]

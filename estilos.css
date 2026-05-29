@@ -14091,30 +14091,51 @@ body.is-dragging-piece .n4-assembly-target::after {
 
 .n4-sort-bin {
   position: absolute;
-  bottom: 2.5%;
+  bottom: 4.5%;
   z-index: 1;
-  width: clamp(195px, 24vw, 315px);
-  min-height: clamp(128px, 17vw, 220px);
+  width: clamp(136px, 15.5vw, 205px);
+  height: clamp(84px, 10vw, 132px);
+  min-height: 0;
   border: 3px dashed rgba(10, 122, 190, 0.34);
   border-radius: 8px;
   background: transparent;
   cursor: pointer;
   display: grid;
-  align-content: end;
+  align-content: center;
   justify-items: center;
-  padding: 8px;
+  overflow: visible;
+  padding: 4px;
 }
 
 .n4-sort-bin img {
-  max-width: 100%;
-  max-height: 100%;
+  --sort-bin-img-x: -50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 235%;
+  height: 235%;
+  max-width: none;
+  max-height: none;
   object-fit: contain;
+  transform: translate(var(--sort-bin-img-x), -54%);
   pointer-events: none;
+}
+
+.n4-sort-bin-tech img {
+  --sort-bin-img-x: -24%;
+}
+
+.n4-sort-bin-toy img {
+  --sort-bin-img-x: -76%;
 }
 
 .n4-sort-bin strong {
   position: absolute;
-  top: 8px;
+  top: -10px;
+  z-index: 2;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
   color: #0a7abe;
   font-size: 0.96rem;
   font-weight: 900;
@@ -14122,11 +14143,11 @@ body.is-dragging-piece .n4-assembly-target::after {
 }
 
 .n4-sort-bin-tech {
-  left: 6.5%;
+  left: 9%;
 }
 
 .n4-sort-bin-toy {
-  right: 6.5%;
+  right: 9%;
 }
 
 .n4-hidden-scene {
@@ -14176,6 +14197,19 @@ body.is-dragging-piece .n4-assembly-target::after {
   background: transparent;
 }
 
+.n4-color-card .n4-color-scene {
+  padding: 0;
+}
+
+.n4-arrow-scene:has(.n4-carpet-layout) {
+  grid-template-columns: minmax(280px, min(52vw, 520px)) minmax(88px, 130px);
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  gap: clamp(12px, 2vw, 24px);
+  padding: 14px 24px 18px;
+}
+
 .n4-arrow-route {
   position: relative;
   z-index: 1;
@@ -14208,6 +14242,220 @@ body.is-dragging-piece .n4-assembly-target::after {
   transform: scaleX(-1) rotate(12deg);
 }
 
+.n4-carpet-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+
+.n4-carpet-map {
+  position: relative;
+  width: min(54vh, 52vw, 510px);
+  max-width: 100%;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  padding: clamp(30px, 3.1vw, 46px);
+  background: url("assets/manta%20sin%20grilla.png") center / 100% 100% no-repeat;
+  filter: drop-shadow(0 12px 18px rgba(10, 122, 190, 0.14));
+}
+
+.n4-carpet-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+  overflow: hidden;
+  border-radius: 4px;
+  background: #ffffff;
+}
+
+.n4-carpet-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  border: 0;
+  border-right: 1px solid rgba(8, 219, 247, 0.58);
+  border-bottom: 1px solid rgba(8, 219, 247, 0.58);
+  background: #ffffff;
+}
+
+.n4-carpet-cell:nth-child(6n) {
+  border-right: 0;
+}
+
+.n4-carpet-cell:nth-last-child(-n + 6) {
+  border-bottom: 0;
+}
+
+.n4-carpet-cell.is-route {
+  background: rgba(136, 228, 0, 0.18);
+  box-shadow: inset 0 0 0 3px rgba(136, 228, 0, 0.3);
+}
+
+.n4-carpet-drop {
+  border: 3px dashed rgba(10, 122, 190, 0.5);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #0a7abe;
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(0.95rem, 2vw, 1.45rem);
+  font-weight: 900;
+  touch-action: none;
+}
+
+.n4-carpet-drop img {
+  width: 86%;
+  height: 86%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.18));
+}
+
+.n4-carpet-drop.is-filled {
+  border-style: solid;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.n4-carpet-start-badge {
+  position: absolute;
+  left: 5%;
+  top: 5%;
+  width: 36%;
+  height: 36%;
+  object-fit: contain;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.n4-carpet-nano {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 7px 10px rgba(0, 0, 0, 0.2));
+}
+
+.n4-carpet-nano.faces-right {
+  transform: rotate(15deg);
+}
+
+.n4-carpet-nano.faces-left {
+  transform: scaleX(-1) rotate(15deg);
+}
+
+.n4-carpet-goal img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 9px rgba(0, 0, 0, 0.18));
+}
+
+.n4-carpet-fixed img {
+  width: 86%;
+  height: 86%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.18));
+}
+
+.n4-program-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  min-height: 0;
+  padding-bottom: 10px;
+}
+
+.n4-program-play {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.n4-program-card .n4-play-main {
+  min-height: 0;
+  width: 100%;
+  max-width: 1180px;
+  padding: 0 18px;
+  gap: 18px;
+  align-items: center;
+}
+
+.n4-program-card .n4-play-maze-panel {
+  width: min(clamp(215px, 27vw, 340px), calc(100vh - 290px));
+  padding: clamp(28px, 2.8vw, 42px);
+}
+
+.n4-program-card .n4-play-grid {
+  width: 100%;
+  height: 100%;
+}
+
+.n4-program-card .n4-program-cell {
+  border-width: 1px;
+}
+
+.n4-program-cell.is-route {
+  background: rgba(136, 228, 0, 0.18);
+}
+
+.n4-program-card .n4-play-right-panel {
+  flex: 1 1 360px;
+  max-width: 520px;
+  align-self: center;
+  overflow: visible;
+}
+
+.n4-program-card .n4-play-section {
+  border-width: 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+.n4-program-card .n4-play-slots {
+  grid-template-columns: repeat(var(--slot-count), clamp(68px, 7vw, 92px));
+  justify-content: start;
+  gap: 7px;
+}
+
+.n4-program-card .n4-play-slot {
+  width: clamp(68px, 7vw, 92px);
+  border-radius: 8px;
+}
+
+.n4-program-card .n4-play-card-bank {
+  gap: 8px;
+}
+
+.n4-program-card .n4-play-card {
+  min-width: clamp(72px, 7.5vw, 98px);
+  border-radius: 8px;
+}
+
+.n4-program-card .n4-play-card img {
+  width: clamp(46px, 5vw, 68px);
+}
+
+.n4-program-card .n4-play-footer {
+  padding: 0;
+  gap: 14px;
+}
+
+.n4-program-card .n4-play-check,
+.n4-program-card .n4-play-reset {
+  width: clamp(128px, 13vw, 170px);
+  min-height: 42px;
+}
+
 .n4-arrow-options,
 .n4-color-options {
   position: relative;
@@ -14216,6 +14464,12 @@ body.is-dragging-piece .n4-assembly-target::after {
   justify-content: center;
   gap: 14px;
   flex-wrap: wrap;
+}
+
+.n4-arrow-scene:has(.n4-carpet-layout) .n4-arrow-options {
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .n4-arrow-option,
@@ -14232,6 +14486,10 @@ body.is-dragging-piece .n4-assembly-target::after {
   box-shadow: none;
 }
 
+.n4-arrow-scene:has(.n4-carpet-layout) .n4-arrow-option {
+  width: clamp(82px, 8.5vw, 118px);
+}
+
 .n4-arrow-option img,
 .n4-color-option img {
   max-width: 100%;
@@ -14241,7 +14499,19 @@ body.is-dragging-piece .n4-assembly-target::after {
   pointer-events: none;
 }
 
+.n4-carpet-option.is-selected {
+  filter: drop-shadow(0 0 14px rgba(245, 146, 10, 0.85));
+  transform: translateY(-3px) scale(1.04);
+}
+
+.n4-carpet-drop.is-wrong,
+.n4-carpet-option.is-wrong {
+  border-color: #f0526b;
+  box-shadow: 0 0 0 5px rgba(240, 82, 107, 0.18);
+}
+
 .n4-arrow-option.is-correct,
+.n4-carpet-drop.is-correct,
 .n4-color-option.is-correct,
 .n4-seq-missing.is-correct,
 .n4-shape-missing.is-correct {
@@ -14306,6 +14576,21 @@ body.is-dragging-piece .n4-assembly-target::after {
   flex-wrap: wrap;
 }
 
+.n4-seq-carpet-scene {
+  grid-template-columns: minmax(280px, min(52vw, 520px)) minmax(88px, 130px);
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  gap: clamp(12px, 2vw, 24px);
+  padding: 14px 24px 18px;
+}
+
+.n4-seq-carpet-scene .n4-seq-options {
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 .n4-seq-option {
   width: clamp(92px, 14vw, 150px);
   aspect-ratio: 1.2;
@@ -14343,6 +14628,7 @@ body.is-dragging-piece .n4-assembly-target::after {
   min-height: 200px;
   display: grid;
   place-items: center;
+  transform: translateY(clamp(-130px, -9vw, -92px));
 }
 
 .n4-shape-belt {
@@ -14358,7 +14644,7 @@ body.is-dragging-piece .n4-assembly-target::after {
   justify-content: flex-start;
   align-items: flex-end;
   gap: clamp(10px, 2.2vw, 20px);
-  padding: 0 0 clamp(24px, 4vw, 40px) clamp(30%, 33vw, 38%);
+  padding: 0 0 clamp(0px, 0.8vw, 8px) clamp(30%, 33vw, 38%);
 }
 
 .n4-shape-series img,
@@ -14427,35 +14713,55 @@ body.is-dragging-piece .n4-assembly-target::after {
 
 .n4-side-box {
   position: absolute;
-  bottom: 9%;
-  width: clamp(120px, 20vw, 190px);
-  height: clamp(100px, 16vw, 155px);
+  bottom: 8%;
+  width: clamp(230px, 23vw, 320px);
+  height: clamp(150px, 15vw, 210px);
   border: 3px dashed rgba(10, 122, 190, 0.42);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.72);
   cursor: pointer;
   display: grid;
   place-items: center;
-  padding: 6px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.n4-seq-carpet-scene .n4-seq-option {
+  width: clamp(82px, 8.5vw, 118px);
 }
 
 .n4-side-box::after {
   content: none;
 }
 
-.n4-side-box img {
-  width: 100%;
-  height: 100%;
+.n4-side-box > img:not(.n4-side-placed-piece) {
+  --side-box-img-x: -50%;
+  --side-box-img-y: -52%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 212%;
+  max-width: none;
+  height: auto;
   object-fit: contain;
+  transform: translate(var(--side-box-img-x), var(--side-box-img-y));
   pointer-events: none;
 }
 
+.n4-side-box-left > img:not(.n4-side-placed-piece) {
+  --side-box-img-x: -24%;
+}
+
+.n4-side-box-right > img:not(.n4-side-placed-piece) {
+  --side-box-img-x: -24%;
+}
+
 .n4-side-box-left {
-  left: 9%;
+  left: 7.5%;
 }
 
 .n4-side-box-right {
-  right: 9%;
+  right: 7.5%;
 }
 
 .n4-side-nano {
@@ -14492,22 +14798,34 @@ body.is-dragging-piece .n4-assembly-target::after {
 }
 
 .n4-color-pattern {
-  position: relative;
+  position: absolute;
+  left: 15%;
+  right: 20.5%;
+  top: 17%;
   z-index: 1;
-  width: 100%;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   gap: clamp(10px, 3vw, 28px);
-  min-height: 190px;
+  min-height: clamp(112px, 16vw, 190px);
 }
 
 .n4-color-options {
-  margin-top: auto;
+  position: absolute;
+  left: 16.4%;
+  right: 17.4%;
+  bottom: -3.8%;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
+  gap: clamp(18px, 3.1vw, 58px);
+  margin-top: 0;
 }
 
 .n4-color-option {
-  width: clamp(78px, 11vw, 126px);
+  width: clamp(108px, 12vw, 178px);
   aspect-ratio: 1;
 }
 
@@ -14582,6 +14900,44 @@ body.is-dragging-piece .n4-assembly-target::after {
     min-height: 0;
   }
 
+  .n4-arrow-scene:has(.n4-carpet-layout) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px 12px 14px;
+  }
+
+  .n4-arrow-scene:has(.n4-carpet-layout) .n4-carpet-map {
+    width: min(62vw, 36vh, 340px);
+  }
+
+  .n4-arrow-scene:has(.n4-carpet-layout) .n4-arrow-options {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .n4-arrow-scene:has(.n4-carpet-layout) .n4-arrow-option {
+    width: clamp(70px, 18vw, 92px);
+  }
+
+  .n4-seq-carpet-scene {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px 12px 14px;
+  }
+
+  .n4-seq-carpet-scene .n4-carpet-map {
+    width: min(62vw, 36vh, 340px);
+  }
+
+  .n4-seq-carpet-scene .n4-seq-options {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .n4-seq-carpet-scene .n4-seq-option {
+    width: clamp(70px, 18vw, 92px);
+  }
+
   .n4-sort-scene {
     grid-template-columns: 1fr;
     align-content: end;
@@ -14592,8 +14948,8 @@ body.is-dragging-piece .n4-assembly-target::after {
   }
 
   .n4-sort-bin {
-    min-height: 140px;
-    width: min(100%, 235px);
+    width: clamp(124px, 25vw, 166px);
+    height: clamp(76px, 15.5vw, 105px);
     justify-self: center;
   }
 
@@ -14602,8 +14958,9 @@ body.is-dragging-piece .n4-assembly-target::after {
   }
 
   .n4-side-box {
-    width: 32%;
-    height: 24%;
+    width: clamp(150px, 38vw, 210px);
+    height: auto;
+    aspect-ratio: 1.55;
   }
 
   .n4-shape-options {
