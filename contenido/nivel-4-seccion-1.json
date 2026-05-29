@@ -7,7 +7,7 @@
       "id": "n4-rework-d1",
       "titulo": "A ensamblar",
       "tipo": "armado-nano",
-      "consigna": "A ensamblar. Nano esta desarmado. Observa las piezas y arrastralas a su lugar para armarlo.",
+      "consigna": "¡A ensamblar! ¡Hola! Nano está desarmado. Observa las piezas y arrástralas a su lugar para armarlo. ¡Tú puedes!",
       "objetivo": "Reconocer partes de Nano y encastrarlas sobre la silueta.",
       "interaccion": "Arrastrar o seleccionar una pieza y luego tocar su lugar correcto."
     },
@@ -15,7 +15,7 @@
       "id": "n4-rework-d2",
       "titulo": "Caja de herramientas",
       "tipo": "clasificar-tecnologia",
-      "consigna": "Caja de herramientas. Nano necesita ordenar. Arrastra las piezas de tecnologia a la caja.",
+      "consigna": "¡Caja de Herramientas! Nano necesita ordenar. Arrastra las piezas de tecnología a la caja. ¡A limpiar!",
       "objetivo": "Distinguir elementos tecnologicos de juguetes u objetos distractores.",
       "interaccion": "Arrastrar o seleccionar solo los elementos tecnologicos y soltarlos en la caja."
     },
@@ -23,7 +23,7 @@
       "id": "n4-rework-d3",
       "titulo": "Piezas escondidas",
       "tipo": "buscar-piezas",
-      "consigna": "El taller esta desordenado. Busca bien y toca las cinco piezas escondidas de Nano.",
+      "consigna": "El taller está desordenado. Busca bien y toca las cinco piezas escondidas de Nano. ¡Encuéntralas todas!",
       "objetivo": "Buscar y reconocer cinco piezas del robot en una escena de taller.",
       "interaccion": "Tocar bateria, chip, engranaje, tornillos y cable."
     },
@@ -31,7 +31,7 @@
       "id": "n4-rework-d4",
       "titulo": "Primer paso",
       "tipo": "elige-flecha-avanzar",
-      "consigna": "Nano quiere dar su primer paso. Coloca una sola tarjeta Avanzar en el algoritmo y comproba el camino.",
+      "consigna": "¡Nano quiere dar su primer paso! Observa su camino y toca la flecha correcta para programarlo",
       "objetivo": "Relacionar un movimiento de una celda con la tarjeta Avanzar.",
       "interaccion": "Seleccionar la tarjeta Avanzar, colocarla en el timeline y comprobar."
     },
@@ -39,7 +39,7 @@
       "id": "n4-rework-d5",
       "titulo": "Doblar a la derecha",
       "tipo": "elige-flecha-derecha",
-      "consigna": "Nano llega a un cruce. Coloca Derecha y despues Avanzar para que doble hacia la derecha y siga el camino.",
+      "consigna": "Nano está mirando hacia la derecha, ¡listo para doblar! Observa su posición y elige la tarjeta que apunta hacia el mismo lado para que no se pierda",
       "objetivo": "Programar un giro a la derecha antes del avance.",
       "interaccion": "Colocar Derecha y Avanzar en el timeline y comprobar."
     },
@@ -47,15 +47,15 @@
       "id": "n4-rework-d6",
       "titulo": "Giro a la izquierda",
       "tipo": "elige-flecha-izquierda",
-      "consigna": "Nano llega a un cruce y quiere ir al parque. Coloca Izquierda y despues Avanzar para que doble hacia la izquierda.",
+      "consigna": "¡Giro a la vista! ¡Llegamos a un cruce! Nano quiere ir al parque. Toca la flecha que apunta a la izquierda para doblar.",
       "objetivo": "Programar un giro a la izquierda antes del avance.",
       "interaccion": "Colocar Izquierda y Avanzar en el timeline y comprobar."
     },
     {
       "id": "n4-rework-d7",
-      "titulo": "Lejos de la ventana",
+      "titulo": "Cerca de la ventana",
       "tipo": "arrastrar-derecha",
-      "consigna": "Nano debe guardar su tuerca lejos de la ventana. Arrastra la pieza hacia la caja de tecnologia que esta lejos de la ventana.",
+      "consigna": "Nano debe guardar su tuerca cerca de la ventana. Arrastra la pieza hacia el lado derecho de la pantalla",
       "objetivo": "Reconocer el lado derecho de la pantalla usando una referencia visual.",
       "interaccion": "Arrastrar o seleccionar el engranaje y colocarlo en la caja derecha."
     },
@@ -63,7 +63,7 @@
       "id": "n4-rework-d8",
       "titulo": "A programar",
       "tipo": "secuencia-tarjetas-n4",
-      "consigna": "Nano avanza y despues necesita girar. Arma el algoritmo con Avanzar, Derecha y Avanzar para llegar a la meta.",
+      "consigna": "¡A programar! Nano avanza, pero tiene que girar. Observa el camino y elige la tarjeta correcta para completar la instrucción. ¡Buena suerte!",
       "objetivo": "Ordenar una secuencia corta de movimiento y giro.",
       "interaccion": "Colocar las tres tarjetas en el timeline y comprobar."
     },
@@ -71,7 +71,7 @@
       "id": "n4-rework-d9",
       "titulo": "Luces con ritmo",
       "tipo": "patron-color",
-      "consigna": "Las luces de Nano brillan con ritmo. Naranja, azul, naranja... Observa bien y toca el color que sigue.",
+      "consigna": "¡Las luces de Nano brillan con ritmo! Rojo, azul, rojo... Observa bien y toca el color que sigue.",
       "objetivo": "Continuar una secuencia logica alternada de colores.",
       "interaccion": "Tocar el color que completa el patron."
     },
@@ -79,7 +79,7 @@
       "id": "n4-rework-d10",
       "titulo": "Serie en la cinta",
       "tipo": "patron-formas-cinta",
-      "consigna": "Por la cinta pasan formas geometricas. Cuadrado, circulo, cuadrado... Arrastra la forma que falta para completar la serie.",
+      "consigna": "¡Por la cinta pasan formas geométricas! Cuadrado, círculo, cuadrado... Arrastra la forma que falta para completar la serie.",
       "objetivo": "Completar un patron AB en una cinta transportadora.",
       "interaccion": "Arrastrar o seleccionar la pieza correcta y colocarla en el espacio faltante."
     }

@@ -13730,6 +13730,12 @@ body:has(.n4-assembly-card) .corner-logo {
   box-shadow: 0 10px 20px rgba(10, 122, 190, 0.12);
 }
 
+.consigna-strike {
+  text-decoration: line-through;
+  text-decoration-thickness: 0.16em;
+  text-decoration-color: #f0526b;
+}
+
 .n4-assembly-card .n4-assembly-header {
   position: absolute;
   left: 50%;
@@ -13883,6 +13889,14 @@ body:has(.n4-assembly-card) .corner-logo {
   filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.22));
 }
 
+.n4-piece-floating[data-piece="pierna-izquierda"] {
+  aspect-ratio: 690 / 1989;
+}
+
+.n4-piece-floating[data-piece="pierna-derecha"] {
+  aspect-ratio: 696 / 1991;
+}
+
 .n4-piece-floating span {
   display: none;
 }
@@ -14010,6 +14024,31 @@ body:has(.n4-assembly-card) .corner-logo {
   display: none;
 }
 
+.n4-face-reveal-target {
+  z-index: 3;
+  opacity: 0;
+  cursor: default;
+  pointer-events: none;
+}
+
+.n4-face-reveal-target::after {
+  display: none;
+}
+
+.n4-face-reveal-target.is-face-on {
+  opacity: 1;
+  animation: nano-face-power-on 900ms ease-out both;
+}
+
+.n4-face-reveal-target.is-face-on img {
+  filter: drop-shadow(0 0 14px rgba(8, 219, 247, 0.9));
+}
+
+.n4-assembly-card.is-nano-powered .n4-nano-silhouette {
+  opacity: 0.72;
+  filter: drop-shadow(0 0 24px rgba(8, 219, 247, 0.48));
+}
+
 .n4-assembly-target.is-available::after {
   border-color: rgba(8, 219, 247, 0.7);
   background: rgba(8, 219, 247, 0.16);
@@ -14049,6 +14088,24 @@ body.is-dragging-piece .n4-assembly-target::after {
 .n4-shape-missing.is-wrong {
   border-color: #f0526b;
   box-shadow: 0 0 0 5px rgba(240, 82, 107, 0.18);
+}
+
+@keyframes nano-face-power-on {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.62);
+    filter: brightness(1.8);
+  }
+  45% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.16);
+    filter: brightness(1.45);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    filter: brightness(1);
+  }
 }
 
 .n4-sort-scene {

@@ -22,6 +22,7 @@ const LEVEL_RATINGS_KEY = "betech-level-ratings";
 const DEFAULT_SOUND_VOLUME = 0.45;
 const DEFAULT_MUSIC_VOLUME = 0.28;
 const MUSIC_BAR_SECONDS = 2.4;
+const COMPLETION_MODAL_DELAY_MS = 2000;
 const LEVEL_RATING_OPTIONS = [
   { value: 1, emoji: "&#128542;", label: "No me gusto" },
   { value: 2, emoji: "&#128528;", label: "Mas o menos" },
@@ -819,7 +820,7 @@ function completeChallenge(id) {
 
   completedChallenges.add(id);
   document.querySelector(`[data-challenge="${id}"]`)?.classList.add("is-complete");
-  window.setTimeout(() => showScenarioCompleteModal(id), 450);
+  window.setTimeout(() => showScenarioCompleteModal(id), COMPLETION_MODAL_DELAY_MS);
 }
 
 function wireSelectorButtons() {
@@ -1206,7 +1207,16 @@ enableMissingPieceDrag(challengeContent);
 
 function renderHeader(id, instruction) {
   const headerId = Number.isInteger(id) ? id : activeChallengeId;
-  return renderChallengeHeader(`desafio ${headerId}`, challengeTitles[headerId], instruction);
+  return renderChallengeHeader(`desafio ${headerId}`, challengeTitles[headerId], formatChallengeInstructionMarkup(headerId, instruction));
+}
+
+function formatChallengeInstructionMarkup(id, instruction) {
+  if (id !== 10) return instruction;
+
+  return instruction.replace(
+    /(Cuadrado,\s*c[íi]rculo,\s*cuadrado\.\.\.)/i,
+    '<span class="consigna-strike">$1</span>',
+  );
 }
 
 function getChallengeInstruction(id, fallbackText) {
@@ -1336,9 +1346,9 @@ function renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact = fals
 }
 
 function renderNanoAssemblyChallenge(id = 1) {
+  const facePiece = { id: "cara", label: "Cara", file: "Cara.png", x: 50, y: 38.1, w: 8, h: 7, hitW: 14, hitH: 12 };
   const pieces = [
     { id: "cabeza", label: "Cabeza", file: "cabeza.png", x: 50, y: 36.5, w: 18, h: 14, hitW: 24, hitH: 20, sx: 64, sy: 40, sw: 9.5 },
-    { id: "cara", label: "Cara", file: "Cara.png", x: 50, y: 38.1, w: 8, h: 7, hitW: 14, hitH: 12, sx: 25, sy: 38, sw: 4.5 },
     { id: "torzo", label: "Torzo", file: "Torzo.png", x: 50.2, y: 54.4, w: 16.2, h: 24.1, hitW: 27, hitH: 33, sx: 23, sy: 71, sw: 7.2, ox: -0.6, oy: 1.2 },
     { id: "brazo-izquierdo", label: "Brazo izquierdo", file: "Brazo izquierdo.png", x: 41.8, y: 51.2, w: 11.1, h: 14.9, hitW: 18, hitH: 22, sx: 34, sy: 60, sw: 6.8 },
     { id: "brazo-derecho", label: "Brazo derecho", file: "Brazo derecho.png", x: 57.5, y: 55, w: 10, h: 22, hitW: 16, hitH: 27, sx: 69, sy: 64, sw: 6.8 },
@@ -1361,7 +1371,7 @@ function renderNanoAssemblyChallenge(id = 1) {
             <span data-speech-label>ESCUCHAR CONSIGNA</span>
           </button>
         </div>
-        <p data-consigna-text>${getChallengeInstruction(id, "Observa las piezas y arrastralas a su lugar para armar a Nano.")}</p>
+        <p data-consigna-text>${getChallengeInstruction(id, "¡A ensamblar! ¡Hola! Nano está desarmado. Observa las piezas y arrástralas a su lugar para armarlo. ¡Tú puedes!")}</p>
       </header>
       <div class="n4-assembly-layout n4-assembly-layout-single">
         <section class="n4-assembly-stage" aria-label="Silueta de Nano">
@@ -1377,6 +1387,7 @@ function renderNanoAssemblyChallenge(id = 1) {
             ${pieces.map((piece) => `
               <button class="n4-assembly-target n4-drop-target" type="button" data-target="${piece.id}" data-label="${piece.label}" style="--x:${piece.x}%;--y:${piece.y}%;--hit-w:${piece.hitW || piece.w}%;--hit-h:${piece.hitH || piece.h}%;--img-w:${(piece.w / (piece.hitW || piece.w)) * 100}%;--img-h:${(piece.h / (piece.hitH || piece.h)) * 100}%;--img-ox:${piece.ox || 0}%;--img-oy:${piece.oy || 0}%;" aria-label="Lugar de ${piece.label}"></button>
             `).join("")}
+            <div class="n4-assembly-target n4-face-reveal-target" data-face-reveal style="--x:${facePiece.x}%;--y:${facePiece.y}%;--hit-w:${facePiece.hitW || facePiece.w}%;--hit-h:${facePiece.hitH || facePiece.h}%;--img-w:${(facePiece.w / (facePiece.hitW || facePiece.w)) * 100}%;--img-h:${(facePiece.h / (facePiece.hitH || facePiece.h)) * 100}%;--img-ox:${facePiece.ox || 0}%;--img-oy:${facePiece.oy || 0}%;"></div>
           </div>
         </section>
       </div>
@@ -1387,6 +1398,19 @@ function renderNanoAssemblyChallenge(id = 1) {
   function clearSelection() {
     challengeContent.querySelectorAll(".n4-piece").forEach((piece) => piece.classList.remove("is-selected"));
     challengeContent.querySelectorAll(".n4-assembly-target").forEach((target) => target.classList.remove("is-available"));
+  }
+
+  function revealFaceAndComplete() {
+    const faceTarget = challengeContent.querySelector("[data-face-reveal]");
+    const card = challengeContent.querySelector(".n4-assembly-card");
+    faceTarget?.classList.add("is-filled", "is-face-on");
+    if (faceTarget) {
+      faceTarget.innerHTML = `<img src="${n4Asset(1, facePiece.file)}" alt="${facePiece.label}" />`;
+    }
+    card?.classList.add("is-nano-powered");
+    playSound("success");
+    setMessage("Nano se prendió. La cara apareció sola.", "is-success");
+    completeChallenge(id);
   }
 
   function placePiece(target) {
@@ -1415,8 +1439,7 @@ function renderNanoAssemblyChallenge(id = 1) {
     playSound("success");
 
     if (placed.size === pieces.length) {
-      setMessage("Nano quedo armado y listo para encenderse.", "is-success");
-      completeChallenge(id);
+      revealFaceAndComplete();
     } else {
       setMessage(`Muy bien. Ya van ${placed.size} de ${pieces.length} piezas.`, "is-good");
     }
@@ -1433,7 +1456,7 @@ function renderNanoAssemblyChallenge(id = 1) {
     });
   });
 
-  challengeContent.querySelectorAll(".n4-assembly-target").forEach((target) => {
+  challengeContent.querySelectorAll(".n4-drop-target").forEach((target) => {
     target.addEventListener("click", () => placePiece(target));
   });
 }
@@ -1457,7 +1480,7 @@ function renderTechnologySortChallenge(id = 2) {
 
   challengeContent.innerHTML = `
     <article class="challenge-card n4-card n4-sort-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Arrastra solo los elementos tecnologicos a la caja."))}
+      ${renderHeader(id, getChallengeInstruction(id, "¡Caja de Herramientas! Nano necesita ordenar. Arrastra las piezas de tecnología a la caja. ¡A limpiar!"))}
       <div class="n4-sort-scene">
         <div class="n4-sort-items" aria-label="Objetos del taller">
           ${items.map((item) => `
@@ -1544,7 +1567,7 @@ function renderHiddenPartsChallenge(id = 3) {
 
   challengeContent.innerHTML = `
     <article class="challenge-card n4-card n4-hidden-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Busca bien y toca las cinco piezas escondidas de Nano."))}
+      ${renderHeader(id, getChallengeInstruction(id, "El taller está desordenado. Busca bien y toca las cinco piezas escondidas de Nano. ¡Encuéntralas todas!"))}
       <div class="n4-hidden-scene">
         ${parts.map((part) => `
           <button class="n4-hidden-part" type="button" data-part="${part.id}" style="--x:${part.x}%;--y:${part.y}%;" aria-label="${part.label}">
@@ -1828,7 +1851,7 @@ function getN4ProgrammingConfig(id) {
       route: ["2-1", "2-2"],
       solution: ["avanzar"],
       availableCards: ["avanzar", "derecha", "izquierda"],
-      fallbackInstruction: "Nano quiere dar su primer paso. Coloca una sola tarjeta Avanzar en el algoritmo y comproba el camino.",
+      fallbackInstruction: "¡Nano quiere dar su primer paso! Observa su camino y toca la flecha correcta para programarlo",
       initialMessage: "El camino tiene un solo paso. Pone Avanzar en el timeline.",
       missingMessage: "Falta completar el timeline con una tarjeta.",
       failureMessage: "Casi. Para el primer paso solo va la tarjeta Avanzar.",
@@ -1843,7 +1866,7 @@ function getN4ProgrammingConfig(id) {
       route: ["2-1", "2-2"],
       solution: ["derecha", "avanzar"],
       availableCards: ["avanzar", "derecha", "izquierda"],
-      fallbackInstruction: "Nano llega a un cruce. Coloca Girar derecha y luego Avanzar para seguir el camino.",
+      fallbackInstruction: "Nano está mirando hacia la derecha, ¡listo para doblar! Observa su posición y elige la tarjeta que apunta hacia el mismo lado para que no se pierda",
       initialMessage: "Primero gira a la derecha, despues avanza.",
       missingMessage: "Completa los dos pasos del algoritmo.",
       failureMessage: "Revisa el orden: para doblar a la derecha, primero va Derecha y despues Avanzar.",
@@ -1858,7 +1881,7 @@ function getN4ProgrammingConfig(id) {
       route: ["2-2", "2-1"],
       solution: ["izquierda", "avanzar"],
       availableCards: ["avanzar", "derecha", "izquierda"],
-      fallbackInstruction: "Nano llega a un cruce. Coloca Girar izquierda y luego Avanzar para ir al parque.",
+      fallbackInstruction: "¡Giro a la vista! ¡Llegamos a un cruce! Nano quiere ir al parque. Toca la flecha que apunta a la izquierda para doblar.",
       initialMessage: "Primero gira a la izquierda, despues avanza.",
       missingMessage: "Completa los dos pasos del algoritmo.",
       failureMessage: "Revisa el orden: para ir a la izquierda, primero va Izquierda y despues Avanzar.",
@@ -1873,7 +1896,7 @@ function getN4ProgrammingConfig(id) {
       route: ["3-1", "2-1", "2-2"],
       solution: ["avanzar", "derecha", "avanzar"],
       availableCards: ["avanzar", "derecha", "izquierda"],
-      fallbackInstruction: "Nano avanza y despues necesita girar. Arma el algoritmo con Avanzar, Derecha y Avanzar.",
+      fallbackInstruction: "¡A programar! Nano avanza, pero tiene que girar. Observa el camino y elige la tarjeta correcta para completar la instrucción. ¡Buena suerte!",
       initialMessage: "Completa el timeline para que Nano avance, gire a la derecha y avance otra vez.",
       missingMessage: "Completa los tres pasos del algoritmo.",
       failureMessage: "Casi. El camino es Avanzar, Derecha y Avanzar.",
@@ -2177,7 +2200,7 @@ function renderDragRightChallenge(id = 7) {
 
   challengeContent.innerHTML = `
     <article class="challenge-card n4-card n4-side-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Arrastra la pieza hacia la caja que esta lejos de la ventana."))}
+      ${renderHeader(id, getChallengeInstruction(id, "Nano debe guardar su tuerca cerca de la ventana. Arrastra la pieza hacia el lado derecho de la pantalla"))}
       <div class="n4-side-scene">
         <button class="n4-side-box n4-side-box-left n4-drop-target" type="button" data-side="left" aria-label="Caja de tecnologia izquierda">
           <img src="${n4Asset(2, "caja de tecnologia.png")}" alt="" aria-hidden="true" />
@@ -2200,7 +2223,7 @@ function renderDragRightChallenge(id = 7) {
 
   const sideMessage = challengeContent.querySelector("[data-message]");
   if (sideMessage) {
-    sideMessage.textContent = "La ventana esta del lado izquierdo. Lleva la pieza a la caja de tecnologia que queda lejos de la ventana.";
+    sideMessage.textContent = "La ventana marca el lado derecho. Lleva la pieza hasta esa caja.";
   }
 
   challengeContent.querySelector(".n4-side-piece").addEventListener("click", (event) => {
@@ -2217,8 +2240,7 @@ function renderDragRightChallenge(id = 7) {
       if (box.dataset.side !== "right") {
         box.classList.add("is-wrong");
         window.setTimeout(() => box.classList.remove("is-wrong"), 520);
-        setMessage("Ese es el lado izquierdo. Buscá la caja que esta cerca de la ventana.", "is-error");
-        setMessage("Esa caja esta cerca de la ventana. Busca la caja de tecnologia que queda mas lejos.", "is-error");
+        setMessage("Ese es el lado izquierdo. Buscá la caja que está cerca de la ventana.", "is-error");
         return;
       }
 
@@ -2227,8 +2249,7 @@ function renderDragRightChallenge(id = 7) {
       box.insertAdjacentHTML("beforeend", `<img class="n4-side-placed-piece" src="${n4Asset(7, "Engranaje.png")}" alt="Engranaje" />`);
       selectedPiece.hidden = true;
       selectedPiece.classList.remove("is-selected");
-      setMessage("Perfecto. La pieza quedo en el lado derecho.", "is-success");
-      setMessage("Perfecto. La pieza quedo lejos de la ventana.", "is-success");
+      setMessage("Perfecto. La pieza quedó cerca de la ventana, del lado derecho.", "is-success");
       completeChallenge(id);
     });
   });
@@ -2246,7 +2267,7 @@ function renderColorPatternChallenge(id = 9) {
 
   challengeContent.innerHTML = `
     <article class="challenge-card n4-card n4-color-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Observa bien y toca el color que sigue."))}
+      ${renderHeader(id, getChallengeInstruction(id, "¡Las luces de Nano brillan con ritmo! Rojo, azul, rojo... Observa bien y toca el color que sigue."))}
       <div class="n4-color-scene">
         <div class="n4-color-pattern" aria-label="Patron de luces">
           ${sequence.map((color) => `<img src="${n4Asset(9, `${color}.png`)}" alt="${color}" />`).join("")}
@@ -2260,7 +2281,7 @@ function renderColorPatternChallenge(id = 9) {
           `).join("")}
         </div>
       </div>
-      <p class="challenge-message" data-message>El ritmo es naranja, azul, naranja... ¿cual sigue?</p>
+      <p class="challenge-message" data-message>El ritmo es rojo, azul, rojo... ¿cual sigue?</p>
     </article>
   `;
 
@@ -2273,7 +2294,7 @@ function renderColorPatternChallenge(id = 9) {
         completeChallenge(id);
       } else {
         button.classList.add("is-wrong");
-        setMessage("Todavia no. El patron alterna naranja y azul.", "is-error");
+        setMessage("Todavia no. El patron alterna rojo y azul.", "is-error");
       }
     });
   });
@@ -2295,7 +2316,7 @@ function renderConveyorShapePatternChallenge(id = 10) {
 
   challengeContent.innerHTML = `
     <article class="challenge-card n4-card n4-shape-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Observa la serie de la cinta y arrastra la pieza que falta para completar el patron."))}
+      ${renderHeader(id, getChallengeInstruction(id, "¡Por la cinta pasan formas geométricas! Cuadrado, círculo, cuadrado... Arrastra la forma que falta para completar la serie."))}
       <div class="n4-shape-scene">
         <div class="n4-shape-belt-wrap" aria-label="Cinta transportadora">
           <img class="n4-shape-belt" src="${n4Asset(10, "banda tranportadora.png")}" alt="" aria-hidden="true" />

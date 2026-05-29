@@ -4,6 +4,7 @@
 
 const PREVIEW_KEY = "betech-preview-level";
 const ROBOT_IMG   = "dise%C3%B1o%20de%20niveles/DESAFIO%206/cara%20Nano.png";
+const COMPLETION_MODAL_DELAY_MS = 2000;
 
 // ── Themes ─────────────────────────────────────────────
 // Cada tema define las imágenes para el icono del header, enemigos e ítems.
@@ -639,13 +640,16 @@ async function runSimulation() {
     }
   }
 
-  isAnimating = false;
-  checkBtn.disabled = false;
-  resetBtn.disabled = false;
-
   if (failReason) {
+    isAnimating = false;
+    checkBtn.disabled = false;
+    resetBtn.disabled = false;
     showModal(false, failReason);
   } else {
+    await sleep(COMPLETION_MODAL_DELAY_MS);
+    isAnimating = false;
+    checkBtn.disabled = false;
+    resetBtn.disabled = false;
     showModal(true);
   }
 }
