@@ -55,3 +55,15 @@ Se reutiliza la mecanica de manta/programacion existente: completar los huecos c
 Tipo: patron-color.
 
 El alumno continua la secuencia alternada de colores. Si no hay rojo disponible, se usa naranja como equivalente visual.
+
+## desafio 10: Serie en la cinta
+
+Tipo: patron-formas-cinta.
+
+El alumno completa un patron AB eligiendo la pieza que falta en la cinta transportadora.
+
+## desafio 11: Piezas en fila
+
+Tipo: patron-hardware.
+
+El alumno observa la fila tornillo, tuerca, tornillo, tuerca, tornillo y toca la tuerca para continuar el patron.

@@ -60,6 +60,7 @@ const challengeTypeRenderers = {
   "patron-color": (id) => renderColorPatternChallenge(id),
   "secuencia-tarjetas-n4": (id) => renderN4ProgrammingCarpetChallenge(id),
   "patron-formas-cinta": (id) => renderConveyorShapePatternChallenge(id),
+  "patron-hardware": (id) => renderHardwarePatternChallenge(id),
   "secuenciacion-guiada": (id) => renderPathChallenge(id),
   "depuracion-inicial": (id) => renderBalanceChallengeV2(id),
   "programacion-por-bloques": (id) => renderRobotChallengeV2(id),
@@ -511,6 +512,8 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n4Asset(9, "Fondo.png");
       case "patron-formas-cinta":
         return n4Asset(10, "FONDO.png");
+      case "patron-hardware":
+        return n4Asset(11, "FONDO 11.jpg");
       case "secuenciacion-guiada":
         return DESIGN_D1_STAGE_BACKGROUND;
       case "depuracion-inicial":
@@ -1211,6 +1214,13 @@ function renderHeader(id, instruction) {
 }
 
 function formatChallengeInstructionMarkup(id, instruction) {
+  if (id === 11) {
+    return instruction.replace(
+      /(Nano ordena sus piezas:\s*tornillo,\s*tuerca,\s*tornillo\.\.\.)\s*(Toca la herramienta que sigue en la fila)/i,
+      '<span class="n4-hardware-title-line">$1</span><span class="n4-hardware-subtitle-line">$2</span>',
+    );
+  }
+
   if (id !== 10) return instruction;
 
   return instruction.replace(
@@ -2377,6 +2387,68 @@ function renderConveyorShapePatternChallenge(id = 10) {
 
   challengeContent.querySelector(".n4-shape-missing")?.addEventListener("click", (event) => {
     placeInGap(event.currentTarget);
+  });
+}
+
+function renderHardwarePatternChallenge(id = 11) {
+  const sequence = [
+    { id: "tornillo", label: "Tornillo", file: "Tornillo.png" },
+    { id: "tuerca", label: "Tuerca", file: "tuerca.png" },
+    { id: "tornillo", label: "Tornillo", file: "Tornillo.png" },
+    { id: "tuerca", label: "Tuerca", file: "tuerca.png" },
+    { id: "tornillo", label: "Tornillo", file: "Tornillo.png" },
+  ];
+  const correct = "tuerca";
+  const options = [
+    { id: "destornillador", label: "Destornillador", file: "destornillado.png" },
+    { id: "tuerca", label: "Tuerca", file: "tuerca.png" },
+    { id: "tornillo", label: "Tornillo", file: "Tornillo.png" },
+  ];
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-card n4-hardware-card">
+      ${renderHeader(id, getChallengeInstruction(id, "Nano ordena sus piezas: tornillo, tuerca, tornillo... Toca la herramienta que sigue en la fila"))}
+      <div class="n4-hardware-scene" aria-label="Patron de piezas de taller">
+        <img class="n4-hardware-bg" src="${n4Asset(11, "FONDO 11.jpg")}" alt="" aria-hidden="true" />
+        <div class="n4-hardware-row" aria-label="Fila de piezas">
+          ${sequence.map((piece) => `<img class="n4-hardware-piece is-${piece.id}" src="${n4Asset(11, piece.file)}" alt="${piece.label}" />`).join("")}
+          <img class="n4-hardware-question" src="${n4Asset(11, "Signo.png")}" alt="Pieza faltante" />
+        </div>
+        <div class="n4-hardware-options" aria-label="Piezas disponibles">
+          ${options.map((piece) => `
+            <button class="n4-hardware-option is-${piece.id}" type="button" data-piece="${piece.id}" aria-label="${piece.label}">
+              <img src="${n4Asset(11, piece.file)}" alt="" aria-hidden="true" />
+            </button>
+          `).join("")}
+        </div>
+      </div>
+      <p class="challenge-message" data-message>El patron alterna tornillo y tuerca. Toca la pieza que sigue.</p>
+    </article>
+  `;
+
+  challengeContent.querySelectorAll(".n4-hardware-option").forEach((button) => {
+    button.addEventListener("click", () => {
+      challengeContent.querySelectorAll(".n4-hardware-option").forEach((option) => {
+        option.classList.remove("is-wrong", "is-correct");
+      });
+
+      if (button.dataset.piece === correct) {
+        button.classList.add("is-correct");
+        const question = challengeContent.querySelector(".n4-hardware-question");
+        question?.classList.add("is-solved");
+        if (question) {
+          question.setAttribute("src", n4Asset(11, "tuerca.png"));
+          question.setAttribute("alt", "Tuerca");
+          question.classList.add("is-tuerca");
+        }
+        setMessage("Exacto. Despues de tornillo sigue tuerca.", "is-success");
+        completeChallenge(id);
+        return;
+      }
+
+      button.classList.add("is-wrong");
+      setMessage("Casi. Mira la serie: tornillo, tuerca, tornillo, tuerca, tornillo...", "is-error");
+    });
   });
 }
 

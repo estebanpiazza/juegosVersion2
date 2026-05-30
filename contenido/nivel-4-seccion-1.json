@@ -82,6 +82,14 @@
       "consigna": "¡Por la cinta pasan formas geométricas! Cuadrado, círculo, cuadrado... Arrastra la forma que falta para completar la serie.",
       "objetivo": "Completar un patron AB en una cinta transportadora.",
       "interaccion": "Arrastrar o seleccionar la pieza correcta y colocarla en el espacio faltante."
+    },
+    {
+      "id": "n4-rework-d11",
+      "titulo": "Piezas en fila",
+      "tipo": "patron-hardware",
+      "consigna": "Nano ordena sus piezas: tornillo, tuerca, tornillo... Toca la herramienta que sigue en la fila",
+      "objetivo": "Continuar un patron AB con piezas de hardware.",
+      "interaccion": "Tocar la pieza correcta entre las tres opciones disponibles."
     }
   ]
 }
