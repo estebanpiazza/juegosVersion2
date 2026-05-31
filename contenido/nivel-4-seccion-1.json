@@ -90,6 +90,22 @@
       "consigna": "Nano ordena sus piezas: tornillo, tuerca, tornillo... Toca la herramienta que sigue en la fila",
       "objetivo": "Continuar un patron AB con piezas de hardware.",
       "interaccion": "Tocar la pieza correcta entre las tres opciones disponibles."
+    },
+    {
+      "id": "n4-rework-d12",
+      "titulo": "Alerta en el codigo",
+      "tipo": "debug-luces",
+      "consigna": "¡Alerta en el código! El código correcto es celeste, verde, naranja, azul. Pero una luz cambió de color. Encuentra el error y ¡tócalo para sacarlo!",
+      "objetivo": "Detectar que la primera luz es incorrecta porque deberia ser celeste.",
+      "interaccion": "Tocar la primera luz verde para quitarla de la secuencia."
+    },
+    {
+      "id": "n4-rework-d13",
+      "titulo": "Repara los colores",
+      "tipo": "reparar-color",
+      "consigna": "¡Atencion! Una falla en el sistema y se cambiaron algunos colores. ¿Podras repararlo?",
+      "objetivo": "Detectar un color equivocado y reemplazarlo por el correcto para reparar una secuencia AB.",
+      "interaccion": "Tocar el color intruso y luego tocar el color azul para completar la serie."
     }
   ]
 }

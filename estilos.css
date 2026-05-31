@@ -13803,7 +13803,9 @@ body:has(.n4-assembly-card) .corner-logo {
 .n4-color-scene,
 .n4-seq-scene,
 .n4-shape-scene,
-.n4-hardware-scene {
+.n4-hardware-scene,
+.n4-light-debug-scene,
+.n4-color-repair-scene {
   position: relative;
   width: 100%;
   margin: 0;
@@ -13943,7 +13945,9 @@ body:has(.n4-assembly-card) .corner-logo {
 .n4-color-bg,
 .n4-seq-bg,
 .n4-shape-bg,
-.n4-hardware-bg {
+.n4-hardware-bg,
+.n4-light-debug-bg,
+.n4-color-repair-bg {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -14087,7 +14091,10 @@ body.is-dragging-piece .n4-assembly-target::after {
 .n4-seq-option.is-wrong,
 .n4-seq-missing.is-wrong,
 .n4-shape-option.is-wrong,
-.n4-shape-missing.is-wrong {
+.n4-shape-missing.is-wrong,
+.n4-light-debug-step.is-wrong,
+.n4-color-repair-slot.is-wrong,
+.n4-color-repair-option.is-wrong {
   border-color: #f0526b;
   box-shadow: 0 0 0 5px rgba(240, 82, 107, 0.18);
 }
@@ -15086,6 +15093,504 @@ article.challenge-card.n4-hardware-card {
   display: none;
 }
 
+body:has(.n4-light-debug-card) .game-workspace {
+  padding: 0;
+}
+
+body:has(.n4-light-debug-card) .challenge-content {
+  overflow: hidden;
+}
+
+body:has(.n4-light-debug-card) .corner-logo {
+  display: none;
+}
+
+article.challenge-card.n4-light-debug-card {
+  position: relative;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.n4-light-debug-card .challenge-header {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: 5%;
+  z-index: 4;
+  width: auto;
+  margin: 0;
+  padding: clamp(10px, 1.35vw, 20px) clamp(14px, 2vw, 34px);
+  border: 2px solid rgba(8, 219, 247, 0.92);
+  border-radius: clamp(14px, 1.9vw, 30px);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12px 26px rgba(8, 219, 247, 0.15);
+}
+
+.n4-light-debug-card .challenge-kicker,
+.n4-light-debug-card .challenge-title-row {
+  display: none;
+}
+
+.n4-light-debug-card .challenge-header p[data-consigna-text] {
+  margin: 0;
+  color: #5f5f5f;
+  font-size: clamp(0.88rem, 1.55vw, 1.58rem);
+  font-weight: 900;
+  line-height: 1.18;
+  text-align: center;
+}
+
+.n4-light-debug-title-line {
+  display: block;
+  margin-bottom: 4px;
+  color: #0a7abe;
+  font-size: clamp(1.02rem, 2.05vw, 2.05rem);
+}
+
+.n4-light-debug-scene {
+  height: 100%;
+  overflow: hidden;
+  background: #e7fcff;
+}
+
+.n4-light-debug-bg {
+  object-fit: cover;
+}
+
+.n4-light-debug-code {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 16%;
+  bottom: 12.8%;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  justify-items: center;
+  gap: clamp(2px, 0.38vw, 8px);
+  overflow: hidden;
+}
+
+.n4-light-debug-step {
+  position: relative;
+  --debug-light-x: 0%;
+  --debug-light-y: 0%;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: stretch center;
+  padding: 0;
+  transition:
+    filter 170ms ease,
+    opacity 200ms ease,
+    transform 200ms ease;
+  transform: translate(var(--debug-light-x), var(--debug-light-y));
+}
+
+.n4-light-debug-step:nth-child(1) {
+  --debug-light-x: 10%;
+  --debug-light-y: 5.5%;
+}
+
+.n4-light-debug-step:nth-child(2) {
+  --debug-light-y: 2.4%;
+}
+
+.n4-light-debug-step:nth-child(3) {
+  --debug-light-x: -8%;
+  --debug-light-y: 2.4%;
+}
+
+.n4-light-debug-step:nth-child(4) {
+  --debug-light-x: -16%;
+  --debug-light-y: 2.4%;
+}
+
+.n4-light-debug-step:hover,
+.n4-light-debug-step:focus-visible {
+  filter: drop-shadow(0 0 16px rgba(8, 219, 247, 0.9));
+  outline: 0;
+  transform: translate(var(--debug-light-x), calc(var(--debug-light-y) - 2px));
+}
+
+.n4-light-debug-beam {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.n4-light-debug-beam img {
+  width: 138%;
+  height: 112%;
+  max-width: none;
+  object-fit: contain;
+  opacity: 0.68;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.n4-light-debug-step strong {
+  position: absolute;
+  left: 50%;
+  bottom: 4.2%;
+  z-index: 1;
+  width: clamp(24px, 2.5vw, 40px);
+  aspect-ratio: 1;
+  border: 2px solid rgba(255, 255, 255, 0.88);
+  border-radius: 50%;
+  background: rgba(3, 36, 50, 0.58);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: clamp(0.78rem, 1.1vw, 1rem);
+  font-weight: 900;
+  transform: translateX(-50%);
+  box-shadow: 0 8px 16px rgba(3, 36, 50, 0.18);
+}
+
+.n4-light-debug-step.is-verde strong {
+  background: rgba(91, 191, 8, 0.72);
+}
+
+.n4-light-debug-step.is-azul strong {
+  background: rgba(0, 118, 205, 0.72);
+}
+
+.n4-light-debug-step.is-naranja strong {
+  background: rgba(245, 146, 10, 0.78);
+}
+
+.n4-light-debug-step.is-wrong {
+  filter: drop-shadow(0 0 14px rgba(240, 82, 107, 0.94));
+  transform: translate(var(--debug-light-x), var(--debug-light-y)) scale(0.98);
+}
+
+.n4-light-debug-step.is-correct {
+  filter: drop-shadow(0 0 18px rgba(37, 211, 102, 0.9));
+}
+
+.n4-light-debug-step.is-removed {
+  opacity: 0.08;
+  transform: translate(var(--debug-light-x), calc(var(--debug-light-y) - 18px)) scale(0.9);
+  pointer-events: none;
+}
+
+.n4-light-debug-card > .challenge-message {
+  position: absolute;
+  left: 50%;
+  bottom: 1.2%;
+  z-index: 4;
+  width: max-content;
+  max-width: min(86vw, 860px);
+  margin: 0;
+  padding: 7px 13px;
+  border: 1px solid rgba(8, 219, 247, 0.42);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #0a7abe;
+  font-size: clamp(0.72rem, 1vw, 0.92rem);
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.n4-light-debug-card > .challenge-message:not(.is-good):not(.is-error):not(.is-success) {
+  display: none;
+}
+
+body:has(.n4-color-repair-card) .game-workspace {
+  padding: 0;
+}
+
+body:has(.n4-color-repair-card) .challenge-content {
+  overflow: hidden;
+}
+
+body:has(.n4-color-repair-card) .corner-logo {
+  display: none;
+}
+
+article.challenge-card.n4-color-repair-card {
+  position: relative;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.n4-color-repair-card .challenge-header {
+  position: absolute;
+  left: 35.8%;
+  right: 13.8%;
+  top: 7.8%;
+  z-index: 4;
+  width: auto;
+  margin: 0;
+  padding: clamp(10px, 1.2vw, 18px) clamp(14px, 1.8vw, 30px);
+  border: 2px solid rgba(8, 219, 247, 0.92);
+  border-radius: clamp(14px, 1.65vw, 26px);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12px 26px rgba(8, 219, 247, 0.15);
+}
+
+.n4-color-repair-card .challenge-kicker,
+.n4-color-repair-card .challenge-title-row {
+  display: none;
+}
+
+.n4-color-repair-card .challenge-header p[data-consigna-text] {
+  margin: 0;
+  color: #5f5f5f;
+  font-size: clamp(0.82rem, 1.35vw, 1.44rem);
+  font-weight: 900;
+  line-height: 1.18;
+  text-align: center;
+}
+
+.n4-color-repair-title-line {
+  display: block;
+  margin-bottom: 3px;
+  color: #d91524;
+  font-size: clamp(1rem, 1.9vw, 1.95rem);
+  text-transform: uppercase;
+}
+
+.n4-color-repair-scene {
+  height: 100%;
+  overflow: hidden;
+  background: #07394a;
+}
+
+.n4-color-repair-bg {
+  object-fit: cover;
+}
+
+.n4-color-repair-alert {
+  position: absolute;
+  left: 14.8%;
+  top: 8.2%;
+  z-index: 3;
+  width: 21.6%;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 0 12px rgba(230, 22, 35, 0.55));
+}
+
+.n4-color-repair-slots {
+  position: absolute;
+  left: 16.9%;
+  right: 18.5%;
+  top: 21.8%;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
+  gap: clamp(10px, 1.35vw, 24px);
+}
+
+.n4-color-repair-slot {
+  position: relative;
+  width: min(75%, 190px);
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition:
+    filter 160ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.n4-color-repair-slot img {
+  width: 170%;
+  height: 170%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 0 22px rgba(255, 255, 255, 0.42));
+}
+
+.n4-color-repair-slot:hover,
+.n4-color-repair-slot:focus-visible {
+  filter: drop-shadow(0 0 18px rgba(8, 219, 247, 0.9));
+  outline: 0;
+  transform: translateY(-3px) scale(1.03);
+}
+
+.n4-color-repair-slot.is-bug {
+  animation: repair-bug-pulse 1.25s ease-in-out infinite;
+}
+
+.n4-color-repair-slot.is-empty {
+  border: 3px dashed rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 24px rgba(8, 219, 247, 0.2);
+}
+
+.n4-color-repair-slot.is-empty span {
+  color: #ffffff;
+  font-size: clamp(2rem, 4.8vw, 4.6rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.n4-color-repair-slot.is-selected {
+  filter: drop-shadow(0 0 17px rgba(245, 146, 10, 0.94));
+}
+
+.n4-color-repair-slot.is-correct,
+.n4-color-repair-option.is-correct {
+  filter: drop-shadow(0 0 18px rgba(37, 211, 102, 0.9));
+  transform: translateY(-3px) scale(1.04);
+}
+
+.n4-color-repair-options {
+  position: absolute;
+  left: 23.7%;
+  right: 24.3%;
+  bottom: -6.8%;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
+  gap: clamp(12px, 2vw, 42px);
+}
+
+.n4-color-repair-option {
+  width: min(100%, 168px);
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition:
+    filter 160ms ease,
+    transform 160ms ease;
+}
+
+.n4-color-repair-option:hover,
+.n4-color-repair-option:focus-visible {
+  filter: drop-shadow(0 0 16px rgba(8, 219, 247, 0.86));
+  outline: 0;
+  transform: translateY(-4px) scale(1.03);
+}
+
+.n4-color-repair-option img {
+  width: 160%;
+  height: 160%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.n4-color-repair-option.is-wrong,
+.n4-color-repair-slot.is-wrong {
+  filter: drop-shadow(0 0 14px rgba(240, 82, 107, 0.94));
+  transform: scale(0.98);
+}
+
+.n4-color-repair-card > .challenge-message {
+  position: absolute;
+  left: 50%;
+  bottom: 1.1%;
+  z-index: 4;
+  width: max-content;
+  max-width: min(86vw, 860px);
+  margin: 0;
+  padding: 7px 13px;
+  border: 1px solid rgba(8, 219, 247, 0.42);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0a7abe;
+  font-size: clamp(0.72rem, 1vw, 0.92rem);
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.n4-color-repair-card > .challenge-message:not(.is-good):not(.is-error):not(.is-success) {
+  display: none;
+}
+
+@keyframes repair-bug-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 16px rgba(245, 146, 10, 0.55));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 25px rgba(245, 146, 10, 0.95));
+  }
+}
+
+@media (max-width: 760px) {
+  .n4-color-repair-card .challenge-header {
+    left: 6%;
+    right: 6%;
+    top: 7.6%;
+    padding: 7px 10px;
+  }
+
+  .n4-color-repair-card .challenge-header p[data-consigna-text] {
+    display: block;
+    font-size: clamp(0.62rem, 2.45vw, 0.82rem);
+    line-height: 1.12;
+  }
+
+  .n4-color-repair-title-line {
+    margin-bottom: 1px;
+    font-size: clamp(0.78rem, 3.1vw, 1rem);
+  }
+
+  .n4-color-repair-alert {
+    display: none;
+  }
+
+  .n4-color-repair-slots {
+    left: 6%;
+    right: 6%;
+    top: 33%;
+    gap: 5px;
+  }
+
+  .n4-color-repair-slot {
+    width: 94%;
+  }
+
+  .n4-color-repair-options {
+    left: 7%;
+    right: 7%;
+    bottom: 5.4%;
+    gap: 8px;
+  }
+
+  .n4-color-repair-option {
+    width: 100%;
+  }
+}
+
 .n4-side-placed-piece {
   position: relative;
   z-index: 1;
@@ -15137,7 +15642,9 @@ article.challenge-card.n4-hardware-card {
   .n4-side-scene,
   .n4-color-scene,
   .n4-seq-scene,
-  .n4-shape-scene {
+  .n4-shape-scene,
+  .n4-light-debug-scene,
+  .n4-color-repair-scene {
     min-height: 0;
   }
 
@@ -15301,7 +15808,9 @@ article.challenge-card.n4-hardware-card {
   .n4-side-scene,
   .n4-color-scene,
   .n4-seq-scene,
-  .n4-shape-scene {
+  .n4-shape-scene,
+  .n4-light-debug-scene,
+  .n4-color-repair-scene {
     min-height: 0;
   }
 
@@ -15312,7 +15821,8 @@ article.challenge-card.n4-hardware-card {
   .n4-arrow-scene,
   .n4-color-scene,
   .n4-seq-scene,
-  .n4-shape-scene {
+  .n4-shape-scene,
+  .n4-light-debug-scene {
     padding: 16px;
   }
 

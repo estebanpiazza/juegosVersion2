@@ -61,6 +61,8 @@ const challengeTypeRenderers = {
   "secuencia-tarjetas-n4": (id) => renderN4ProgrammingCarpetChallenge(id),
   "patron-formas-cinta": (id) => renderConveyorShapePatternChallenge(id),
   "patron-hardware": (id) => renderHardwarePatternChallenge(id),
+  "debug-luces": (id) => renderLightDebugChallenge(id),
+  "reparar-color": (id) => renderColorRepairChallenge(id),
   "secuenciacion-guiada": (id) => renderPathChallenge(id),
   "depuracion-inicial": (id) => renderBalanceChallengeV2(id),
   "programacion-por-bloques": (id) => renderRobotChallengeV2(id),
@@ -514,6 +516,10 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n4Asset(10, "FONDO.png");
       case "patron-hardware":
         return n4Asset(11, "FONDO 11.jpg");
+      case "debug-luces":
+        return n4Asset(12, "FONDO 12.png");
+      case "reparar-color":
+        return n4Asset(13, "Fondo.png");
       case "secuenciacion-guiada":
         return DESIGN_D1_STAGE_BACKGROUND;
       case "depuracion-inicial":
@@ -1214,6 +1220,20 @@ function renderHeader(id, instruction) {
 }
 
 function formatChallengeInstructionMarkup(id, instruction) {
+  if (id === 13) {
+    return instruction.replace(
+      /(¡?\s*Atenci[óo]n\s*!?)/i,
+      '<span class="n4-color-repair-title-line">$1</span>',
+    );
+  }
+
+  if (id === 12) {
+    return instruction.replace(
+      /(¡?Alerta en el c[óo]digo!?)/i,
+      '<span class="n4-light-debug-title-line">$1</span>',
+    );
+  }
+
   if (id === 11) {
     return instruction.replace(
       /(Nano ordena sus piezas:\s*tornillo,\s*tuerca,\s*tornillo\.\.\.)\s*(Toca la herramienta que sigue en la fila)/i,
@@ -2448,6 +2468,161 @@ function renderHardwarePatternChallenge(id = 11) {
 
       button.classList.add("is-wrong");
       setMessage("Casi. Mira la serie: tornillo, tuerca, tornillo, tuerca, tornillo...", "is-error");
+    });
+  });
+}
+
+function renderLightDebugChallenge(id = 12) {
+  const correct = "intruso";
+  const lights = [
+    { id: correct, label: "Verde", color: "verde", file: "VERDE 1.png" },
+    { id: "verde-b", label: "Verde", color: "verde", file: "VERDE 2.png" },
+    { id: "naranja-a", label: "Naranja", color: "naranja", file: "NARANJA 3.png" },
+    { id: "azul-a", label: "Azul", color: "azul", file: "AZUL 4.png" },
+  ];
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-card n4-light-debug-card">
+      ${renderHeader(id, getChallengeInstruction(id, "¡Alerta en el código! Hay un error en las luces. Observa el patrón, encuentra al intruso y ¡tócalo para sacarlo!"))}
+      <div class="n4-light-debug-scene" aria-label="Patron de luces con un intruso">
+        <img class="n4-light-debug-bg" src="${n4Asset(12, "FONDO 12.png")}" alt="" aria-hidden="true" />
+        <div class="n4-light-debug-code" aria-label="Secuencia de luces">
+          ${lights.map((light, index) => `
+            <button class="n4-light-debug-step is-${light.color}" type="button" data-light="${light.id}" aria-label="${light.label} ${index + 1}">
+              <span class="n4-light-debug-beam">
+                <img src="${n4Asset(12, light.file)}" alt="" aria-hidden="true" />
+              </span>
+              <strong>${index + 1}</strong>
+            </button>
+          `).join("")}
+        </div>
+      </div>
+      <p class="challenge-message" data-message>El codigo correcto empieza con celeste: celeste, verde, naranja, azul. Toca la primera luz verde para sacarla.</p>
+    </article>
+  `;
+
+  challengeContent.querySelectorAll(".n4-light-debug-step").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+
+      challengeContent.querySelectorAll(".n4-light-debug-step").forEach((step) => {
+        step.classList.remove("is-wrong", "is-correct", "is-removed");
+      });
+
+      if (button.dataset.light !== correct) {
+        button.classList.add("is-wrong");
+        setMessage("Todavia no. Esa luz esta bien ubicada. El error esta en el primer lugar: deberia ser celeste.", "is-error");
+        return;
+      }
+
+      solved = true;
+      button.classList.add("is-correct", "is-removed");
+      setMessage("Bug encontrado. El primer lugar era el que debia ser celeste.", "is-success");
+      completeChallenge(id);
+    });
+  });
+}
+
+function renderColorRepairChallenge(id = 13) {
+  const slots = [
+    { id: "slot-1", expected: "verde", current: "verde", label: "Verde" },
+    { id: "slot-2", expected: "azul", current: "naranja", label: "Naranja" },
+    { id: "slot-3", expected: "verde", current: "verde", label: "Verde" },
+    { id: "slot-4", expected: "azul", current: "azul", label: "Azul" },
+  ];
+  const options = [
+    { id: "verde", label: "Verde", file: "verde.png" },
+    { id: "naranja", label: "Naranja", file: "naranja.png" },
+    { id: "azul", label: "Azul", file: "azul.png" },
+    { id: "turquesa", label: "Turquesa", file: "turquesa.png" },
+  ];
+  const slotById = new Map(slots.map((slot) => [slot.id, { ...slot }]));
+  let repairTarget = null;
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-card n4-color-repair-card">
+      ${renderHeader(id, getChallengeInstruction(id, "¡Atencion! Una falla en el sistema y se cambiaron algunos colores. ¿Podras repararlo?"))}
+      <div class="n4-color-repair-scene" aria-label="Reparacion de colores">
+        <img class="n4-color-repair-bg" src="${n4Asset(13, "Fondo.png")}" alt="" aria-hidden="true" />
+        <img class="n4-color-repair-alert" src="${n4Asset(13, "Atencion.png")}" alt="" aria-hidden="true" />
+        <div class="n4-color-repair-slots" aria-label="Secuencia de colores">
+          ${slots.map((slot, index) => `
+            <button class="n4-color-repair-slot is-${slot.current} ${slot.current !== slot.expected ? "is-bug" : ""}" type="button" data-slot="${slot.id}" aria-label="Posicion ${index + 1}: ${slot.label}">
+              <img src="${n4Asset(13, `${slot.current}.png`)}" alt="" aria-hidden="true" />
+            </button>
+          `).join("")}
+        </div>
+        <div class="n4-color-repair-options" aria-label="Colores para reparar">
+          ${options.map((option) => `
+            <button class="n4-color-repair-option is-${option.id}" type="button" data-color="${option.id}" aria-label="${option.label}">
+              <img src="${n4Asset(13, option.file)}" alt="" aria-hidden="true" />
+            </button>
+          `).join("")}
+        </div>
+      </div>
+      <p class="challenge-message" data-message>Encuentra el color equivocado en la serie y sacalo para repararlo.</p>
+    </article>
+  `;
+
+  function clearMarks() {
+    challengeContent.querySelectorAll(".n4-color-repair-slot, .n4-color-repair-option").forEach((node) => {
+      node.classList.remove("is-wrong", "is-correct", "is-selected");
+    });
+  }
+
+  challengeContent.querySelectorAll(".n4-color-repair-slot").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+      clearMarks();
+      const slot = slotById.get(button.dataset.slot);
+      if (!slot) return;
+
+      if (slot.current === slot.expected) {
+        button.classList.add("is-wrong");
+        setMessage("Todavia no. Ese color ya esta bien. Busca el que rompe el patron verde, azul, verde, azul.", "is-error");
+        return;
+      }
+
+      repairTarget = slot.id;
+      slot.current = "";
+      button.classList.add("is-empty", "is-selected");
+      button.innerHTML = "<span>?</span>";
+      setMessage("Intruso fuera. Ahora toca el color correcto para completar el patron.", "is-good");
+    });
+  });
+
+  challengeContent.querySelectorAll(".n4-color-repair-option").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+      clearMarks();
+
+      if (!repairTarget) {
+        button.classList.add("is-wrong");
+        setMessage("Primero toca el color equivocado de la fila para sacarlo.", "is-error is-soft-error");
+        return;
+      }
+
+      const slot = slotById.get(repairTarget);
+      const targetButton = challengeContent.querySelector(`[data-slot="${repairTarget}"]`);
+
+      if (button.dataset.color !== slot.expected) {
+        button.classList.add("is-wrong");
+        targetButton?.classList.add("is-selected");
+        setMessage("Todavia no. Para que la serie sea verde, azul, verde, azul, falta el azul.", "is-error");
+        return;
+      }
+
+      solved = true;
+      slot.current = slot.expected;
+      button.classList.add("is-correct");
+      if (targetButton) {
+        targetButton.className = "n4-color-repair-slot is-azul is-correct";
+        targetButton.innerHTML = `<img src="${n4Asset(13, "azul.png")}" alt="" aria-hidden="true" />`;
+      }
+      setMessage("Sistema reparado. El patron de colores vuelve a estar en orden.", "is-success");
+      completeChallenge(id);
     });
   });
 }
