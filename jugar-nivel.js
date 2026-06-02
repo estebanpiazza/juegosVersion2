@@ -3,7 +3,7 @@
    ====================================================== */
 
 const PREVIEW_KEY = "betech-preview-level";
-const ROBOT_IMG   = "dise%C3%B1o%20de%20niveles/DESAFIO%206/cara%20Nano.png";
+const ROBOT_IMG = `nuevos/No%20lograste/cabeza%20Nano.png?v=${Date.now()}`;
 const COMPLETION_MODAL_DELAY_MS = 2000;
 
 // ── Themes ─────────────────────────────────────────────

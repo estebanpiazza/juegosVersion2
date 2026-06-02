@@ -89,16 +89,19 @@ const challengeTypeRenderers = {
 const levelBackgrounds = [
   "assets/fondo.jpeg",
 ];
-const ROBOT_IMAGE_SRC = `PANDA%20FELIZ%20-%20copia.png?v=${Date.now()}`;
+const NANO_HEAD_IMAGE_SRC = `nuevos/No%20lograste/cabeza%20Nano.png?v=${Date.now()}`;
+const MODAL_SUCCESS_ROBOT_IMAGE_SRC = `nuevos/No%20lograste/lograste.png?v=${Date.now()}`;
+const MODAL_FAILURE_ROBOT_IMAGE_SRC = `nuevos/No%20lograste/No%20lograste.png?v=${Date.now()}`;
+const ROBOT_IMAGE_SRC = NANO_HEAD_IMAGE_SRC;
 const DESIGN_D1_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%201";
-const DESIGN_D1_ROBOT_IMAGE_SRC = `${DESIGN_D1_ASSET_BASE}/Robot%20Nani.png?v=${Date.now()}`;
+const DESIGN_D1_ROBOT_IMAGE_SRC = NANO_HEAD_IMAGE_SRC;
 const DESIGN_D2_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%202";
-const DESIGN_D2_ROBOT_IMAGE_SRC = `${DESIGN_D2_ASSET_BASE}/cara%20Nano.png?v=${Date.now()}`;
+const DESIGN_D2_ROBOT_IMAGE_SRC = NANO_HEAD_IMAGE_SRC;
 const DESIGN_D3_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%203";
-const DESIGN_D3_ROBOT_IMAGE_SRC = `${DESIGN_D3_ASSET_BASE}/cara%20Nano.png?v=${Date.now()}`;
+const DESIGN_D3_ROBOT_IMAGE_SRC = NANO_HEAD_IMAGE_SRC;
 const DESIGN_D4_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%204";
 const DESIGN_D6_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%206";
-const DESIGN_D6_ROBOT_IMAGE_SRC = `${DESIGN_D6_ASSET_BASE}/cara%20Nano.png?v=${Date.now()}`;
+const DESIGN_D6_ROBOT_IMAGE_SRC = NANO_HEAD_IMAGE_SRC;
 const DESIGN_D1_STAGE_BACKGROUND = `${DESIGN_D1_ASSET_BASE}/DESAFIO%201.png`;
 const DESIGN_D2_STAGE_BACKGROUND = `${DESIGN_D2_ASSET_BASE}/DESAFIO%202.jpg`;
 const DESIGN_D3_STAGE_BACKGROUND = `${DESIGN_D3_ASSET_BASE}/DESAFIO%203.png`;
@@ -115,11 +118,11 @@ function n4Asset(challengeNumber, fileName) {
 }
 
 function renderRobotMarker() {
-  return `<img class="robot-marker" src="${ROBOT_IMAGE_SRC}" alt="Panda feliz" style="--robot-rotation: 0deg" />`;
+  return `<img class="robot-marker" src="${ROBOT_IMAGE_SRC}" alt="Nano" style="--robot-rotation: 0deg" />`;
 }
 
 function renderDesignRobotMarker() {
-  return `<img class="robot-marker design-d1-robot" src="${DESIGN_D1_ROBOT_IMAGE_SRC}" alt="Robot Nani" />`;
+  return `<img class="robot-marker design-d1-robot" src="${DESIGN_D1_ROBOT_IMAGE_SRC}" alt="Nano" />`;
 }
 
 function renderDesignRainRobotMarker() {
@@ -697,7 +700,7 @@ function renderFinalSuccessCard(id, nextScenario) {
     <article class="final-success-card" aria-labelledby="scenario-modal-title">
       <img class="final-success-bg" src="${finalSuccessAsset("Fondo.png")}" alt="" aria-hidden="true" />
       <img class="final-success-title" src="${finalSuccessAsset("LO%20LOGRASTE.png")}" alt="" aria-hidden="true" />
-      <img class="final-success-robot" src="${finalSuccessAsset("Nano.png")}" alt="" aria-hidden="true" />
+      <img class="final-success-robot" src="${MODAL_SUCCESS_ROBOT_IMAGE_SRC}" alt="" aria-hidden="true" />
       <h2 class="sr-only" id="scenario-modal-title">Lo lograste</h2>
       <img class="final-success-subtitle" src="${finalSuccessAsset("Desafio.png")}" alt="Desafio completado" />
       <div class="final-success-divider" aria-hidden="true"></div>
@@ -717,7 +720,7 @@ function renderFinalFailureCard(id) {
     <article class="final-success-card final-failure-card" aria-labelledby="scenario-modal-title">
       <img class="final-success-bg" src="${finalFailureAsset("No%20lo%20lograste.png")}" alt="" aria-hidden="true" />
       <img class="final-success-title final-failure-title" src="${finalFailureAsset("UPSS.png")}" alt="" aria-hidden="true" />
-      <img class="final-success-robot final-failure-robot" src="${finalFailureAsset("nANO.png")}" alt="" aria-hidden="true" />
+      <img class="final-success-robot final-failure-robot" src="${MODAL_FAILURE_ROBOT_IMAGE_SRC}" alt="" aria-hidden="true" />
       <h2 class="sr-only" id="scenario-modal-title">Ups, casi lo logras</h2>
       <img class="final-success-subtitle final-failure-subtitle" src="${finalFailureAsset("Sigue%20jugando.png")}" alt="Sigue jugando" />
       <div class="final-success-divider" aria-hidden="true"></div>
@@ -1746,7 +1749,7 @@ function renderCarpetArrowChoiceChallenge(id, correct) {
       return `
         <div class="n4-carpet-cell n4-carpet-start is-route" style="--row:${row + 1};--col:${col + 1};">
           <img class="n4-carpet-start-badge" src="${n4Asset(challengeNumber, "Entrada.png")}" alt="" aria-hidden="true" />
-          <img class="n4-carpet-nano faces-${route.start.facing}" src="${n4Asset(1, "Robot Nano.png")}" alt="Nano" />
+          <img class="n4-carpet-nano faces-${route.start.facing}" src="${NANO_HEAD_IMAGE_SRC}" alt="Nano" />
         </div>
       `;
     }
@@ -2739,7 +2742,7 @@ function renderN4SequenceCardsChallenge(id = 8) {
       return `
         <div class="n4-carpet-cell n4-carpet-start is-route" style="--row:${row + 1};--col:${col + 1};">
           <img class="n4-carpet-start-badge" src="${n4Asset(8, "Entrada.png")}" alt="" aria-hidden="true" />
-          <img class="n4-carpet-nano faces-${start.facing}" src="${n4Asset(1, "Robot Nano.png")}" alt="Nano" />
+          <img class="n4-carpet-nano faces-${start.facing}" src="${NANO_HEAD_IMAGE_SRC}" alt="Nano" />
         </div>
       `;
     }

@@ -9995,8 +9995,8 @@ article.challenge-card.design-challenge-v2 .rain-goal {
 
 /* ===== MODAL LO LOGRASTE: armado con assets de nuevos/LO LOGRASTE ===== */
 .final-success-card:not(.final-failure-card) .final-success-robot {
-  width: min(42vw, 320px) !important;
-  right: clamp(-30px, -2vw, -8px) !important;
+  width: min(26vw, 170px) !important;
+  right: clamp(-18px, -1.4vw, -6px) !important;
   top: clamp(12px, 2vw, 22px) !important;
 }
 
