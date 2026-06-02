@@ -91,7 +91,7 @@ const levelBackgrounds = [
 ];
 const NANO_HEAD_IMAGE_SRC = `nuevos/No%20lograste/cabeza%20Nano.png?v=${Date.now()}`;
 const MODAL_SUCCESS_ROBOT_IMAGE_SRC = `nuevos/No%20lograste/lograste.png?v=${Date.now()}`;
-const MODAL_FAILURE_ROBOT_IMAGE_SRC = `nuevos/No%20lograste/No%20lograste.png?v=${Date.now()}`;
+const MODAL_FAILURE_ROBOT_IMAGE_SRC = `nuevos/No%20lograste/noloraste.png?v=${Date.now()}`;
 const ROBOT_IMAGE_SRC = NANO_HEAD_IMAGE_SRC;
 const DESIGN_D1_ASSET_BASE = "dise%C3%B1o%20de%20niveles/DESAFIO%201";
 const DESIGN_D1_ROBOT_IMAGE_SRC = NANO_HEAD_IMAGE_SRC;
