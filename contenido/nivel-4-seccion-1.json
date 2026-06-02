@@ -39,7 +39,7 @@
       "id": "n4-rework-d5",
       "titulo": "Doblar a la derecha",
       "tipo": "elige-flecha-derecha",
-      "consigna": "Nano está mirando hacia la derecha, ¡listo para doblar! Observa su posición y elige la tarjeta que apunta hacia el mismo lado para que no se pierda",
+      "consigna": "Nano está mirando hacia arriba, ¡listo para doblar! Observa su posición y elige la tarjeta que apunta hacia el mismo lado para que no se pierda",
       "objetivo": "Programar un giro a la derecha antes del avance.",
       "interaccion": "Colocar Derecha y Avanzar en el timeline y comprobar."
     },
@@ -71,7 +71,7 @@
       "id": "n4-rework-d9",
       "titulo": "Luces con ritmo",
       "tipo": "patron-color",
-      "consigna": "¡Las luces de Nano brillan con ritmo! Rojo, azul, rojo... Observa bien y toca el color que sigue.",
+      "consigna": "¡Las luces de Nano brillan con ritmo! Observa y toca el color que sigue.",
       "objetivo": "Continuar una secuencia logica alternada de colores.",
       "interaccion": "Tocar el color que completa el patron."
     },
@@ -79,7 +79,7 @@
       "id": "n4-rework-d10",
       "titulo": "Serie en la cinta",
       "tipo": "patron-formas-cinta",
-      "consigna": "¡Por la cinta pasan formas geométricas! Cuadrado, círculo, cuadrado... Arrastra la forma que falta para completar la serie.",
+      "consigna": "Arrastra la figura que falta para completar la serie.",
       "objetivo": "Completar un patron AB en una cinta transportadora.",
       "interaccion": "Arrastrar o seleccionar la pieza correcta y colocarla en el espacio faltante."
     },
@@ -87,7 +87,7 @@
       "id": "n4-rework-d11",
       "titulo": "Piezas en fila",
       "tipo": "patron-hardware",
-      "consigna": "Nano ordena sus piezas: tornillo, tuerca, tornillo... Toca la herramienta que sigue en la fila",
+      "consigna": "Nano ordena sus piezas: Toca la herramienta que sigue en la fila",
       "objetivo": "Continuar un patron AB con piezas de hardware.",
       "interaccion": "Tocar la pieza correcta entre las tres opciones disponibles."
     },
@@ -103,9 +103,41 @@
       "id": "n4-rework-d13",
       "titulo": "Repara los colores",
       "tipo": "reparar-color",
-      "consigna": "¡Atencion! Una falla en el sistema y se cambiaron algunos colores. ¿Podras repararlo?",
+      "consigna": "¡Atencion! Una falla en el sistema y se cambiaron algunos colores. ¿Podras repararlo? La secuencia correcta es Verde-Azul-Verde-Azul",
       "objetivo": "Detectar un color equivocado y reemplazarlo por el correcto para reparar una secuencia AB.",
       "interaccion": "Tocar el color intruso y luego tocar el color azul para completar la serie."
+    },
+    {
+      "id": "n4-rework-d14",
+      "titulo": "Nano nos habla",
+      "tipo": "patron-sonidos",
+      "consigna": "¡Nano nos habla! Escucha sus sonidos con atención y toca los botones para responderle igual.",
+      "objetivo": "Repetir un patrón de sonidos usando botones con bocinas.",
+      "interaccion": "Escuchar el patrón y tocar los botones de sonido en el mismo orden."
+    },
+    {
+      "id": "n4-rework-d16",
+      "titulo": "Recupera el destornillador",
+      "tipo": "recuperar-destornillador-alfombra",
+      "consigna": "¡AYUDA A NANO! Nano necesita usar el destornillador ayudalo a conseguirlo. Observa los pasos de Nano: avanzar, avanzar y girar.",
+      "objetivo": "Programar a Nano sobre la alfombra para conseguir el destornillador siguiendo los pasos indicados.",
+      "interaccion": "Completar el algoritmo con Avanzar, Avanzar, Derecha, Avanzar y Avanzar."
+    },
+    {
+      "id": "n4-rework-d18",
+      "titulo": "Parque bajo lluvia",
+      "tipo": "alerta-lluvia-alfombra",
+      "consigna": "¡Alerta de lluvia! Nano no sabe cómo llegar. Aplica la lógica y elige las tarjetas para completar el algoritmo. ¡Recuerda ayudarlo a avanzar y girar sin pisar los charcos que son obstáculos!",
+      "objetivo": "Programar a Nano sobre la alfombra para llegar sin pisar los charcos.",
+      "interaccion": "Completar el algoritmo con Avanzar, Avanzar, Izquierda, Avanzar, Avanzar, Derecha, Avanzar y Avanzar."
+    },
+    {
+      "id": "n4-rework-d19",
+      "titulo": "Mision laberinto",
+      "tipo": "recuperar-tesoro-alfombra",
+      "consigna": "¡Misión laberinto! Nano te necesita. Crea la secuencia exacta: pasa por la batería para obtener energía, llega al tesoro y ¡esquiva los obstáculos!",
+      "objetivo": "Programar a Nano sobre la alfombra para cargar energía y recuperar el tesoro evitando obstáculos.",
+      "interaccion": "Completar el algoritmo con Avanzar, Avanzar, Avanzar, Izquierda, Avanzar, Avanzar, Derecha, Avanzar y Avanzar."
     }
   ]
 }

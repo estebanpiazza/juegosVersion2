@@ -67,3 +67,21 @@ El alumno completa un patron AB eligiendo la pieza que falta en la cinta transpo
 Tipo: patron-hardware.
 
 El alumno observa la fila tornillo, tuerca, tornillo, tuerca, tornillo y toca la tuerca para continuar el patron.
+
+## consigna 16: Recupera el destornillador
+
+Tipo: recuperar-destornillador-alfombra.
+
+El alumno programa a Nano sobre la alfombra siguiendo los pasos avanzar, avanzar y girar para recuperar el destornillador.
+
+## consigna 18: Parque bajo lluvia
+
+Tipo: alerta-lluvia-alfombra.
+
+El alumno programa a Nano sobre la alfombra para ayudarlo a llegar, avanzando y girando sin pisar los charcos que son obstaculos.
+
+## consigna 19: Mision laberinto
+
+Tipo: recuperar-tesoro-alfombra.
+
+El alumno programa a Nano sobre la alfombra para pasar por la bateria, cargar energia y recuperar el tesoro esquivando obstaculos.

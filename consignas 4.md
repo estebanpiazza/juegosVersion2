@@ -13,11 +13,11 @@ Mecánica: Nano está mirando hacia adelante y señala un punto de llegada. Deba
 5- Consigna:(Taller mecánico) Nano está mirando hacia la derecha, ¡listo para doblar! Observa su posición y elige la tarjeta que apunta hacia el mismo lado para que no se pierda
 Mecánica: Nano en el centro inclinado hacia la derecha. Abajo, dos tarjetas de "Girar" (una izquierda, una derecha). Entrena la lateralidad visual
 6- Consigna: ¡Giro a la vista! ¡Llegamos a un cruce! Nano quiere ir al parque. Toca la flecha que apunta a la izquierda para doblar.
-7- Consigna: (Taller mecánico) Nano debe guardar su tuerca cerca de la ventana. Arrastra la pieza hacia el lado derecho de la pantalla
+7- Consigna: (Taller mecánico) Nano debe guardar su tuerca lejos de la ventana. Arrastra la pieza hacia el lado derecho de la pantalla
 Mecánica (Drag & Drop): Nano está en el centro de la pantalla sosteniendo un engranaje brillante. Hay dos cajas abiertas: una en el extremo izquierdo de la pantalla y otra en el extremo derecho. Justo encima de la caja derecha hay una ventana grande dibujada (aplicando la técnica de Be Tech de usar referencias de la sala). El jugador debe arrastrar la pieza hacia ese lado
 8- Consigna: (Taller mecánico)¡A programar! Nano avanza, pero tiene que girar. Observa el camino y elige la tarjeta correcta para completar la instrucción. ¡Buena suerte! 
 (ACTIVIDAD REALIZADA ES LA ACT 1 QUE HICIMOS EN EL OTRO ARCHIVO)
-9- Consigna:(Taller mecánico) ¡Las luces de Nano brillan con ritmo! Rojo, azul, rojo... Observa bien y toca el color que sigue.
+9- Consigna:(Taller mecánico) ¡Las luces de Nano brillan con ritmo! Observa bien y toca el color que sigue.
 Mecánica: Nano enciende luces. Abajo hay un botón rojo y uno azul. El niño toca el que continúa la secuencia lógica.
 10- Consigna: (Taller mecánico)¡Por la cinta pasan formas geométricas! Cuadrado, círculo, cuadrado... Arrastra la forma que falta para completar la serie.
 Mecánica: Una cinta transportadora en movimiento lento. Falta la última pieza de la secuencia AB. El niño arrastra la pieza correcta desde el inventario

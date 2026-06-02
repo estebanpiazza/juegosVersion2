@@ -23,15 +23,26 @@ function fallbackStages() {
   }));
 }
 
+function getStageDisplayNumber(stage, index) {
+  const explicitNumber = Number(stage?.numero || stage?.actividad || stage?.desafio);
+  if (Number.isFinite(explicitNumber) && explicitNumber > 0) return explicitNumber;
+
+  const idMatch = String(stage?.id || "").match(/d(\d+)$/i);
+  if (idMatch) return Number(idMatch[1]);
+
+  return index + 1;
+}
+
 function renderStageCards(stages) {
   if (!stageCards) return;
   stageCards.innerHTML = stages
     .map((stage, index) => {
-      const number = index + 1;
-      const title = stage.titulo || `Desafio ${number}`;
+      const internalNumber = index + 1;
+      const displayNumber = getStageDisplayNumber(stage, index);
+      const title = stage.titulo || `Desafio ${displayNumber}`;
       return `
-        <a class="stage-node" href="nivel.html?nivel=${stageLevel}&desafio=${number}" aria-label="Entrar a ${title}">
-          <span>${number}</span>
+        <a class="stage-node" href="nivel.html?nivel=${stageLevel}&desafio=${internalNumber}" aria-label="Entrar a ${title}">
+          <span>${displayNumber}</span>
         </a>
       `;
     })

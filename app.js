@@ -63,6 +63,10 @@ const challengeTypeRenderers = {
   "patron-hardware": (id) => renderHardwarePatternChallenge(id),
   "debug-luces": (id) => renderLightDebugChallenge(id),
   "reparar-color": (id) => renderColorRepairChallenge(id),
+  "patron-sonidos": (id) => renderSoundPatternChallenge(id),
+  "recuperar-destornillador-alfombra": (id) => renderN4ProgrammingCarpetChallenge(id),
+  "alerta-lluvia-alfombra": (id) => renderN4ProgrammingCarpetChallenge(id),
+  "recuperar-tesoro-alfombra": (id) => renderN4ProgrammingCarpetChallenge(id),
   "secuenciacion-guiada": (id) => renderPathChallenge(id),
   "depuracion-inicial": (id) => renderBalanceChallengeV2(id),
   "programacion-por-bloques": (id) => renderRobotChallengeV2(id),
@@ -110,6 +114,9 @@ const DESIGN_D6_STAGE_BACKGROUND = `${DESIGN_D6_ASSET_BASE}/DESAFIO%206.png`;
 const N4_NEW_ASSET_BASE = "nuevos";
 const N4_ASSET_FOLDER_BY_CHALLENGE = {
   10: "consigna 10",
+  16: "CONSIGNA 16,18,19",
+  18: "CONSIGNA 16,18,19",
+  19: "CONSIGNA 16,18,19",
 };
 
 function n4Asset(challengeNumber, fileName) {
@@ -339,6 +346,17 @@ function playSound(name) {
   playTone({ frequency: 520, endFrequency: 680, duration: 0.055, type: "sine", gain: 0.07 });
 }
 
+function playAudioAsset(src, volumeMultiplier = 1) {
+  return new Promise((resolve) => {
+    const audio = new Audio(src);
+    audio.volume = Math.max(0, Math.min(1, soundVolume * volumeMultiplier));
+    audio.addEventListener("ended", resolve, { once: true });
+    audio.addEventListener("error", resolve, { once: true });
+    const playback = audio.play();
+    if (playback?.catch) playback.catch(resolve);
+  });
+}
+
 function playRobotMoveSound() {
   playSound("move");
 }
@@ -523,6 +541,14 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n4Asset(12, "FONDO 12.png");
       case "reparar-color":
         return n4Asset(13, "Fondo.png");
+      case "patron-sonidos":
+        return n4Asset(14, "FONDO 14.jpg");
+      case "recuperar-destornillador-alfombra":
+        return "assets/fondo%20taller.jpg";
+      case "alerta-lluvia-alfombra":
+        return n4Asset(18, "CONSIGNA 18.png");
+      case "recuperar-tesoro-alfombra":
+        return n4Asset(19, "CONSIGNA 19.png");
       case "secuenciacion-guiada":
         return DESIGN_D1_STAGE_BACKGROUND;
       case "depuracion-inicial":
@@ -565,11 +591,20 @@ function buildSelectorButtons() {
   selectorWrap.classList.remove("is-hidden");
   selectorWrap.innerHTML = challenges
     .map(
-      (_, index) => `
-        <button class="selector-chip ${index === 0 ? "is-active" : ""}" type="button" data-challenge="${index + 1}" aria-label="desafio ${index + 1}">
-          <strong>${index + 1}</strong>
+      (challenge, index) => {
+        const internalNumber = index + 1;
+        const explicitNumber = Number(challenge?.numero || challenge?.actividad || challenge?.desafio);
+        const idMatch = String(challenge?.id || "").match(/d(\d+)$/i);
+        const displayNumber = Number.isFinite(explicitNumber) && explicitNumber > 0
+          ? explicitNumber
+          : idMatch ? Number(idMatch[1]) : internalNumber;
+
+        return `
+        <button class="selector-chip ${index === 0 ? "is-active" : ""}" type="button" data-challenge="${internalNumber}" aria-label="desafio ${displayNumber}">
+          <strong>${displayNumber}</strong>
         </button>
-      `,
+      `;
+      },
     )
     .join("");
 
@@ -583,6 +618,17 @@ function mapChallengeTitles(levelData) {
   challengeTitles = Object.fromEntries(
     challenges.map((challenge, index) => [index + 1, challenge.titulo || `desafio ${index + 1}`]),
   );
+}
+
+function getChallengeDisplayNumber(id) {
+  const challenge = getChallengesFromData(currentLevelData)[id - 1];
+  const explicitNumber = Number(challenge?.numero || challenge?.actividad || challenge?.desafio);
+  if (Number.isFinite(explicitNumber) && explicitNumber > 0) return explicitNumber;
+
+  const idMatch = String(challenge?.id || "").match(/d(\d+)$/i);
+  if (idMatch) return Number(idMatch[1]);
+
+  return id;
 }
 
 function closeScenarioModal() {
@@ -1220,7 +1266,7 @@ enableMissingPieceDrag(challengeContent);
 
 function renderHeader(id, instruction) {
   const headerId = Number.isInteger(id) ? id : activeChallengeId;
-  return renderChallengeHeader(`desafio ${headerId}`, challengeTitles[headerId], formatChallengeInstructionMarkup(headerId, instruction));
+  return renderChallengeHeader(`desafio ${getChallengeDisplayNumber(headerId)}`, challengeTitles[headerId], formatChallengeInstructionMarkup(headerId, instruction));
 }
 
 function formatChallengeInstructionMarkup(id, instruction) {
@@ -1382,14 +1428,14 @@ function renderCommandSequencePanel({ stepsMarkup, actionsMarkup, compact = fals
 function renderNanoAssemblyChallenge(id = 1) {
   const facePiece = { id: "cara", label: "Cara", file: "Cara.png", x: 50, y: 38.1, w: 8, h: 7, hitW: 14, hitH: 12 };
   const pieces = [
-    { id: "cabeza", label: "Cabeza", file: "cabeza.png", x: 50, y: 36.5, w: 18, h: 14, hitW: 24, hitH: 20, sx: 64, sy: 40, sw: 9.5 },
-    { id: "torzo", label: "Torzo", file: "Torzo.png", x: 50.2, y: 54.4, w: 16.2, h: 24.1, hitW: 27, hitH: 33, sx: 23, sy: 71, sw: 7.2, ox: -0.6, oy: 1.2 },
-    { id: "brazo-izquierdo", label: "Brazo izquierdo", file: "Brazo izquierdo.png", x: 41.8, y: 51.2, w: 11.1, h: 14.9, hitW: 18, hitH: 22, sx: 34, sy: 60, sw: 6.8 },
-    { id: "brazo-derecho", label: "Brazo derecho", file: "Brazo derecho.png", x: 57.5, y: 55, w: 10, h: 22, hitW: 16, hitH: 27, sx: 69, sy: 64, sw: 6.8 },
-    { id: "mano-izquierda", label: "Mano izquierda", file: "Mano izquierdo.png", x: 38.3, y: 47.2, w: 10, h: 11, hitW: 16, hitH: 16, sx: 30, sy: 42, sw: 5.6 },
-    { id: "mano-derecha", label: "Mano derecha", file: "Mano drecha.png", x: 59.5, y: 67, w: 9, h: 11, hitW: 15, hitH: 16, sx: 79, sy: 69, sw: 5.6 },
-    { id: "pierna-izquierda", label: "Pierna izquierda", file: "Pierna izquierda.png", x: 45.9, y: 74.8, w: 9.6, h: 27, hitW: 14, hitH: 30, sx: 21, sy: 35, sw: 6.4 },
-    { id: "pierna-derecha", label: "Pierna derecha", file: "Pierna derecha.png", x: 54.1, y: 74.8, w: 9.6, h: 27, hitW: 14, hitH: 30, sx: 78, sy: 35, sw: 6.4 },
+    { id: "cabeza",         label: "Cabeza",          file: "cabeza.png",           x: 50,   y: 36.5, w: 18,  h: 14,   hitW: 24, hitH: 20, sx: 64, sy: 40, sw: 9.5 },
+    { id: "torzo",          label: "Torzo",            file: "Torzo.png",             x: 50.2, y: 54.4, w: 16.2,h: 24.1, hitW: 27, hitH: 33, sx: 23, sy: 71, sw: 7.2, ox: -0.6, oy: 1.2 },
+    { id: "brazo-izquierdo",label: "Brazo izquierdo",  file: "Brazo izquierdo.png",   x: 41.8, y: 51.2, w: 11.1,h: 14.9, hitW: 18, hitH: 22, sx: 34, sy: 60, sw: 6.8 },
+    { id: "brazo-derecho",  label: "Brazo derecho",    file: "Brazo derecho.png",     x: 57.5, y: 55,   w: 10,  h: 22,   hitW: 16, hitH: 27, sx: 69, sy: 64, sw: 6.8 },
+    { id: "mano-izquierda", label: "Mano izquierda",   file: "Mano izquierdo.png",   x: 38.3, y: 47.2, w: 10,  h: 11,   hitW: 16, hitH: 16, sx: 30, sy: 42, sw: 5.6 },
+    { id: "mano-derecha",   label: "Mano derecha",     file: "Mano drecha.png",       x: 59.5, y: 67,   w: 9,   h: 11,   hitW: 15, hitH: 16, sx: 79, sy: 69, sw: 5.6 },
+    { id: "pierna-izquierda",label: "Pierna izquierda",file: "Pierna izquierda.png", x: 45.9, y: 74.8, w: 9.6, h: 27,   hitW: 14, hitH: 30, sx: 21, sy: 35, sw: 6.4 },
+    { id: "pierna-derecha", label: "Pierna derecha",   file: "Pierna derecha.png",   x: 54.1, y: 74.8, w: 9.6, h: 27,   hitW: 14, hitH: 30, sx: 78, sy: 35, sw: 6.4 },
   ];
   const placed = new Set();
   let selectedPiece = null;
@@ -1936,6 +1982,74 @@ function getN4ProgrammingConfig(id) {
       failureMessage: "Casi. El camino es Avanzar, Derecha y Avanzar.",
       successMessage: "Excelente. Completaste el camino de la alfombra.",
     },
+    14: {
+      assetChallenge: 16,
+      cardAssetChallenge: 4,
+      markerAssetChallenge: 4,
+      rows: 5,
+      cols: 5,
+      start: { row: 3, col: 1, dir: 0 },
+      goal: { row: 1, col: 3 },
+      route: ["3-1", "2-1", "1-1", "1-2", "1-3"],
+      solution: ["avanzar", "avanzar", "derecha", "avanzar", "avanzar"],
+      availableCards: ["avanzar", "derecha", "izquierda"],
+      goalAsset: "destornillado.png",
+      goalAlt: "Destornillador",
+      cardClass: "n4-screwdriver-card",
+      fallbackInstruction: "¡AYUDA A NANO! Nano necesita usar el destornillador ayudalo a conseguirlo. Observa los pasos de Nano: avanzar, avanzar y girar.",
+      initialMessage: "Observa los pasos de Nano: avanzar, avanzar y girar.",
+      missingMessage: "Completa los pasos de Nano para conseguir el destornillador.",
+      failureMessage: "Casi. Observa los pasos: avanzar, avanzar y girar.",
+      successMessage: "Muy bien. Nano consiguio el destornillador.",
+    },
+    15: {
+      assetChallenge: 18,
+      cardAssetChallenge: 4,
+      markerAssetChallenge: 4,
+      rows: 6,
+      cols: 6,
+      start: { row: 5, col: 0, dir: 1 },
+      goal: { row: 3, col: 4 },
+      route: ["5-0", "5-1", "5-2", "4-2", "3-2", "3-3", "3-4"],
+      obstacles: ["4-1", "4-3", "2-1", "2-4"],
+      solution: ["avanzar", "avanzar", "izquierda", "avanzar", "avanzar", "derecha", "avanzar", "avanzar"],
+      availableCards: ["avanzar", "derecha", "izquierda"],
+      obstacleAsset: "assets/charco.png",
+      goalAssetChallenge: 4,
+      goalAlt: "Llegada",
+      cardClass: "n4-rain-park-card",
+      fallbackInstruction: "¡Alerta de lluvia! Nano no sabe cómo llegar. Aplica la lógica y elige las tarjetas para completar el algoritmo. ¡Recuerda ayudarlo a avanzar y girar sin pisar los charcos que son obstáculos!",
+      initialMessage: "Aplica la lógica y elige las tarjetas para completar el algoritmo sin pisar los charcos.",
+      missingMessage: "Completa el algoritmo para ayudar a Nano a avanzar y girar.",
+      failureMessage: "Casi. Nano debe avanzar y girar sin pisar los charcos.",
+      successMessage: "Muy bien. Nano llego sin pisar los charcos.",
+    },
+    16: {
+      assetChallenge: 19,
+      cardAssetChallenge: 4,
+      markerAssetChallenge: 4,
+      rows: 6,
+      cols: 6,
+      start: { row: 5, col: 0, dir: 1 },
+      goal: { row: 3, col: 5 },
+      route: ["5-0", "5-1", "5-2", "5-3", "4-3", "3-3", "3-4", "3-5"],
+      items: [
+        { row: 5, col: 2, icon: "⚡", label: "Energia" },
+        { row: 3, col: 3, asset: "dise%C3%B1o%20de%20niveles/DESAFIO%203/BATERIA.png", label: "Bateria" },
+      ],
+      obstacles: ["4-1", "4-2", "2-4", "4-5"],
+      solution: ["avanzar", "avanzar", "avanzar", "izquierda", "avanzar", "avanzar", "derecha", "avanzar", "avanzar"],
+      availableCards: ["avanzar", "derecha", "izquierda"],
+      obstacleIcon: "X",
+      goalAsset: "destornillado.png",
+      goalAlt: "Tesoro destornillador",
+      cardClass: "n4-treasure-park-card",
+      fallbackInstruction: "¡Misión laberinto! Nano te necesita. Crea la secuencia exacta: pasa por la batería para obtener energía, llega al tesoro y ¡esquiva los obstáculos!",
+      initialMessage: "Crea la secuencia exacta: pasa por la batería para obtener energía, llega al tesoro y esquiva los obstáculos.",
+      missingMessage: "Completa todos los pasos para que Nano llegue al tesoro.",
+      failureMessage: "Casi. La ruta debe pasar por la bateria y rodear los obstaculos antes del tesoro.",
+      successMessage: "Muy bien. Nano cargo energia y recupero el tesoro.",
+    },
   };
 
   return configs[id] || configs[4];
@@ -1944,6 +2058,8 @@ function getN4ProgrammingConfig(id) {
 function renderN4ProgrammingCarpetChallenge(id = 4) {
   const config = getN4ProgrammingConfig(id);
   const routeSet = new Set(config.route);
+  const obstacleSet = new Set(config.obstacles || []);
+  const itemByKey = new Map((config.items || []).map((item) => [`${item.row}-${item.col}`, item]));
   const goalKey = `${config.goal.row}-${config.goal.col}`;
   const startKey = `${config.start.row}-${config.start.col}`;
   let selectedSlot = 0;
@@ -1952,7 +2068,7 @@ function renderN4ProgrammingCarpetChallenge(id = 4) {
 
   function cardAsset(cardId) {
     const card = N4_PROGRAM_CARDS[cardId];
-    return card ? n4Asset(config.assetChallenge, card.file) : "";
+    return card ? n4Asset(config.cardAssetChallenge || config.assetChallenge, card.file) : "";
   }
 
   function renderProgramCell(row, col) {
@@ -1960,10 +2076,25 @@ function renderN4ProgrammingCarpetChallenge(id = 4) {
     const isStart = key === startKey;
     const isGoal = key === goalKey;
     const isRoute = routeSet.has(key);
-    const cellType = isStart ? "start" : isGoal ? "goal" : isRoute ? "path" : "empty";
+    const isObstacle = obstacleSet.has(key);
+    const item = itemByKey.get(key);
+    const cellType = isStart ? "start" : isGoal ? "goal" : isObstacle ? "obstacle" : item ? "item" : isRoute ? "path" : "empty";
+    const goalMarkup = config.goalIcon
+      ? `<span class="play-cell-icon play-cell-icon--goal" aria-label="${config.goalAlt || "Meta"}">${config.goalIcon}</span>`
+      : `<img class="play-cell-img ${config.goalAsset ? "play-cell-img--goal-item" : ""}" src="${config.goalAsset ? n4Asset(config.assetChallenge, config.goalAsset) : n4Asset(config.goalAssetChallenge || config.assetChallenge, "Vamos.png")}" alt="${config.goalAlt || "Llegada"}" />`;
+    const itemMarkup = item
+      ? item.asset
+        ? `<img class="play-cell-img play-cell-img--item" src="${item.asset}" alt="${item.label || "Item"}" />`
+        : `<span class="play-cell-icon play-cell-icon--item" aria-label="${item.label || "Item"}">${item.icon || "•"}</span>`
+      : "";
+    const obstacleMarkup = config.obstacleIcon
+      ? `<span class="play-cell-icon play-cell-icon--obstacle" aria-label="Obstaculo">${config.obstacleIcon}</span>`
+      : `<img class="play-cell-img play-cell-img--obstacle" src="${config.obstacleAsset || "assets/charco.png"}" alt="Charco" />`;
     const content = [
-      isStart ? `<img class="play-cell-img play-cell-img--start" src="${n4Asset(config.assetChallenge, "Entrada.png")}" alt="Entrada" />` : "",
-      isGoal ? `<img class="play-cell-img" src="${n4Asset(config.assetChallenge, "Vamos.png")}" alt="Llegada" />` : "",
+      isObstacle ? obstacleMarkup : "",
+      itemMarkup,
+      isStart ? `<img class="play-cell-img play-cell-img--start" src="${n4Asset(config.markerAssetChallenge || config.assetChallenge, "Entrada.png")}" alt="Entrada" />` : "",
+      isGoal ? goalMarkup : "",
     ].join("");
 
     return `
@@ -2003,7 +2134,7 @@ function renderN4ProgrammingCarpetChallenge(id = 4) {
   const cardsMarkup = config.availableCards.map(renderProgramCard).join("");
 
   challengeContent.innerHTML = `
-    <article class="challenge-card n4-card n4-program-card">
+    <article class="challenge-card n4-card n4-program-card ${config.cardClass || ""}">
       ${renderHeader(id, getChallengeInstruction(id, config.fallbackInstruction))}
       <div class="n4-program-play" data-n4-program>
         <main class="play-main n4-play-main">
@@ -2154,6 +2285,10 @@ function renderN4ProgrammingCarpetChallenge(id = 4) {
           currentCell?.classList.add("is-wrong");
           return false;
         }
+        if (obstacleSet.has(`${nextRow}-${nextCol}`)) {
+          getCell(nextRow, nextCol)?.classList.add("is-wrong");
+          return false;
+        }
         robotState = { ...robotState, row: nextRow, col: nextCol };
         placeRobot();
         await wait(190);
@@ -2234,10 +2369,10 @@ function renderDragRightChallenge(id = 7) {
 
   challengeContent.innerHTML = `
     <article class="challenge-card n4-card n4-side-card">
-      ${renderHeader(id, getChallengeInstruction(id, "Nano debe guardar su tuerca cerca de la ventana. Arrastra la pieza hacia el lado derecho de la pantalla"))}
+      ${renderHeader(id, getChallengeInstruction(id, "Nano debe guardar su tuerca lejos de la ventana. Arrastra la pieza hacia el lado derecho de la pantalla"))}
       <div class="n4-side-scene">
-        <button class="n4-side-box n4-side-box-left n4-drop-target" type="button" data-side="left" aria-label="Caja de tecnologia izquierda">
-          <img src="${n4Asset(2, "caja de tecnologia.png")}" alt="" aria-hidden="true" />
+        <button class="n4-side-box n4-side-box-left n4-drop-target" type="button" data-side="left" aria-label="Caja de juguetes izquierda">
+          <img src="${n4Asset(7, "caja de juguetes.png")}" alt="" aria-hidden="true" />
         </button>
         <button class="n4-side-box n4-side-box-right n4-drop-target" type="button" data-side="right" aria-label="Caja de tecnologia derecha">
           <img src="${n4Asset(2, "caja de tecnologia.png")}" alt="" aria-hidden="true" />
@@ -2315,7 +2450,7 @@ function renderColorPatternChallenge(id = 9) {
           `).join("")}
         </div>
       </div>
-      <p class="challenge-message" data-message>El ritmo es rojo, azul, rojo... ¿cual sigue?</p>
+      <p class="challenge-message" data-message>El ritmo es naranja, azul, naranja... ¿cual sigue?</p>
     </article>
   `;
 
@@ -2626,6 +2761,134 @@ function renderColorRepairChallenge(id = 13) {
         targetButton.innerHTML = `<img src="${n4Asset(13, "azul.png")}" alt="" aria-hidden="true" />`;
       }
       setMessage("Sistema reparado. El patron de colores vuelve a estar en orden.", "is-success");
+      completeChallenge(id);
+    });
+  });
+}
+
+function renderSoundPatternChallenge(id = 14) {
+  const sounds = [
+    { id: "verde", label: "Verde", wave: "ONDA VERDE.png", audio: "TIMBRE 1.mp3" },
+    { id: "naranja", label: "Naranja", wave: "ONDA NARANJA.png", audio: "TIMBRE 2.mp3" },
+    { id: "azul", label: "Azul", wave: "ONDA AZUL.png", audio: "TIMBRE 3.mp3" },
+    { id: "turquesa", label: "Turquesa", wave: "ONDA TURQEUSA.png", audio: "TIMBRE 4.mp3" },
+  ];
+  const sequence = sounds.map((sound) => sound.id);
+  const soundById = new Map(sounds.map((sound) => [sound.id, sound]));
+  let progress = 0;
+  let solved = false;
+  let isPlayingPattern = false;
+  let playbackRun = 0;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-card n4-sound-card">
+      ${renderHeader(id, getChallengeInstruction(id, "¡Nano nos habla! Escucha sus sonidos con atención y toca los botones para responderle igual."))}
+      <div class="n4-sound-scene" aria-label="Patron de sonidos de Nano">
+        <img class="n4-sound-bg" src="${n4Asset(14, "FONDO 14.jpg")}" alt="" aria-hidden="true" />
+        <button class="n4-sound-replay" type="button" data-sound-replay aria-label="Escuchar patron de sonidos">
+          <span aria-hidden="true">&#9658;</span>
+          <span>ESCUCHAR PATRON</span>
+        </button>
+        <div class="n4-sound-pattern" aria-label="Ondas del patron">
+          ${sounds.map((sound, index) => `
+            <div class="n4-sound-wave is-${sound.id}" data-sound-display="${sound.id}" data-step="${index}" aria-label="Sonido ${index + 1}: ${sound.label}">
+              <img src="${n4Asset(14, sound.wave)}" alt="" aria-hidden="true" />
+            </div>
+          `).join("")}
+        </div>
+        <div class="n4-sound-options" aria-label="Botones de sonido">
+          ${sounds.map((sound) => `
+            <button class="n4-sound-option is-${sound.id}" type="button" data-sound="${sound.id}" aria-label="Sonido ${sound.label}">
+              <span aria-hidden="true">&#128266;</span>
+            </button>
+          `).join("")}
+        </div>
+      </div>
+      <p class="challenge-message" data-message>Toca escuchar patron y repite los sonidos en el mismo orden.</p>
+    </article>
+  `;
+
+  const replayButton = challengeContent.querySelector("[data-sound-replay]");
+  const optionButtons = [...challengeContent.querySelectorAll("[data-sound]")];
+  const waves = [...challengeContent.querySelectorAll("[data-sound-display]")];
+
+  function delay(ms) {
+    return new Promise((resolve) => window.setTimeout(resolve, ms));
+  }
+
+  function resetAttempt() {
+    progress = 0;
+    optionButtons.forEach((button) => button.classList.remove("is-correct", "is-wrong", "is-active"));
+    waves.forEach((wave) => wave.classList.remove("is-active", "is-done"));
+  }
+
+  async function playOne(soundId, source = "pattern") {
+    const sound = soundById.get(soundId);
+    if (!sound) return;
+    const wave = challengeContent.querySelector(`[data-sound-display="${soundId}"]`);
+    const button = challengeContent.querySelector(`[data-sound="${soundId}"]`);
+    wave?.classList.add("is-active");
+    if (source === "input") button?.classList.add("is-active");
+    await playAudioAsset(n4Asset(14, sound.audio), 1.15);
+    await delay(120);
+    wave?.classList.remove("is-active");
+    button?.classList.remove("is-active");
+  }
+
+  async function playPattern() {
+    if (isPlayingPattern || solved) return;
+    resetAttempt();
+    isPlayingPattern = true;
+    playbackRun += 1;
+    const run = playbackRun;
+    replayButton.disabled = true;
+    optionButtons.forEach((button) => { button.disabled = true; });
+    setMessage("Escucha con atencion el patron de Nano.", "is-good");
+
+    for (const soundId of sequence) {
+      if (run !== playbackRun) return;
+      await playOne(soundId);
+      await delay(180);
+    }
+
+    if (run !== playbackRun) return;
+    isPlayingPattern = false;
+    replayButton.disabled = false;
+    optionButtons.forEach((button) => { button.disabled = false; });
+    setMessage("Ahora toca los botones en el mismo orden.", "is-good");
+  }
+
+  replayButton?.addEventListener("click", playPattern);
+
+  optionButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      if (solved || isPlayingPattern) return;
+      const soundId = button.dataset.sound;
+      const expected = sequence[progress];
+      optionButtons.forEach((option) => option.classList.remove("is-wrong", "is-active"));
+      await playOne(soundId, "input");
+
+      if (soundId !== expected) {
+        button.classList.add("is-wrong");
+        resetAttempt();
+        setMessage("Ese sonido no va ahi. Escucha el patron y proba otra vez desde el principio.", "is-error");
+        return;
+      }
+
+      button.classList.add("is-correct");
+      waves[progress]?.classList.add("is-done");
+      progress += 1;
+
+      if (progress < sequence.length) {
+        setMessage(`Bien. Sigue con el sonido ${progress + 1}.`, "is-good");
+        return;
+      }
+
+      solved = true;
+      playbackRun += 1;
+      optionButtons.forEach((option) => { option.disabled = true; });
+      replayButton.disabled = true;
+      setMessage("Excelente. Repetiste igual el patron de sonidos de Nano.", "is-success");
       completeChallenge(id);
     });
   });
