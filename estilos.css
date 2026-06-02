@@ -9993,6 +9993,72 @@ article.challenge-card.design-challenge-v2 .rain-goal {
   }
 }
 
+/* ===== MODAL LO LOGRASTE: armado con assets de nuevos/LO LOGRASTE ===== */
+.final-success-card:not(.final-failure-card) .final-success-robot {
+  width: min(42vw, 320px) !important;
+  right: clamp(-30px, -2vw, -8px) !important;
+  top: clamp(12px, 2vw, 22px) !important;
+}
+
+.final-success-card:not(.final-failure-card) .final-success-title {
+  width: min(50%, 250px) !important;
+}
+
+.final-success-card:not(.final-failure-card) .final-success-subtitle {
+  width: min(46%, 230px) !important;
+}
+
+.final-success-card:not(.final-failure-card) .final-success-divider {
+  width: min(48%, 250px) !important;
+}
+
+.final-rating-success {
+  position: relative !important;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: clamp(18px, 3vw, 30px) !important;
+  padding: clamp(24px, 3vw, 38px) clamp(22px, 3.6vw, 44px) clamp(18px, 2.4vw, 30px) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.final-rating-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.final-rating-success > :not(.final-rating-bg) {
+  position: relative;
+  z-index: 1;
+}
+
+.final-rating-success .final-rating-title {
+  width: min(44%, 220px) !important;
+  margin: 0 0 clamp(8px, 1vw, 12px) clamp(2px, 1vw, 12px) !important;
+}
+
+@media (max-width: 760px) {
+  .final-success-card:not(.final-failure-card) .final-success-robot {
+    width: min(48vw, 180px) !important;
+    right: -36px !important;
+    top: 8px !important;
+  }
+
+  .final-rating-success {
+    padding: 20px 16px 16px !important;
+  }
+
+  .final-rating-success .final-rating-title {
+    width: min(70%, 210px) !important;
+    margin: 0 auto 8px !important;
+  }
+}
+
 /* Desafio 3: Mision laberinto con piezas de la referencia. */
 body:has(.design-challenge-v3) .game-stage-bg {
   display: block;
@@ -11604,6 +11670,26 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
   border-radius: 18px;
   padding: clamp(12px, 2vw, 18px) clamp(12px, 2vw, 18px) clamp(14px, 2vw, 20px);
 }
+.modal-rating-win {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border-radius: 24px;
+  padding: clamp(24px, 3vw, 36px) clamp(20px, 3.6vw, 42px) clamp(18px, 2.6vw, 28px);
+}
+.modal-rating-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+.modal-rating-win > :not(.modal-rating-bg) {
+  position: relative;
+  z-index: 1;
+}
 .modal-rating-q {
   margin: 0 0 12px;
   font-size: clamp(0.8rem, 1.6vw, 0.96rem);
@@ -11611,6 +11697,13 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
   color: #08DBF7;
   text-align: center;
   text-transform: none;
+}
+.modal-rating-q-img {
+  width: min(48%, 220px);
+  min-width: 150px;
+  height: auto;
+  display: block;
+  margin: 0 0 clamp(8px, 1.2vw, 14px);
 }
 .modal-rating-grid {
   display: grid;

@@ -618,7 +618,7 @@ function renderLevelRating(challengeId, nextScenario) {
   `;
 }
 
-const FINAL_SUCCESS_ASSET_DIR = "tarjetas%20finalizacion%20nivel/LO%20LOGRASTE";
+const FINAL_SUCCESS_ASSET_DIR = "nuevos/LO%20LOGRASTE";
 const FINAL_FAILURE_ASSET_DIR = "tarjetas%20finalizacion%20nivel/NO%20LO%20LOGRASTE";
 const FINAL_SUCCESS_RATING_OPTIONS = [
   { value: 1, label: "No me gusto", asset: "No%20me%20gusto.png" },
@@ -645,7 +645,8 @@ function renderFinalSuccessRating(challengeId) {
   const savedRating = readLevelRating(challengeId);
 
   return `
-    <section class="final-rating" aria-labelledby="final-rating-title" data-rating-challenge="${challengeId}">
+    <section class="final-rating final-rating-success" aria-labelledby="final-rating-title" data-rating-challenge="${challengeId}">
+      <img class="final-rating-bg" src="${finalSuccessAsset("Cuadro%20Gris.png")}" alt="" aria-hidden="true" />
       <img class="final-rating-title" id="final-rating-title" src="${finalSuccessAsset("Te%20gusto.png")}" alt="Te gusto esta mision?" />
       <div class="final-rating-scale" role="group" aria-label="Te gusto esta mision?">
         ${FINAL_SUCCESS_RATING_OPTIONS.map((option) => {
@@ -702,10 +703,10 @@ function renderFinalSuccessCard(id, nextScenario) {
       <div class="final-success-divider" aria-hidden="true"></div>
       ${renderFinalSuccessRating(id)}
       <div class="final-success-actions">
+        ${nextAction}
         <button class="final-action final-action-replay" type="button" data-replay-scenario="${id}" aria-label="Volver a jugar">
           <img src="${finalSuccessAsset("Boton%20azul.png")}" alt="" aria-hidden="true" />
         </button>
-        ${nextAction}
       </div>
     </article>
   `;
