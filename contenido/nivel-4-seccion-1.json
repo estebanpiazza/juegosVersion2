@@ -55,7 +55,7 @@
       "id": "n4-rework-d7",
       "titulo": "Cerca de la ventana",
       "tipo": "arrastrar-derecha",
-      "consigna": "Nano debe guardar su tuerca cerca de la ventana. Arrastra la pieza hacia el lado derecho de la pantalla",
+      "consigna": "Nano debe guardar su tuerca lejos de la ventana. Arrastra la pieza hacia el lado derecho de la pantalla",
       "objetivo": "Reconocer el lado derecho de la pantalla usando una referencia visual.",
       "interaccion": "Arrastrar o seleccionar el engranaje y colocarlo en la caja derecha."
     },

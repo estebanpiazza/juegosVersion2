@@ -40,6 +40,7 @@ let musicStarted = false;
 let musicTimer = null;
 let nextMusicTime = 0;
 let musicStep = 0;
+const audioAssetBufferCache = new Map();
 
 let challengeTitles = {
   1: "Camino del robot",
@@ -346,15 +347,76 @@ function playSound(name) {
   playTone({ frequency: 520, endFrequency: 680, duration: 0.055, type: "sine", gain: 0.07 });
 }
 
-function playAudioAsset(src, volumeMultiplier = 1) {
-  return new Promise((resolve) => {
-    const audio = new Audio(src);
-    audio.volume = Math.max(0, Math.min(1, soundVolume * volumeMultiplier));
-    audio.addEventListener("ended", resolve, { once: true });
-    audio.addEventListener("error", resolve, { once: true });
-    const playback = audio.play();
-    if (playback?.catch) playback.catch(resolve);
+function getAudioAssetBuffer(src, context) {
+  if (!context) return Promise.reject(new Error("AudioContext unavailable"));
+  if (!audioAssetBufferCache.has(src)) {
+    const request = fetch(src)
+      .then((response) => {
+        if (!response.ok) throw new Error(`Audio asset not found: ${src}`);
+        return response.arrayBuffer();
+      })
+      .then((buffer) => context.decodeAudioData(buffer));
+
+    audioAssetBufferCache.set(src, request);
+  }
+
+  return audioAssetBufferCache.get(src).catch((error) => {
+    audioAssetBufferCache.delete(src);
+    throw error;
   });
+}
+
+function playAudioBuffer(buffer, volumeMultiplier = 1) {
+  const context = getSoundContext();
+  if (!context || !soundMaster || !buffer) return Promise.resolve(false);
+
+  return new Promise((resolve) => {
+    const source = context.createBufferSource();
+    const gain = context.createGain();
+    gain.gain.value = Math.max(0, Math.min(1.5, volumeMultiplier));
+    source.buffer = buffer;
+    source.connect(gain);
+    gain.connect(soundMaster);
+    source.addEventListener("ended", () => {
+      source.disconnect();
+      gain.disconnect();
+      resolve(true);
+    }, { once: true });
+    source.start();
+  });
+}
+
+function playHtmlAudioAsset(src, volumeMultiplier = 1) {
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = (played) => {
+      if (settled) return;
+      settled = true;
+      resolve(played);
+    };
+
+    const audio = new Audio(src);
+    audio.preload = "auto";
+    audio.volume = Math.max(0, Math.min(1, soundVolume * volumeMultiplier));
+    audio.addEventListener("ended", () => finish(true), { once: true });
+    audio.addEventListener("error", () => finish(false), { once: true });
+    const playback = audio.play();
+    if (playback?.catch) playback.catch(() => finish(false));
+  });
+}
+
+async function playAudioAsset(src, volumeMultiplier = 1) {
+  const context = getSoundContext();
+  if (context?.state === "suspended") {
+    await context.resume().catch(() => {});
+  }
+
+  try {
+    const buffer = await getAudioAssetBuffer(src, context);
+    return await playAudioBuffer(buffer, volumeMultiplier);
+  } catch {
+    return playHtmlAudioAsset(src, volumeMultiplier);
+  }
 }
 
 function playRobotMoveSound() {
@@ -752,10 +814,10 @@ function renderFinalSuccessCard(id, nextScenario) {
       <div class="final-success-divider" aria-hidden="true"></div>
       ${renderFinalSuccessRating(id)}
       <div class="final-success-actions">
-        ${nextAction}
-        <button class="final-action final-action-replay" type="button" data-replay-scenario="${id}" aria-label="Volver a jugar">
+        <button class="final-action final-action-replay" type="button" data-replay-scenario="${id}" aria-label="Volver a intentar">
           <img src="${finalSuccessAsset("Boton%20azul.png")}" alt="" aria-hidden="true" />
         </button>
+        ${nextAction}
       </div>
     </article>
   `;
@@ -772,12 +834,12 @@ function renderFinalFailureCard(id) {
       <div class="final-success-divider" aria-hidden="true"></div>
       ${renderFinalFailureRating(id)}
       <div class="final-success-actions">
+        <button class="final-action final-action-replay" type="button" data-replay-scenario="${id}" aria-label="Volver a intentar">
+          <img src="${finalFailureAsset("Boton%20azul.png")}" alt="" aria-hidden="true" />
+        </button>
         <a class="final-action final-action-next" href="index.html" aria-label="Volver al inicio">
           <img src="${finalFailureAsset("Boton%20turquesa.png")}" alt="" aria-hidden="true" />
         </a>
-        <button class="final-action final-action-replay" type="button" data-replay-scenario="${id}" aria-label="Volver a jugar">
-          <img src="${finalFailureAsset("Boton%20azul.png")}" alt="" aria-hidden="true" />
-        </button>
       </div>
     </article>
   `;
@@ -1596,6 +1658,7 @@ function renderTechnologySortChallenge(id = 2) {
       placedTech.add(itemId);
       selectedItem.classList.add("is-collected");
       selectedItem.disabled = true;
+      selectedItem.hidden = true;
       challengeContent.querySelector("[data-count]").textContent = `${placedTech.size}/${needed.length}`;
       playSound("success");
 
@@ -1609,6 +1672,7 @@ function renderTechnologySortChallenge(id = 2) {
       parkedToys.add(itemId);
       selectedItem.classList.add("is-collected");
       selectedItem.disabled = true;
+      selectedItem.hidden = true;
       setMessage("Perfecto. Ese objeto va en la caja de juguetes.", "is-good");
       playSound("success");
     } else {
@@ -2371,8 +2435,8 @@ function renderDragRightChallenge(id = 7) {
     <article class="challenge-card n4-card n4-side-card">
       ${renderHeader(id, getChallengeInstruction(id, "Nano debe guardar su tuerca lejos de la ventana. Arrastra la pieza hacia el lado derecho de la pantalla"))}
       <div class="n4-side-scene">
-        <button class="n4-side-box n4-side-box-left n4-drop-target" type="button" data-side="left" aria-label="Caja de juguetes izquierda">
-          <img src="${n4Asset(7, "caja de juguetes.png")}" alt="" aria-hidden="true" />
+        <button class="n4-side-box n4-side-box-left n4-side-toy-box n4-drop-target" type="button" data-side="left" aria-label="Caja de juguetes izquierda">
+          <img src="${n4Asset(2, "caja de juguetes.png")}" alt="" aria-hidden="true" />
         </button>
         <button class="n4-side-box n4-side-box-right n4-drop-target" type="button" data-side="right" aria-label="Caja de tecnologia derecha">
           <img src="${n4Asset(2, "caja de tecnologia.png")}" alt="" aria-hidden="true" />
@@ -2775,6 +2839,12 @@ function renderSoundPatternChallenge(id = 14) {
   ];
   const sequence = sounds.map((sound) => sound.id);
   const soundById = new Map(sounds.map((sound) => [sound.id, sound]));
+  const fallbackFrequencies = {
+    verde: 392,
+    naranja: 494,
+    azul: 587,
+    turquesa: 740,
+  };
   let progress = 0;
   let solved = false;
   let isPlayingPattern = false;
@@ -2822,6 +2892,16 @@ function renderSoundPatternChallenge(id = 14) {
     waves.forEach((wave) => wave.classList.remove("is-active", "is-done"));
   }
 
+  async function playFallbackTone(soundId) {
+    playTone({
+      frequency: fallbackFrequencies[soundId] || 520,
+      duration: 0.36,
+      type: "sine",
+      gain: 0.16,
+    });
+    await delay(380);
+  }
+
   async function playOne(soundId, source = "pattern") {
     const sound = soundById.get(soundId);
     if (!sound) return;
@@ -2829,7 +2909,8 @@ function renderSoundPatternChallenge(id = 14) {
     const button = challengeContent.querySelector(`[data-sound="${soundId}"]`);
     wave?.classList.add("is-active");
     if (source === "input") button?.classList.add("is-active");
-    await playAudioAsset(n4Asset(14, sound.audio), 1.15);
+    const played = await playAudioAsset(n4Asset(14, sound.audio), 1.15);
+    if (!played) await playFallbackTone(soundId);
     await delay(120);
     wave?.classList.remove("is-active");
     button?.classList.remove("is-active");

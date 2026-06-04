@@ -9921,12 +9921,13 @@ article.challenge-card.design-challenge-v2 .rain-goal {
 
 /* ===== MODAL FINALIZACION: ajuste de robot y alineacion ===== */
 .scenario-modal-panel {
-  width: min(84vw, 560px) !important;
+  width: min(82vw, 500px) !important;
+  max-height: calc(100dvh - 40px) !important;
 }
 
 .final-success-card {
-  padding: clamp(10px, 1.3vw, 16px) clamp(10px, 1.4vw, 18px) clamp(10px, 1.3vw, 16px) !important;
-  gap: clamp(4px, 0.7dvh, 8px) !important;
+  padding: clamp(8px, 1vw, 14px) clamp(8px, 1.2vw, 16px) clamp(8px, 1vw, 14px) !important;
+  gap: clamp(3px, 0.6dvh, 7px) !important;
 }
 
 .final-success-robot,
@@ -9959,7 +9960,8 @@ article.challenge-card.design-challenge-v2 .rain-goal {
 }
 
 .final-rating {
-  width: 100% !important;
+  width: min(92%, 440px) !important;
+  margin: clamp(2px, 0.6dvh, 6px) auto 0 !important;
   padding: clamp(6px, 0.9vw, 10px) !important;
 }
 
@@ -9968,11 +9970,14 @@ article.challenge-card.design-challenge-v2 .rain-goal {
 }
 
 .final-success-actions {
-  width: 100% !important;
+  width: min(88%, 390px) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: clamp(6px, 1.2vw, 12px) !important;
 }
 
 .final-action {
+  width: 100% !important;
+  margin: 0 !important;
   min-height: 38px !important;
 }
 
@@ -9982,7 +9987,8 @@ article.challenge-card.design-challenge-v2 .rain-goal {
 
 @media (max-width: 760px) {
   .scenario-modal-panel {
-    width: min(96vw, 420px) !important;
+    width: min(94vw, 390px) !important;
+    max-height: calc(100dvh - 18px) !important;
   }
 
   .final-success-robot,
@@ -9990,6 +9996,11 @@ article.challenge-card.design-challenge-v2 .rain-goal {
     width: min(30vw, 120px) !important;
     right: -28px !important;
     top: 8px !important;
+  }
+
+  .final-success-actions {
+    width: min(92%, 340px) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
 
@@ -10016,8 +10027,8 @@ article.challenge-card.design-challenge-v2 .rain-goal {
   position: relative !important;
   overflow: hidden;
   border: 0 !important;
-  border-radius: clamp(18px, 3vw, 30px) !important;
-  padding: clamp(24px, 3vw, 38px) clamp(22px, 3.6vw, 44px) clamp(18px, 2.4vw, 30px) !important;
+  border-radius: clamp(16px, 2.4vw, 26px) !important;
+  padding: clamp(18px, 2.2vw, 28px) clamp(18px, 2.8vw, 34px) clamp(14px, 1.8vw, 22px) !important;
   background: transparent !important;
   box-shadow: none !important;
 }
@@ -11620,9 +11631,10 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
 /* Card contenedor (ambos: win y fail) */
 .modal-card {
   position: relative;
-  width: min(94vw, 560px);
+  width: min(88vw, 500px);
+  max-height: calc(100dvh - 36px);
   background: #ffffff;
-  border-radius: 28px;
+  border-radius: 22px;
   overflow: hidden;
   box-shadow: 0 32px 80px rgba(10, 18, 40, 0.28);
   display: flex;
@@ -11636,8 +11648,8 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: clamp(20px, 3vw, 32px) clamp(20px, 3vw, 32px) 0;
-  gap: 12px;
+  padding: clamp(14px, 2.2vw, 24px) clamp(16px, 2.6vw, 26px) 0;
+  gap: 8px;
 }
 .modal-text-group {
   display: flex;
@@ -11647,17 +11659,17 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
   min-width: 0;
 }
 .modal-title-img {
-  width: clamp(160px, 34vw, 260px);
+  width: clamp(140px, 30vw, 230px);
   height: auto;
   display: block;
 }
 .modal-subtitle-img {
-  width: clamp(160px, 30vw, 240px);
+  width: clamp(136px, 27vw, 210px);
   height: auto;
   display: block;
 }
 .modal-nano {
-  width: clamp(100px, 22vw, 180px);
+  width: clamp(86px, 18vw, 150px);
   height: auto;
   flex-shrink: 0;
   margin-top: -10px;
@@ -11665,17 +11677,18 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
 
 /* Sección rating */
 .modal-rating {
-  margin: clamp(10px, 2vw, 18px) clamp(16px, 3vw, 28px);
+  margin: clamp(8px, 1.4vw, 14px) auto;
+  width: min(88%, 420px);
   background: #eef1f6;
   border-radius: 18px;
-  padding: clamp(12px, 2vw, 18px) clamp(12px, 2vw, 18px) clamp(14px, 2vw, 20px);
+  padding: clamp(10px, 1.5vw, 14px) clamp(10px, 1.8vw, 16px) clamp(12px, 1.8vw, 16px);
 }
 .modal-rating-win {
   position: relative;
   overflow: hidden;
   background: transparent;
   border-radius: 24px;
-  padding: clamp(24px, 3vw, 36px) clamp(20px, 3.6vw, 42px) clamp(18px, 2.6vw, 28px);
+  padding: clamp(18px, 2.3vw, 28px) clamp(18px, 3vw, 34px) clamp(14px, 2vw, 22px);
 }
 .modal-rating-bg {
   position: absolute;
@@ -11802,9 +11815,9 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
 .modal-actions {
   display: flex;
   justify-content: center;
-  gap: clamp(10px, 2vw, 20px);
-  padding: clamp(10px, 1.5vw, 16px) clamp(16px, 3vw, 28px) clamp(14px, 2vw, 22px);
-  flex-wrap: wrap;
+  gap: clamp(8px, 1.6vw, 16px);
+  padding: clamp(8px, 1.2vw, 12px) clamp(14px, 2.4vw, 22px) clamp(10px, 1.6vw, 16px);
+  flex-wrap: nowrap;
 }
 .modal-action-btn {
   background: none;
@@ -11814,7 +11827,7 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
   transition: transform 130ms ease, filter 130ms ease;
 }
 .modal-action-btn img {
-  width: clamp(130px, 20vw, 210px);
+  width: clamp(118px, 17vw, 180px);
   height: auto;
   display: block;
 }
@@ -11826,7 +11839,7 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
 /* Cloud/fondo al pie de la card win */
 .modal-fondo {
   width: 100%;
-  height: 60px;
+  height: 44px;
   object-fit: cover;
   object-position: bottom;
   display: block;
@@ -14081,8 +14094,10 @@ body:has(.n4-assembly-card) .corner-logo {
 }
 
 .n4-sort-item.is-collected {
-  opacity: 0.35;
-  transform: scale(0.96);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.96);
 }
 
 .n4-assembly-stage {
@@ -15228,7 +15243,7 @@ body.is-dragging-piece .n4-assembly-target::after {
 }
 
 .n4-side-box-left > img:not(.n4-side-placed-piece) {
-  --side-box-img-x: -24%;
+  --side-box-img-x: -76%;
 }
 
 .n4-side-box-right > img:not(.n4-side-placed-piece) {
@@ -15236,7 +15251,7 @@ body.is-dragging-piece .n4-assembly-target::after {
 }
 
 .n4-side-box-left {
-  left: 7.5%;
+  left: 2.5%;
 }
 
 .n4-side-box-right {
@@ -15380,7 +15395,7 @@ article.challenge-card.n4-color-card {
 .n4-color-card .n4-color-pattern {
   left: 16.9%;
   right: 18.5%;
-  top: 21.8%;
+  top: calc(21.8% + 10px);
   z-index: 2;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -15545,7 +15560,7 @@ article.challenge-card.n4-hardware-card {
   position: absolute;
   left: 19.7%;
   right: 21.9%;
-  top: 38.3%;
+  top: calc(38.3% - 10px);
   z-index: 2;
   height: 19.8%;
   display: grid;
