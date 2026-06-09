@@ -15121,7 +15121,7 @@ body.is-dragging-piece .n4-assembly-target::after {
   min-height: 200px;
   display: grid;
   place-items: center;
-  transform: translateY(clamp(-74px, -5vw, -48px));
+  transform: translateY(clamp(-88px, -6vw, -60px));
 }
 
 .n4-shape-belt {
@@ -15138,6 +15138,7 @@ body.is-dragging-piece .n4-assembly-target::after {
   align-items: flex-end;
   gap: clamp(10px, 2.2vw, 20px);
   padding: 0 0 clamp(0px, 0.8vw, 8px) clamp(30%, 33vw, 38%);
+  transform: translateY(-15px);
 }
 
 .n4-shape-series img,
@@ -15172,7 +15173,7 @@ body.is-dragging-piece .n4-assembly-target::after {
   gap: 10px;
   width: 100%;
   justify-self: center;
-  transform: translateY(clamp(-74px, -5vw, -48px));
+  transform: translateY(clamp(-42px, -3vw, -28px));
 }
 
 .n4-shape-option {
@@ -15359,17 +15360,19 @@ article.challenge-card.n4-color-card {
 
 .n4-color-card .challenge-header {
   position: absolute;
-  left: 35.8%;
-  right: 13.8%;
+  left: 50%;
+  right: auto;
   top: 7.8%;
   z-index: 4;
-  width: auto;
+  width: min(70vw, 760px);
+  max-width: calc(100vw - 32px);
   margin: 0;
   padding: clamp(10px, 1.2vw, 18px) clamp(14px, 1.8vw, 30px);
   border: 2px solid rgba(8, 219, 247, 0.92);
   border-radius: clamp(14px, 1.65vw, 26px);
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 12px 26px rgba(8, 219, 247, 0.15);
+  transform: translateX(-50%);
 }
 
 .n4-color-card .challenge-kicker,
@@ -15378,6 +15381,7 @@ article.challenge-card.n4-color-card {
 }
 
 .n4-color-card .challenge-header p[data-consigna-text] {
+  display: block;
   margin: 0;
   color: #5f5f5f;
   font-size: clamp(0.82rem, 1.35vw, 1.44rem);
@@ -15395,7 +15399,7 @@ article.challenge-card.n4-color-card {
 .n4-color-card .n4-color-pattern {
   left: 16.9%;
   right: 18.5%;
-  top: calc(21.8% + 10px);
+  top: calc(27.2% + 10px);
   z-index: 2;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -16374,9 +16378,10 @@ article.challenge-card.n4-sound-card {
   }
 
   .n4-color-card .challenge-header {
-    left: 6%;
-    right: 6%;
+    left: 50%;
+    right: auto;
     top: 7.6%;
+    width: calc(100vw - 32px);
     padding: 7px 10px;
   }
 
@@ -16579,7 +16584,7 @@ article.challenge-card.n4-sound-card {
 
   .n4-shape-options {
     grid-template-columns: repeat(3, minmax(66px, 1fr));
-    transform: translateY(-36px);
+    transform: translateY(-22px);
   }
 }
 
@@ -16705,7 +16710,7 @@ article.challenge-card.n4-sound-card {
 
   .n4-shape-options {
     grid-template-columns: repeat(2, minmax(66px, 1fr));
-    transform: translateY(-28px);
+    transform: translateY(-16px);
   }
 }
 
