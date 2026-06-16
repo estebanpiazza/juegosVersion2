@@ -15745,17 +15745,20 @@ article.challenge-card.n4-light-debug-card {
   right: 25%;
   top: 16%;
   bottom: 12.8%;
-  z-index: 2;
+  z-index: 3;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: stretch;
   justify-items: center;
   gap: clamp(2px, 0.38vw, 8px);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .n4-light-debug-step {
   position: relative;
+  --debug-light-core: rgba(91, 191, 8, 0.98);
+  --debug-light-glow: rgba(91, 191, 8, 0.62);
+  --debug-light-soft: rgba(91, 191, 8, 0.16);
   --debug-light-x: 0%;
   --debug-light-y: 0%;
   width: 100%;
@@ -15772,6 +15775,44 @@ article.challenge-card.n4-light-debug-card {
     opacity 200ms ease,
     transform 200ms ease;
   transform: translate(var(--debug-light-x), var(--debug-light-y));
+}
+
+.n4-light-debug-step::before,
+.n4-light-debug-step::after {
+  position: absolute;
+  left: 50%;
+  pointer-events: none;
+  content: "";
+}
+
+.n4-light-debug-step::before {
+  bottom: 7.2%;
+  z-index: 2;
+  width: min(82%, 132px);
+  min-width: 54px;
+  aspect-ratio: 2.28 / 1;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.92) 0 12%, var(--debug-light-core) 13% 38%, var(--debug-light-glow) 39% 64%, rgba(255, 255, 255, 0) 65%);
+  box-shadow:
+    0 0 16px var(--debug-light-glow),
+    0 0 34px var(--debug-light-soft);
+  transform: translateX(-50%);
+}
+
+.n4-light-debug-step::after {
+  top: 6%;
+  bottom: 14.8%;
+  z-index: 1;
+  width: min(58%, 88px);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), var(--debug-light-soft) 24%, var(--debug-light-glow) 100%);
+  filter: blur(1px);
+  mix-blend-mode: multiply;
+  opacity: 0.72;
+  transform: translateX(-50%) skewX(-7deg);
 }
 
 .n4-light-debug-step:nth-child(1) {
@@ -15813,16 +15854,17 @@ article.challenge-card.n4-light-debug-card {
   height: 112%;
   max-width: none;
   object-fit: contain;
-  opacity: 0.68;
+  opacity: 0.82;
   pointer-events: none;
+  filter: saturate(1.32) contrast(1.12);
   mix-blend-mode: multiply;
 }
 
 .n4-light-debug-step strong {
   position: absolute;
   left: 50%;
-  bottom: 4.2%;
-  z-index: 1;
+  bottom: 8.8%;
+  z-index: 3;
   width: clamp(24px, 2.5vw, 40px);
   aspect-ratio: 1;
   border: 2px solid rgba(255, 255, 255, 0.88);
@@ -15841,8 +15883,20 @@ article.challenge-card.n4-light-debug-card {
   background: rgba(91, 191, 8, 0.72);
 }
 
+.n4-light-debug-step.is-azul {
+  --debug-light-core: rgba(0, 151, 255, 0.98);
+  --debug-light-glow: rgba(0, 151, 255, 0.62);
+  --debug-light-soft: rgba(0, 151, 255, 0.18);
+}
+
 .n4-light-debug-step.is-azul strong {
   background: rgba(0, 118, 205, 0.72);
+}
+
+.n4-light-debug-step.is-naranja {
+  --debug-light-core: rgba(255, 157, 22, 0.98);
+  --debug-light-glow: rgba(255, 157, 22, 0.62);
+  --debug-light-soft: rgba(255, 157, 22, 0.18);
 }
 
 .n4-light-debug-step.is-naranja strong {
@@ -16692,6 +16746,10 @@ article.challenge-card.n4-sound-card {
   .n4-shape-scene,
   .n4-light-debug-scene {
     padding: 16px;
+  }
+
+  body:has(.n4-light-debug-card) .n4-light-debug-scene {
+    padding: 0;
   }
 
   .n4-arrow-route {
