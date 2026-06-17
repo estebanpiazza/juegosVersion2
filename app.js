@@ -2025,7 +2025,13 @@ function getN4ProgrammingConfig(id) {
       route: ["2-2", "2-1"],
       solution: ["izquierda", "avanzar"],
       availableCards: ["avanzar", "derecha", "izquierda"],
-      fallbackInstruction: "¡Giro a la vista! ¡Llegamos a un cruce! Nano quiere ir al parque. Toca la flecha que apunta a la izquierda para doblar.",
+      startAsset: "Mecanico.png",
+      startAlt: "Mecanico",
+      startAssetClass: "play-cell-img--landmark",
+      goalAsset: "Plaza.png",
+      goalAlt: "Plaza",
+      goalAssetClass: "play-cell-img--landmark",
+      fallbackInstruction: "¡Giro a la vista! ¡Llegamos a un cruce! Nano quiere ir a la plaza. Toca la flecha que apunta a la izquierda para doblar.",
       initialMessage: "Primero gira a la izquierda, despues avanza.",
       missingMessage: "Completa los dos pasos del algoritmo.",
       failureMessage: "Revisa el orden: para ir a la izquierda, primero va Izquierda y despues Avanzar.",
@@ -2143,9 +2149,14 @@ function renderN4ProgrammingCarpetChallenge(id = 4) {
     const isObstacle = obstacleSet.has(key);
     const item = itemByKey.get(key);
     const cellType = isStart ? "start" : isGoal ? "goal" : isObstacle ? "obstacle" : item ? "item" : isRoute ? "path" : "empty";
+    const goalClass = config.goalAssetClass || (config.goalAsset ? "play-cell-img--goal-item" : "");
+    const startClass = config.startAssetClass || "";
     const goalMarkup = config.goalIcon
       ? `<span class="play-cell-icon play-cell-icon--goal" aria-label="${config.goalAlt || "Meta"}">${config.goalIcon}</span>`
-      : `<img class="play-cell-img ${config.goalAsset ? "play-cell-img--goal-item" : ""}" src="${config.goalAsset ? n4Asset(config.assetChallenge, config.goalAsset) : n4Asset(config.goalAssetChallenge || config.assetChallenge, "Vamos.png")}" alt="${config.goalAlt || "Llegada"}" />`;
+      : `<img class="play-cell-img ${goalClass}" src="${config.goalAsset ? n4Asset(config.assetChallenge, config.goalAsset) : n4Asset(config.goalAssetChallenge || config.assetChallenge, "Vamos.png")}" alt="${config.goalAlt || "Llegada"}" />`;
+    const startMarkup = config.startAsset
+      ? `<img class="play-cell-img play-cell-img--start ${startClass}" src="${n4Asset(config.startAssetChallenge || config.assetChallenge, config.startAsset)}" alt="${config.startAlt || "Entrada"}" />`
+      : `<img class="play-cell-img play-cell-img--start ${startClass}" src="${n4Asset(config.markerAssetChallenge || config.assetChallenge, "Entrada.png")}" alt="${config.startAlt || "Entrada"}" />`;
     const itemMarkup = item
       ? item.asset
         ? `<img class="play-cell-img play-cell-img--item" src="${item.asset}" alt="${item.label || "Item"}" />`
@@ -2157,7 +2168,7 @@ function renderN4ProgrammingCarpetChallenge(id = 4) {
     const content = [
       isObstacle ? obstacleMarkup : "",
       itemMarkup,
-      isStart ? `<img class="play-cell-img play-cell-img--start" src="${n4Asset(config.markerAssetChallenge || config.assetChallenge, "Entrada.png")}" alt="Entrada" />` : "",
+      isStart ? startMarkup : "",
       isGoal ? goalMarkup : "",
     ].join("");
 

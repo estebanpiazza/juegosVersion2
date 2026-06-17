@@ -47,7 +47,7 @@
       "id": "n4-rework-d6",
       "titulo": "Giro a la izquierda",
       "tipo": "elige-flecha-izquierda",
-      "consigna": "¡Giro a la vista! ¡Llegamos a un cruce! Nano quiere ir al parque. Toca la flecha que apunta a la izquierda para doblar.",
+      "consigna": "¡Giro a la vista! ¡Llegamos a un cruce! Nano quiere ir a la plaza. Toca la flecha que apunta a la izquierda para doblar.",
       "objetivo": "Programar un giro a la izquierda antes del avance.",
       "interaccion": "Colocar Izquierda y Avanzar en el timeline y comprobar."
     },

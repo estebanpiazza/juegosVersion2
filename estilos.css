@@ -11711,6 +11711,16 @@ article.challenge-card.design-challenge-v3 .command-placeholder {
   z-index: 2;
 }
 
+.play-cell-img--landmark {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  opacity: 0.9;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.18));
+  z-index: 1;
+}
+
 .play-cell-img--obstacle {
   width: 92%;
   height: 92%;
