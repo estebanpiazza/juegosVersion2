@@ -981,12 +981,12 @@ function shouldShowFailureModal(text) {
   return !/(faltan|todavia|primero agrega|ya usaste|proba ejecutarlo|navegador no tiene|proximamente)/i.test(text);
 }
 
-function completeChallenge(id) {
+function completeChallenge(id, delayMs = COMPLETION_MODAL_DELAY_MS) {
   if (!totalChallenges || id > totalChallenges) return;
 
   completedChallenges.add(id);
   document.querySelector(`[data-challenge="${id}"]`)?.classList.add("is-complete");
-  window.setTimeout(() => showScenarioCompleteModal(id), COMPLETION_MODAL_DELAY_MS);
+  window.setTimeout(() => showScenarioCompleteModal(id), delayMs);
 }
 
 function wireSelectorButtons() {
@@ -1747,43 +1747,114 @@ function renderTechnologySortChallenge(id = 2) {
 
 function renderHiddenPartsChallenge(id = 3) {
   const parts = [
-    { id: "bateria", label: "Bateria", file: "Bateria.png", x: 18, y: 68 },
-    { id: "chip", label: "Chip", file: "chip.png", x: 72, y: 28 },
-    { id: "engranaje", label: "Engranaje", file: "engranaje.png", x: 48, y: 66 },
-    { id: "tornillos", label: "Tornillos", file: "tornillos.png", x: 81, y: 72 },
-    { id: "cable", label: "Cable", file: "cable.png", x: 30, y: 35 },
+    { id: "bateria", label: "Bateria", file: "Bateria.png" },
+    { id: "chip", label: "Chip", file: "chip.png" },
+    { id: "engranaje", label: "Engranaje", file: "engranaje.png" },
+    { id: "tornillos", label: "Tornillos", file: "tornillos.png" },
+    { id: "cable", label: "Cable", file: "cable.png" },
   ];
-  const found = new Set();
+  const totalRounds = 3;
+  let currentRound = 1;
+  let found = new Set();
+  let lastRoundPositions = new Map();
 
   challengeContent.innerHTML = `
     <article class="challenge-card n4-card n4-hidden-card">
       ${renderHeader(id, getChallengeInstruction(id, "El taller está desordenado. Busca bien y toca las cinco piezas escondidas de Nano. ¡Encuéntralas todas!"))}
+      <p class="n4-hidden-round" data-round>Ronda 1 de ${totalRounds}</p>
       <div class="n4-hidden-scene">
-        ${parts.map((part) => `
-          <button class="n4-hidden-part" type="button" data-part="${part.id}" style="--x:${part.x}%;--y:${part.y}%;" aria-label="${part.label}">
-            <img src="${n4Asset(3, part.file)}" alt="" aria-hidden="true" />
-          </button>
-        `).join("")}
       </div>
-      <p class="challenge-message" data-message>Encontrá bateria, chip, engranaje, tornillos y cable. Van 0 de 5.</p>
+      <p class="challenge-message" data-message></p>
     </article>
   `;
 
-  challengeContent.querySelectorAll(".n4-hidden-part").forEach((button) => {
-    button.addEventListener("click", () => {
-      if (found.has(button.dataset.part)) return;
-      found.add(button.dataset.part);
-      button.classList.add("is-found");
-      playSound("success");
+  const scene = challengeContent.querySelector(".n4-hidden-scene");
+  const roundLabel = challengeContent.querySelector("[data-round]");
 
-      if (found.size === parts.length) {
-        setMessage("Encontraste todas las piezas escondidas del taller.", "is-success");
-        completeChallenge(id);
-      } else {
-        setMessage(`Muy buen ojo. Van ${found.size} de ${parts.length}.`, "is-good");
+  function randomBetween(min, max) {
+    return min + Math.random() * (max - min);
+  }
+
+  function distanceBetween(a, b) {
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  }
+
+  function makeRandomPositions() {
+    const positions = new Map();
+
+    parts.forEach((part) => {
+      let candidate = null;
+      let minDistance = 18;
+
+      for (let attempt = 0; attempt < 160; attempt += 1) {
+        const next = {
+          x: randomBetween(12, 88),
+          y: randomBetween(18, 82),
+        };
+        const previous = lastRoundPositions.get(part.id);
+        const farFromOthers = [...positions.values()].every((position) => distanceBetween(position, next) >= minDistance);
+        const movedEnough = !previous || distanceBetween(previous, next) >= 16;
+
+        if (farFromOthers && movedEnough) {
+          candidate = next;
+          break;
+        }
+
+        if (attempt === 90) minDistance = 14;
       }
+
+      positions.set(part.id, candidate || {
+        x: randomBetween(12, 88),
+        y: randomBetween(18, 82),
+      });
     });
-  });
+
+    lastRoundPositions = positions;
+    return positions;
+  }
+
+  function renderRound() {
+    found = new Set();
+    const positions = makeRandomPositions();
+    roundLabel.textContent = `Ronda ${currentRound} de ${totalRounds}`;
+    scene.innerHTML = parts.map((part) => {
+      const position = positions.get(part.id);
+      return `
+        <button class="n4-hidden-part" type="button" data-part="${part.id}" style="--x:${position.x.toFixed(2)}%;--y:${position.y.toFixed(2)}%;" aria-label="${part.label}">
+          <img src="${n4Asset(3, part.file)}" alt="" aria-hidden="true" />
+        </button>
+      `;
+    }).join("");
+
+    setMessage(`Ronda ${currentRound}/${totalRounds}: encontra bateria, chip, engranaje, tornillos y cable. Van 0 de ${parts.length}.`);
+
+    scene.querySelectorAll(".n4-hidden-part").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (found.has(button.dataset.part)) return;
+        found.add(button.dataset.part);
+        button.classList.add("is-found");
+        playSound("success");
+
+        if (found.size === parts.length) {
+          if (currentRound === totalRounds) {
+            setMessage("Encontraste todas las piezas en las 3 rondas.", "is-success");
+            completeChallenge(id);
+            return;
+          }
+
+          const completedRound = currentRound;
+          currentRound += 1;
+          setMessage(`Ronda ${completedRound} lista. Preparando una nueva ubicacion...`, "is-good");
+          window.setTimeout(renderRound, 850);
+          return;
+        }
+
+        setMessage(`Muy buen ojo. Ronda ${currentRound}/${totalRounds}: van ${found.size} de ${parts.length}.`, "is-good");
+      });
+    });
+  }
+
+  renderRound();
 }
 
 function renderArrowChoiceChallenge(id, correct) {
@@ -2028,7 +2099,6 @@ const N4_PROGRAM_CARDS = {
 };
 const N4_PROGRAM_DELTAS = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 const N4_PROGRAM_ROBOT_ROTATION = ["-90deg", "0deg", "90deg", "180deg"];
-const N4_PROGRAM_ARROW_ROTATION = ["0deg", "90deg", "180deg", "270deg"];
 
 function getN4ProgrammingConfig(id) {
   const configs = {
@@ -2351,7 +2421,7 @@ function renderN4ProgrammingCarpetChallenge(id = 4) {
   function placeRobot(animateTurn = false) {
     programRoot.querySelectorAll(".play-cell").forEach((cell) => {
       cell.classList.remove("is-robot", "is-turning");
-      cell.querySelectorAll(".play-robot-img, .play-robot-direction").forEach((node) => node.remove());
+      cell.querySelectorAll(".play-robot-img").forEach((node) => node.remove());
     });
 
     const cell = getCell(robotState.row, robotState.col);
@@ -2360,7 +2430,6 @@ function renderN4ProgrammingCarpetChallenge(id = 4) {
     cell.classList.toggle("is-turning", animateTurn);
     cell.insertAdjacentHTML("beforeend", `
       <img class="play-robot-img n4-program-robot" src="${DESIGN_D6_ROBOT_IMAGE_SRC}" alt="Nano" style="--robot-rotation: ${N4_PROGRAM_ROBOT_ROTATION[robotState.dir]};" />
-      <span class="play-robot-direction" aria-hidden="true" style="--robot-direction: ${N4_PROGRAM_ARROW_ROTATION[robotState.dir]};"></span>
     `);
   }
 
@@ -2368,7 +2437,7 @@ function renderN4ProgrammingCarpetChallenge(id = 4) {
     robotState = { ...config.start };
     programRoot.querySelectorAll(".play-cell").forEach((cell) => {
       cell.classList.remove("is-trail", "is-robot", "is-turning", "is-wrong");
-      cell.querySelectorAll(".play-robot-img, .play-robot-direction").forEach((node) => node.remove());
+      cell.querySelectorAll(".play-robot-img").forEach((node) => node.remove());
     });
     placeRobot();
   }
@@ -3485,17 +3554,17 @@ function getN5EnergyConfig() {
     message: "Tocá solo los objetos que usan enchufe o pilas.",
     success: "Seleccionaste todos los objetos que necesitan energia.",
     items: [
-      { id: "ventilador", label: "Ventilador", file: "Ventilador.png", correct: true, x: 10, y: 82, w: 14 },
-      { id: "aspiradora", label: "Aspiradora", file: "Apiradora.png", correct: true, x: 87, y: 80, w: 16 },
-      { id: "tablet", label: "Tablet", file: "tablet.png", correct: true, x: 53, y: 63, w: 11 },
-      { id: "compu", label: "Computadora", file: "campu.png", correct: true, x: 58, y: 46, w: 14 },
-      { id: "linterna", label: "Linterna", file: "Linterna.png", correct: true, x: 79, y: 73, w: 7 },
-      { id: "parlante", label: "Parlante", file: "Parlante.png", correct: true, x: 42, y: 61, w: 10 },
-      { id: "reflector", label: "Reflector Led", file: "Reflector Led.png", correct: true, x: 78, y: 38, w: 11 },
-      { id: "taladro", label: "Taladro", file: "Taladro.png", correct: true, x: 31, y: 58, w: 12 },
-      { id: "sierra-caladora", label: "Sierra caladora", file: "Sierra caladora.png", correct: true, x: 68, y: 60, w: 11 },
-      { id: "sierra-sable", label: "Sierra sable", file: "Sierra Sable.png", correct: true, x: 39, y: 65, w: 10 },
-      { id: "destornilladora", label: "Destornillador", file: "Destornilladora.png", correct: false, x: 34, y: 40, w: 7 },
+      { id: "ventilador", label: "Ventilador", file: "Ventilador.png", correct: true, x: 9, y: 80, w: 13 },
+      { id: "aspiradora", label: "Aspiradora", file: "Apiradora.png", correct: true, x: 89, y: 82, w: 15 },
+      { id: "tablet", label: "Tablet", file: "tablet.png", correct: true, x: 53, y: 62, w: 11 },
+      { id: "compu", label: "Computadora", file: "campu.png", correct: true, x: 62, y: 45, w: 15 },
+      { id: "linterna", label: "Linterna", file: "Linterna.png", correct: true, x: 80, y: 77, w: 6.5 },
+      { id: "parlante", label: "Parlante", file: "Parlante.png", correct: true, x: 42, y: 62, w: 9 },
+      { id: "reflector", label: "Reflector Led", file: "Reflector Led.png", correct: true, x: 78, y: 42, w: 11 },
+      { id: "taladro", label: "Taladro", file: "Taladro.png", correct: true, x: 30, y: 59, w: 12 },
+      { id: "sierra-caladora", label: "Sierra caladora", file: "Sierra caladora.png", correct: true, x: 66, y: 58, w: 10 },
+      { id: "sierra-sable", label: "Sierra sable", file: "Sierra Sable.png", correct: true, x: 20, y: 45, w: 10 },
+      { id: "destornilladora", label: "Destornillador", file: "Destornilladora.png", correct: false, x: 63, y: 65, w: 7 },
     ],
   };
 }
@@ -3506,18 +3575,18 @@ function getN5ProgrammableConfig() {
     message: "Tocá las maquinas que pueden recibir tus ordenes.",
     success: "Encontraste los amigos programables de Nano.",
     items: [
-      { id: "dron", label: "Dron", file: "DRON.png", correct: true, x: 16, y: 30, w: 18 },
-      { id: "tablet", label: "Tablet", file: "TABLET.png", correct: true, x: 15, y: 61, w: 10 },
-      { id: "scaner", label: "Scaner", file: "SCANER.png", correct: true, x: 33, y: 66, w: 12 },
+      { id: "dron", label: "Dron", file: "DRON.png", correct: true, x: 16, y: 43, w: 18 },
+      { id: "tablet", label: "Tablet", file: "TABLET.png", correct: true, x: 15, y: 60, w: 10 },
+      { id: "scaner", label: "Scaner", file: "SCANER.png", correct: true, x: 34, y: 66, w: 11 },
       { id: "celular", label: "Celular", file: "CELULAR.png", correct: true, x: 45, y: 66, w: 6 },
       { id: "computadora", label: "Computadora", file: "COMPUTADORA.png", correct: true, x: 61, y: 51, w: 13 },
-      { id: "auto", label: "Auto", file: "AUTO.png", correct: true, x: 82, y: 33, w: 22 },
-      { id: "planta", label: "Planta", file: "PLANTA.png", correct: false, x: 8, y: 54, w: 9 },
-      { id: "mochila", label: "Mochila", file: "MOCHILA.png", correct: false, x: 34, y: 50, w: 8 },
-      { id: "destornilladores", label: "Destornilladores", file: "DESTORNILLADORES.png", correct: false, x: 47, y: 38, w: 14 },
-      { id: "caja", label: "Caja", file: "CAJA.png", correct: false, x: 77, y: 58, w: 10 },
-      { id: "martillo", label: "Martillo", file: "MARTILLO.png", correct: false, x: 62, y: 64, w: 9 },
-      { id: "bicicleta", label: "Bicicleta", file: "BICICLETA.png", correct: false, x: 79, y: 78, w: 24 },
+      { id: "auto", label: "Auto", file: "AUTO.png", correct: true, x: 84, y: 43, w: 22 },
+      { id: "planta", label: "Planta", file: "PLANTA.png", correct: false, x: 8, y: 58, w: 9 },
+      { id: "mochila", label: "Mochila", file: "MOCHILA.png", correct: false, x: 34, y: 51, w: 8 },
+      { id: "destornilladores", label: "Destornilladores", file: "DESTORNILLADORES.png", correct: false, x: 49, y: 47, w: 14 },
+      { id: "caja", label: "Caja", file: "CAJA.png", correct: false, x: 78, y: 58, w: 10 },
+      { id: "martillo", label: "Martillo", file: "MARTILLO.png", correct: false, x: 63, y: 64, w: 9 },
+      { id: "bicicleta", label: "Bicicleta", file: "BICICLETA.png", correct: false, x: 84, y: 79, w: 23 },
     ],
   };
 }
@@ -3747,59 +3816,121 @@ function renderN5NanoAssemblyChallenge(id = 4) {
 }
 
 function renderN5ProgrammingToolChallenge(id = 6) {
-  const options = [
-    { id: "destornillador", label: "Destornillador", correct: false, files: ["destornillado.png"], x: 34, y: 34 },
-    { id: "cards", label: "Tarjetas de programacion", correct: true, files: ["PANDE FELIZ.png", "AVANZAR.png", "DERECHA.png"], x: 50, y: 34 },
-    { id: "derecha", label: "Tarjeta de giro", correct: false, files: ["DERECHA.png"], x: 66, y: 34 },
-    { id: "entrada", label: "Tarjeta de inicio", correct: false, files: ["Entrada.png"], x: 34, y: 66 },
-    { id: "tuerca", label: "Tuerca", correct: false, files: ["tuerca.png"], x: 50, y: 66 },
-    { id: "dinosaurio", label: "Dinosaurio", correct: false, files: ["DINOSAURIO.png"], x: 66, y: 66 },
+  const slots = [
+    { x: 31, y: 35 },
+    { x: 50, y: 35 },
+    { x: 69, y: 35 },
+    { x: 31, y: 66 },
+    { x: 50, y: 66 },
+    { x: 69, y: 66 },
   ];
+  const rounds = [
+    [
+      { id: "program-card-avanzar", label: "Tarjeta de programacion", correct: true, files: ["AVANZAR.png"] },
+      { id: "destornillador", label: "Destornillador", correct: false, files: ["destornillado.png"] },
+      { id: "dinosaurio", label: "Dinosaurio", correct: false, files: ["DINOSAURIO.png"] },
+      { id: "tuerca", label: "Tuerca", correct: false, files: ["tuerca.png"] },
+      { id: "oso", label: "Oso", correct: false, files: ["OSO.png"] },
+      { id: "tornillo", label: "Tornillo", correct: false, files: ["Tornillo.png"] },
+    ],
+    [
+      { id: "program-card-derecha", label: "Tarjeta de programacion", correct: true, files: ["DERECHA.png"] },
+      { id: "patito", label: "Patito", correct: false, files: ["PATITO.png"] },
+      { id: "destornillador", label: "Destornillador", correct: false, files: ["destornillado.png"] },
+      { id: "tuerca", label: "Tuerca", correct: false, files: ["tuerca.png"] },
+      { id: "dinosaurio", label: "Dinosaurio", correct: false, files: ["DINOSAURIO.png"] },
+      { id: "tornillo", label: "Tornillo", correct: false, files: ["Tornillo.png"] },
+    ],
+    [
+      { id: "program-card-izquierda", label: "Tarjeta de programacion", correct: true, files: ["IZQUIERDA.png"] },
+      { id: "oso", label: "Oso", correct: false, files: ["OSO.png"] },
+      { id: "patito", label: "Patito", correct: false, files: ["PATITO.png"] },
+      { id: "destornillador", label: "Destornillador", correct: false, files: ["destornillado.png"] },
+      { id: "tuerca", label: "Tuerca", correct: false, files: ["tuerca.png"] },
+      { id: "dinosaurio", label: "Dinosaurio", correct: false, files: ["DINOSAURIO.png"] },
+    ],
+  ];
+  let currentRound = 0;
 
   challengeContent.innerHTML = `
     <article class="challenge-card n5-card n5-tool-card" ${n5CardStyle(id)}>
       ${renderN5Header(id, "¿Qué herramienta usamos en el taller para programar a Nano?")}
-      <div class="n5-stage n5-tool-grid">
-        ${options.map((option) => `
-          <button class="n5-tool-option" type="button" data-id="${option.id}" aria-label="${option.label}" style="--x:${option.x}%;--y:${option.y}%;">
-            <span class="n5-tool-images">
-              ${option.files.map((file) => `<img src="${n5Asset(6, file)}" alt="" aria-hidden="true" />`).join("")}
-            </span>
-            <strong>${option.label}</strong>
-          </button>
-        `).join("")}
-      </div>
-      <p class="challenge-message" data-message>Tocá la herramienta que sirve para darle instrucciones a Nano.</p>
+      <div class="n5-stage n5-tool-grid" data-tool-grid></div>
+      <p class="challenge-message" data-message></p>
     </article>
   `;
 
-  challengeContent.querySelectorAll(".n5-tool-option").forEach((button) => {
-    const option = options.find((item) => item.id === button.dataset.id);
-    button.addEventListener("click", () => {
-      if (!option?.correct) {
-        button.classList.add("is-wrong");
-        window.setTimeout(() => button.classList.remove("is-wrong"), 520);
-        setMessage("Eso ayuda a construir, pero no a programar.", "is-error");
-        return;
-      }
-      button.classList.add("is-correct");
-      setMessage("Exacto: programamos con tarjetas de instrucciones.", "is-success");
-      completeChallenge(id);
+  const grid = challengeContent.querySelector("[data-tool-grid]");
+
+  function shuffled(items) {
+    return items
+      .map((item) => ({ item, order: Math.random() }))
+      .sort((a, b) => a.order - b.order)
+      .map(({ item }) => item);
+  }
+
+  function renderRound() {
+    const options = shuffled(rounds[currentRound]).map((option, index) => ({
+      ...option,
+      ...slots[index],
+    }));
+
+    grid.innerHTML = options.map((option) => `
+      <button class="n5-tool-option" type="button" data-id="${option.id}" aria-label="${option.label}" style="--x:${option.x}%;--y:${option.y}%;">
+        <span class="n5-tool-images">
+          ${option.files.map((file) => `<img src="${n5Asset(6, file)}" alt="" aria-hidden="true" />`).join("")}
+        </span>
+        <strong>${option.label}</strong>
+      </button>
+    `).join("");
+
+    setMessage(`Ronda ${currentRound + 1}/3: tocá la tarjeta que sirve para darle instrucciones a Nano.`);
+
+    grid.querySelectorAll(".n5-tool-option").forEach((button) => {
+      const option = options.find((item) => item.id === button.dataset.id);
+      button.addEventListener("click", () => {
+        if (!option?.correct) {
+          button.classList.add("is-wrong");
+          window.setTimeout(() => button.classList.remove("is-wrong"), 520);
+          setMessage("Eso ayuda a construir o jugar, pero no a programar.", "is-error");
+          return;
+        }
+
+        button.classList.add("is-correct");
+        if (currentRound === rounds.length - 1) {
+          setMessage("Exacto: programamos con tarjetas de instrucciones.", "is-success");
+          completeChallenge(id);
+          return;
+        }
+
+        currentRound += 1;
+        setMessage("Muy bien. Las piezas se reordenan para otra ronda.", "is-good");
+        window.setTimeout(renderRound, 760);
+      });
     });
-  });
+  }
+
+  renderRound();
 }
 
 function renderN5LinearCommandChallenge(id = 7) {
   const expected = ["AVANZAR.png", "AVANZAR.png", "AVANZAR.png"];
   const options = ["AVANZAR.png", "DERECHA.png", "IZQUIERDA.png", "RETROCEDER.png"];
   const slots = Array(expected.length).fill(null);
+  const nanoPath = [
+    { x: 10, y: 18 },
+    { x: 32, y: 18 },
+    { x: 55, y: 18 },
+    { x: 78, y: 18 },
+  ];
   let selectedSlot = 0;
+  let isAnimating = false;
 
   challengeContent.innerHTML = `
     <article class="challenge-card n5-card n5-linear-card" ${n5CardStyle(id)}>
       ${renderN5Header(id, "Ordena las flechas para dar 3 pasos hacia el cargador.")}
       <div class="n5-stage n5-linear-scene">
-        <img class="n5-linear-nano" src="${n5Asset(7, "Nano.png")}" alt="Nano" />
+        <img class="n5-linear-nano" data-nano src="${n5Asset(7, "Nano.png")}" alt="Nano" style="--nano-x:${nanoPath[0].x}%;--nano-y:${nanoPath[0].y}%;" />
         <img class="n5-linear-goal" src="${n5Asset(7, "ESTACION DE CARGA USB.png")}" alt="Estacion de carga" />
         <div class="n5-slots n5-slots-big">
           ${slots.map((_, index) => `<button class="n5-slot ${index === 0 ? "is-selected" : ""}" type="button" data-slot="${index}" aria-label="Paso ${index + 1}">${index + 1}</button>`).join("")}
@@ -3816,8 +3947,42 @@ function renderN5LinearCommandChallenge(id = 7) {
     </article>
   `;
 
+  const nano = challengeContent.querySelector("[data-nano]");
+  const commandCards = [...challengeContent.querySelectorAll(".n5-command-card")];
+  const slotButtons = [...challengeContent.querySelectorAll(".n5-slot")];
+
+  function wait(ms) {
+    return new Promise((resolve) => window.setTimeout(resolve, ms));
+  }
+
+  function setControlsDisabled(disabled) {
+    commandCards.forEach((card) => {
+      card.disabled = disabled;
+    });
+    slotButtons.forEach((slot) => {
+      slot.disabled = disabled;
+    });
+  }
+
+  async function animateNanoToCharger() {
+    isAnimating = true;
+    setControlsDisabled(true);
+    setMessage("Muy bien. Nano va a probar los 3 pasos.", "is-good");
+
+    for (let index = 1; index < nanoPath.length; index += 1) {
+      await wait(520);
+      nano.style.setProperty("--nano-x", `${nanoPath[index].x}%`);
+      nano.style.setProperty("--nano-y", `${nanoPath[index].y}%`);
+      playRobotMoveSound();
+    }
+
+    await wait(420);
+    setMessage("Nano llegó a la bateria. Cargando energia...", "is-success");
+    completeChallenge(id, 3000);
+  }
+
   function renderSlots() {
-    challengeContent.querySelectorAll(".n5-slot").forEach((slot) => {
+    slotButtons.forEach((slot) => {
       const index = Number(slot.dataset.slot);
       slot.classList.toggle("is-selected", index === selectedSlot);
       slot.innerHTML = slots[index]
@@ -3827,21 +3992,25 @@ function renderN5LinearCommandChallenge(id = 7) {
   }
 
   function maybeComplete() {
-    if (slots.some(Boolean) && expected.every((file, index) => slots[index] === file)) {
-      setMessage("Secuencia correcta: tres pasos hacia el cargador.", "is-success");
-      completeChallenge(id);
+    if (isAnimating) return;
+    if (slots.every(Boolean) && expected.every((file, index) => slots[index] === file)) {
+      animateNanoToCharger();
+    } else if (slots.every(Boolean)) {
+      setMessage("Revisá la secuencia: Nano necesita avanzar 3 veces.", "is-error");
     }
   }
 
-  challengeContent.querySelectorAll(".n5-slot").forEach((slot) => {
+  slotButtons.forEach((slot) => {
     slot.addEventListener("click", () => {
+      if (isAnimating) return;
       selectedSlot = Number(slot.dataset.slot);
       renderSlots();
     });
   });
 
-  challengeContent.querySelectorAll(".n5-command-card").forEach((card) => {
+  commandCards.forEach((card) => {
     card.addEventListener("click", () => {
+      if (isAnimating) return;
       slots[selectedSlot] = card.dataset.file;
       selectedSlot = Math.min(selectedSlot + 1, slots.length - 1);
       renderSlots();

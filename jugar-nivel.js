@@ -127,7 +127,6 @@ function normalizeCardId(cardId) {
 // Direction: 0=↑ 1=→ 2=↓ 3=←
 const DIR_DELTA = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 const DIR_ROTATION = ["-90deg", "0deg", "90deg", "180deg"];
-const DIR_ARROW_ROTATION = ["0deg", "90deg", "180deg", "270deg"];
 
 // ── DOM refs ───────────────────────────────────────────
 const gridEl      = document.getElementById("play-grid");
@@ -504,7 +503,7 @@ function placeRobot(pos, animateTurn = false) {
   // Remove robot from all cells
   Object.values(cellEls).forEach((cell) => {
     cell.classList.remove("is-robot", "is-turning");
-    cell.querySelectorAll(".play-robot-img, .play-robot-direction").forEach((node) => node.remove());
+    cell.querySelectorAll(".play-robot-img").forEach((node) => node.remove());
   });
 
   if (!pos || !cellEls[pos]) return;
@@ -517,11 +516,6 @@ function placeRobot(pos, animateTurn = false) {
   img.alt = "Robot";
   img.style.setProperty("--robot-rotation", DIR_ROTATION[robotDir]);
   cell.appendChild(img);
-  const direction = document.createElement("span");
-  direction.className = "play-robot-direction";
-  direction.style.setProperty("--robot-direction", DIR_ARROW_ROTATION[robotDir]);
-  direction.setAttribute("aria-hidden", "true");
-  cell.appendChild(direction);
 }
 
 function markTrail(pos) {
@@ -724,7 +718,7 @@ function resetRobotPosition() {
   collectedItems.clear();
   Object.values(cellEls).forEach((cell) => {
     cell.classList.remove("is-trail", "is-robot", "is-collected");
-    cell.querySelectorAll(".play-robot-img, .play-robot-direction, .play-collected-check").forEach((node) => node.remove());
+    cell.querySelectorAll(".play-robot-img, .play-collected-check").forEach((node) => node.remove());
     const baseType = cell.dataset.baseType;
     setCellContent(cell, baseType, levelData.tema);
     cell.dataset.type = baseType;
