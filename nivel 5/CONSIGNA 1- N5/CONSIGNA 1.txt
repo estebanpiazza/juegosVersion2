@@ -1,0 +1,3 @@
+1. Consigna: ¡A ordenar el taller! Coloca los Robots en el estante azul y los demás objetos en el baúl.
+
+Mecánica: Drag & Drop. Clasificación en dos contenedores en pantalla. Assets mezclados en la base: un perro robótico, una muñeca de trapo, un brazo mecánico y un auto de madera. El backend debe validar que los elementos con automatización/sensores vayan al estante azul y los juguetes analógicos al baúl.

@@ -1,0 +1,3 @@
+Consigna: ¡El orden importa! Ordena los pasos desde el principio hasta el final.
+
+Mecánica: Drag & Drop (Algoritmo cotidiano). Se presentan 4 imágenes desordenadas que muestran el paso a paso del lavado de manos (mojar, enjabonar, enjuagar, secar). El alumno debe arrastrarlas a los casilleros numerados del 1 al 4 para establecer la secuencia lógica correcta.

@@ -1,4 +1,0 @@
-Consigna 2: (Taller mecánico) ¡Caja de Herramientas! Nano necesita ordenar. Arrastra las piezas de tecnología a la caja. ¡A limpiar!
-Idea del juego: Nano necesita limpiar su mesa de trabajo, pero hay cosas que no son de robot. Arrastra las piezas de hardware a la caja de herramientas, y deja los juguetes afuera.
-El objetivo: Arrastra solo los elementos tecnológicos a la caja.
-Mecánica: En la mesa hay engranajes, tornillos, cables, un oso de peluche y una pelota (agregar y sacar los objetos que consideren). El niño debe arrastrar solo el hardware a la caja metálica.

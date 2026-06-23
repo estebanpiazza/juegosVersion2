@@ -1,3 +1,0 @@
-Consigna 7: (Taller mecánico) Nano debe guardar su tuerca cerca de la ventana. Arrastra la pieza hacia el lado derecho de la pantalla
-
-Mecánica (Drag & Drop): Nano está en el centro de la pantalla sosteniendo un engranaje brillante. Hay dos cajas abiertas: una en el extremo izquierdo de la pantalla y otra en el extremo derecho. Justo encima de la caja derecha hay una ventana grande dibujada (aplicando la técnica de Be Tech de usar referencias de la sala). El jugador debe arrastrar la pieza hacia ese lado

@@ -1,0 +1,70 @@
+{
+  "grado": 5,
+  "seccion": 1,
+  "objetivo": "Nivel 5 armado desde las consignas base: clasificacion, energia, secuencias, armado, programables y depuracion inicial.",
+  "desafios": [
+    {
+      "id": "n5-d1",
+      "titulo": "Ordenar el taller",
+      "tipo": "n5-clasificar-robots",
+      "consigna": "¡A ordenar el taller! Coloca los Robots en el estante azul y los demás objetos en el baúl.",
+      "interaccion": "Seleccionar cada objeto y ubicarlo en el estante azul o en el baúl."
+    },
+    {
+      "id": "n5-d2",
+      "titulo": "Encender motores",
+      "tipo": "n5-seleccionar-energia",
+      "consigna": "¡Hora de encender motores! Selecciona solo los objetos que usan enchufe o pilas.",
+      "interaccion": "Tocar únicamente los objetos que requieren energía."
+    },
+    {
+      "id": "n5-d3",
+      "titulo": "Alerta de energía",
+      "tipo": "n5-camino-carga",
+      "consigna": "¡Alerta de energía! Guía a Nano hasta su estación de carga.",
+      "interaccion": "Completar la secuencia de flechas para llegar a la estación USB."
+    },
+    {
+      "id": "n5-d4",
+      "titulo": "Nano listo",
+      "tipo": "n5-armado-nano",
+      "consigna": "¡Ayuda a Nano a estar listo! Arrastra cada pieza a su lugar correcto.",
+      "interaccion": "Seleccionar piezas de Nano y encastrarlas sobre la silueta."
+    },
+    {
+      "id": "n5-d5",
+      "titulo": "Amigos programables",
+      "tipo": "n5-programables",
+      "consigna": "¡Buscamos amigos programables! Toca las máquinas que reciben tus órdenes e instrucciones.",
+      "interaccion": "Tocar las máquinas programables y evitar objetos simples."
+    },
+    {
+      "id": "n5-d6",
+      "titulo": "Herramienta para programar",
+      "tipo": "n5-herramienta-programar",
+      "consigna": "¿Qué herramienta usamos en el taller para programar a Nano?",
+      "interaccion": "Elegir las tarjetas de programación entre objetos distractores."
+    },
+    {
+      "id": "n5-d7",
+      "titulo": "Tres pasos al cargador",
+      "tipo": "n5-secuencia-avanzar",
+      "consigna": "Ordena las flechas para dar 3 pasos hacia el cargador.",
+      "interaccion": "Completar tres casilleros con flechas de avanzar."
+    },
+    {
+      "id": "n5-d8",
+      "titulo": "El orden importa",
+      "tipo": "n5-lavado-manos",
+      "consigna": "¡El orden importa! Ordena los pasos desde el principio hasta el final.",
+      "interaccion": "Ordenar las imágenes del lavado de manos."
+    },
+    {
+      "id": "n5-d9",
+      "titulo": "Alerta de choque",
+      "tipo": "n5-debug-choque",
+      "consigna": "¡Alerta de choque! Toca la tarjeta equivocada para salvar a Nano.",
+      "interaccion": "Detectar la tarjeta incorrecta y reemplazarla por un giro."
+    }
+  ]
+}

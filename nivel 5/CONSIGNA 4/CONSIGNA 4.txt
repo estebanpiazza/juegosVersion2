@@ -1,0 +1,4 @@
+Consigna: ¡Ayuda a Nano a estar listo! Arrastra cada pieza a su lugar correcto.
+Mecánica: Drag & Drop (Rompecabezas). Silueta gris de Nano en el centro de la pantalla. En los laterales se encuentran las piezas sueltas: el visor (sensores/ojos) y las ruedas (actuadores). El programador debe definir áreas de encastre específicas: el visor se activa en la cabeza y las ruedas en la base de la silueta.
+
+NOTA: Tengo duda si es igual al de la consigna 1 del nivel 4

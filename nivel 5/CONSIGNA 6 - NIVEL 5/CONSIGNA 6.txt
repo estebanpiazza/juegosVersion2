@@ -1,0 +1,5 @@
+Consigna: ¿Qué herramienta usamos en el taller para programar a Nano?
+
+Mecánica: Tap. Aparecen tres assets flotando con una animación sutil: una llave inglesa, un martillo y un mazo de tarjetas de programación físicas. El desarrollador configura la respuesta correcta exclusivamente al hacer clic sobre el mazo de tarjetas de programación.
+
+NOTA: te puse varios objetos o jueguetes asi como tarjetas de programaciones porque creo que puedes repetir ese juego varias veces en una misma consigna, igual mañana lo charlamos.

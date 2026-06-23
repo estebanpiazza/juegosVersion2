@@ -1,0 +1,5 @@
+Consigna: ¡Alerta de energía! Guía a Nano hasta su estación de carga.
+
+Mecánica: Drag & Drop en cuadrícula (Pathfinding básico). El escenario presenta a Nano en un punto de inicio y tres elementos en distintas coordenadas: una pizza, un vaso de agua y la estación de carga USB. El panel de código inferior tiene casilleros vacíos. El alumno debe arrastrar las flechas de dirección para secuenciar el camino exacto que lleve al robot hasta la coordenada de la estación USB, evitando los objetos distractores.
+
+NOTA: No me dieron la posicion exacta, asi que tienes la libertad de ponerlo como quieras, en la imagen que te mande solo lo puse como referencia pero hazlo como tu quiera, el numero de pasos ponlo tu

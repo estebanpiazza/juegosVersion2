@@ -1,0 +1,3 @@
+Consigna: Ordena las flechas para dar 3 pasos hacia el cargador.
+
+Mecánica: Drag & Drop (Secuencia lineal). La interfaz muestra 3 casilleros horizontales vacíos alineados de izquierda a derecha [   ] [   ] [   ]. Abajo hay fichas desordenadas. El jugador debe encastrar tres flechas de [Avanzar] consecutivas para completar la secuencia.

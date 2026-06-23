@@ -1,2 +1,0 @@
-Consigna 12: (Taller mecánico) ¡Alerta en el código! Hay un error en las luces. Observa el patrón, encuentra al intruso y ¡tócalo para sacarlo!
-Mecánica: Se muestra una secuencia AAB (Verde, Verde, Azul - Verde, Amarillo, Azul). El niño debe tocar el "Amarillo" para eliminarlo. Introduce el concepto de "debuggear" visualmente

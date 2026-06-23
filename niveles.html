@@ -29,6 +29,10 @@
       // Rango de escaneo: niveles 4-10, desafíos 1-10
       const LEVELS   = [4, 5, 6, 7, 8, 9, 10];
       const DESAFIOS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      const params = new URLSearchParams(window.location.search);
+      const selectedLevel = Number(params.get("nivel"));
+      const visibleLevels = LEVELS.includes(selectedLevel) ? [selectedLevel] : LEVELS;
+      const returnPage = selectedLevel ? `niveles.html?nivel=${selectedLevel}` : "niveles.html";
 
       const mkFilename = (n, d) => `nivel-${n}-desafio-${d}.json`;
 
@@ -62,10 +66,13 @@
         const infoBar = document.getElementById("niv-info-bar");
         grid.innerHTML = "";
 
-        const total = Object.keys(found).length;
+        const visibleFound = Object.fromEntries(
+          Object.entries(found).filter(([key]) => visibleLevels.includes(Number(key.split("-")[0])))
+        );
+        const total = Object.keys(visibleFound).length;
         infoBar.textContent = total === 0
-          ? "No hay niveles todavía. Agregá archivos con el formato nivel-{N}-desafio-{D}.json en la carpeta niveles/."
-          : `${total} nivel${total !== 1 ? "es" : ""} disponible${total !== 1 ? "s" : ""}`;
+          ? "No hay desafíos todavía. Agregá archivos con el formato nivel-{N}-desafio-{D}.json en la carpeta niveles/."
+          : `${total} desafío${total !== 1 ? "s" : ""} disponible${total !== 1 ? "s" : ""}`;
 
         // Fila de encabezado
         const headRow = document.createElement("div");
@@ -80,7 +87,7 @@
         grid.appendChild(headRow);
 
         // Filas por nivel
-        for (const n of LEVELS) {
+        for (const n of visibleLevels) {
           const row   = document.createElement("div");
           row.className = "niv-row";
 
@@ -97,7 +104,7 @@
             if (entry) {
               const a = document.createElement("a");
               a.className = "niv-btn niv-btn--on";
-              a.href  = `jugar-nivel.html?carpeta=niveles&file=${encodeURIComponent(entry.fn)}`;
+              a.href  = `jugar-nivel.html?carpeta=niveles&file=${encodeURIComponent(entry.fn)}&volver=${encodeURIComponent(returnPage)}`;
               a.title = entry.data.consigna || entry.data.tematica || `Nivel ${n} · Desafío ${d}`;
               a.setAttribute("aria-label", `Nivel ${n} Desafío ${d}`);
               a.textContent = d;

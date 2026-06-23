@@ -1,0 +1,2 @@
+Consigna: ¡Hora de encender motores! Selecciona solo los objetos que usan enchufe o pilas.
+Mecánica: Tap. Pantalla estática con elementos electrónicos y no electrónicos mezclados (ej. tablet, oso de peluche, linterna, tijera). El sistema registra como aciertos únicamente los clics sobre los objetos que requieren energía eléctrica o química para funcionar.

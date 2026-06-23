@@ -17173,3 +17173,859 @@ article.challenge-card.n4-sound-card {
   }
 }
 
+/* ===== Nivel 5 templates ===== */
+.n5-card {
+  --n5-cyan: #00c7df;
+  --n5-blue: #1778b8;
+  --n5-ink: #213a54;
+  --n5-panel: rgba(255, 255, 255, 0.72);
+  --n5-good: #29c85f;
+  --n5-bad: #ff3f5f;
+  position: relative;
+  overflow: visible;
+  isolation: isolate;
+  padding: clamp(10px, 1.8vw, 18px);
+  gap: clamp(10px, 1.5vw, 16px);
+  background: linear-gradient(180deg, rgba(235, 251, 255, 0.96), rgba(248, 253, 255, 0.88));
+}
+
+.n5-card .challenge-header {
+  position: relative;
+  z-index: 4;
+  width: min(1020px, 92%);
+  margin: 0 auto;
+  padding: clamp(10px, 1.5vw, 16px) clamp(14px, 2vw, 24px);
+  border: 2px solid rgba(0, 199, 223, 0.62);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 28px rgba(20, 76, 118, 0.14);
+}
+
+.n5-card .challenge-header h2 {
+  color: var(--n5-blue);
+}
+
+.n5-card .challenge-header p {
+  color: #6d727a;
+}
+
+.n5-card > .challenge-message {
+  position: relative;
+  z-index: 4;
+  width: min(900px, 92%);
+  margin: 0 auto;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 10px 22px rgba(20, 76, 118, 0.1);
+}
+
+.n5-stage {
+  position: relative;
+  z-index: 1;
+  width: min(1280px, 100%);
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--n5-bg) center / cover no-repeat;
+  box-shadow: 0 18px 40px rgba(18, 70, 112, 0.18);
+}
+
+.n5-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 2px rgba(0, 199, 223, 0.16);
+}
+
+.n5-object-field,
+.n5-object-field-large,
+.n5-sort-layout,
+.n5-path-layout,
+.n5-assembly-layout,
+.n5-tool-grid,
+.n5-linear-scene,
+.n5-order-layout,
+.n5-debug-scene {
+  min-height: 0;
+}
+
+/* Template: escena con hotspots de objetos. */
+.n5-image-option {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  z-index: 2;
+  width: max(var(--w), 58px);
+  min-width: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--n5-ink);
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 8px 10px rgba(24, 44, 70, 0.25));
+  transition: transform 0.18s ease, filter 0.18s ease;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.n5-image-option img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.n5-image-option span,
+.n5-tool-option strong {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.n5-image-option:hover,
+.n5-image-option:focus-visible,
+.n5-image-option.is-selected {
+  outline: 3px solid rgba(0, 199, 223, 0.78);
+  outline-offset: 5px;
+  transform: translate(-50%, -50%) scale(1.08);
+  filter: drop-shadow(0 14px 18px rgba(24, 44, 70, 0.28));
+}
+
+.n5-image-option.is-correct,
+.n5-tool-option.is-correct,
+.n5-debug-token.is-correct {
+  outline: 5px solid rgba(41, 200, 95, 0.92);
+  outline-offset: 5px;
+}
+
+.n5-image-option.is-wrong,
+.n5-tool-option.is-wrong,
+.n5-debug-token.is-bug {
+  outline: 5px solid rgba(255, 63, 95, 0.92);
+  outline-offset: 5px;
+}
+
+/* Template: clasificar objetos en zonas de la escena. */
+.n5-sort-card .challenge-header {
+  width: min(860px, 86%);
+  padding: clamp(8px, 1.1vw, 12px) clamp(12px, 1.7vw, 18px);
+}
+
+.n5-sort-card .challenge-header h2 {
+  font-size: clamp(1.25rem, 1.9vw, 1.75rem);
+}
+
+.n5-sort-card .challenge-header p {
+  max-width: 760px;
+  font-size: clamp(0.98rem, 1.35vw, 1.18rem);
+  line-height: 1.24;
+}
+
+.n5-tap-card-2 .challenge-header {
+  width: min(860px, 86%);
+  padding: clamp(8px, 1.1vw, 12px) clamp(12px, 1.7vw, 18px);
+}
+
+.n5-tap-card-2 .challenge-header h2 {
+  font-size: clamp(1.25rem, 1.9vw, 1.75rem);
+}
+
+.n5-tap-card-2 .challenge-header p {
+  max-width: 760px;
+  font-size: clamp(0.98rem, 1.35vw, 1.18rem);
+  line-height: 1.24;
+}
+
+.n5-tap-card-2 {
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  background: var(--n5-bg) center / cover no-repeat;
+}
+
+.n5-tap-card-2 .n5-stage {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.n5-tap-card-2 .n5-stage::after {
+  display: none;
+}
+
+.n5-drop-zone {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  place-items: start center;
+  align-content: start;
+  gap: 4px;
+  padding: 10px;
+  border: 3px dashed rgba(0, 199, 223, 0.46);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #05769b;
+  font-size: clamp(0.64rem, 1vw, 0.82rem);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.n5-drop-zone strong,
+.n5-drop-zone span {
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.n5-drop-zone.is-drag-over {
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 0 0 5px rgba(0, 199, 223, 0.16);
+}
+
+.n5-drop-zone-robot {
+  left: 20.5%;
+  top: 18%;
+  width: 30.5%;
+  height: 54%;
+}
+
+.n5-drop-zone-toy {
+  left: 55.2%;
+  top: 38.5%;
+  width: 23%;
+  height: 38%;
+  border-color: rgba(118, 218, 38, 0.58);
+  color: #4d8b00;
+}
+
+.n5-drag-ghost {
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: 1000 !important;
+  transform-origin: center center !important;
+}
+
+/* Template: programar una ruta. */
+.n5-path-layout .n5-mini-grid {
+  position: absolute;
+  left: 7.6%;
+  top: 24%;
+  width: 33.5%;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 1.4%;
+  padding: 2%;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 12px 26px rgba(18, 70, 112, 0.18);
+}
+
+.n5-mini-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(0, 174, 239, 0.38);
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.n5-mini-cell.is-path {
+  background: rgba(250, 210, 76, 0.26);
+}
+
+.n5-grid-nano,
+.n5-grid-item {
+  max-width: 76%;
+  max-height: 76%;
+  object-fit: contain;
+}
+
+.n5-program-panel {
+  position: absolute;
+  right: 7%;
+  top: 32%;
+  width: 43%;
+  min-height: 28%;
+  padding: clamp(10px, 1.5vw, 18px);
+  display: grid;
+  align-content: center;
+  gap: clamp(10px, 1.3vw, 16px);
+  border: 2px solid rgba(0, 199, 223, 0.48);
+  border-radius: 8px;
+  background: var(--n5-panel);
+  backdrop-filter: blur(2px);
+}
+
+.n5-slots,
+.n5-order-slots,
+.n5-card-bank,
+.n5-order-bank {
+  display: flex;
+  justify-content: center;
+  gap: clamp(8px, 1.2vw, 14px);
+  flex-wrap: wrap;
+}
+
+.n5-slot,
+.n5-order-slot {
+  width: clamp(58px, 6vw, 92px);
+  height: clamp(58px, 6vw, 92px);
+  display: grid;
+  place-items: center;
+  border: 3px dashed rgba(0, 199, 223, 0.72);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--n5-blue);
+  font-weight: 900;
+  box-shadow: 0 10px 20px rgba(20, 76, 118, 0.12);
+}
+
+.n5-slot.is-selected,
+.n5-order-slot.is-selected {
+  border-style: solid;
+  box-shadow: 0 0 0 5px rgba(0, 199, 223, 0.18);
+}
+
+.n5-slot img,
+.n5-order-slot img {
+  max-width: 86%;
+  max-height: 78%;
+  object-fit: contain;
+}
+
+.n5-command-card,
+.n5-order-card-option,
+.n5-tool-option,
+.n5-debug-token {
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--n5-ink);
+  font-weight: 900;
+  box-shadow: 0 10px 22px rgba(20, 76, 118, 0.14);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.n5-command-card:hover,
+.n5-command-card:focus-visible,
+.n5-order-card-option:hover,
+.n5-order-card-option:focus-visible,
+.n5-debug-token:hover,
+.n5-debug-token:focus-visible {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 14px 28px rgba(20, 76, 118, 0.2);
+}
+
+.n5-tool-option:hover,
+.n5-tool-option:focus-visible {
+  transform: translate(-50%, -53%) scale(1.03);
+  box-shadow: 0 14px 28px rgba(20, 76, 118, 0.2);
+}
+
+.n5-command-card {
+  width: clamp(72px, 7vw, 118px);
+  height: clamp(72px, 7vw, 118px);
+}
+
+.n5-command-card img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+}
+
+.n5-command-card span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.n5-run-button {
+  justify-self: center;
+  min-height: 38px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--n5-blue);
+  color: #fff;
+  font-weight: 900;
+}
+
+.n5-path-layout .n5-slot {
+  width: clamp(48px, 5vw, 72px);
+  height: clamp(48px, 5vw, 72px);
+}
+
+.n5-path-layout .n5-command-card {
+  width: clamp(58px, 6vw, 86px);
+  height: clamp(58px, 6vw, 86px);
+}
+
+/* Template: ensamble sobre silueta. */
+.n5-assembly-stage.n4-assembly-stage {
+  position: absolute;
+  left: 12%;
+  top: 10%;
+  width: 76%;
+  height: 76%;
+  min-height: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.n5-assembly-card .n4-nano-silhouette {
+  left: 50%;
+  top: 52%;
+  width: 30%;
+  opacity: 0.7;
+}
+
+.n5-assembly-card .n4-assembly-target-layer {
+  transform: translate(1.9%, -6.5%) scale(1.08);
+}
+
+.n5-assembly-card .n4-piece-floating {
+  pointer-events: auto;
+  filter: drop-shadow(0 10px 14px rgba(24, 44, 70, 0.24));
+}
+
+.n5-assembly-card .n4-piece-floating[data-piece="cabeza"] { --sx: 20% !important; --sy: 22% !important; }
+.n5-assembly-card .n4-piece-floating[data-piece="torzo"] { --sx: 18% !important; --sy: 49% !important; }
+.n5-assembly-card .n4-piece-floating[data-piece="brazo-izquierdo"] { --sx: 24% !important; --sy: 73% !important; }
+.n5-assembly-card .n4-piece-floating[data-piece="brazo-derecho"] { --sx: 75% !important; --sy: 24% !important; }
+.n5-assembly-card .n4-piece-floating[data-piece="mano-izquierda"] { --sx: 80% !important; --sy: 46% !important; }
+.n5-assembly-card .n4-piece-floating[data-piece="mano-derecha"] { --sx: 76% !important; --sy: 70% !important; }
+.n5-assembly-card .n4-piece-floating[data-piece="pierna-izquierda"] { --sx: 34% !important; --sy: 79% !important; }
+.n5-assembly-card .n4-piece-floating[data-piece="pierna-derecha"] { --sx: 66% !important; --sy: 79% !important; }
+
+/* Template: elegir una herramienta en grilla. */
+.n5-tool-grid {
+  display: block;
+}
+
+.n5-tool-option {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 17%;
+  height: 28%;
+  min-width: 0;
+  min-height: 0;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+  transform: translate(-50%, -50%);
+}
+
+.n5-tool-images {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.n5-tool-images img {
+  max-width: 78%;
+  max-height: 78%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 14px rgba(24, 44, 70, 0.24));
+}
+
+.n5-tool-option[data-id="cards"] .n5-tool-images {
+  width: min(140px, 86%);
+  height: min(140px, 86%);
+  margin: auto;
+}
+
+.n5-tool-option[data-id="cards"] .n5-tool-images img {
+  position: absolute;
+  max-width: none;
+  max-height: none;
+}
+
+.n5-tool-option[data-id="cards"] .n5-tool-images img:nth-child(1) {
+  z-index: 3;
+  top: 0;
+  left: 27%;
+  width: 70%;
+}
+
+.n5-tool-option[data-id="cards"] .n5-tool-images img:nth-child(2) {
+  z-index: 1;
+  left: 0;
+  bottom: 8%;
+  width: 46%;
+  transform: rotate(-10deg);
+}
+
+.n5-tool-option[data-id="cards"] .n5-tool-images img:nth-child(3) {
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  width: 48%;
+  transform: rotate(9deg);
+}
+
+.n5-tool-option[data-id="destornillador"] .n5-tool-images img,
+.n5-tool-option[data-id="tuerca"] .n5-tool-images img {
+  max-width: 92%;
+  max-height: 92%;
+}
+
+.n5-tool-option[data-id="dinosaurio"] .n5-tool-images img {
+  max-width: 72%;
+}
+
+/* Template: secuencia lineal. */
+.n5-linear-nano,
+.n5-linear-goal {
+  position: absolute;
+  z-index: 2;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 18px rgba(24, 44, 70, 0.25));
+}
+
+.n5-linear-nano {
+  left: 10%;
+  bottom: 17%;
+  width: 14%;
+}
+
+.n5-linear-goal {
+  right: 11%;
+  bottom: 17%;
+  width: 11%;
+}
+
+.n5-linear-scene .n5-slots {
+  position: absolute;
+  left: 28%;
+  top: 48%;
+  width: 47%;
+  min-height: 22%;
+  padding: 2%;
+  align-items: center;
+  border: 2px solid rgba(0, 199, 223, 0.54);
+  border-radius: 8px;
+  background: var(--n5-panel);
+  backdrop-filter: blur(2px);
+}
+
+.n5-slots-big .n5-slot {
+  width: clamp(72px, 9vw, 132px);
+  height: clamp(72px, 9vw, 132px);
+}
+
+.n5-linear-scene .n5-card-bank {
+  position: absolute;
+  left: 21%;
+  bottom: 4%;
+  width: 58%;
+  padding: 1.2% 2%;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+/* Template: ordenar pasos. */
+.n5-bath-bg {
+  display: none;
+}
+
+.n5-order-slots {
+  position: absolute;
+  left: 12%;
+  top: 24%;
+  width: 76%;
+  justify-content: space-between;
+}
+
+.n5-order-slot {
+  width: clamp(86px, 13vw, 180px);
+  height: clamp(86px, 13vw, 170px);
+  align-content: center;
+  background: rgba(255, 255, 255, 0.34);
+  backdrop-filter: blur(1px);
+}
+
+.n5-order-slot span,
+.n5-order-card-option span {
+  font-size: clamp(0.58rem, 0.8vw, 0.78rem);
+  line-height: 1.1;
+  text-align: center;
+}
+
+.n5-order-bank {
+  position: absolute;
+  left: 11%;
+  bottom: 5%;
+  width: 78%;
+  justify-content: space-between;
+}
+
+.n5-order-card-option {
+  width: clamp(110px, 16vw, 230px);
+  padding: 0;
+  overflow: hidden;
+}
+
+.n5-order-card-option img {
+  width: 100%;
+  height: clamp(82px, 10vw, 150px);
+  object-fit: cover;
+}
+
+.n5-order-card-option span {
+  width: 100%;
+  padding: 7px 8px;
+  background: var(--n5-cyan);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* Template: debug. */
+.n5-debug-alert {
+  position: absolute;
+  left: 12%;
+  top: 8%;
+  width: 28%;
+  max-height: 18%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 16px rgba(120, 0, 0, 0.22));
+}
+
+.n5-debug-nano {
+  position: absolute;
+  left: 4%;
+  bottom: 8%;
+  width: 17%;
+  max-height: 36%;
+  object-fit: contain;
+}
+
+.n5-debug-code {
+  position: absolute;
+  left: 15%;
+  top: 37%;
+  width: 70%;
+  min-height: 26%;
+  padding: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2vw, 28px);
+  border: 2px solid rgba(0, 199, 223, 0.48);
+  border-radius: 8px;
+  background: var(--n5-panel);
+  backdrop-filter: blur(2px);
+}
+
+.n5-debug-token {
+  width: clamp(72px, 10vw, 150px);
+  height: clamp(72px, 10vw, 150px);
+}
+
+.n5-debug-token img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+}
+
+.n5-debug-token span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.n5-debug-arrow {
+  color: var(--n5-blue);
+  font-size: clamp(1.4rem, 3vw, 2.8rem);
+  font-weight: 900;
+}
+
+.n5-debug-mark {
+  position: absolute;
+  right: 18%;
+  top: 31%;
+  width: 8%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 14px rgba(120, 0, 0, 0.24));
+}
+
+@media (max-width: 900px) {
+  .n5-card {
+    padding: 10px;
+  }
+
+  .n5-card .challenge-header,
+  .n5-card > .challenge-message {
+    width: 100%;
+  }
+
+  .n5-image-option {
+    width: max(var(--w), 44px);
+  }
+
+  .n5-drop-zone {
+    border-width: 2px;
+    padding: 6px;
+  }
+
+  .n5-program-panel {
+    right: 4%;
+    width: 47%;
+  }
+
+  .n5-command-card {
+    width: clamp(52px, 8vw, 86px);
+    height: clamp(52px, 8vw, 86px);
+  }
+}
+
+@media (max-width: 560px) {
+  .n5-card {
+    width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
+    margin-left: auto;
+    margin-right: auto;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .n5-card .challenge-header {
+    padding: 9px 10px;
+  }
+
+  .n5-card .challenge-header h2 {
+    font-size: clamp(0.98rem, 5.4vw, 1.22rem);
+  }
+
+  .n5-card .challenge-header p {
+    max-width: 31ch;
+    font-size: clamp(0.78rem, 4.6vw, 1rem);
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .n5-card > .challenge-message {
+    max-width: 31ch;
+    padding: 8px 10px;
+    font-size: 0.68rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .n5-stage {
+    border-radius: 8px;
+  }
+
+  .n5-image-option {
+    width: max(var(--w), 34px);
+  }
+
+  .n5-drop-zone strong,
+  .n5-drop-zone span {
+    padding: 2px 5px;
+  }
+
+  .n5-slot,
+  .n5-order-slot {
+    border-width: 2px;
+  }
+
+  .n5-program-panel {
+    right: 3%;
+    top: 31%;
+    width: 50%;
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .n5-path-layout .n5-mini-grid {
+    left: 4%;
+    top: 30%;
+    width: 39%;
+    padding: 1.2%;
+  }
+
+  .n5-path-layout .n5-slot {
+    width: 34px;
+    height: 34px;
+    font-size: 0.72rem;
+  }
+
+  .n5-path-layout .n5-command-card {
+    width: 42px;
+    height: 42px;
+  }
+
+  .n5-run-button {
+    min-height: 30px;
+    padding: 0 10px;
+    font-size: 0.72rem;
+  }
+
+  .n5-tool-grid {
+    display: block;
+  }
+
+  .n5-tool-option[data-id="cards"] .n5-tool-images {
+    width: 74px;
+    height: 74px;
+  }
+
+  .n5-order-slots {
+    left: 6%;
+    width: 88%;
+  }
+
+  .n5-order-slot {
+    width: 64px;
+    height: 64px;
+  }
+
+  .n5-order-bank {
+    left: 4%;
+    width: 92%;
+    gap: 6px;
+  }
+
+  .n5-order-card-option {
+    width: 78px;
+  }
+
+  .n5-order-card-option img {
+    height: 58px;
+  }
+
+  .n5-order-card-option span {
+    padding: 4px;
+    font-size: 0.52rem;
+  }
+}
+

@@ -113,6 +113,16 @@ const CARD_DEFS = [
   { id: "vamos",            label: "¡Vamos!",        img: "tarjetas%20movimiento/Vamos.png" },
 ];
 const CARD_MAP = Object.fromEntries(CARD_DEFS.map((c) => [c.id, c]));
+const CARD_ALIASES = {
+  girar_derecha: "derecha",
+  "girar-derecha": "derecha",
+  girar_izquierda: "izquierda",
+  "girar-izquierda": "izquierda",
+};
+
+function normalizeCardId(cardId) {
+  return CARD_ALIASES[cardId] || cardId;
+}
 
 // Direction: 0=↑ 1=→ 2=↓ 3=←
 const DIR_DELTA = [[-1, 0], [0, 1], [1, 0], [0, -1]];
@@ -150,6 +160,17 @@ let robotDir = 0;
 function resolveReturnPage(requested, carpeta) {
   const allowedPages = new Set(["index.html", "niveles.html", "niveles-ods.html"]);
   if (allowedPages.has(requested)) return requested;
+  if (requested) {
+    try {
+      const url = new URL(requested, window.location.href);
+      const file = url.pathname.split("/").pop();
+      if (allowedPages.has(file) && url.origin === window.location.origin) {
+        return `${file}${url.search}`;
+      }
+    } catch {
+      // Sigue con la resolucion por carpeta.
+    }
+  }
   if (carpeta === "niveles-ods") return "niveles-ods.html";
   if (carpeta === "niveles") return "niveles.html";
   return "index.html";
@@ -311,9 +332,10 @@ function buildSlots(algoritmo) {
     el.appendChild(numEl);
 
     if (hint) {
-      const card = CARD_MAP[hint.card];
+      const normalizedCard = normalizeCardId(hint.card);
+      const card = CARD_MAP[normalizedCard];
       if (card) {
-        el.dataset.card = hint.card;
+        el.dataset.card = normalizedCard;
         const img = document.createElement("img");
         img.src = card.img;
         img.alt = card.label;
@@ -395,13 +417,14 @@ function clearSlot(index) {
 // ── Card bank ──────────────────────────────────────────
 function buildBank(cardIds) {
   bankEl.innerHTML = "";
-  cardIds.forEach((id) => {
-    const card = CARD_MAP[id];
+  const normalizedIds = [...new Set(cardIds.map(normalizeCardId))];
+  normalizedIds.forEach((normalizedId) => {
+    const card = CARD_MAP[normalizedId];
     if (!card) return;
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "play-card";
-    btn.dataset.card = id;
+    btn.dataset.card = normalizedId;
     btn.setAttribute("role", "listitem");
     btn.setAttribute("aria-label", card.label);
 
@@ -414,7 +437,7 @@ function buildBank(cardIds) {
     lbl.textContent = card.label;
     btn.appendChild(lbl);
 
-    addFastActivation(btn, () => onCardClick(id));
+    addFastActivation(btn, () => onCardClick(normalizedId));
     bankEl.appendChild(btn);
   });
 }

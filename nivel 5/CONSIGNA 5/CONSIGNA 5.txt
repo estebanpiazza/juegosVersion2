@@ -1,0 +1,2 @@
+Consigna: ¡Buscamos amigos programables! Toca las máquinas que reciben tus órdenes e instrucciones.
+Mecánica: Tap. Selección múltiple en pantalla. El niño debe discernir entre dispositivos interactivos programables (computadora, dron) y herramientas u objetos simples (martillo, bicicleta). El sistema resalta en verde los programables y da feedback de error en los analógicos.

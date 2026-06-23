@@ -1,3 +1,0 @@
-Consigna 14: (Taller mecánico) ¡Nano nos habla! Escucha sus sonidos con atención y toca los botones para responderle igual.
-Objetivo: Repite el patrón de sonidos.
-Mecánica: Igual al anterior, pero el refuerzo es auditivo. Los botones abajo tienen íconos de bocinas y hacen sonidos distintos al tocarlos

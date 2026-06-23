@@ -1,1 +1,0 @@
-Consigna 18 (Parque) : ¡Alerta de lluvia!  Nano no sabe cómo llegar. Aplica la lógica y elige las tarjetas para completar el algoritmo. ¡Recuerda ayudarlo a avanzar y girar sin pisar los charcos que son obstáculos! (ACTIVIDAD REALIZADA ES LA ACT 2 QUE HICIMOS EN EL OTRO ARCHIVO)
