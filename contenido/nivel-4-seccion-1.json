@@ -29,11 +29,11 @@
     },
     {
       "id": "n4-rework-d4",
-      "titulo": "Primer paso",
+      "titulo": "Girar al este",
       "tipo": "elige-flecha-avanzar",
-      "consigna": "¡Nano quiere dar su primer paso! Observa su camino y toca la flecha correcta para programarlo",
-      "objetivo": "Relacionar un movimiento de una celda con la tarjeta Avanzar.",
-      "interaccion": "Seleccionar la tarjeta Avanzar, colocarla en el timeline y comprobar."
+      "consigna": "Nano empieza mirando al norte. Primero gira a la derecha y después avanza hacia el este.",
+      "objetivo": "Programar un giro a la derecha antes de avanzar.",
+      "interaccion": "Colocar Derecha y Avanzar en el timeline y comprobar."
     },
     {
       "id": "n4-rework-d5",

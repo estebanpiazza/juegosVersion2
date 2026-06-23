@@ -104,6 +104,14 @@ const levelBackgrounds = [
   "assets/fondo.jpeg",
 ];
 const NANO_HEAD_IMAGE_SRC = `nuevos/No%20lograste/cabeza%20Nano.png?v=${Date.now()}`;
+const NANO_DIRECTION_ASSET_BASE = "nano%20assets";
+const NANO_DIRECTION_FILES = {
+  up: "norte.png",
+  right: "este.png",
+  down: "sur.png",
+  left: "oeste.png",
+};
+const N4_PROGRAM_DIRECTIONS = ["up", "right", "down", "left"];
 const MODAL_SUCCESS_ROBOT_IMAGE_SRC = `nuevos/No%20lograste/lograste.png?v=${Date.now()}`;
 const MODAL_FAILURE_ROBOT_IMAGE_SRC = `nuevos/No%20lograste/noloraste.png?v=${Date.now()}`;
 const ROBOT_IMAGE_SRC = NANO_HEAD_IMAGE_SRC;
@@ -133,6 +141,50 @@ function n4Asset(challengeNumber, fileName) {
   const folder = N4_ASSET_FOLDER_BY_CHALLENGE[challengeNumber] || `CONSIGNA ${challengeNumber}`;
   return `${N4_NEW_ASSET_BASE}/${encodeURIComponent(folder)}/${encodeURIComponent(fileName)}`;
 }
+
+function nanoDirectionAsset(fileName) {
+  return `${NANO_DIRECTION_ASSET_BASE}/${encodeURIComponent(fileName)}`;
+}
+
+function normalizeNanoDirection(direction) {
+  const normalized = String(direction || "up").toLowerCase();
+  const aliases = {
+    arriba: "up",
+    norte: "up",
+    up: "up",
+    derecha: "right",
+    este: "right",
+    right: "right",
+    abajo: "down",
+    sur: "down",
+    down: "down",
+    izquierda: "left",
+    oeste: "left",
+    left: "left",
+  };
+  return aliases[normalized] || "up";
+}
+
+function getNanoDirectionAsset(direction) {
+  const normalized = normalizeNanoDirection(direction);
+  return nanoDirectionAsset(NANO_DIRECTION_FILES[normalized] || NANO_DIRECTION_FILES.up);
+}
+
+function renderNanoDirectionImage(className, direction, alt = "Nano") {
+  const normalized = normalizeNanoDirection(direction);
+  return `<img class="${className}" src="${getNanoDirectionAsset(normalized)}" alt="${alt}" data-nano-direction="${normalized}" data-nano-fallbacks="${NANO_HEAD_IMAGE_SRC}" />`;
+}
+
+document.addEventListener("error", (event) => {
+  const image = event.target;
+  if (!(image instanceof HTMLImageElement) || !image.dataset.nanoFallbacks) return;
+  const fallbacks = image.dataset.nanoFallbacks.split("|").filter(Boolean);
+  if (!fallbacks.length) return;
+  const [nextSource, ...remainingSources] = fallbacks;
+  image.dataset.nanoFallbacks = remainingSources.join("|");
+  image.classList.toggle("is-fallback-nano-head", remainingSources.length === 0);
+  image.src = nextSource;
+}, true);
 
 const N5_ASSET_BASE = "nivel%205";
 const N5_ASSET_FOLDER_BY_CHALLENGE = {
@@ -164,8 +216,8 @@ function renderDesignRainRobotMarker() {
   return `<img class="robot-marker design-d2-robot" src="${DESIGN_D2_ROBOT_IMAGE_SRC}" alt="Nano" />`;
 }
 
-function renderDesignEnergyRobotMarker() {
-  return `<img class="robot-marker design-d3-robot" src="${DESIGN_D3_ROBOT_IMAGE_SRC}" alt="Nano" />`;
+function renderDesignEnergyRobotMarker(direction = "up") {
+  return renderNanoDirectionImage("robot-marker design-d3-robot", N4_PROGRAM_DIRECTIONS[direction] || direction);
 }
 
 function renderDesignD6RobotMarker() {
@@ -1656,7 +1708,7 @@ function renderTechnologySortChallenge(id = 2) {
     { id: "placa", label: "Parte de compu", file: "PARTE DE LA COMPU.png", kind: "tech", x: 53, y: 36, w: 9.5 },
     { id: "pelota", label: "Pelota", file: "PEÑOTA.png", kind: "toy", x: 67, y: 36, w: 8.8 },
     { id: "robot", label: "Robot", file: "ROBOT.png", kind: "tech", x: 82, y: 38, w: 8.8 },
-    { id: "tornillos", label: "Tornillos", file: "TORNILLOS.png", kind: "tech", x: 32, y: 58, w: 7.8 },
+    { id: "consola", label: "Consola", file: "CONSOLA - CONSIGNA 2 - NIVEL 4.png", kind: "tech", x: 32, y: 58, w: 11.5 },
     { id: "auriculares", label: "Auriculares", file: "AURICULARES.png", kind: "tech", x: 46, y: 58, w: 8.8 },
     { id: "auto", label: "Auto", file: "AUTO.png", kind: "toy", x: 60, y: 58, w: 7.8 },
     { id: "patito", label: "Patito", file: "PATITO.png", kind: "toy", x: 70, y: 59, w: 7 },
@@ -1876,7 +1928,7 @@ function renderArrowChoiceChallenge(id, correct) {
       <div class="n4-arrow-scene">
         <div class="n4-arrow-route">
           <img src="${n4Asset(challengeNumber, "Entrada.png")}" alt="Entrada" />
-          <span class="n4-arrow-nano ${correct === "derecha" ? "faces-right" : correct === "izquierda" ? "faces-left" : ""}"></span>
+          ${renderNanoDirectionImage("n4-arrow-nano", correct === "derecha" ? "right" : correct === "izquierda" ? "left" : "up")}
           <img src="${n4Asset(challengeNumber, "Vamos.png")}" alt="Llegada" />
         </div>
         <div class="n4-arrow-options" aria-label="Tarjetas">
@@ -1976,7 +2028,7 @@ function renderCarpetArrowChoiceChallenge(id, correct) {
       return `
         <div class="n4-carpet-cell n4-carpet-start is-route" style="--row:${row + 1};--col:${col + 1};">
           <img class="n4-carpet-start-badge" src="${n4Asset(challengeNumber, "Entrada.png")}" alt="" aria-hidden="true" />
-          <img class="n4-carpet-nano faces-${route.start.facing}" src="${NANO_HEAD_IMAGE_SRC}" alt="Nano" />
+          ${renderNanoDirectionImage("n4-carpet-nano", route.start.facing)}
         </div>
       `;
     }
@@ -2098,7 +2150,6 @@ const N4_PROGRAM_CARDS = {
   izquierda: { label: "Izquierda", file: "IZQUIERDA.png" },
 };
 const N4_PROGRAM_DELTAS = [[-1, 0], [0, 1], [1, 0], [0, -1]];
-const N4_PROGRAM_ROBOT_ROTATION = ["-90deg", "0deg", "90deg", "180deg"];
 
 function getN4ProgrammingConfig(id) {
   const configs = {
@@ -2106,16 +2157,16 @@ function getN4ProgrammingConfig(id) {
       assetChallenge: 4,
       rows: 4,
       cols: 4,
-      start: { row: 2, col: 1, dir: 1 },
+      start: { row: 2, col: 1, dir: 0 },
       goal: { row: 2, col: 2 },
       route: ["2-1", "2-2"],
-      solution: ["avanzar"],
+      solution: ["derecha", "avanzar"],
       availableCards: ["avanzar", "derecha", "izquierda"],
-      fallbackInstruction: "¡Nano quiere dar su primer paso! Observa su camino y toca la flecha correcta para programarlo",
-      initialMessage: "El camino tiene un solo paso. Pone Avanzar en el timeline.",
-      missingMessage: "Falta completar el timeline con una tarjeta.",
-      failureMessage: "Casi. Para el primer paso solo va la tarjeta Avanzar.",
-      successMessage: "Muy bien. Nano dio su primer paso.",
+      fallbackInstruction: "Nano empieza mirando al norte. Primero gira a la derecha y despues avanza hacia el este.",
+      initialMessage: "Completa el timeline: primero gira a la derecha, despues avanza.",
+      missingMessage: "Falta completar el timeline con las dos tarjetas.",
+      failureMessage: "Casi. Nano debe girar a la derecha y despues avanzar hacia el este.",
+      successMessage: "Muy bien. Nano giro hacia el este y avanzo.",
     },
     5: {
       assetChallenge: 5,
@@ -2429,7 +2480,7 @@ function renderN4ProgrammingCarpetChallenge(id = 4) {
     cell.classList.add("is-robot");
     cell.classList.toggle("is-turning", animateTurn);
     cell.insertAdjacentHTML("beforeend", `
-      <img class="play-robot-img n4-program-robot" src="${DESIGN_D6_ROBOT_IMAGE_SRC}" alt="Nano" style="--robot-rotation: ${N4_PROGRAM_ROBOT_ROTATION[robotState.dir]};" />
+      ${renderNanoDirectionImage("play-robot-img n4-program-robot", N4_PROGRAM_DIRECTIONS[robotState.dir])}
     `);
   }
 
@@ -3212,7 +3263,7 @@ function renderN4SequenceCardsChallenge(id = 8) {
       return `
         <div class="n4-carpet-cell n4-carpet-start is-route" style="--row:${row + 1};--col:${col + 1};">
           <img class="n4-carpet-start-badge" src="${n4Asset(8, "Entrada.png")}" alt="" aria-hidden="true" />
-          <img class="n4-carpet-nano faces-${start.facing}" src="${NANO_HEAD_IMAGE_SRC}" alt="Nano" />
+          ${renderNanoDirectionImage("n4-carpet-nano", start.facing)}
         </div>
       `;
     }
@@ -5127,7 +5178,7 @@ function renderRobotChallengeV2(id = 3) {
     const robotCell = cells.get(key);
     if (!robotCell) return;
     robotCell.classList.add("is-robot");
-    robotCell.innerHTML = renderDesignEnergyRobotMarker();
+    robotCell.innerHTML = renderDesignEnergyRobotMarker(directionForRouteKey(route, key));
   }
 
   async function animateRoute(routeLimit = route.length - 1) {
