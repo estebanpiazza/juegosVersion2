@@ -14157,6 +14157,10 @@ body:has(.n4-assembly-card) .corner-logo {
   pointer-events: none;
 }
 
+.n4-assembly-card:not(.n5-assembly-card) .n4-nano-silhouette {
+  display: none;
+}
+
 .n4-assembly-target-layer {
   position: absolute;
   inset: 0;
@@ -16854,20 +16858,23 @@ article.challenge-card.n4-sound-card {
 }
 
 .scratch-body {
+  height: 100vh;
   min-height: 100vh;
+  overflow: hidden;
   background:
     linear-gradient(180deg, rgba(249, 251, 253, 0.94), rgba(255, 255, 255, 0.98)),
     url("assets/fondo.jpeg") center / cover fixed;
 }
 
 .scratch-shell {
-  width: min(1440px, calc(100% - 28px));
-  min-height: 100vh;
+  width: min(1440px, calc(100% - 20px));
+  height: 100vh;
+  min-height: 0;
   margin: 0 auto;
-  padding: 20px 0;
+  padding: 10px 0;
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 16px;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
 }
 
 .scratch-topbar {
@@ -16883,9 +16890,9 @@ article.challenge-card.n4-sound-card {
 }
 
 .scratch-kicker {
-  margin: 0 0 4px;
+  margin: 0 0 2px;
   color: var(--color-primary);
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -16893,12 +16900,12 @@ article.challenge-card.n4-sound-card {
 
 .scratch-heading h1 {
   margin: 0;
-  font-size: clamp(1.85rem, 4vw, 3.25rem);
+  font-size: clamp(1.55rem, 3vw, 2.25rem);
 }
 
 .scratch-download {
-  min-height: 44px;
-  padding: 0 18px;
+  min-height: 36px;
+  padding: 0 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -16913,7 +16920,7 @@ article.challenge-card.n4-sound-card {
 .scratch-workbench {
   display: grid;
   grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
-  gap: 16px;
+  gap: 10px;
   min-height: 0;
 }
 
@@ -17064,12 +17071,12 @@ article.challenge-card.n4-sound-card {
 .scratch-level-nav {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .scratch-level-nav a {
-  width: 44px;
-  height: 44px;
+  width: 34px;
+  height: 34px;
   display: inline-grid;
   place-items: center;
   border: 2px solid rgba(10, 122, 190, 0.16);
@@ -17085,9 +17092,408 @@ article.challenge-card.n4-sound-card {
   color: var(--color-white);
 }
 
+.scratch-mission-workbench {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 370px);
+  align-items: stretch;
+}
+
+.scratch-mission-board,
+.scratch-code-panel {
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid rgba(10, 122, 190, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow-card);
+}
+
+.scratch-mission-board {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(10px, 1.3vw, 16px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.scratch-mission-board::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(249, 251, 253, 0.6), rgba(255, 255, 255, 0.72)),
+    url("assets/fondo taller.jpg") center / cover;
+  content: "";
+}
+
+.scratch-mission-dialog,
+.scratch-map-wrap,
+.scratch-run-message {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.scratch-mission-dialog {
+  width: min(880px, 100%);
+  padding: clamp(8px, 1vw, 12px) clamp(12px, 1.4vw, 16px);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  border: 2px solid rgba(8, 219, 247, 0.72);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 14px 28px rgba(10, 122, 190, 0.14);
+}
+
+.scratch-nano-portrait {
+  width: clamp(50px, 5vw, 66px);
+  height: clamp(50px, 5vw, 66px);
+  object-fit: contain;
+  filter: drop-shadow(0 10px 14px rgba(10, 122, 190, 0.18));
+}
+
+.scratch-mission-dialog h2 {
+  margin: 4px 0 3px;
+  color: var(--color-primary);
+  font-size: clamp(1rem, 1.65vw, 1.32rem);
+}
+
+.scratch-mission-dialog p {
+  max-width: 72ch;
+  margin: 0;
+  color: #3e4a54;
+  font-size: clamp(0.76rem, 1.05vw, 0.9rem);
+  line-height: 1.25;
+}
+
+.scratch-map-wrap {
+  min-height: 0;
+  display: grid;
+  place-items: start center;
+  align-content: start;
+}
+
+.scratch-map {
+  width: min(100%, 620px);
+  max-width: 100%;
+  height: min(34vh, 260px);
+  display: grid;
+  grid-template-columns: repeat(var(--scratch-cols), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--scratch-rows), minmax(0, 1fr));
+  gap: clamp(4px, 0.55vw, 7px);
+  padding: clamp(14px, 2vw, 22px);
+  border-radius: 8px;
+  border: clamp(8px, 1.2vw, 14px) solid rgba(8, 219, 247, 0.92);
+  background:
+    radial-gradient(circle at 10px 10px, rgba(8, 219, 247, 0.14) 2px, transparent 2.5px) 0 0 / 42px 42px,
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(222, 249, 254, 0.94));
+  box-shadow:
+    inset 0 0 0 4px rgba(255, 255, 255, 0.82),
+    0 18px 28px rgba(10, 122, 190, 0.2);
+}
+
+.scratch-cell {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(8, 219, 247, 0.34);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.scratch-cell.is-route {
+  border-style: dashed;
+  background: rgba(8, 219, 247, 0.12);
+}
+
+.scratch-cell.is-trail {
+  background: rgba(37, 211, 102, 0.18);
+  border-color: rgba(37, 211, 102, 0.54);
+}
+
+.scratch-cell.is-hazard {
+  background: rgba(255, 255, 255, 0.66);
+  border-color: rgba(10, 122, 190, 0.18);
+}
+
+.scratch-cell.is-goal {
+  background: rgba(245, 146, 10, 0.16);
+  border-color: rgba(245, 146, 10, 0.52);
+}
+
+.scratch-hazard,
+.scratch-goal,
+.scratch-nano-sprite {
+  max-width: 86%;
+  max-height: 86%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.scratch-hazard {
+  filter: drop-shadow(0 8px 10px rgba(10, 122, 190, 0.16));
+}
+
+.scratch-goal {
+  filter: drop-shadow(0 10px 12px rgba(245, 146, 10, 0.22));
+}
+
+.scratch-nano-sprite {
+  width: auto;
+  height: 74%;
+  max-width: 74%;
+  max-height: 74%;
+  animation: scratch-nano-pop 280ms ease-out;
+  filter: drop-shadow(0 12px 14px rgba(10, 122, 190, 0.25));
+}
+
+.scratch-run-message {
+  min-height: 34px;
+  margin: 0;
+  padding: 7px 10px;
+  display: grid;
+  align-items: center;
+  border: 1px solid rgba(8, 219, 247, 0.35);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.scratch-run-message.is-soft {
+  color: #6a4a05;
+  background: rgba(255, 226, 150, 0.9);
+}
+
+.scratch-run-message.is-error {
+  color: #9f1c35;
+  background: rgba(255, 235, 239, 0.94);
+  border-color: rgba(240, 82, 107, 0.46);
+}
+
+.scratch-run-message.is-success {
+  color: #116632;
+  background: rgba(229, 255, 239, 0.94);
+  border-color: rgba(37, 211, 102, 0.48);
+}
+
+.scratch-code-panel {
+  padding: 10px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 8px;
+}
+
+.scratch-panel-section {
+  min-height: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.scratch-program-section {
+  overflow: hidden;
+}
+
+.scratch-section-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--color-primary);
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.scratch-section-title span {
+  width: 24px;
+  height: 24px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+.scratch-block-palette,
+.scratch-program-track {
+  display: grid;
+  gap: 6px;
+}
+
+.scratch-program-track {
+  max-height: 100%;
+  overflow: auto;
+  padding-right: 3px;
+}
+
+.scratch-block,
+.scratch-slot {
+  width: 100%;
+  min-height: 40px;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.scratch-block {
+  padding: 5px 9px;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  border: 0;
+  color: #ffffff;
+  font-weight: 900;
+  text-align: left;
+  cursor: grab;
+  box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.13), 0 8px 14px rgba(10, 122, 190, 0.1);
+}
+
+.scratch-block img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.scratch-block span {
+  min-width: 0;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.scratch-block-blue {
+  background: #2a8ee8;
+}
+
+.scratch-block-orange {
+  background: #f5920a;
+}
+
+.scratch-slot {
+  padding: 4px;
+  display: grid;
+  place-items: center;
+  border: 2px dashed rgba(10, 122, 190, 0.28);
+  background: rgba(8, 219, 247, 0.08);
+  color: rgba(10, 122, 190, 0.68);
+  font-weight: 900;
+}
+
+.scratch-slot.is-filled {
+  padding: 5px 9px;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  place-items: initial;
+  border: 0;
+  color: #ffffff;
+  text-align: left;
+}
+
+.scratch-slot.is-filled.scratch-block-blue {
+  background: #2a8ee8;
+}
+
+.scratch-slot.is-filled.scratch-block-orange {
+  background: #f5920a;
+}
+
+.scratch-slot.is-drag-over {
+  border-color: rgba(37, 211, 102, 0.82);
+  background: rgba(37, 211, 102, 0.14);
+}
+
+.scratch-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.scratch-run,
+.scratch-reset {
+  min-height: 36px;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.scratch-code-panel .scratch-goal-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.scratch-code-panel .scratch-goal-list div {
+  padding: 8px;
+}
+
+.scratch-code-panel .scratch-goal-list dt {
+  font-size: 0.62rem;
+}
+
+.scratch-code-panel .scratch-goal-list dd {
+  font-size: 0.76rem;
+  line-height: 1.2;
+}
+
+.scratch-run {
+  border: 0;
+  background: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 10px 18px rgba(10, 122, 190, 0.18);
+}
+
+.scratch-reset {
+  border: 2px solid rgba(10, 122, 190, 0.22);
+  background: #ffffff;
+  color: var(--color-primary);
+}
+
+.scratch-block:focus-visible,
+.scratch-slot:focus-visible,
+.scratch-run:focus-visible,
+.scratch-reset:focus-visible {
+  outline: 3px solid rgba(245, 146, 10, 0.9);
+  outline-offset: 3px;
+}
+
+.is-running-scratch .scratch-block,
+.is-running-scratch .scratch-slot,
+.is-running-scratch .scratch-run,
+.is-running-scratch .scratch-reset {
+  pointer-events: none;
+  opacity: 0.68;
+}
+
+@keyframes scratch-nano-pop {
+  from {
+    opacity: 0.4;
+    transform: scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 @media (max-width: 980px) {
+  .scratch-body {
+    height: auto;
+    min-height: 100vh;
+    overflow: auto;
+  }
+
   .scratch-shell {
     width: min(100% - 20px, 760px);
+    height: auto;
+    min-height: 100vh;
   }
 
   .scratch-topbar {
@@ -17112,6 +17518,10 @@ article.challenge-card.n4-sound-card {
     grid-template-columns: 1fr;
   }
 
+  .scratch-mission-workbench {
+    grid-template-columns: 1fr;
+  }
+
   .scratch-objective-panel {
     grid-template-columns: 120px minmax(0, 1fr);
     align-items: center;
@@ -17131,26 +17541,64 @@ article.challenge-card.n4-sound-card {
   .scratch-editor-panel iframe {
     min-height: 620px;
   }
+
+  .scratch-code-panel {
+    grid-template-rows: auto auto auto auto;
+  }
+
+  .scratch-block-palette {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .scratch-map {
+    height: min(46vh, 340px);
+  }
 }
 
 @media (max-width: 560px) {
+  .scratch-body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
   .scratch-shell {
-    width: min(100% - 16px, 460px);
-    padding: 12px 0;
+    width: 100%;
+    max-width: 100vw;
+    padding: 8px 10px;
+    overflow-x: hidden;
   }
 
   .scratch-topbar {
+    grid-template-columns: auto minmax(0, 1fr);
     gap: 10px;
   }
 
+  .scratch-heading {
+    text-align: left;
+  }
+
+  .scratch-heading h1 {
+    font-size: clamp(1.18rem, 7vw, 1.55rem);
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+
   .scratch-download {
-    min-height: 40px;
-    padding: 0 12px;
-    font-size: 0.82rem;
+    display: none;
   }
 
   .scratch-objective-panel {
     grid-template-columns: 1fr;
+  }
+
+  .scratch-workbench,
+  .scratch-mission-workbench,
+  .scratch-mission-board,
+  .scratch-code-panel,
+  .scratch-mission-dialog,
+  .scratch-run-message {
+    width: 100%;
+    max-width: calc(100vw - 20px);
   }
 
   .scratch-nano {
@@ -17165,6 +17613,64 @@ article.challenge-card.n4-sound-card {
   .scratch-editor-note {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .scratch-mission-dialog {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 8px;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .scratch-nano-portrait {
+    width: 44px;
+    height: 44px;
+    justify-self: start;
+  }
+
+  .scratch-mission-dialog h2 {
+    font-size: 1rem;
+  }
+
+  .scratch-mission-dialog p {
+    font-size: 0.72rem;
+    line-height: 1.15;
+  }
+
+  .scratch-status {
+    padding: 4px 7px;
+    font-size: 0.62rem;
+  }
+
+  .scratch-map {
+    width: calc(100vw - 44px);
+    max-width: 300px;
+    gap: 4px;
+    height: 300px;
+    padding: 10px;
+    border-width: 6px;
+  }
+
+  .scratch-map-wrap {
+    place-items: start;
+  }
+
+  .scratch-cell {
+    border-width: 1px;
+  }
+
+  .scratch-block-palette {
+    grid-template-columns: 1fr;
+  }
+
+  .scratch-block {
+    grid-template-columns: 38px minmax(0, 1fr);
+    min-height: 48px;
+  }
+
+  .scratch-block img {
+    width: 36px;
+    height: 36px;
   }
 }
 
@@ -17195,21 +17701,36 @@ article.challenge-card.n4-sound-card {
   z-index: 4;
   width: min(1020px, 92%);
   margin: 0 auto;
-  padding: 0 clamp(10px, 1.8vw, 22px);
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  text-shadow:
-    0 2px 0 rgba(255, 255, 255, 0.82),
-    0 8px 22px rgba(255, 255, 255, 0.75);
+  padding: clamp(10px, 1.35vw, 16px) clamp(18px, 2.7vw, 36px);
+  border: 2px solid rgba(0, 199, 223, 0.78);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 14px 30px rgba(24, 76, 112, 0.16);
+  text-shadow: none;
+}
+
+.n5-card .challenge-header::after {
+  position: absolute;
+  left: clamp(42px, 11vw, 150px);
+  bottom: -16px;
+  width: 28px;
+  height: 28px;
+  border-right: 2px solid rgba(0, 199, 223, 0.78);
+  border-bottom: 2px solid rgba(0, 199, 223, 0.78);
+  background: rgba(255, 255, 255, 0.92);
+  transform: rotate(45deg);
+  content: "";
 }
 
 .n5-card .challenge-header h2 {
+  position: relative;
+  z-index: 1;
   color: var(--n5-blue);
 }
 
 .n5-card .challenge-header p {
+  position: relative;
+  z-index: 1;
   color: #6d727a;
   max-width: 980px;
   margin-left: auto;
