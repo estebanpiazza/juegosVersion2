@@ -25,13 +25,6 @@
       "interaccion": "Completar la secuencia de flechas para llegar a la estación USB."
     },
     {
-      "id": "n5-d4",
-      "titulo": "Nano listo",
-      "tipo": "n5-armado-nano",
-      "consigna": "¡Ayuda a Nano a estar listo! Arrastra cada pieza a su lugar correcto.",
-      "interaccion": "Seleccionar piezas de Nano y encastrarlas sobre la silueta."
-    },
-    {
       "id": "n5-d5",
       "titulo": "Amigos programables",
       "tipo": "n5-programables",

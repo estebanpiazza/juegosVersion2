@@ -29,11 +29,11 @@
     },
     {
       "id": "n4-rework-d4",
-      "titulo": "Girar al este",
+      "titulo": "Un paso adelante",
       "tipo": "elige-flecha-avanzar",
-      "consigna": "Nano empieza mirando al norte. Primero gira a la derecha y después avanza hacia el este.",
-      "objetivo": "Programar un giro a la derecha antes de avanzar.",
-      "interaccion": "Colocar Derecha y Avanzar en el timeline y comprobar."
+      "consigna": "Nano quiere dar un paso hacia adelante. Toca la tarjeta de avanzar.",
+      "objetivo": "Reconocer la accion avanzar sin girar.",
+      "interaccion": "Tocar la tarjeta Avanzar."
     },
     {
       "id": "n4-rework-d5",
@@ -127,17 +127,9 @@
       "id": "n4-rework-d18",
       "titulo": "Parque bajo lluvia",
       "tipo": "alerta-lluvia-alfombra",
-      "consigna": "¡Alerta de lluvia! Nano no sabe cómo llegar. Aplica la lógica y elige las tarjetas para completar el algoritmo. ¡Recuerda ayudarlo a avanzar y girar sin pisar los charcos que son obstáculos!",
-      "objetivo": "Programar a Nano sobre la alfombra para llegar sin pisar los charcos.",
+      "consigna": "¡Alerta de lluvia! Nano no sabe cómo llegar. Aplica la lógica y elige las tarjetas para completar el algoritmo.",
+      "objetivo": "Programar a Nano sobre la alfombra para llegar al final del recorrido.",
       "interaccion": "Completar el algoritmo con Avanzar, Avanzar, Izquierda, Avanzar, Avanzar, Derecha, Avanzar y Avanzar."
-    },
-    {
-      "id": "n4-rework-d19",
-      "titulo": "Mision laberinto",
-      "tipo": "recuperar-tesoro-alfombra",
-      "consigna": "¡Misión laberinto! Nano te necesita. Crea la secuencia exacta: pasa por la batería para obtener energía, llega al tesoro y ¡esquiva los obstáculos!",
-      "objetivo": "Programar a Nano sobre la alfombra para cargar energía y recuperar el tesoro evitando obstáculos.",
-      "interaccion": "Completar el algoritmo con Avanzar, Avanzar, Avanzar, Izquierda, Avanzar, Avanzar, Derecha, Avanzar y Avanzar."
     }
   ]
 }
