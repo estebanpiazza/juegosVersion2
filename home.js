@@ -8,6 +8,7 @@ if (levelCardsContainer) {
   function getLevelHref(levelNumber) {
     if (levelNumber === 4) return `etapas.html?nivel=${levelNumber}`;
     if (levelNumber === 5) return `etapas.html?nivel=${levelNumber}`;
+    if (levelNumber === 6) return `etapas.html?nivel=${levelNumber}`;
     if (levelNumber >= 7 && levelNumber <= 10) return `scratch-desafio.html?nivel=${levelNumber}`;
     return `niveles.html?nivel=${levelNumber}`;
   }

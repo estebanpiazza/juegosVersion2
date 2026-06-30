@@ -1,0 +1,3 @@
+Consigna: ¿Cuál de estas máquinas trabaja completamente sola?
+
+Mecánica: Tap. La interfaz reproduce dos animaciones breves en bucle: la Opción A muestra una escoba tradicional barriendo impulsada manualmente por un personaje; la Opción B muestra un robot aspiradora circular moviéndose de forma autónoma por la habitación. El niño debe tocar la animación de la aspiradora robótica.
