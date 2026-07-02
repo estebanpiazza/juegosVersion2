@@ -1607,9 +1607,9 @@ function renderNanoAssemblyChallenge(id = 1) {
   const pieces = [
     { id: "cabeza",         label: "Cabeza",          file: "cabeza.png",           x: 50,   y: 36.5, w: 18,  h: 14,   hitW: 24, hitH: 20, sx: 64, sy: 40, sw: 9.5 },
     { id: "torzo",          label: "Torzo",            file: "Torzo.png",             x: 50.2, y: 54.4, w: 16.2,h: 24.1, hitW: 27, hitH: 33, sx: 23, sy: 71, sw: 7.2, ox: -0.6, oy: 1.2 },
-    { id: "brazo-izquierdo",label: "Brazo izquierdo",  file: "Brazo izquierdo.png",   x: 41.8, y: 51.2, w: 11.1,h: 14.9, hitW: 18, hitH: 22, sx: 34, sy: 60, sw: 6.8, dx: 8 },
+    { id: "brazo-izquierdo",label: "Brazo izquierdo",  file: "Brazo izquierdo.png",   x: 41.8, y: 51.2, w: 11.1,h: 14.9, hitW: 18, hitH: 22, sx: 34, sy: 60, sw: 6.8, dx: -22 },
     { id: "brazo-derecho",  label: "Brazo derecho",    file: "Brazo derecho.png",     x: 57.5, y: 55,   w: 10,  h: 22,   hitW: 16, hitH: 27, sx: 69, sy: 64, sw: 6.8, dx: -7, dy: 4 },
-    { id: "mano-izquierda", label: "Mano izquierda",   file: "Mano izquierdo.png",   x: 38.3, y: 47.2, w: 10,  h: 11,   hitW: 16, hitH: 16, sx: 30, sy: 42, sw: 5.6, dx: 6 },
+    { id: "mano-izquierda", label: "Mano izquierda",   file: "Mano izquierdo.png",   x: 38.3, y: 47.2, w: 10,  h: 11,   hitW: 16, hitH: 16, sx: 30, sy: 42, sw: 5.6, dx: -24 },
     { id: "mano-derecha",   label: "Mano derecha",     file: "Mano drecha.png",       x: 59.5, y: 67,   w: 9,   h: 11,   hitW: 15, hitH: 16, sx: 79, sy: 69, sw: 5.6, dy: 20 },
     { id: "pierna-izquierda",label: "Pierna izquierda",file: "Pierna izquierda.png", x: 45.9, y: 74.8, w: 9.6, h: 27,   hitW: 14, hitH: 30, sx: 21, sy: 35, sw: 6.4 },
     { id: "pierna-derecha", label: "Pierna derecha",   file: "Pierna derecha.png",   x: 54.1, y: 74.8, w: 9.6, h: 27,   hitW: 14, hitH: 30, sx: 78, sy: 35, sw: 6.4 },
@@ -1721,14 +1721,14 @@ function renderNanoAssemblyChallenge(id = 1) {
 function renderTechnologySortChallenge(id = 2) {
   const items = [
     { id: "cable", label: "Cable USB", file: "Cable usb.png", kind: "tech", x: 25, y: 52.5, w: 9.6 },
-    { id: "oso", label: "Oso", file: "OSO.png", kind: "toy", x: 38, y: 51.5, w: 7.6 },
+    { id: "oso", label: "Oso", file: "OSO.png", kind: "toy", x: 38, y: 51.5, w: 7.6, dy: -10 },
     { id: "placa", label: "Parte de compu", file: "PARTE DE LA COMPU.png", kind: "tech", x: 53, y: 52.8, w: 8.6 },
     { id: "pelota", label: "Pelota", file: "PEÑOTA.png", kind: "toy", x: 67, y: 51.7, w: 7.8 },
-    { id: "robot", label: "Robot", file: "ROBOT.png", kind: "tech", x: 80.5, y: 51.6, w: 7.7 },
-    { id: "consola", label: "Consola", file: "CONSOLA - CONSIGNA 2 - NIVEL 4.png", kind: "tech", x: 29, y: 62.2, w: 10.5 },
-    { id: "auriculares", label: "Auriculares", file: "AURICULARES.png", kind: "tech", x: 43.5, y: 63.4, w: 8.2 },
-    { id: "auto", label: "Auto", file: "AUTO.png", kind: "toy", x: 58, y: 62.8, w: 7.1 },
-    { id: "patito", label: "Patito", file: "PATITO.png", kind: "toy", x: 71.5, y: 63.2, w: 6.5 },
+    { id: "robot", label: "Robot", file: "ROBOT.png", kind: "tech", x: 80.5, y: 51.6, w: 7.7, dy: -10 },
+    { id: "consola", label: "Consola", file: "CONSOLA - CONSIGNA 2 - NIVEL 4.png", kind: "tech", x: 29, y: 62.2, w: 10.5, dy: -10 },
+    { id: "auriculares", label: "Auriculares", file: "AURICULARES.png", kind: "tech", x: 43.5, y: 63.4, w: 8.2, dy: -10 },
+    { id: "auto", label: "Auto", file: "AUTO.png", kind: "toy", x: 58, y: 62.8, w: 7.1, dy: -10 },
+    { id: "patito", label: "Patito", file: "PATITO.png", kind: "toy", x: 71.5, y: 63.2, w: 6.5, dy: -10 },
   ];
   const needed = items.filter((item) => item.kind === "tech");
   const placedTech = new Set();
@@ -1741,7 +1741,7 @@ function renderTechnologySortChallenge(id = 2) {
       <div class="n4-sort-scene">
         <div class="n4-sort-items" aria-label="Objetos del taller">
           ${items.map((item) => `
-            <button class="n4-sort-item n4-drag-source" type="button" data-item="${item.id}" data-kind="${item.kind}" data-label="${item.label}" aria-label="${item.label}" style="--x:${item.x}%;--y:${item.y}%;--w:${item.w}%;">
+            <button class="n4-sort-item n4-drag-source" type="button" data-item="${item.id}" data-kind="${item.kind}" data-label="${item.label}" aria-label="${item.label}" style="--x:${item.x}%;--y:${item.y}%;--w:${item.w}%;--item-offset-y:${item.dy || 0}px;">
               <img src="${n4Asset(2, item.file)}" alt="" aria-hidden="true" />
               <span>${item.label}</span>
             </button>
@@ -2174,16 +2174,16 @@ function getN4ProgrammingConfig(id) {
       assetChallenge: 4,
       rows: 4,
       cols: 4,
-      start: { row: 2, col: 1, dir: 0 },
+      start: { row: 2, col: 1, dir: 1 },
       goal: { row: 2, col: 2 },
       route: ["2-1", "2-2"],
-      solution: ["derecha", "avanzar"],
-      availableCards: ["avanzar", "derecha", "izquierda"],
-      fallbackInstruction: "Nano empieza mirando al norte. Primero gira a la derecha y despues avanza hacia el este.",
-      initialMessage: "Completa el timeline: primero gira a la derecha, despues avanza.",
-      missingMessage: "Falta completar el timeline con las dos tarjetas.",
-      failureMessage: "Casi. Nano debe girar a la derecha y despues avanzar hacia el este.",
-      successMessage: "Muy bien. Nano giro hacia el este y avanzo.",
+      solution: ["avanzar"],
+      availableCards: ["avanzar"],
+      fallbackInstruction: "Nano ya esta mirando hacia el camino. Coloca la tarjeta Avanzar para que llegue a la meta.",
+      initialMessage: "Completa el timeline con la tarjeta Avanzar.",
+      missingMessage: "Falta colocar la tarjeta Avanzar.",
+      failureMessage: "Casi. Nano solo necesita avanzar.",
+      successMessage: "Muy bien. Nano avanzo hacia la meta.",
     },
     5: {
       assetChallenge: 5,
@@ -3175,10 +3175,9 @@ function renderSoundPatternChallenge(id = 14) {
     const button = challengeContent.querySelector(`[data-sound="${soundId}"]`);
     wave?.classList.add("is-active");
     if (source === "input") button?.classList.add("is-active");
-    const fallbackTone = source === "input" ? playFallbackTone(soundId) : null;
-    const played = await playAudioAsset(n4Asset(14, sound.audio), 1.15);
-    if (!played && source !== "input") await playFallbackTone(soundId);
-    if (fallbackTone) await fallbackTone;
+    const fallbackTone = playFallbackTone(soundId);
+    await playAudioAsset(n4Asset(14, sound.audio), 1.15);
+    await fallbackTone;
     await delay(120);
     wave?.classList.remove("is-active");
     button?.classList.remove("is-active");
@@ -3702,10 +3701,10 @@ function getN5EnergyConfig() {
     items: [
       { id: "dron", label: "Dron", file: "Dron.png", correct: true, x: 20.2, y: 46.8, w: 18.5, ...itemOffset },
       { id: "linterna", label: "Linterna", file: "linterna.png", correct: true, x: 36, y: 46.3, w: 11, ...itemOffset },
-      { id: "parlante", label: "Parlante", file: "Parlante.png", correct: true, x: 49.4, y: 44.2, w: 15.5, ...itemOffset },
-      { id: "scooter", label: "Scooter", file: "Scooter.png", correct: true, x: 73, y: 43.4, w: 20, ...itemOffset },
-      { id: "ventilador", label: "Ventilador", file: "Ventilador.png", correct: true, x: 88.4, y: 44.4, w: 13.5, ...itemOffset },
-      { id: "compu", label: "Computadora", file: "Compu.png", correct: true, x: 23.5, y: 71.5, w: 20.5, ...itemOffset },
+      { id: "parlante", label: "Parlante", file: "Parlante.png", correct: true, x: 49.4, y: 44.2, w: 15.5, ...itemOffset, dy: -10 },
+      { id: "scooter", label: "Scooter", file: "Scooter.png", correct: true, x: 73, y: 43.4, w: 20, ...itemOffset, dx: -65 },
+      { id: "ventilador", label: "Ventilador", file: "Ventilador.png", correct: true, x: 88.4, y: 44.4, w: 13.5, ...itemOffset, dy: 10 },
+      { id: "compu", label: "Computadora", file: "Compu.png", correct: true, x: 23.5, y: 71.5, w: 20.5, ...itemOffset, dy: 10 },
       { id: "tablet", label: "Tablet", file: "Tablet.png", correct: true, x: 40.6, y: 77.5, w: 10.8, ...itemOffset },
       { id: "vr", label: "Visor de realidad virtual", file: "VR .png", correct: true, x: 51.3, y: 75.7, w: 14.5, ...itemOffset },
       { id: "switch", label: "Consola portatil", file: "Switch.png", correct: true, x: 63.8, y: 74, w: 12.2, ...itemOffset },
@@ -3785,7 +3784,7 @@ function renderN5ChargingPathChallenge(id = 3) {
   ];
   let selectedSlot = 0;
   const slots = Array(expected.length).fill(null);
-  const start = { row: 4, col: 0 };
+  const start = { row: 4, col: 0, dir: 0 };
   const goal = { row: 2, col: 3 };
   const pathCells = ["4-0", "3-0", "2-0", "2-1", "2-2", "2-3"];
 
@@ -3801,7 +3800,7 @@ function renderN5ChargingPathChallenge(id = 3) {
             const col = index % 5;
             const key = `${row}-${col}`;
             let content = "";
-            if (key === `${start.row}-${start.col}`) content = `<img class="n5-grid-nano n5-carpet-nano" src="${n5Asset(3, "cabeza Nano.png")}" alt="Nano" />`;
+            if (key === `${start.row}-${start.col}`) content = renderNanoDirectionImage("n5-grid-nano n5-carpet-nano", N4_PROGRAM_DIRECTIONS[start.dir]);
             if (key === `${goal.row}-${goal.col}`) content = `<img class="n5-grid-item" src="${n5Asset(3, "ESTACION DE CARGA USB.png")}" alt="Estacion de carga" />`;
             if (key === "1-2") content = `<img class="n5-grid-item" src="${n5Asset(3, "VASO.png")}" alt="Vaso" />`;
             if (key === "3-2") content = `<img class="n5-grid-item" src="${n5Asset(3, "PIZZA.png")}" alt="Pizza" />`;
@@ -3867,7 +3866,6 @@ function renderN5ChargingPathChallenge(id = 3) {
   });
 
   async function animateChargingPath() {
-    const path = pathCells.slice(1);
     const nano = challengeContent.querySelector(".n5-carpet-nano");
     const checkButton = challengeContent.querySelector("[data-check-path]");
     if (!nano || !checkButton) {
@@ -3878,10 +3876,35 @@ function renderN5ChargingPathChallenge(id = 3) {
 
     checkButton.disabled = true;
     setMessage("Secuencia correcta. Nano avanza hacia la carga.", "is-good");
-    for (const key of path) {
+
+    const robotState = { ...start };
+    const setNanoDirection = () => {
+      const direction = N4_PROGRAM_DIRECTIONS[robotState.dir];
+      nano.src = getNanoDirectionAsset(direction);
+      nano.dataset.nanoDirection = direction;
+      nano.dataset.nanoFallbacks = NANO_HEAD_IMAGE_SRC;
+      nano.classList.remove("is-fallback-nano-head");
+    };
+
+    for (const command of expected) {
       await new Promise((resolve) => window.setTimeout(resolve, 420));
-      challengeContent.querySelector(`[data-key="${key}"]`)?.append(nano);
-      playRobotMoveSound();
+      if (command === "derecha" || command === "izquierda") {
+        robotState.dir = command === "derecha"
+          ? (robotState.dir + 1) % 4
+          : (robotState.dir + 3) % 4;
+        setNanoDirection();
+        playSound("move");
+        continue;
+      }
+
+      if (command === "avanzar") {
+        const [rowDelta, colDelta] = N4_PROGRAM_DELTAS[robotState.dir];
+        robotState.row += rowDelta;
+        robotState.col += colDelta;
+        setNanoDirection();
+        challengeContent.querySelector(`[data-key="${robotState.row}-${robotState.col}"]`)?.append(nano);
+        playRobotMoveSound();
+      }
     }
     setMessage("Nano llego a la estacion de carga.", "is-success");
     completeChallenge(id);
@@ -4031,7 +4054,11 @@ function renderN5ProgrammingToolChallenge(id = 6) {
   challengeContent.innerHTML = `
     <article class="challenge-card n5-card n5-tool-card" ${n5CardStyle(6)}>
       ${renderN5Header(id, "¿Qué herramienta usamos en el taller para programar a Nano?")}
-      <div class="n5-stage n5-tool-grid" data-tool-grid></div>
+      <div class="n5-stage n5-tool-stage">
+        <img class="n5-tool-nano" src="${n5Asset(7, "Nano.png")}" alt="" aria-hidden="true" />
+        <img class="n5-tool-battery" src="${n4Asset(3, "Bateria.png")}" alt="" aria-hidden="true" />
+        <div class="n5-tool-grid" data-tool-grid></div>
+      </div>
       <p class="challenge-message" data-message></p>
     </article>
   `;
@@ -4246,7 +4273,7 @@ function renderN5HandwashingOrderChallenge(id = 8) {
     if (slots.some((slot) => !slot)) return;
     const isCorrect = steps.every((step, index) => slots[index] === step.id);
     if (!isCorrect) {
-      setMessage("El orden todavia no cierra. Pensá qué va primero.", "is-error");
+      setMessage("El orden todavia no cierra. Pensá qué va primero.");
       return;
     }
     setMessage("Orden perfecto: mojar, enjabonar, enjuagar y secar.", "is-success");
