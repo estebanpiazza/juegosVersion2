@@ -18,6 +18,8 @@ let currentLevelData = null;
 let activeChallengeId = 1;
 const SOUND_VOLUME_KEY = "betech-sound-volume";
 const MUSIC_VOLUME_KEY = "betech-music-volume";
+const SOUND_VOLUME_DEFAULT_FIX_KEY = "betech-sound-volume-default-fixed";
+const MUSIC_VOLUME_DEFAULT_FIX_KEY = "betech-music-volume-default-fixed";
 const LEVEL_RATINGS_KEY = "betech-level-ratings";
 const DEFAULT_SOUND_VOLUME = 0.45;
 const DEFAULT_MUSIC_VOLUME = 0.28;
@@ -235,12 +237,24 @@ function renderDesignD6RobotMarker() {
 }
 
 function readStoredSoundVolume() {
-  const stored = Number(window.localStorage?.getItem(SOUND_VOLUME_KEY));
+  const rawValue = window.localStorage?.getItem(SOUND_VOLUME_KEY);
+  if (rawValue === null || rawValue === undefined) return DEFAULT_SOUND_VOLUME;
+  const stored = Number(rawValue);
+  if (stored === 0 && !window.localStorage?.getItem(SOUND_VOLUME_DEFAULT_FIX_KEY)) {
+    window.localStorage?.setItem(SOUND_VOLUME_DEFAULT_FIX_KEY, "true");
+    return DEFAULT_SOUND_VOLUME;
+  }
   return Number.isFinite(stored) ? Math.min(Math.max(stored, 0), 1) : DEFAULT_SOUND_VOLUME;
 }
 
 function readStoredMusicVolume() {
-  const stored = Number(window.localStorage?.getItem(MUSIC_VOLUME_KEY));
+  const rawValue = window.localStorage?.getItem(MUSIC_VOLUME_KEY);
+  if (rawValue === null || rawValue === undefined) return DEFAULT_MUSIC_VOLUME;
+  const stored = Number(rawValue);
+  if (stored === 0 && !window.localStorage?.getItem(MUSIC_VOLUME_DEFAULT_FIX_KEY)) {
+    window.localStorage?.setItem(MUSIC_VOLUME_DEFAULT_FIX_KEY, "true");
+    return DEFAULT_MUSIC_VOLUME;
+  }
   return Number.isFinite(stored) ? Math.min(Math.max(stored, 0), 1) : DEFAULT_MUSIC_VOLUME;
 }
 
@@ -1607,9 +1621,9 @@ function renderNanoAssemblyChallenge(id = 1) {
   const pieces = [
     { id: "cabeza",         label: "Cabeza",          file: "cabeza.png",           x: 50,   y: 36.5, w: 18,  h: 14,   hitW: 24, hitH: 20, sx: 64, sy: 40, sw: 9.5 },
     { id: "torzo",          label: "Torzo",            file: "Torzo.png",             x: 50.2, y: 54.4, w: 16.2,h: 24.1, hitW: 27, hitH: 33, sx: 23, sy: 71, sw: 7.2, ox: -0.6, oy: 1.2 },
-    { id: "brazo-izquierdo",label: "Brazo izquierdo",  file: "Brazo izquierdo.png",   x: 41.8, y: 51.2, w: 11.1,h: 14.9, hitW: 18, hitH: 22, sx: 34, sy: 60, sw: 6.8, dx: -22 },
+    { id: "brazo-izquierdo",label: "Brazo izquierdo",  file: "Brazo izquierdo.png",   x: 41.8, y: 51.2, w: 11.1,h: 14.9, hitW: 18, hitH: 22, sx: 34, sy: 60, sw: 6.8, dx: -8 },
     { id: "brazo-derecho",  label: "Brazo derecho",    file: "Brazo derecho.png",     x: 57.5, y: 55,   w: 10,  h: 22,   hitW: 16, hitH: 27, sx: 69, sy: 64, sw: 6.8, dx: -7, dy: 4 },
-    { id: "mano-izquierda", label: "Mano izquierda",   file: "Mano izquierdo.png",   x: 38.3, y: 47.2, w: 10,  h: 11,   hitW: 16, hitH: 16, sx: 30, sy: 42, sw: 5.6, dx: -24 },
+    { id: "mano-izquierda", label: "Mano izquierda",   file: "Mano izquierdo.png",   x: 38.3, y: 47.2, w: 10,  h: 11,   hitW: 16, hitH: 16, sx: 30, sy: 42, sw: 5.6, dx: -10, dy: 3 },
     { id: "mano-derecha",   label: "Mano derecha",     file: "Mano drecha.png",       x: 59.5, y: 67,   w: 9,   h: 11,   hitW: 15, hitH: 16, sx: 79, sy: 69, sw: 5.6, dy: 20 },
     { id: "pierna-izquierda",label: "Pierna izquierda",file: "Pierna izquierda.png", x: 45.9, y: 74.8, w: 9.6, h: 27,   hitW: 14, hitH: 30, sx: 21, sy: 35, sw: 6.4 },
     { id: "pierna-derecha", label: "Pierna derecha",   file: "Pierna derecha.png",   x: 54.1, y: 74.8, w: 9.6, h: 27,   hitW: 14, hitH: 30, sx: 78, sy: 35, sw: 6.4 },
@@ -4055,8 +4069,6 @@ function renderN5ProgrammingToolChallenge(id = 6) {
     <article class="challenge-card n5-card n5-tool-card" ${n5CardStyle(6)}>
       ${renderN5Header(id, "¿Qué herramienta usamos en el taller para programar a Nano?")}
       <div class="n5-stage n5-tool-stage">
-        <img class="n5-tool-nano" src="${n5Asset(7, "Nano.png")}" alt="" aria-hidden="true" />
-        <img class="n5-tool-battery" src="${n4Asset(3, "Bateria.png")}" alt="" aria-hidden="true" />
         <div class="n5-tool-grid" data-tool-grid></div>
       </div>
       <p class="challenge-message" data-message></p>
@@ -4129,23 +4141,21 @@ function renderN5ProgrammingToolChallenge(id = 6) {
 function renderN5LinearCommandChallenge(id = 7) {
   const expected = ["AVANZAR.png", "AVANZAR.png", "AVANZAR.png"];
   const options = ["AVANZAR.png", "DERECHA.png", "IZQUIERDA.png", "RETROCEDER.png"];
-  const slots = Array(expected.length).fill(null);
+  const chosenSequence = [];
   const nanoPath = [
     { x: 8, y: 18 },
     { x: 30, y: 18 },
     { x: 53, y: 18 },
     { x: 76, y: 18 },
   ];
-  let selectedSlot = 0;
   let isAnimating = false;
 
   challengeContent.innerHTML = `
     <article class="challenge-card n5-card n5-linear-card" ${n5CardStyle(7)}>
       ${renderN5Header(id, "Ordena las flechas para dar 3 pasos hacia el cargador.")}
       <div class="n5-stage n5-linear-scene">
-        <div class="n5-slots n5-slots-big">
-          ${slots.map((_, index) => `<button class="n5-slot ${index === 0 ? "is-selected" : ""}" type="button" data-slot="${index}" aria-label="Paso ${index + 1}">${index + 1}</button>`).join("")}
-        </div>
+        <img class="n5-linear-nano" src="${n5Asset(7, "Nano.png")}" alt="" aria-hidden="true" style="--nano-x:${nanoPath[0].x}%;--nano-y:${nanoPath[0].y}%;" />
+        <img class="n5-linear-goal" src="${n4Asset(3, "Bateria.png")}" alt="" aria-hidden="true" />
         <div class="n5-card-bank">
           ${options.map((file) => `
             <button class="n5-command-card" type="button" data-file="${file}">
@@ -4159,7 +4169,7 @@ function renderN5LinearCommandChallenge(id = 7) {
   `;
 
   const commandCards = [...challengeContent.querySelectorAll(".n5-command-card")];
-  const slotButtons = [...challengeContent.querySelectorAll(".n5-slot")];
+  const nano = challengeContent.querySelector(".n5-linear-nano");
 
   function wait(ms) {
     return new Promise((resolve) => window.setTimeout(resolve, ms));
@@ -4168,9 +4178,6 @@ function renderN5LinearCommandChallenge(id = 7) {
   function setControlsDisabled(disabled) {
     commandCards.forEach((card) => {
       card.disabled = disabled;
-    });
-    slotButtons.forEach((slot) => {
-      slot.disabled = disabled;
     });
   }
 
@@ -4181,6 +4188,10 @@ function renderN5LinearCommandChallenge(id = 7) {
 
     for (let index = 1; index < nanoPath.length; index += 1) {
       await wait(260);
+      if (nano) {
+        nano.style.setProperty("--nano-x", `${nanoPath[index].x}%`);
+        nano.style.setProperty("--nano-y", `${nanoPath[index].y}%`);
+      }
       playRobotMoveSound();
     }
 
@@ -4189,40 +4200,25 @@ function renderN5LinearCommandChallenge(id = 7) {
     completeChallenge(id, 3000);
   }
 
-  function renderSlots() {
-    slotButtons.forEach((slot) => {
-      const index = Number(slot.dataset.slot);
-      slot.classList.toggle("is-selected", index === selectedSlot);
-      slot.innerHTML = slots[index]
-        ? `<img src="${n5Asset(7, slots[index])}" alt="" aria-hidden="true" />`
-        : String(index + 1);
-    });
-  }
-
-  function maybeComplete() {
-    if (isAnimating) return;
-    if (slots.every(Boolean) && expected.every((file, index) => slots[index] === file)) {
-      animateNanoToCharger();
-    } else if (slots.every(Boolean)) {
-      setMessage("Revisá la secuencia: Nano necesita avanzar 3 veces.", "is-error");
-    }
-  }
-
-  slotButtons.forEach((slot) => {
-    slot.addEventListener("click", () => {
-      if (isAnimating) return;
-      selectedSlot = Number(slot.dataset.slot);
-      renderSlots();
-    });
-  });
-
   commandCards.forEach((card) => {
     card.addEventListener("click", () => {
       if (isAnimating) return;
-      slots[selectedSlot] = card.dataset.file;
-      selectedSlot = Math.min(selectedSlot + 1, slots.length - 1);
-      renderSlots();
-      maybeComplete();
+      const nextStep = chosenSequence.length;
+      const selectedFile = card.dataset.file;
+
+      if (selectedFile !== expected[nextStep]) {
+        chosenSequence.length = 0;
+        setMessage("Revisá la secuencia: Nano necesita avanzar 3 veces.", "is-error");
+        return;
+      }
+
+      chosenSequence.push(selectedFile);
+      if (chosenSequence.length < expected.length) {
+        setMessage(`Bien. Faltan ${expected.length - chosenSequence.length} pasos de avanzar.`, "is-good");
+        return;
+      }
+
+      animateNanoToCharger();
     });
   });
 }
@@ -4469,7 +4465,7 @@ function renderN6InitialDirectionChallenge(id = 1) {
       ${renderN6SpaceHeader(id, "Observa el camino hacia el mineral brillante y elige el primer paso para empezar el recorrido.")}
       <section class="n6-d1-board" aria-label="Camino hacia el mineral">
         <img class="n6-d1-grid-frame" src="${n6Asset(1, "Cuadricula.png")}" alt="" aria-hidden="true" />
-        <img class="n6-d1-nano" src="${n6Asset(1, "FRENTE.png")}" alt="Nano astronauta" />
+        <img class="n6-d1-nano" src="${n6Asset(1, "cara Derecha_1.png")}" alt="Nano astronauta" />
         <img class="n6-d1-mineral" src="${n6Asset(1, "Mineral.png")}" alt="Mineral brillante" />
       </section>
       <section class="n6-d1-options" aria-label="Opciones de direccion">
@@ -8326,7 +8322,7 @@ function isScratchStandaloneLevel(levelNumber) {
 }
 
 function redirectToScratchLevel() {
-  window.location.replace(`scratch-desafio.html?nivel=${level}`);
+  window.location.replace(`scratch-nivel.html?nivel=${level}`);
 }
 
 function openStandaloneLevel() {

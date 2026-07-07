@@ -17072,6 +17072,30 @@ article.challenge-card.n4-sound-card {
   color: var(--color-primary);
 }
 
+.scratch-editor-fallback {
+  height: 100%;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.scratch-editor-fallback p {
+  max-width: 420px;
+  margin: 0;
+  color: #42515a;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.scratch-editor-fallback a[href]:not(.scratch-action) {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
 .scratch-level-nav {
   display: flex;
   justify-content: center;
@@ -17487,6 +17511,223 @@ article.challenge-card.n4-sound-card {
   }
 }
 
+/* ── scratch-nivel (niveles 7-10 con editor externo) ── */
+.scratch-body:has(.scratch-nivel-shell) {
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.scratch-body .scratch-nivel-shell {
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  display: block;
+  overflow: hidden;
+}
+
+.scratch-nivel-shell .scratch-topbar {
+  position: fixed;
+  inset: 10px 12px auto;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.scratch-nivel-shell .scratch-back,
+.scratch-nivel-shell .scratch-download,
+.scratch-nivel-shell .scratch-consigna-button {
+  pointer-events: auto;
+}
+
+.scratch-nivel-shell .scratch-back {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 55;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.scratch-nivel-shell .scratch-back .side-control-label {
+  display: none;
+}
+
+.scratch-nivel-shell .scratch-heading {
+  display: none;
+}
+
+.scratch-nivel-workbench {
+  position: fixed;
+  inset: 0;
+  display: block;
+}
+
+.scratch-nivel-shell .scratch-objective-panel {
+  position: fixed;
+  left: 8px;
+  top: 50px;
+  z-index: 40;
+  width: min(320px, calc(100vw - 28px));
+  max-height: calc(100vh - 82px);
+  padding: 12px;
+  gap: 12px;
+  overflow-y: auto;
+  min-height: 0;
+  align-self: auto;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+}
+
+.scratch-nivel-shell .scratch-editor-panel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: calc(100vh - 32px);
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.scratch-nivel-shell .scratch-editor-panel iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  overflow: hidden;
+}
+
+.scratch-nivel-shell .scratch-level-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 10px;
+  z-index: 35;
+  padding: 6px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 10px 24px rgba(10, 122, 190, 0.14);
+  transform: translateX(-50%);
+}
+
+.scratch-consigna-button {
+  position: fixed;
+  top: 8px;
+  right: auto;
+  left: 50px;
+  z-index: 55;
+  min-width: 108px;
+  height: 34px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(10, 122, 190, 0.18);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.scratch-consigna-button[aria-expanded="true"] {
+  background: #f28c00;
+}
+
+.scratch-floating-panel-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: grab;
+  user-select: none;
+}
+
+.scratch-floating-panel-bar:active {
+  cursor: grabbing;
+}
+
+.scratch-floating-panel-bar strong {
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.scratch-floating-toggle {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.scratch-floating-panel.is-collapsed {
+  display: none;
+}
+
+/* Fallback cuando el editor local no está disponible */
+.scratch-nivel-steps {
+  display: grid;
+  gap: 14px;
+  width: min(480px, 100%);
+  margin: 0 auto;
+}
+
+.scratch-nivel-step {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.scratch-nivel-step-num {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 900;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.scratch-nivel-step strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--color-dark);
+  font-size: 0.95rem;
+}
+
+.scratch-nivel-step p {
+  margin: 0;
+  color: #6b7c85;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.scratch-nivel-step .scratch-action {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  min-height: 38px;
+}
+
 @media (max-width: 980px) {
   .scratch-body {
     height: auto;
@@ -17546,6 +17787,10 @@ article.challenge-card.n4-sound-card {
     min-height: 620px;
   }
 
+  .scratch-nivel-workbench {
+    grid-template-columns: 1fr;
+  }
+
   .scratch-code-panel {
     grid-template-rows: auto auto auto auto;
   }
@@ -17591,7 +17836,11 @@ article.challenge-card.n4-sound-card {
     display: none;
   }
 
-  .scratch-objective-panel {
+  .scratch-objetivo-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .scratch-nivel-workbench {
     grid-template-columns: 1fr;
   }
 
@@ -19108,6 +19357,19 @@ article.challenge-card.n4-sound-card {
   transform: none;
 }
 
+.n5-debug-card .n5-debug-code::after {
+  content: "";
+  position: absolute;
+  right: 1.5%;
+  top: -26%;
+  z-index: 6;
+  width: 12%;
+  height: 34%;
+  border-radius: 999px;
+  background: #f5fbff;
+  pointer-events: none;
+}
+
 .n5-debug-card .n5-debug-token {
   aspect-ratio: 1;
   min-height: 54px;
@@ -19273,17 +19535,17 @@ article.challenge-card.n4-sound-card {
 }
 
 .n6-d1-nano {
-  left: 20.6%;
-  top: 61%;
-  width: 12.5%;
+  left: 21.8%;
+  top: 61.2%;
+  width: 11.8%;
   transform: translate(-50%, -50%);
   filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.34));
 }
 
 .n6-d1-mineral {
-  left: 32.8%;
-  top: 60.5%;
-  width: 12.5%;
+  left: 34%;
+  top: 61.2%;
+  width: 11.8%;
   transform: translate(-50%, -50%);
   filter: drop-shadow(0 0 18px rgba(221, 90, 255, 0.8));
 }
