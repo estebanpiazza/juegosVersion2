@@ -1,0 +1,3 @@
+Consigna:Nano va directo contra un satélite. Observa las opciones y elige la ficha incorrecta para ayudarlo a evitar el choque.
+
+Mecánica: Tap (Depuración / Debugging). El algoritmo en pantalla muestra una secuencia lineal fija que lleva a Nano a colisionar: [Avanzar] -> [Avanzar] -> [Avanzar]. El alumno identifica la instrucción que causa el impacto, hace Tap sobre la segunda tarjeta de [Avanzar] y del menú emergente selecciona [Girar a la derecha].

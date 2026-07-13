@@ -1,0 +1,3 @@
+Consigna: ¡Súper recolección! Hay muchas estrellas flotando en fila. Elige el bloque que te ayuda a recogerlas todas juntas con un solo movimiento.
+
+Mecánica: Drag & Drop. Automatización por repetición. En la cuadrícula hay una fila de 4 estrellas (o rocas lunares). En la regla de código hay un espacio para un bloque contenedor. Opciones abajo: [Repetición x4], [Girar a la izquierda], [Avanzar] y [Batería baja]. El alumno debe arrastrar el bloque contenedor [Repetición x4] para automatizar la tarea.

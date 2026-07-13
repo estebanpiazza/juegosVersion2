@@ -7,7 +7,7 @@
       "id": "n6-d1",
       "titulo": "Mision espacial",
       "tipo": "n6-direccion-inicial",
-      "consigna": "¡Misión espacial! Observa el camino hacia el mineral brillante y elige el primer paso para empezar el recorrido.",
+      "consigna": "Observa el camino hacia el mineral brillante y elige el primer paso para empezar el recorrido.",
       "objetivo": "Identificar la direccion inicial correcta para comenzar un recorrido lineal.",
       "interaccion": "Tocar la tarjeta Avanzar entre tres opciones de flechas."
     },
@@ -15,9 +15,17 @@
       "id": "n6-d2",
       "titulo": "Alerta roja",
       "tipo": "n6-condicional-meteoritos",
-      "consigna": "¡Alerta roja! Una lluvia de meteoritos pasa frente a Nano. Selecciona la acción exacta para que espere seguro en su nave.",
+      "consigna": "Selecciona la acción exacta para que espere seguro en su nave.",
       "objetivo": "Completar una regla condicional simple relacionando peligro visual con accion segura.",
       "interaccion": "Arrastrar o seleccionar la tarjeta Detenerse y colocarla en el espacio vacio."
+    },
+    {
+      "id": "n6-d3",
+      "titulo": "Súper recolección",
+      "tipo": "n6-repeticion-estrellas",
+      "consigna": "Hay muchas estrellas flotando en fila. Elige el bloque que te ayuda a recogerlas todas juntas con un solo movimiento.",
+      "objetivo": "Reconocer la repetición como una forma de automatizar una acción que se realiza cuatro veces.",
+      "interaccion": "Arrastrar o seleccionar la tarjeta Repetición x4 y colocarla en el primer espacio del algoritmo."
     }
   ]
 }

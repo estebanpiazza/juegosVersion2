@@ -7551,6 +7551,361 @@ article.challenge-card.design-challenge-v2 .rain-goal {
   }
 }
 
+/* ===== Nivel 6 · Consigna 1 (formato final) ===== */
+body:has(.n6-card-d1) .game-workspace {
+  padding: 0;
+}
+
+body:has(.n6-card-d1) .game-stage::after,
+body:has(.n6-card-d1) .game-topbar,
+body:has(.n6-card-d1) .corner-logo {
+  display: none;
+}
+
+body:has(.n6-card-d1) .game-stage-bg {
+  object-fit: cover;
+}
+
+.n6-card.n6-card-d1 {
+  min-height: 100%;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.n6-d1-header {
+  position: absolute;
+  left: 50%;
+  top: 4.8%;
+  z-index: 8;
+  width: min(54%, 1050px);
+  min-height: 16.5%;
+  padding: clamp(9px, 1.3vh, 15px) clamp(48px, 4vw, 76px);
+  display: grid;
+  align-content: center;
+  border: 5px solid rgba(145, 225, 239, 0.96);
+  border-radius: clamp(18px, 2vw, 32px);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 0 20px #00d8f4, inset 0 0 32px rgba(164, 234, 246, 0.42);
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.n6-d1-header h2 {
+  margin: 0 0 4px;
+  color: #08cbe7;
+  font-size: clamp(1.7rem, 2.9vw, 3rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.n6-d1-header p[data-consigna-text] {
+  max-width: 900px;
+  margin: 0 auto;
+  color: #666;
+  font-size: clamp(1rem, 1.75vw, 1.78rem);
+  font-weight: 800;
+  line-height: 1.24;
+  text-transform: none;
+}
+
+.n6-d1-listen {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: #087cab;
+  background: rgba(8, 203, 231, 0.12);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.n6-card-d1 .n6-d1-board {
+  left: 0.5%;
+  top: 24.7%;
+  width: 48%;
+  aspect-ratio: 1.066;
+}
+
+.n6-card-d1 .n6-d1-grid-frame {
+  object-fit: contain;
+  filter: drop-shadow(0 0 13px rgba(0, 220, 250, 0.72));
+}
+
+.n6-card-d1 .n6-d1-nano {
+  left: 17.3%;
+  top: 54.7%;
+  width: 10.5%;
+  transition: left 700ms cubic-bezier(.22, .8, .3, 1), transform 350ms ease;
+}
+
+.n6-card-d1 .n6-d1-nano.is-advancing {
+  left: 30%;
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.n6-card-d1 .n6-d1-mineral {
+  left: 87.5%;
+  top: 54.7%;
+  width: 13%;
+}
+
+.n6-d1-panels-bg {
+  position: absolute;
+  right: -4.2%;
+  top: 24.7%;
+  z-index: 1;
+  width: 62%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(0, 220, 250, 0.55));
+  pointer-events: none;
+}
+
+.n6-d1-algorithm {
+  position: absolute;
+  right: 5.2%;
+  top: 31.8%;
+  z-index: 4;
+  width: 42%;
+  height: 28%;
+}
+
+.n6-d1-algorithm h3 {
+  margin: 0;
+  color: #0bd9ef;
+  font-size: clamp(1.2rem, 2vw, 2.1rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+}
+
+.n6-d1-slots {
+  height: calc(100% - 34px);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: center;
+  gap: 2.1%;
+  padding: 4.2% 2% 0;
+}
+
+.n6-d1-slot {
+  position: relative;
+  aspect-ratio: 0.92;
+  display: grid;
+  place-items: center;
+  border: 3px dashed #0ad9f1;
+  border-radius: 14px;
+  color: #07d8ef;
+  background: rgba(4, 51, 69, 0.42);
+  font-size: clamp(2rem, 4.2vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1;
+  clip-path: polygon(0 0, 88% 0, 100% 12%, 100% 88%, 88% 100%, 0 100%, 0 61%, 10% 50%, 0 39%);
+}
+
+.n6-d1-slot img {
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+}
+
+.n6-d1-slot.is-correct {
+  border-style: solid;
+  border-color: #25d366;
+  background: rgba(37, 211, 102, 0.16);
+  box-shadow: 0 0 18px rgba(37, 211, 102, 0.78);
+}
+
+.n6-d1-options-panel {
+  position: absolute;
+  right: 5.2%;
+  top: 67.8%;
+  z-index: 4;
+  width: 42%;
+  height: 20%;
+}
+
+.n6-card-d1 .n6-d1-options {
+  position: static;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  place-items: center;
+  gap: 9%;
+  padding: 0 5%;
+}
+
+.n6-card-d1 .n6-direction-option {
+  width: 100%;
+  max-width: 154px;
+  aspect-ratio: 1;
+  overflow: visible;
+}
+
+.n6-option-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.n6-card-d1 .n6-direction-option .n6-option-card-base,
+.n6-card-d1 .n6-direction-option .n6-option-card-icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.n6-card-d1 .n6-direction-option .n6-option-card-icon {
+  left: 24%;
+  top: 11%;
+  width: 52%;
+  height: 52%;
+}
+
+.n6-card-d1 .n6-direction-option:hover,
+.n6-card-d1 .n6-direction-option:focus-visible,
+.n6-card-d1 .n6-direction-option.is-correct,
+.n6-card-d1 .n6-direction-option.is-wrong {
+  transform: translateY(-5px) scale(1.06);
+}
+
+.n6-card-d1 > .challenge-message {
+  bottom: 2.2%;
+  z-index: 10;
+  width: min(620px, 72%);
+  padding: 8px 18px;
+  border-width: 2px;
+  border-radius: 14px;
+  font-size: clamp(.78rem, 1.1vw, 1rem);
+  text-align: center;
+}
+
+.n6-card-d1 > .challenge-message:empty {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .n6-card.n6-card-d1 {
+    min-height: 900px;
+    overflow-y: auto;
+  }
+
+  .n6-d1-header {
+    top: 18px;
+    width: min(92%, 650px);
+    min-height: 132px;
+    padding: 16px 48px 16px 22px;
+  }
+
+  .n6-card-d1 .n6-d1-board {
+    left: 50%;
+    top: 150px;
+    width: min(94%, 590px);
+    transform: translateX(-50%);
+  }
+
+  .n6-d1-panels-bg {
+    display: none;
+  }
+
+  .n6-d1-algorithm,
+  .n6-d1-options-panel {
+    left: 50%;
+    right: auto;
+    width: min(92%, 600px);
+    border: 2px solid #0bd9ef;
+    border-radius: 22px;
+    background: rgba(2, 39, 56, 0.9);
+    box-shadow: 0 0 15px rgba(0, 220, 250, 0.55);
+    transform: translateX(-50%);
+  }
+
+  .n6-d1-algorithm {
+    top: 610px;
+    height: 130px;
+    padding: 10px;
+  }
+
+  .n6-d1-options-panel {
+    top: 755px;
+    height: 130px;
+  }
+
+  .n6-d1-slots {
+    padding-top: 8px;
+  }
+
+  .n6-d1-slot {
+    max-height: 78px;
+  }
+
+  .n6-card-d1 .n6-direction-option {
+    max-width: 106px;
+  }
+}
+
+@media (max-width: 560px) {
+  .n6-card.n6-card-d1 {
+    min-height: 760px;
+  }
+
+  .n6-d1-header {
+    min-height: 116px;
+  }
+
+  .n6-d1-header h2 {
+    font-size: 1.45rem;
+  }
+
+  .n6-d1-header p[data-consigna-text] {
+    font-size: .86rem;
+  }
+
+  .n6-card-d1 .n6-d1-board {
+    top: 130px;
+  }
+
+  .n6-d1-algorithm {
+    top: 490px;
+    height: 110px;
+  }
+
+  .n6-d1-options-panel {
+    top: 615px;
+    height: 120px;
+  }
+
+  .n6-d1-algorithm h3 {
+    font-size: 1rem;
+  }
+
+  .n6-d1-slots {
+    height: calc(100% - 20px);
+    gap: 4px;
+    padding: 5px 0 0;
+  }
+
+  .n6-d1-slot {
+    border-width: 2px;
+    border-radius: 8px;
+    font-size: 2rem;
+  }
+
+  .n6-card-d1 .n6-d1-options {
+    gap: 3%;
+    padding: 4px 3%;
+  }
+}
+
 /* Ajuste final de pantalla: deja ambos desafios dentro del viewport sin perder el estilo original. */
 body:has(.design-challenge-v1) .game-workspace,
 body:has(.design-challenge-v2) .game-workspace {
@@ -20161,6 +20516,811 @@ article.challenge-card.n4-sound-card {
 
   .n6-d2-ship {
     display: none;
+  }
+}
+
+/* ===== Nivel 6 · Consigna 2 (formato final) ===== */
+body:has(.n6-card-d2) .game-workspace {
+  padding: 0;
+}
+
+body:has(.n6-card-d2) .game-stage::after,
+body:has(.n6-card-d2) .game-topbar,
+body:has(.n6-card-d2) .corner-logo {
+  display: none;
+}
+
+body:has(.n6-card-d2) .game-stage-bg {
+  object-fit: cover;
+}
+
+.n6-card.n6-card-d2 {
+  min-height: 100%;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.n6-card-d2 .n6-d2-header {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  max-width: none;
+  margin: 0;
+  pointer-events: none;
+}
+
+.n6-d2-alert {
+  position: absolute;
+  left: 12.4%;
+  top: 1%;
+  width: 30%;
+  height: 28%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 13px rgba(0, 220, 250, 0.7));
+}
+
+.n6-d2-instruction {
+  position: absolute;
+  left: 38.4%;
+  top: 6.4%;
+  width: 50.5%;
+  min-height: 17.5%;
+  padding: 1.2% 3.2% 1.2% 2.8%;
+  display: grid;
+  align-content: center;
+  border: 5px solid rgba(145, 225, 239, 0.96);
+  border-radius: clamp(18px, 2vw, 32px);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 20px #00d8f4, inset 0 0 32px rgba(164, 234, 246, 0.42);
+  text-align: left;
+}
+
+.n6-d2-instruction h2 {
+  margin: 0 0 4px;
+  color: #09c9e6;
+  font-size: clamp(1.55rem, 2.75vw, 2.9rem);
+  font-weight: 900;
+  line-height: 1.03;
+}
+
+.n6-d2-instruction p[data-consigna-text] {
+  margin: 0;
+  color: #707070;
+  font-size: clamp(.9rem, 1.45vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: none;
+}
+
+.n6-d2-listen {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: #087cab;
+  background: rgba(8, 203, 231, 0.12);
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translateY(-50%);
+}
+
+.n6-card-d2 .n6-d2-ship {
+  left: 0.7%;
+  bottom: 1.5%;
+  z-index: 3;
+  width: 35.5%;
+  max-height: 42%;
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.35));
+}
+
+.n6-d2-panels-bg {
+  position: absolute;
+  right: -10.5%;
+  top: 16.5%;
+  z-index: 1;
+  width: 89%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(0, 220, 250, 0.55));
+  pointer-events: none;
+}
+
+.n6-card-d2 .n6-condition-panel {
+  position: absolute;
+  left: 35.8%;
+  right: auto;
+  top: 26.5%;
+  z-index: 4;
+  width: 59%;
+  min-height: 24%;
+  padding: 0;
+  display: block;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.n6-card-d2 .n6-meteor-card {
+  position: absolute;
+  left: 12.5%;
+  top: 8%;
+  width: 35%;
+  max-height: none;
+  filter: drop-shadow(0 0 12px rgba(255, 132, 0, 0.48));
+}
+
+.n6-card-d2 .n6-answer-slot {
+  position: absolute;
+  right: 1.2%;
+  top: 1%;
+  width: 23.5%;
+  height: 96%;
+  aspect-ratio: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 20px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.n6-card-d2 .n6-answer-slot > img {
+  width: 58%;
+  height: 72%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(0, 220, 250, 0.6));
+}
+
+.n6-card-d2 .n6-answer-slot.is-drag-over,
+.n6-card-d2 .n6-answer-slot.is-correct {
+  box-shadow: inset 0 0 0 4px rgba(37, 211, 102, 0.8), 0 0 25px rgba(37, 211, 102, 0.5);
+}
+
+.n6-card-d2 .n6-answer-slot.is-wrong {
+  box-shadow: inset 0 0 0 4px rgba(255, 74, 96, 0.86), 0 0 25px rgba(255, 74, 96, 0.55);
+}
+
+.n6-card-d2 .n6-d2-bank {
+  position: absolute;
+  left: 37.2%;
+  right: auto;
+  top: 62.2%;
+  bottom: auto;
+  z-index: 4;
+  width: 57.5%;
+  min-height: 32%;
+  padding: 2.6% 2.4% 1.5%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  gap: 2.4%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.n6-card-d2 .n6-action-card {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
+  overflow: visible;
+}
+
+.n6-card-d2 .n6-action-card > .n6-d2-option-card,
+.n6-card-d2 .n6-answer-slot .n6-d2-placed-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+.n6-card-d2 .n6-action-card > .n6-d2-option-card {
+  left: -12.5%;
+  top: -12.5%;
+  width: 125%;
+  height: 125%;
+}
+
+.n6-card-d2 .n6-action-card .n6-d2-option-base,
+.n6-card-d2 .n6-action-card .n6-d2-option-icon,
+.n6-card-d2 .n6-answer-slot .n6-d2-option-base,
+.n6-card-d2 .n6-answer-slot .n6-d2-option-icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.n6-card-d2 .n6-action-card .n6-d2-option-icon,
+.n6-card-d2 .n6-answer-slot .n6-d2-option-icon {
+  left: 24%;
+  top: 11%;
+  width: 52%;
+  height: 52%;
+}
+
+.n6-card-d2 .n6-answer-slot.is-filled {
+  padding: 0;
+  background: rgba(2, 18, 34, 0.25);
+}
+
+.n6-card-d2 .n6-answer-slot .n6-d2-placed-card {
+  width: 100%;
+  height: 100%;
+}
+
+.n6-card-d2 .n6-action-card.is-selected {
+  filter: brightness(1.08) drop-shadow(0 0 14px rgba(37, 211, 102, 0.85));
+}
+
+.n6-card-d2 > .challenge-message {
+  bottom: 1.2%;
+  z-index: 10;
+  width: min(620px, 72%);
+  padding: 8px 18px;
+  border-width: 2px;
+  border-radius: 14px;
+  font-size: clamp(.78rem, 1.1vw, 1rem);
+  text-align: center;
+  text-transform: none;
+}
+
+.n6-card-d2 > .challenge-message:empty {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .n6-card.n6-card-d2 {
+    min-height: 960px;
+    overflow-y: auto;
+  }
+
+  .n6-card-d2 .n6-d2-header {
+    position: absolute;
+  }
+
+  .n6-d2-alert {
+    left: 3%;
+    top: 12px;
+    width: 30%;
+    height: 126px;
+  }
+
+  .n6-d2-instruction {
+    left: 28%;
+    top: 18px;
+    width: 69%;
+    min-height: 116px;
+    padding: 12px 44px 12px 18px;
+  }
+
+  .n6-d2-instruction h2 {
+    font-size: clamp(1.1rem, 4vw, 1.65rem);
+  }
+
+  .n6-d2-instruction p[data-consigna-text] {
+    font-size: clamp(.76rem, 2.5vw, 1rem);
+  }
+
+  .n6-d2-panels-bg {
+    display: none;
+  }
+
+  .n6-card-d2 .n6-condition-panel,
+  .n6-card-d2 .n6-d2-bank {
+    left: 50%;
+    right: auto;
+    width: min(94%, 650px);
+    border: 2px solid #0bd9ef;
+    border-radius: 22px;
+    background: rgba(2, 39, 56, 0.9);
+    box-shadow: 0 0 15px rgba(0, 220, 250, 0.55);
+    transform: translateX(-50%);
+  }
+
+  .n6-card-d2 .n6-condition-panel {
+    top: 160px;
+    min-height: 245px;
+  }
+
+  .n6-card-d2 .n6-meteor-card {
+    left: 7%;
+    top: 19%;
+    width: 48%;
+  }
+
+  .n6-card-d2 .n6-answer-slot {
+    right: 5%;
+    top: 12%;
+    width: 30%;
+    height: 76%;
+    border: 3px dashed #0bd9ef;
+  }
+
+  .n6-card-d2 .n6-d2-bank {
+    top: 425px;
+    min-height: 230px;
+    padding: 22px;
+  }
+
+  .n6-card-d2 .n6-d2-ship {
+    left: 2%;
+    bottom: 34px;
+    width: min(50%, 360px);
+  }
+}
+
+@media (max-width: 560px) {
+  .n6-card.n6-card-d2 {
+    min-height: 830px;
+  }
+
+  .n6-d2-alert {
+    left: 2%;
+    width: 34%;
+    height: 108px;
+  }
+
+  .n6-d2-instruction {
+    left: 30%;
+    width: 68%;
+    min-height: 96px;
+    padding: 8px 38px 8px 12px;
+    border-width: 3px;
+  }
+
+  .n6-d2-instruction h2 {
+    font-size: .93rem;
+  }
+
+  .n6-d2-instruction p[data-consigna-text] {
+    font-size: .7rem;
+  }
+
+  .n6-card-d2 .n6-condition-panel {
+    top: 135px;
+    min-height: 205px;
+  }
+
+  .n6-card-d2 .n6-d2-bank {
+    top: 360px;
+    min-height: 370px;
+    padding: 18px 28px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .n6-card-d2 .n6-d2-ship {
+    display: none;
+  }
+}
+
+/* ===== Nivel 6 · Consigna 3 (formato final) ===== */
+body:has(.n6-card-d3) .game-workspace {
+  padding: 0;
+}
+
+body:has(.n6-card-d3) .game-stage::after,
+body:has(.n6-card-d3) .game-topbar,
+body:has(.n6-card-d3) .corner-logo {
+  display: none;
+}
+
+body:has(.n6-card-d3) .game-stage-bg {
+  object-fit: cover;
+}
+
+.n6-card.n6-card-d3 {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.n6-card-d3 .n6-d3-header {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  max-width: none;
+  margin: 0;
+  pointer-events: none;
+}
+
+.n6-d3-instruction {
+  position: absolute;
+  left: 50%;
+  top: 4.8%;
+  width: min(54%, 1050px);
+  min-height: 16.5%;
+  padding: clamp(9px, 1.3vh, 15px) clamp(48px, 4vw, 76px);
+  display: grid;
+  align-content: center;
+  border: 5px solid rgba(145, 225, 239, 0.96);
+  border-radius: clamp(18px, 2vw, 32px);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 0 20px #00d8f4, inset 0 0 32px rgba(164, 234, 246, 0.42);
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.n6-d3-instruction h2 {
+  margin: 0 0 4px;
+  color: #08cbe7;
+  font-size: clamp(1.65rem, 2.8vw, 2.9rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.n6-d3-instruction p[data-consigna-text] {
+  max-width: 930px;
+  margin: 0 auto;
+  color: #666;
+  font-size: clamp(.95rem, 1.65vw, 1.65rem);
+  font-weight: 800;
+  line-height: 1.23;
+  text-transform: none;
+}
+
+.n6-d3-listen {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: #087cab;
+  background: rgba(8, 203, 231, 0.12);
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translateY(-50%);
+}
+
+.n6-d3-board {
+  position: absolute;
+  left: .5%;
+  top: 24.7%;
+  z-index: 2;
+  width: 48%;
+  aspect-ratio: 1.066;
+}
+
+.n6-d3-grid-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 13px rgba(0, 220, 250, 0.72));
+  pointer-events: none;
+}
+
+.n6-d3-nano,
+.n6-d3-star {
+  position: absolute;
+  z-index: 3;
+  object-fit: contain;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.n6-d3-nano {
+  left: 44.5%;
+  top: 25.9%;
+  z-index: 5;
+  width: 11%;
+  filter: drop-shadow(0 7px 10px rgba(0, 0, 0, .3));
+}
+
+.n6-d3-star {
+  left: 44.5%;
+  width: 9%;
+  filter: drop-shadow(0 0 12px rgba(255, 197, 0, .65));
+}
+
+.n6-d3-star-1 { top: 37.7%; }
+.n6-d3-star-2 { top: 49.6%; }
+.n6-d3-star-3 { top: 61.4%; }
+.n6-d3-star-4 { top: 73.2%; }
+
+.n6-d3-panels-bg {
+  position: absolute;
+  right: -4.2%;
+  top: 24.7%;
+  z-index: 1;
+  width: 62%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(0, 220, 250, .55));
+  pointer-events: none;
+}
+
+.n6-d3-algorithm {
+  position: absolute;
+  right: 5.2%;
+  top: 36.5%;
+  z-index: 4;
+  width: 42%;
+  height: 22%;
+}
+
+.n6-d3-slots {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: center;
+  gap: 2.1%;
+  padding: 0 2%;
+}
+
+.n6-d3-slot {
+  position: relative;
+  aspect-ratio: .92;
+  min-width: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 3px dashed #0ad9f1;
+  border-radius: 14px;
+  color: #07d8ef;
+  background: rgba(4, 51, 69, .42);
+  font-family: inherit;
+  font-size: clamp(2rem, 4.2vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1;
+  clip-path: polygon(0 0, 88% 0, 100% 12%, 100% 88%, 88% 100%, 0 100%, 0 61%, 10% 50%, 0 39%);
+}
+
+button.n6-d3-slot {
+  cursor: pointer;
+}
+
+.n6-d3-slot.is-drag-over,
+.n6-d3-slot.is-correct {
+  border-style: solid;
+  border-color: #25d366;
+  box-shadow: 0 0 18px rgba(37, 211, 102, .78);
+}
+
+.n6-d3-slot.is-wrong {
+  border-color: #ff4a60;
+  box-shadow: 0 0 18px rgba(255, 74, 96, .8);
+}
+
+.n6-d3-slot.is-filled {
+  background: rgba(37, 211, 102, .12);
+}
+
+.n6-d3-bank {
+  position: absolute;
+  right: 5.2%;
+  top: 66.6%;
+  z-index: 4;
+  width: 42%;
+  height: 22%;
+  padding: 0 3%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  gap: 3%;
+}
+
+.n6-d3-action-card {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  cursor: grab;
+  touch-action: none;
+  transition: transform .18s ease, filter .18s ease;
+}
+
+.n6-d3-option-card,
+.n6-d3-placed-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.n6-d3-option-base,
+.n6-d3-option-icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.n6-d3-option-icon {
+  left: 24%;
+  top: 11%;
+  width: 52%;
+  height: 52%;
+}
+
+.n6-d3-action-card:hover,
+.n6-d3-action-card:focus-visible,
+.n6-d3-action-card.is-selected {
+  outline: 0;
+  transform: translateY(-5px) scale(1.06);
+  filter: brightness(1.08) drop-shadow(0 0 12px rgba(37, 211, 102, .75));
+}
+
+.n6-d3-action-card.is-wrong {
+  filter: drop-shadow(0 0 14px rgba(255, 74, 96, .9));
+}
+
+.n6-d3-placed-card {
+  width: 100%;
+  height: 100%;
+}
+
+.n6-card-d3 > .challenge-message {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  z-index: 10;
+  width: min(640px, 72%);
+  margin: 0;
+  padding: 8px 18px;
+  border: 2px solid rgba(8, 219, 247, .55);
+  border-radius: 14px;
+  color: #fff;
+  background: rgba(2, 18, 34, .82);
+  font-size: clamp(.78rem, 1.1vw, 1rem);
+  font-weight: 800;
+  text-align: center;
+  text-transform: none;
+  transform: translateX(-50%);
+}
+
+.n6-card-d3 > .challenge-message:empty {
+  display: none;
+}
+
+.n6-card-d3 > .challenge-message.is-success {
+  border-color: #25d366;
+}
+
+.n6-card-d3 > .challenge-message.is-error,
+.n6-card-d3 > .challenge-message.is-soft-error {
+  border-color: #ff4a60;
+}
+
+@keyframes n6-d3-collect-route {
+  0%, 8% { top: 25.9%; }
+  23% { top: 37.7%; }
+  47% { top: 49.6%; }
+  71% { top: 61.4%; }
+  95%, 100% { top: 73.2%; }
+}
+
+@keyframes n6-d3-star-collected {
+  0%, 42% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(.15) rotate(100deg); }
+}
+
+.n6-card-d3.is-collecting .n6-d3-nano {
+  animation: n6-d3-collect-route 2.65s cubic-bezier(.42, 0, .3, 1) forwards;
+}
+
+.n6-card-d3.is-collecting .n6-d3-star {
+  animation: n6-d3-star-collected .55s ease forwards;
+}
+
+.n6-card-d3.is-collecting .n6-d3-star-1 { animation-delay: .38s; }
+.n6-card-d3.is-collecting .n6-d3-star-2 { animation-delay: 1.02s; }
+.n6-card-d3.is-collecting .n6-d3-star-3 { animation-delay: 1.64s; }
+.n6-card-d3.is-collecting .n6-d3-star-4 { animation-delay: 2.28s; }
+
+@media (max-width: 900px) {
+  .n6-card.n6-card-d3 {
+    min-height: 930px;
+    overflow-y: auto;
+  }
+
+  .n6-d3-instruction {
+    top: 18px;
+    width: min(92%, 650px);
+    min-height: 132px;
+    padding: 16px 48px 16px 22px;
+  }
+
+  .n6-d3-board {
+    left: 50%;
+    top: 150px;
+    width: min(94%, 590px);
+    transform: translateX(-50%);
+  }
+
+  .n6-d3-panels-bg {
+    display: none;
+  }
+
+  .n6-d3-algorithm,
+  .n6-d3-bank {
+    left: 50%;
+    right: auto;
+    width: min(92%, 600px);
+    border: 2px solid #0bd9ef;
+    border-radius: 22px;
+    background: rgba(2, 39, 56, .9);
+    box-shadow: 0 0 15px rgba(0, 220, 250, .55);
+    transform: translateX(-50%);
+  }
+
+  .n6-d3-algorithm {
+    top: 610px;
+    height: 125px;
+    padding: 10px;
+  }
+
+  .n6-d3-bank {
+    top: 755px;
+    height: 150px;
+    padding: 8px 18px;
+  }
+}
+
+@media (max-width: 560px) {
+  .n6-card.n6-card-d3 {
+    min-height: 820px;
+  }
+
+  .n6-d3-instruction {
+    min-height: 116px;
+  }
+
+  .n6-d3-instruction h2 {
+    font-size: 1.35rem;
+  }
+
+  .n6-d3-instruction p[data-consigna-text] {
+    font-size: .82rem;
+  }
+
+  .n6-d3-board {
+    top: 130px;
+  }
+
+  .n6-d3-algorithm {
+    top: 490px;
+    height: 110px;
+  }
+
+  .n6-d3-bank {
+    top: 620px;
+    height: 180px;
+    padding: 8px 24px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .n6-d3-slot {
+    border-width: 2px;
+    border-radius: 8px;
+    font-size: 2rem;
   }
 }
 
