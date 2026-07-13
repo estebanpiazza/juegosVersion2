@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Be Tech | Scratch</title>
-    <link rel="stylesheet" href="estilos.css?v=63" />
+    <title>Be Tech | Mision de bloques</title>
+    <link rel="stylesheet" href="estilos.css?v=88" />
   </head>
   <body class="scratch-body">
     <main class="scratch-shell">
@@ -19,50 +19,62 @@
           <h1 data-scratch-title>Desafio Scratch</h1>
         </div>
 
-        <a class="scratch-download" href="scratch/nano-starter.sb3" download>
-          Proyecto Nano
-        </a>
+        <a class="scratch-download" href="scratch/nano-starter.sb3" download>Proyecto Nano</a>
       </header>
 
-      <section class="scratch-workbench" aria-label="Desafio Scratch">
-        <aside class="scratch-objective-panel">
-          <img class="scratch-nano" src="scratch/nano-scratch.png" alt="Nano" />
-          <div class="scratch-objective-copy">
-            <span class="scratch-status">Objetivo</span>
-            <h2 data-scratch-objective-title>Programa a Nano</h2>
-            <p data-scratch-objective>
-              Crea un proyecto en Scratch usando a Nano como personaje principal.
-            </p>
+      <section class="scratch-workbench scratch-mission-workbench" aria-label="Mision con bloques">
+        <section class="scratch-mission-board">
+          <div class="scratch-mission-dialog">
+            <img class="scratch-nano-portrait" src="scratch/nano-scratch.png" alt="Nano" />
+            <div>
+              <span class="scratch-status">Mision</span>
+              <h2 data-scratch-objective-title>Programa a Nano</h2>
+              <p data-scratch-objective>
+                Arma el camino con bloques para llevar a Nano hasta la estacion de carga.
+              </p>
+            </div>
+          </div>
+
+          <div class="scratch-map-wrap">
+            <div class="scratch-map" data-scratch-grid aria-label="Mapa de la manta de Nano"></div>
+          </div>
+
+          <p class="scratch-run-message" data-scratch-message>Arrastra o toca bloques para armar el programa.</p>
+        </section>
+
+        <aside class="scratch-code-panel" aria-label="Programacion por bloques">
+          <section class="scratch-panel-section">
+            <div class="scratch-section-title">
+              <span>1</span>
+              <strong>Bloques</strong>
+            </div>
+            <div class="scratch-block-palette" data-scratch-palette></div>
+          </section>
+
+          <section class="scratch-panel-section scratch-program-section">
+            <div class="scratch-section-title">
+              <span>2</span>
+              <strong>Programa</strong>
+            </div>
+            <div class="scratch-program-track" data-scratch-program></div>
+          </section>
+
+          <div class="scratch-controls">
+            <button class="scratch-run" type="button" data-scratch-run>Ejecutar</button>
+            <button class="scratch-reset" type="button" data-scratch-reset>Reiniciar</button>
           </div>
 
           <dl class="scratch-goal-list">
             <div>
               <dt>Concepto</dt>
-              <dd data-scratch-concept>Condicionales</dd>
+              <dd data-scratch-concept>Secuencia</dd>
             </div>
             <div>
-              <dt>Entrega</dt>
-              <dd data-scratch-deliverable>Proyecto probado en el editor.</dd>
+              <dt>Meta</dt>
+              <dd data-scratch-deliverable>Nano llega al cargador sin pisar el charco.</dd>
             </div>
           </dl>
-
-          <div class="scratch-actions">
-            <a class="scratch-action scratch-action-primary" data-scratch-open href="#" target="_blank" rel="noreferrer">
-              Abrir editor
-            </a>
-            <a class="scratch-action scratch-action-secondary" href="scratch/nano-starter.sb3" download>
-              Descargar base
-            </a>
-          </div>
         </aside>
-
-        <section class="scratch-editor-panel" aria-label="Editor Scratch">
-          <iframe data-scratch-frame title="Editor Scratch"></iframe>
-          <div class="scratch-editor-note" data-scratch-note hidden>
-            <strong>Fork local pendiente</strong>
-            <span>Se abre el editor web hasta que exista la build local en este proyecto.</span>
-          </div>
-        </section>
       </section>
 
       <nav class="scratch-level-nav" aria-label="Niveles Scratch">
@@ -73,6 +85,6 @@
       </nav>
     </main>
 
-    <script src="scratch-desafio.js?v=1"></script>
+    <script src="scratch-desafio.js?v=2"></script>
   </body>
 </html>

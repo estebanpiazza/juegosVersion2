@@ -14,8 +14,8 @@
       "id": "n5-d2",
       "titulo": "Encender motores",
       "tipo": "n5-seleccionar-energia",
-      "consigna": "¡Hora de encender motores! Selecciona solo los objetos que usan enchufe o pilas.",
-      "interaccion": "Tocar únicamente los objetos que requieren energía."
+      "consigna": "¡Hora de encender motores! Encontrá en el taller los objetos que usan enchufe o pilas.",
+      "interaccion": "Tocar los objetos del taller que requieren energía."
     },
     {
       "id": "n5-d3",
@@ -23,13 +23,6 @@
       "tipo": "n5-camino-carga",
       "consigna": "¡Alerta de energía! Guía a Nano hasta su estación de carga.",
       "interaccion": "Completar la secuencia de flechas para llegar a la estación USB."
-    },
-    {
-      "id": "n5-d4",
-      "titulo": "Nano listo",
-      "tipo": "n5-armado-nano",
-      "consigna": "¡Ayuda a Nano a estar listo! Arrastra cada pieza a su lugar correcto.",
-      "interaccion": "Seleccionar piezas de Nano y encastrarlas sobre la silueta."
     },
     {
       "id": "n5-d5",
@@ -65,6 +58,13 @@
       "tipo": "n5-debug-choque",
       "consigna": "¡Alerta de choque! Toca la tarjeta equivocada para salvar a Nano.",
       "interaccion": "Detectar la tarjeta incorrecta y reemplazarla por un giro."
+    },
+    {
+      "id": "n5-d10",
+      "titulo": "Trabaja sola",
+      "tipo": "n5-maquina-autonoma",
+      "consigna": "¿Cuál de estas máquinas trabaja completamente sola?",
+      "interaccion": "Tocar la tarjeta de la aspiradora robótica."
     }
   ]
 }

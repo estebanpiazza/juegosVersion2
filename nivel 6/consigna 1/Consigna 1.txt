@@ -1,0 +1,3 @@
+Consigna: ¡Misión espacial! Observa el camino hacia el mineral brillante y elige el primer paso para empezar el recorrido.
+
+Mecánica: Tap. Identificación de dirección inicial. En la cuadrícula se ve a Nano Astronauta frente a un camino lineal hacia un mineral brillante del espacio. Abajo se presentan 3 opciones de flechas de dirección básicas ([Avanzar], [Girar a la izquierda], [Girar a la derecha]). El alumno debe tocar [Avanzar] para iniciar el algoritmo.

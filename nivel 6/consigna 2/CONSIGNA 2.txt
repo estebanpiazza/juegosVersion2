@@ -1,0 +1,3 @@
+Consigna: ¡Alerta roja! Una lluvia de meteoritos pasa frente a Nano. Selecciona la acción exacta para que espere seguro en su nave.
+
+Mecánica: Drag & Drop. Estructura condicional simple basada en peligro visual. En la regla de código se muestra: SI [Lluvia de meteoritos] ENTONCES [ ? ]. Opciones en la botonera: [Avanzar], [Detenerse], [Girar] y [Saltar]. El alumno debe arrastrar la tarjeta [Detenerse] al espacio vacío.

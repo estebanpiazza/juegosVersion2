@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Be Tech | Editor de bloques</title>
+    <link rel="stylesheet" href="estilos.css?v=96" />
+  </head>
+  <body class="scratch-body">
+    <main class="scratch-shell scratch-nivel-shell">
+      <header class="scratch-topbar">
+        <a class="back-link scratch-back" href="index.html" aria-label="Volver a niveles">
+          <span class="side-control-icon" aria-hidden="true">&larr;</span>
+          <span class="side-control-label">Volver</span>
+        </a>
+        <button class="scratch-consigna-button" type="button" data-scratch-consigna-button aria-expanded="true">
+          Consigna
+        </button>
+
+        <div class="scratch-heading">
+          <p class="scratch-kicker" data-scratch-kicker>Nivel 7</p>
+          <h1 data-scratch-title>Editor de bloques</h1>
+        </div>
+
+      </header>
+
+      <div class="scratch-workbench scratch-nivel-workbench">
+        <aside class="scratch-objective-panel scratch-floating-panel" data-scratch-floating-panel>
+          <div class="scratch-floating-panel-bar" data-scratch-floating-handle>
+            <strong>Consigna</strong>
+            <button class="scratch-floating-toggle" type="button" data-scratch-floating-toggle aria-expanded="true" aria-label="Ocultar consigna">−</button>
+          </div>
+          <div class="scratch-objective-copy">
+            <span class="scratch-status" data-scratch-counter>Desafio 1 de 5</span>
+            <h2 data-scratch-objective-title>Programa a Nano</h2>
+            <p data-scratch-objective></p>
+          </div>
+          <dl class="scratch-goal-list">
+            <div>
+              <dt>Concepto</dt>
+              <dd data-scratch-concept>Secuencia</dd>
+            </div>
+          </dl>
+          <div class="scratch-actions">
+            <a class="scratch-action scratch-action-primary" href="scratch/nano-starter.sb3" download data-scratch-starter>
+              Descargar proyecto
+            </a>
+          </div>
+        </aside>
+        <div class="scratch-editor-panel" data-scratch-editor-panel></div>
+      </div>
+
+      <nav class="scratch-level-nav" aria-label="Desafios del nivel" data-scratch-desafio-nav></nav>
+    </main>
+
+    <script src="scratch-nivel.js?v=16"></script>
+  </body>
+</html>

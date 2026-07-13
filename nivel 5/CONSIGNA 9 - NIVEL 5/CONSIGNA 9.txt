@@ -1,3 +1,5 @@
 Consigna: ¡Alerta de choque! Toca la tarjeta equivocada para salvar a Nano.
 
 Mecánica: Tap (Depuración / Debugging). En pantalla se simula un recorrido donde Nano avanzará hacia un obstáculo si ejecuta el código actual. La barra de código muestra una flecha de avance incorrecta. Al hacer Tap sobre esa tarjeta defectuosa, el backend la reemplaza automáticamente por una tarjeta de giro, desviando al robot del impacto.
+
+Nota: El recorrido lo haces tu, el proposito es no chocar con los muebles, tu pones la secuencia pero hay una que esta mal y el chico lo tiene que detectar
