@@ -150,6 +150,16 @@
       "consigna": "Nano se puso sus zapatillas favoritas, pero los cordones están sueltos. Observa los pasos y ordénalos para que no se tropiece.",
       "objetivo": "Ordenar temporalmente los movimientos necesarios para atar los cordones.",
       "interaccion": "Arrastrar o seleccionar las nueve imágenes desde los cordones sueltos hasta el nudo terminado."
+    },
+    {
+      "id": "n4-rework-b2-d3",
+      "numero": 22,
+      "bloque": 2,
+      "titulo": "¡A lavarse los dientes!",
+      "tipo": "secuencia-cepillado-n4",
+      "consigna": "¡A lavarse los dientes! Para que queden limpios hay que seguir un orden. Ordena las imágenes.",
+      "objetivo": "Reconocer y ordenar temporalmente los pasos necesarios para cepillarse los dientes.",
+      "interaccion": "Arrastrar o seleccionar las ocho imágenes desde tomar el cepillo hasta guardarlo limpio."
     }
   ]
 }

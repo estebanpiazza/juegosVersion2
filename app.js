@@ -72,6 +72,7 @@ const challengeTypeRenderers = {
   "recuperar-tesoro-alfombra": (id) => renderN4ProgrammingCarpetChallenge(id),
   "secuencia-despertar-n4": (id) => renderN4WakeUpSequenceChallenge(id),
   "secuencia-cordones-n4": (id) => renderN4ShoelaceSequenceChallenge(id),
+  "secuencia-cepillado-n4": (id) => renderN4ToothbrushingSequenceChallenge(id),
   "secuenciacion-guiada": (id) => renderPathChallenge(id),
   "depuracion-inicial": (id) => renderBalanceChallengeV2(id),
   "programacion-por-bloques": (id) => renderRobotChallengeV2(id),
@@ -748,6 +749,8 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n4Block2Asset("FONDO.png");
       case "secuencia-cordones-n4":
         return n4Block2Asset("FONDO.png");
+      case "secuencia-cepillado-n4":
+        return n4Block2ChallengeAsset(3, "FONDO.png");
       case "n5-clasificar-robots":
         return n5Asset(1, "Fondo consigna 1.jpg");
       case "n5-seleccionar-energia":
@@ -4633,6 +4636,149 @@ function renderN4ShoelaceSequenceChallenge(id) {
     });
     option.addEventListener("dragstart", (event) => {
       event.dataTransfer?.setData("text/plain", option.dataset.laceStep);
+      option.classList.add("is-dragging");
+    });
+    option.addEventListener("dragend", () => option.classList.remove("is-dragging"));
+  });
+}
+
+function renderN4ToothbrushingSequenceChallenge(id) {
+  const orderedFileNumbers = [1, 4, 6, 2, 3, 5, 7, 8];
+  const labels = [
+    "Tomar el cepillo",
+    "Abrir la canilla",
+    "Mojar el cepillo",
+    "Colocar la pasta",
+    "Cepillar los dientes",
+    "Enjuagar la boca",
+    "Cerrar la canilla",
+    "Guardar el cepillo limpio",
+  ];
+  const steps = orderedFileNumbers.map((fileNumber, index) => ({
+    id: `cepillado-${fileNumber}`,
+    label: labels[index],
+    file: `PASO ${fileNumber}.png`,
+  }));
+  const bankOrder = [steps[3], steps[1], steps[5], steps[7], steps[4], steps[2], steps[6], steps[0]];
+  const slots = Array(steps.length).fill(null);
+  let selectedSlot = 0;
+  let solved = false;
+
+  const stepById = (stepId) => steps.find((step) => step.id === stepId);
+  const imageMarkup = (step) => `<img src="${n4Block2ChallengeAsset(3, step.file)}" alt="" aria-hidden="true" />`;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-b2-d3-card">
+      ${renderChallengeHeader(
+        "BLOQUE 2 · DESAFÍO 3",
+        "¡A LAVARSE LOS DIENTES!",
+        getChallengeInstruction(id, "Para que queden limpios hay que seguir un orden. Ordena las imágenes."),
+      )}
+      <section class="n4-b2-d3-layout" aria-label="Ordenar el paso a paso del cepillado de dientes">
+        <div class="n4-b2-d3-slots" aria-label="Secuencia ordenada">
+          ${steps.map((_, index) => `
+            <button class="n4-b2-d3-slot${index === 0 ? " is-selected" : ""}" type="button" data-brush-slot="${index}" aria-label="Paso ${index + 1}, vacío">
+              <strong>${index + 1}</strong>
+              <span>?</span>
+            </button>
+          `).join("")}
+        </div>
+        <div class="n4-b2-d3-bank" aria-label="Imágenes desordenadas">
+          ${bankOrder.map((step) => `
+            <button class="n4-b2-d3-option" type="button" draggable="true" data-brush-step="${step.id}" aria-label="${step.label}">
+              ${imageMarkup(step)}
+            </button>
+          `).join("")}
+        </div>
+      </section>
+      <p class="challenge-message n4-b2-d3-message" data-message>Ordená las ocho imágenes desde que tomás el cepillo hasta que lo guardás limpio.</p>
+    </article>
+  `;
+
+  const slotNodes = [...challengeContent.querySelectorAll("[data-brush-slot]")];
+  const optionNodes = [...challengeContent.querySelectorAll("[data-brush-step]")];
+
+  function renderState() {
+    slotNodes.forEach((slot, index) => {
+      const step = stepById(slots[index]);
+      slot.classList.toggle("is-selected", index === selectedSlot && !solved);
+      slot.classList.remove("is-drag-over");
+      slot.setAttribute("aria-label", step ? `Paso ${index + 1}: ${step.label}` : `Paso ${index + 1}, vacío`);
+      slot.innerHTML = step
+        ? `<strong>${index + 1}</strong>${imageMarkup(step)}`
+        : `<strong>${index + 1}</strong><span>?</span>`;
+    });
+    optionNodes.forEach((option) => {
+      const isPlaced = slots.includes(option.dataset.brushStep);
+      option.classList.toggle("is-placed", isPlaced);
+      option.disabled = solved;
+    });
+  }
+
+  function placeStep(stepId, slotIndex) {
+    if (solved || !stepById(stepId)) return;
+    const previousIndex = slots.indexOf(stepId);
+    if (previousIndex !== -1) slots[previousIndex] = null;
+    slots[slotIndex] = stepId;
+    slotNodes.forEach((slot) => slot.classList.remove("is-wrong"));
+    const nextEmpty = slots.findIndex((value) => !value);
+    selectedSlot = nextEmpty === -1 ? slotIndex : nextEmpty;
+    renderState();
+
+    if (slots.some((value) => !value)) {
+      setMessage(`Paso ubicado. Faltan ${slots.filter((value) => !value).length}.`, "is-good");
+      return;
+    }
+
+    const wrongIndexes = steps
+      .map((step, index) => slots[index] === step.id ? -1 : index)
+      .filter((index) => index !== -1);
+    if (wrongIndexes.length) {
+      wrongIndexes.forEach((index) => slotNodes[index].classList.add("is-wrong"));
+      selectedSlot = wrongIndexes[0];
+      renderState();
+      wrongIndexes.forEach((index) => slotNodes[index].classList.add("is-wrong"));
+      setMessage(`Revisá desde el paso ${wrongIndexes[0] + 1}. Recordá cepillarte antes de enjuagarte.`, "is-error is-soft-error");
+      return;
+    }
+
+    solved = true;
+    slotNodes.forEach((slot) => slot.classList.add("is-correct"));
+    renderState();
+    setMessage("¡Dientes limpios! Seguiste los ocho pasos en el orden correcto.", "is-success");
+    completeChallenge(id);
+  }
+
+  slotNodes.forEach((slot) => {
+    slot.addEventListener("click", () => {
+      if (solved) return;
+      selectedSlot = Number(slot.dataset.brushSlot);
+      renderState();
+    });
+    slot.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      slot.classList.add("is-drag-over");
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-drag-over"));
+    slot.addEventListener("drop", (event) => {
+      event.preventDefault();
+      placeStep(event.dataTransfer?.getData("text/plain"), Number(slot.dataset.brushSlot));
+    });
+  });
+
+  optionNodes.forEach((option) => {
+    option.addEventListener("click", () => {
+      if (solved) return;
+      const stepId = option.dataset.brushStep;
+      if (slots.includes(stepId)) {
+        selectedSlot = slots.indexOf(stepId);
+        renderState();
+        return;
+      }
+      placeStep(stepId, selectedSlot);
+    });
+    option.addEventListener("dragstart", (event) => {
+      event.dataTransfer?.setData("text/plain", option.dataset.brushStep);
       option.classList.add("is-dragging");
     });
     option.addEventListener("dragend", () => option.classList.remove("is-dragging"));
