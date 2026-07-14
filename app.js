@@ -4851,8 +4851,8 @@ function renderN6AntennaRouteChallenge(id = 4) {
     const card = challengeContent.querySelector(".n6-card-d4");
     const nano = challengeContent.querySelector(".n6-d4-nano");
     const positions = [
-      [17.3, 49.6], [31.3, 49.6], [45.4, 49.6], [45.4, 49.6], [45.4, 61.4],
-      [45.4, 61.4], [59.4, 61.4], [73.5, 61.4], [73.5, 61.4], [73.5, 49.6], [73.5, 37.7],
+      [18.9, 48.4], [31.5, 48.4], [44.3, 48.4], [44.3, 48.4], [44.3, 60.2],
+      [44.3, 60.2], [57, 60.2], [69.7, 60.2], [69.7, 60.2], [69.7, 48.4], [69.7, 36.7],
     ];
     const collectedAt = new Map([[4, ".n6-d4-wrench"], [10, ".n6-d4-nut"]]);
     card?.classList.add("is-running");
@@ -5020,10 +5020,12 @@ function renderN6CraterDetourChallenge(id = 5) {
   function animateSafeRoute(positions) {
     const nano = challengeContent.querySelector(".n6-d5-nano");
     const radar = challengeContent.querySelector(".n6-d5-radar");
+    const columnCenters = [20.75, 32.55, 44.34, 55.85, 67.43, 79.42];
+    const rowCenters = [24.59, 35.41, 46.6, 57.82, 69.61];
     positions.slice(1).forEach(({ row, column }, index) => {
       window.setTimeout(() => {
-        nano.style.left = `${17.3 + (column * 14.04)}%`;
-        nano.style.top = `${25.9 + (row * 11.825)}%`;
+        nano.style.left = `${columnCenters[column]}%`;
+        nano.style.top = `${rowCenters[row]}%`;
         slots[index]?.classList.add("is-executed");
         if (index === positions.length - 2) radar?.classList.add("is-reached");
       }, (index + 1) * 390);

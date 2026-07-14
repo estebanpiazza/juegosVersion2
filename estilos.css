@@ -22312,6 +22312,42 @@ body:has(.n6-card) .game-stage-bg {
   min-height: 100%;
 }
 
+.n6-card-d1 .n6-d1-nano {
+  left: 18.9%;
+  top: 48.4%;
+}
+
+.n6-card-d1 .n6-d1-nano.is-advancing {
+  left: 31.5%;
+}
+
+.n6-card-d1 .n6-d1-mineral {
+  left: 82.7%;
+  top: 48.4%;
+}
+
+.n6-card-d3 .n6-d3-nano {
+  left: 44.3%;
+  top: 25.3%;
+}
+
+.n6-card-d3 .n6-d3-star {
+  left: 44.3%;
+}
+
+.n6-card-d3 .n6-d3-star-1 { top: 36.7%; }
+.n6-card-d3 .n6-d3-star-2 { top: 48.4%; }
+.n6-card-d3 .n6-d3-star-3 { top: 60.2%; }
+.n6-card-d3 .n6-d3-star-4 { top: 72.6%; }
+
+@keyframes n6-d3-collect-route {
+  0%, 8% { top: 25.3%; }
+  23% { top: 36.7%; }
+  47% { top: 48.4%; }
+  71% { top: 60.2%; }
+  95%, 100% { top: 72.6%; }
+}
+
 .n6-d1-header,
 .n6-d3-instruction,
 .n6-d4-instruction {
@@ -22330,53 +22366,53 @@ body:has(.n6-card) .game-stage-bg {
 }
 
 .n6-card-d4 .n6-d4-nano {
-  left: 17.3%;
-  top: 49.6%;
+  left: 18.9%;
+  top: 48.4%;
 }
 
 .n6-card-d4 .n6-d4-wrench {
-  left: 45.4%;
-  top: 61.4%;
+  left: 44.3%;
+  top: 60.2%;
 }
 
 .n6-card-d4 .n6-d4-nut {
-  left: 73.5%;
-  top: 37.7%;
+  left: 69.7%;
+  top: 36.7%;
 }
 
 .n6-card-d5 .n6-d5-nano {
-  left: 17.3%;
-  top: 73.2%;
+  left: 20.75%;
+  top: 69.61%;
 }
 
 .n6-card-d5 .n6-d5-radar {
-  left: 73.5%;
-  top: 25.9%;
+  left: 67.43%;
+  top: 24.59%;
 }
 
 .n6-card-d6 .n6-d6-nano {
-  left: 17.3%;
-  top: 49.6%;
+  left: 18.9%;
+  top: 48.4%;
 }
 
 .n6-card-d6 .n6-d6-satellite {
-  left: 59.4%;
-  top: 49.6%;
+  left: 57%;
+  top: 48.4%;
 }
 
 .n6-card-d7 .n6-d7-nano {
-  left: 31.3%;
-  top: 37.7%;
+  left: 31.5%;
+  top: 36.7%;
 }
 
 .n6-card-d7 .n6-d7-solar {
-  top: 37.7%;
+  top: 36.7%;
 }
 
-.n6-card-d7 .n6-d7-solar-1 { left: 45.4%; }
-.n6-card-d7 .n6-d7-solar-2 { left: 59.4%; }
-.n6-card-d7 .n6-d7-solar-3 { left: 73.5%; }
-.n6-card-d7 .n6-d7-solar-4 { left: 87.5%; }
+.n6-card-d7 .n6-d7-solar-1 { left: 44.3%; }
+.n6-card-d7 .n6-d7-solar-2 { left: 57%; }
+.n6-card-d7 .n6-d7-solar-3 { left: 69.7%; }
+.n6-card-d7 .n6-d7-solar-4 { left: 82.7%; }
 
 .n6-d4-panels-bg {
   right: -4.2%;
@@ -22411,17 +22447,17 @@ body:has(.n6-card) .game-stage-bg {
 }
 
 @keyframes n6-d6-safe-route {
-  0% { left: 17.3%; top: 49.6%; }
-  35%, 55% { left: 31.3%; top: 49.6%; }
-  100% { left: 31.3%; top: 61.4%; }
+  0% { left: 18.9%; top: 48.4%; }
+  35%, 55% { left: 31.5%; top: 48.4%; }
+  100% { left: 31.5%; top: 60.2%; }
 }
 
 @keyframes n6-d7-panel-route {
-  0% { left: 31.3%; }
-  24% { left: 45.4%; }
-  48% { left: 59.4%; }
-  72% { left: 73.5%; }
-  100% { left: 87.5%; }
+  0% { left: 31.5%; }
+  24% { left: 44.3%; }
+  48% { left: 57%; }
+  72% { left: 69.7%; }
+  100% { left: 82.7%; }
 }
 
 @media (max-width: 900px) {
