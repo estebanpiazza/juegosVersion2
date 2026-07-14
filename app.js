@@ -88,6 +88,10 @@ const challengeTypeRenderers = {
   "n6-direccion-inicial": (id) => renderN6InitialDirectionChallenge(id),
   "n6-condicional-meteoritos": (id) => renderN6MeteorConditionChallenge(id),
   "n6-repeticion-estrellas": (id) => renderN6StarRepetitionChallenge(id),
+  "n6-ruta-antena": (id) => renderN6AntennaRouteChallenge(id),
+  "n6-desvio-crater": (id) => renderN6CraterDetourChallenge(id),
+  "n6-debug-satelite": (id) => renderN6SatelliteDebugChallenge(id),
+  "n6-repeticion-paneles": (id) => renderN6SolarRepetitionChallenge(id),
   "repeticion-obligatoria": (id) => renderRepeatRequiredChallenge(id),
   "laberinto-flechas": (id) => renderDesignD6ArrowMazeChallenge(id),
   "ordenar-algoritmo": (id) => renderOrderAlgorithmChallenge(id),
@@ -216,6 +220,10 @@ const N6_ASSET_FOLDER_BY_CHALLENGE = {
   1: "Consigna 1- NIVEL 6",
   2: "CONSIGNA 2 NIVEL 6",
   3: "CONSIGNA 3 - NIVEL 6",
+  4: "CONSIGNA 4 - NIVEL 6",
+  5: "CONSIGNA 5 - NIVEL 6",
+  6: "CONSIGNA 6 - Nivel 6",
+  7: "CONSIGNA 7 - NIVEL 6",
 };
 
 function n6Asset(challengeNumber, fileName) {
@@ -747,6 +755,14 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n6Asset(2, "FONDO.png");
       case "n6-repeticion-estrellas":
         return n6Asset(3, "Fondo.png");
+      case "n6-ruta-antena":
+        return n6Asset(4, "FONDO.png");
+      case "n6-desvio-crater":
+        return n6Asset(5, "Fondo.png");
+      case "n6-debug-satelite":
+        return n6Asset(6, "Fondo.png");
+      case "n6-repeticion-paneles":
+        return n6Asset(6, "Fondo.png");
       case "secuenciacion-guiada":
         return DESIGN_D1_STAGE_BACKGROUND;
       case "depuracion-inicial":
@@ -4752,6 +4768,565 @@ function renderN6StarRepetitionChallenge(id = 3) {
   });
 
   slot.addEventListener("click", () => placeCard(slot));
+}
+
+function renderN6AntennaRouteChallenge(id = 4) {
+  const commands = [
+    { id: "avanzar", label: "Avanzar", base: "Tarjeta avanzar.png", icon: "AVANZAR.png" },
+    { id: "izquierda", label: "Girar a la izquierda", base: "GIRAR IZQUIERDA.png", icon: "IZQUIERDA.png" },
+    { id: "derecha", label: "Girar a la derecha", base: "GIRAR DERECHA.png", icon: "DERECHA.png" },
+  ];
+  const expectedRoute = ["avanzar", "avanzar", "derecha", "avanzar", "izquierda", "avanzar", "avanzar", "izquierda", "avanzar", "avanzar"];
+  const programmedRoute = [];
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n6-card n6-card-d4">
+      <header class="challenge-header n6-d4-header">
+        <div class="n6-d4-instruction">
+          <h2>¡AYUDA A NANO A COMPLETAR LA ANTENA ESPACIAL!</h2>
+          <p data-consigna-text>${getChallengeInstruction(id, "Encuentra las piezas que necesita para terminar de armarla.")}</p>
+          <button class="n6-d4-listen" type="button" data-speak-consigna aria-label="Escuchar consigna" title="Escuchar consigna">&#128266;</button>
+        </div>
+      </header>
+
+      <section class="n6-d4-board" aria-label="Cuadrícula con Nano y las piezas de la antena">
+        <img class="n6-d4-grid-frame" src="${n6Asset(4, "Cuadricula.png")}" alt="" aria-hidden="true" />
+        <img class="n6-d4-nano" src="${n6Asset(4, "cara Derecha.png")}" alt="Nano" />
+        <img class="n6-d4-piece n6-d4-wrench" src="${n6Asset(4, "llave.png")}" alt="Llave para la antena" />
+        <img class="n6-d4-piece n6-d4-nut" src="${n6Asset(4, "tuerca.png")}" alt="Tuerca para la antena" />
+      </section>
+
+      <img class="n6-d4-panels-bg" src="${n6Asset(4, "tablero.png")}" alt="" aria-hidden="true" />
+
+      <section class="n6-d4-algorithm" aria-label="Algoritmo de diez pasos">
+        <div class="n6-d4-algorithm-heading">
+          <h3>ALGORITMO</h3>
+          <button class="n6-d4-clear" type="button" data-clear-route aria-label="Borrar algoritmo">Borrar</button>
+        </div>
+        <div class="n6-d4-slots">
+          ${Array.from({ length: 10 }, (_, index) => `
+            <button class="n6-d4-slot" type="button" data-route-slot="${index}" aria-label="Paso ${index + 1}, vacío"><span>?</span></button>
+          `).join("")}
+        </div>
+      </section>
+
+      <section class="n6-d4-bank" aria-label="Tarjetas de programación">
+        ${commands.map((command) => `
+          <button class="n6-d4-action-card" type="button" data-command="${command.id}" aria-label="${command.label}">
+            <span class="n6-d4-option-card">
+              <img class="n6-d4-option-base" src="${n6Asset(4, command.base)}" alt="" aria-hidden="true" />
+              <img class="n6-d4-option-icon" src="${n6Asset(4, command.icon)}" alt="" aria-hidden="true" />
+            </span>
+            <span class="sr-only">${command.label}</span>
+          </button>
+        `).join("")}
+      </section>
+
+      <p class="challenge-message n6-d4-message" data-message></p>
+    </article>
+  `;
+
+  const slots = [...challengeContent.querySelectorAll(".n6-d4-slot")];
+  const actionButtons = [...challengeContent.querySelectorAll(".n6-d4-action-card")];
+  const clearButton = challengeContent.querySelector("[data-clear-route]");
+
+  function renderProgram() {
+    slots.forEach((slot, index) => {
+      const command = commands.find((item) => item.id === programmedRoute[index]);
+      slot.classList.toggle("is-filled", Boolean(command));
+      slot.classList.remove("is-wrong");
+      if (!command) {
+        slot.innerHTML = "<span>?</span>";
+        slot.setAttribute("aria-label", `Paso ${index + 1}, vacío`);
+        return;
+      }
+      slot.innerHTML = `<img src="${n6Asset(4, command.icon)}" alt="" aria-hidden="true" />`;
+      slot.setAttribute("aria-label", `Paso ${index + 1}, ${command.label}. Tocar para borrar desde aquí.`);
+    });
+    clearButton.disabled = programmedRoute.length === 0 || solved;
+  }
+
+  function animateSuccessfulRoute() {
+    const card = challengeContent.querySelector(".n6-card-d4");
+    const nano = challengeContent.querySelector(".n6-d4-nano");
+    const positions = [
+      [17.3, 49.6], [31.3, 49.6], [45.4, 49.6], [45.4, 49.6], [45.4, 61.4],
+      [45.4, 61.4], [59.4, 61.4], [73.5, 61.4], [73.5, 61.4], [73.5, 49.6], [73.5, 37.7],
+    ];
+    const collectedAt = new Map([[4, ".n6-d4-wrench"], [10, ".n6-d4-nut"]]);
+    card?.classList.add("is-running");
+    positions.slice(1).forEach(([left, top], index) => {
+      window.setTimeout(() => {
+        nano.style.left = `${left}%`;
+        nano.style.top = `${top}%`;
+        slots[index]?.classList.add("is-executed");
+        const pieceSelector = collectedAt.get(index + 1);
+        if (pieceSelector) challengeContent.querySelector(pieceSelector)?.classList.add("is-collected");
+      }, (index + 1) * 390);
+    });
+  }
+
+  function validateProgram() {
+    if (programmedRoute.length < expectedRoute.length || solved) return;
+    const firstError = programmedRoute.findIndex((command, index) => command !== expectedRoute[index]);
+    if (firstError !== -1) {
+      slots[firstError]?.classList.add("is-wrong");
+      setMessage(`Revisá el paso ${firstError + 1}. Nano todavía no puede recoger las dos piezas.`, "is-error is-soft-error");
+      window.setTimeout(() => slots[firstError]?.classList.remove("is-wrong"), 850);
+      return;
+    }
+
+    solved = true;
+    actionButtons.forEach((button) => { button.disabled = true; });
+    slots.forEach((slot) => { slot.disabled = true; });
+    clearButton.disabled = true;
+    animateSuccessfulRoute();
+    setMessage("¡Excelente! Nano encontró la llave y la tuerca para completar la antena.", "is-success");
+    completeChallenge(id, 4700);
+  }
+
+  actionButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+      if (programmedRoute.length >= expectedRoute.length) programmedRoute.length = 0;
+      programmedRoute.push(button.dataset.command);
+      renderProgram();
+      playSound("tap");
+      if (programmedRoute.length === expectedRoute.length) validateProgram();
+      else setMessage(`Paso ${programmedRoute.length} agregado. Faltan ${expectedRoute.length - programmedRoute.length}.`, "is-good");
+    });
+  });
+
+  slots.forEach((slot, index) => {
+    slot.addEventListener("click", () => {
+      if (solved || index >= programmedRoute.length) return;
+      programmedRoute.splice(index);
+      renderProgram();
+      setMessage("Podés continuar el algoritmo desde ese paso.", "is-good");
+    });
+  });
+
+  clearButton.addEventListener("click", () => {
+    if (solved) return;
+    programmedRoute.length = 0;
+    renderProgram();
+    setMessage("Algoritmo borrado. Volvé a elegir los movimientos de Nano.", "is-good");
+  });
+
+  renderProgram();
+}
+
+function renderN6CraterDetourChallenge(id = 5) {
+  const commands = [
+    { id: "avanzar", label: "Avanzar", base: "Tarjeta avanzar.png", icon: "AVANZAR.png" },
+    { id: "derecha", label: "Girar a la derecha", base: "GIRAR DERECHA.png", icon: "DERECHA.png" },
+    { id: "izquierda", label: "Girar a la izquierda", base: "GIRAR IZQUIERDA.png", icon: "IZQUIERDA.png" },
+  ];
+  const safeRoute = ["avanzar", "avanzar", "avanzar", "avanzar", "derecha", "avanzar", "avanzar", "avanzar", "avanzar"];
+  const programmedRoute = [];
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n6-card n6-card-d5">
+      <header class="challenge-header n6-d4-header">
+        <div class="n6-d4-instruction">
+          <h2>¡UN CRÁTER GIGANTE BLOQUEA EL PASO!</h2>
+          <p data-consigna-text>${getChallengeInstruction(id, "Observa el suelo lunar seguro y elige los movimientos para armar un desvío perfecto.")}</p>
+          <button class="n6-d4-listen" type="button" data-speak-consigna aria-label="Escuchar consigna" title="Escuchar consigna">&#128266;</button>
+        </div>
+      </header>
+
+      <section class="n6-d4-board" aria-label="Cuadrícula lunar con un cráter que bloquea el camino">
+        <img class="n6-d4-grid-frame" src="${n6Asset(5, "Cuadricula.png")}" alt="Cráter gigante en el centro de la cuadrícula" />
+        <img class="n6-d4-nano n6-d5-nano" src="${n6Asset(5, "FRENTE.png")}" alt="Nano" />
+        <img class="n6-d5-radar" src="${n6Asset(5, "RADAR.png")}" alt="Radar de destino" />
+      </section>
+
+      <img class="n6-d4-panels-bg" src="${n6Asset(5, "tablero.png")}" alt="" aria-hidden="true" />
+
+      <section class="n6-d4-algorithm" aria-label="Algoritmo para rodear el cráter">
+        <div class="n6-d4-algorithm-heading">
+          <h3>ALGORITMO</h3>
+          <button class="n6-d4-clear" type="button" data-clear-route aria-label="Borrar algoritmo">Borrar</button>
+        </div>
+        <div class="n6-d4-slots">
+          ${Array.from({ length: 10 }, (_, index) => `
+            <button class="n6-d4-slot" type="button" data-route-slot="${index}" aria-label="Paso ${index + 1}, vacío"><span>?</span></button>
+          `).join("")}
+        </div>
+      </section>
+
+      <section class="n6-d4-bank" aria-label="Tarjetas de movimiento reutilizables">
+        ${commands.map((command) => `
+          <button class="n6-d4-action-card" type="button" data-command="${command.id}" aria-label="${command.label}">
+            <span class="n6-d4-option-card">
+              <img class="n6-d4-option-base" src="${n6Asset(5, command.base)}" alt="" aria-hidden="true" />
+              <img class="n6-d4-option-icon" src="${n6Asset(5, command.icon)}" alt="" aria-hidden="true" />
+            </span>
+            <span class="sr-only">${command.label}</span>
+          </button>
+        `).join("")}
+      </section>
+
+      <p class="challenge-message n6-d4-message" data-message></p>
+    </article>
+  `;
+
+  const slots = [...challengeContent.querySelectorAll(".n6-d4-slot")];
+  const actionButtons = [...challengeContent.querySelectorAll(".n6-d4-action-card")];
+  const clearButton = challengeContent.querySelector("[data-clear-route]");
+
+  function renderProgram() {
+    slots.forEach((slot, index) => {
+      const command = commands.find((item) => item.id === programmedRoute[index]);
+      slot.classList.toggle("is-filled", Boolean(command));
+      slot.classList.remove("is-wrong");
+      if (!command) {
+        slot.innerHTML = "<span>?</span>";
+        slot.setAttribute("aria-label", `Paso ${index + 1}, vacío`);
+        return;
+      }
+      slot.innerHTML = `<img src="${n6Asset(5, command.icon)}" alt="" aria-hidden="true" />`;
+      slot.setAttribute("aria-label", `Paso ${index + 1}, ${command.label}. Tocar para borrar desde aquí.`);
+    });
+    clearButton.disabled = programmedRoute.length === 0 || solved;
+  }
+
+  function simulateRoute(route) {
+    const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+    let row = 4;
+    let column = 0;
+    let direction = 0;
+    let collisionAt = -1;
+    const positions = [{ row, column }];
+
+    route.forEach((command, index) => {
+      if (command === "derecha") direction = (direction + 1) % 4;
+      if (command === "izquierda") direction = (direction + 3) % 4;
+      if (command === "avanzar") {
+        row += directions[direction][0];
+        column += directions[direction][1];
+      }
+      const outside = row < 0 || row > 4 || column < 0 || column > 5;
+      const crater = row >= 1 && row <= 3 && column >= 1 && column <= 4;
+      if (collisionAt === -1 && (outside || crater)) collisionAt = index;
+      positions.push({ row, column });
+    });
+
+    return { row, column, collisionAt, positions, reachedRadar: row === 0 && column === 4 && collisionAt === -1 };
+  }
+
+  function animateSafeRoute(positions) {
+    const nano = challengeContent.querySelector(".n6-d5-nano");
+    const radar = challengeContent.querySelector(".n6-d5-radar");
+    positions.slice(1).forEach(({ row, column }, index) => {
+      window.setTimeout(() => {
+        nano.style.left = `${17.3 + (column * 14.04)}%`;
+        nano.style.top = `${25.9 + (row * 11.825)}%`;
+        slots[index]?.classList.add("is-executed");
+        if (index === positions.length - 2) radar?.classList.add("is-reached");
+      }, (index + 1) * 390);
+    });
+  }
+
+  function validateProgram() {
+    const result = simulateRoute(programmedRoute);
+    if (result.reachedRadar) {
+      solved = true;
+      actionButtons.forEach((button) => { button.disabled = true; });
+      slots.forEach((slot) => { slot.disabled = true; });
+      clearButton.disabled = true;
+      animateSafeRoute(result.positions);
+      setMessage("¡Desvío perfecto! Nano rodeó el cráter y llegó al radar.", "is-success");
+      completeChallenge(id, 4400);
+      return;
+    }
+
+    if (programmedRoute.length < 10) return;
+    const firstError = result.collisionAt !== -1
+      ? result.collisionAt
+      : programmedRoute.findIndex((command, index) => command !== safeRoute[index]);
+    const errorIndex = firstError === -1 ? programmedRoute.length - 1 : firstError;
+    slots[errorIndex]?.classList.add("is-wrong");
+    const feedback = result.collisionAt !== -1
+      ? `En el paso ${errorIndex + 1}, Nano entra al cráter o sale de la cuadrícula.`
+      : "Nano todavía no llegó al radar. Revisá el desvío desde el primer giro.";
+    setMessage(feedback, "is-error is-soft-error");
+    window.setTimeout(() => slots[errorIndex]?.classList.remove("is-wrong"), 900);
+  }
+
+  actionButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+      if (programmedRoute.length >= 10) programmedRoute.length = 0;
+      programmedRoute.push(button.dataset.command);
+      renderProgram();
+      playSound("tap");
+      validateProgram();
+      if (!solved && programmedRoute.length < 10) {
+        setMessage(`Paso ${programmedRoute.length} agregado. Podés usar hasta ${10 - programmedRoute.length} más.`, "is-good");
+      }
+    });
+  });
+
+  slots.forEach((slot, index) => {
+    slot.addEventListener("click", () => {
+      if (solved || index >= programmedRoute.length) return;
+      programmedRoute.splice(index);
+      renderProgram();
+      setMessage("Ruta corregida. Continuá desde ese paso.", "is-good");
+    });
+  });
+
+  clearButton.addEventListener("click", () => {
+    if (solved) return;
+    programmedRoute.length = 0;
+    renderProgram();
+    setMessage("Algoritmo borrado. Buscá el camino libre alrededor del cráter.", "is-good");
+  });
+
+  renderProgram();
+}
+
+function renderN6SatelliteDebugChallenge(id = 6) {
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n6-card n6-card-d6">
+      <header class="challenge-header n6-d4-header">
+        <div class="n6-d4-instruction n6-d6-instruction">
+          <h2>NANO VA DIRECTO CONTRA UN SATÉLITE.</h2>
+          <p data-consigna-text>${getChallengeInstruction(id, "Observa las opciones y elige la ficha incorrecta para ayudarlo a evitar el choque.")}</p>
+          <button class="n6-d4-listen" type="button" data-speak-consigna aria-label="Escuchar consigna" title="Escuchar consigna">&#128266;</button>
+        </div>
+      </header>
+
+      <section class="n6-d4-board n6-d6-board" aria-label="Nano frente a un satélite">
+        <img class="n6-d4-grid-frame" src="${n6Asset(6, "Cuadricula.png")}" alt="" aria-hidden="true" />
+        <img class="n6-d4-nano n6-d6-nano" src="${n6Asset(6, "cara Derecha.png")}" alt="Nano" />
+        <img class="n6-d6-satellite" src="${n6Asset(6, "RADAR.png")}" alt="Satélite que bloquea el camino" />
+      </section>
+
+      <section class="n6-d6-code-panel" aria-label="Secuencia que debe ser corregida">
+        <img class="n6-d6-panel-frame" src="${n6Asset(6, "Pantalla.png")}" alt="" aria-hidden="true" />
+        <div class="n6-d6-sequence">
+          <img class="n6-d6-start" src="${n6Asset(6, "Entrada.png")}" alt="Inicio" />
+          ${Array.from({ length: 3 }, (_, index) => `
+            <button class="n6-d6-command" type="button" data-debug-step="${index}" aria-label="Paso ${index + 1}: Avanzar${index === 1 ? ". Tocar para revisar" : ""}">
+              <img src="${n6Asset(6, "AVANZAR.png")}" alt="Avanzar" />
+            </button>
+          `).join("")}
+          <img class="n6-d6-finish" src="${n6Asset(6, "Vamos.png")}" alt="Ejecutar" />
+        </div>
+
+        <div class="n6-d6-replace-menu" data-replace-menu hidden>
+          <p>Reemplazar el paso 2 por:</p>
+          <div>
+            <button type="button" data-replacement="derecha"><span aria-hidden="true">↷</span> Girar a la derecha</button>
+            <button type="button" data-replacement="izquierda"><span aria-hidden="true">↶</span> Girar a la izquierda</button>
+            <button type="button" data-replacement="avanzar"><span aria-hidden="true">→</span> Avanzar</button>
+          </div>
+        </div>
+      </section>
+
+      <p class="challenge-message n6-d6-message" data-message></p>
+    </article>
+  `;
+
+  const commandButtons = [...challengeContent.querySelectorAll(".n6-d6-command")];
+  const incorrectCommand = commandButtons[1];
+  const replaceMenu = challengeContent.querySelector("[data-replace-menu]");
+
+  function closeMenu() {
+    replaceMenu.hidden = true;
+    incorrectCommand.classList.remove("is-selected");
+  }
+
+  commandButtons.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+      if (index !== 1) {
+        button.classList.add("is-wrong");
+        setMessage("Esa ficha puede quedarse. Revisá cuál avance acerca demasiado a Nano al satélite.", "is-error is-soft-error");
+        window.setTimeout(() => button.classList.remove("is-wrong"), 700);
+        return;
+      }
+
+      const willOpen = replaceMenu.hidden;
+      replaceMenu.hidden = !willOpen;
+      incorrectCommand.classList.toggle("is-selected", willOpen);
+      if (willOpen) setMessage("Encontraste la ficha incorrecta. Elegí el movimiento que evita el choque.", "is-good");
+    });
+  });
+
+  challengeContent.querySelectorAll("[data-replacement]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+      const replacement = button.dataset.replacement;
+      if (replacement !== "derecha") {
+        button.classList.add("is-wrong");
+        setMessage("Ese cambio no crea el desvío seguro. Nano necesita girar hacia abajo.", "is-error is-soft-error");
+        window.setTimeout(() => button.classList.remove("is-wrong"), 650);
+        return;
+      }
+
+      solved = true;
+      closeMenu();
+      incorrectCommand.classList.add("is-correct");
+      incorrectCommand.innerHTML = `<span class="n6-d6-turn-icon" aria-hidden="true">↷</span><span class="sr-only">Girar a la derecha</span>`;
+      incorrectCommand.setAttribute("aria-label", "Paso 2 corregido: Girar a la derecha");
+      commandButtons.forEach((command) => { command.disabled = true; });
+      challengeContent.querySelector(".n6-card-d6")?.classList.add("is-running");
+      setMessage("¡Muy bien! Nano gira a la derecha y evita el satélite.", "is-success");
+      completeChallenge(id, 3000);
+    });
+  });
+}
+
+function renderN6SolarRepetitionChallenge(id = 7) {
+  const repetitions = [2, 3, 4, 5];
+  let selectedValue = null;
+  let draggedValue = null;
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n6-card n6-card-d7">
+      <header class="challenge-header n6-d4-header">
+        <div class="n6-d4-instruction n6-d7-instruction">
+          <h2>¡ENERGÍA BAJA!</h2>
+          <p data-consigna-text>${getChallengeInstruction(id, "Nano Astronauta debe encender los paneles solares de la base espacial. Cuenta cuántos hay y elige el bloque de repetición correcto.")}</p>
+          <button class="n6-d4-listen" type="button" data-speak-consigna aria-label="Escuchar consigna" title="Escuchar consigna">&#128266;</button>
+        </div>
+      </header>
+
+      <section class="n6-d4-board n6-d7-board" aria-label="Nano y cuatro paneles solares apagados">
+        <img class="n6-d4-grid-frame" src="${n6Asset(7, "Cuadricula.png")}" alt="" aria-hidden="true" />
+        <img class="n6-d4-nano n6-d7-nano" src="${n6Asset(7, "cara Derecha.png")}" alt="Nano" />
+        ${Array.from({ length: 4 }, (_, index) => `
+          <img class="n6-d7-solar n6-d7-solar-${index + 1}" src="${n6Asset(7, "Paneles del Solar.png")}" alt="Panel solar ${index + 1} apagado" data-solar-panel />
+        `).join("")}
+      </section>
+
+      <img class="n6-d4-panels-bg" src="${n6Asset(7, "tablero.png")}" alt="" aria-hidden="true" />
+
+      <section class="n6-d7-algorithm" aria-label="Algoritmo de repetición">
+        <div class="n6-d7-program">
+          <img src="${n6Asset(7, "Entrada.png")}" alt="Inicio" />
+          <button class="n6-d7-repeat-target" type="button" data-repeat-target aria-label="Espacio para el bloque de repetición"><span>?</span></button>
+          <img src="${n6Asset(7, "AVANZAR.png")}" alt="Avanzar" />
+          <img class="n6-d7-panel-command" src="${n6Asset(7, "tarjeta de panel encendida.png")}" alt="Encender panel" />
+          <img src="${n6Asset(7, "Vamos.png")}" alt="Ejecutar" />
+        </div>
+      </section>
+
+      <section class="n6-d7-bank" aria-label="Opciones de repetición">
+        ${repetitions.map((value) => `
+          <button class="n6-d7-repeat-card" type="button" draggable="true" data-repeat-value="${value}" aria-label="Repetición x${value}">
+            <span class="n6-d7-card-art">
+              <img class="n6-d7-card-base" src="${n6Asset(7, `REPETICION X${value}.png`)}" alt="" aria-hidden="true" />
+              <img class="n6-d7-card-icon" src="${n6Asset(7, `Reptir x${value}.png`)}" alt="" aria-hidden="true" />
+            </span>
+            <span class="sr-only">Repetición x${value}</span>
+          </button>
+        `).join("")}
+      </section>
+
+      <p class="challenge-message n6-d7-message" data-message></p>
+    </article>
+  `;
+
+  const target = challengeContent.querySelector("[data-repeat-target]");
+  const cards = [...challengeContent.querySelectorAll(".n6-d7-repeat-card")];
+
+  function clearSelection() {
+    cards.forEach((card) => card.classList.remove("is-selected"));
+  }
+
+  function tryPlace(value) {
+    if (solved || !value) return;
+    const numericValue = Number(value);
+    if (numericValue !== 4) {
+      const wrongCard = cards.find((card) => Number(card.dataset.repeatValue) === numericValue);
+      wrongCard?.classList.add("is-wrong");
+      target.classList.add("is-wrong");
+      setMessage(`Hay cuatro paneles. Repetición x${numericValue} no alcanza la cantidad correcta.`, "is-error is-soft-error");
+      window.setTimeout(() => {
+        wrongCard?.classList.remove("is-wrong");
+        target.classList.remove("is-wrong");
+      }, 700);
+      return;
+    }
+
+    solved = true;
+    const correctCard = cards.find((card) => Number(card.dataset.repeatValue) === 4);
+    target.classList.add("is-filled", "is-correct");
+    target.innerHTML = correctCard.querySelector(".n6-d7-card-art").outerHTML;
+    cards.forEach((card) => { card.disabled = true; });
+    correctCard.hidden = true;
+    clearSelection();
+    challengeContent.querySelector(".n6-card-d7")?.classList.add("is-running");
+
+    const panels = [...challengeContent.querySelectorAll("[data-solar-panel]")];
+    panels.forEach((panel, index) => {
+      window.setTimeout(() => {
+        panel.src = n6Asset(7, "Paneles del Solar encendido.png");
+        panel.alt = `Panel solar ${index + 1} encendido`;
+        panel.classList.add("is-on");
+      }, 600 + (index * 560));
+    });
+
+    setMessage("¡Correcto! Repetición x4 enciende los cuatro paneles solares.", "is-success");
+    completeChallenge(id, 3600);
+  }
+
+  cards.forEach((card) => {
+    card.addEventListener("click", () => {
+      if (solved) return;
+      selectedValue = Number(card.dataset.repeatValue);
+      clearSelection();
+      card.classList.add("is-selected");
+      setMessage(`Repetición x${selectedValue} seleccionada. Tocá el espacio con el signo de pregunta.`, "is-good");
+    });
+
+    card.addEventListener("dragstart", (event) => {
+      if (solved) return;
+      draggedValue = Number(card.dataset.repeatValue);
+      event.dataTransfer?.setData("text/plain", String(draggedValue));
+      if (event.dataTransfer) event.dataTransfer.effectAllowed = "copy";
+      card.classList.add("is-dragging");
+    });
+
+    card.addEventListener("dragend", () => {
+      draggedValue = null;
+      card.classList.remove("is-dragging");
+      target.classList.remove("is-drag-over");
+    });
+  });
+
+  target.addEventListener("click", () => {
+    if (solved) return;
+    if (!selectedValue) {
+      setMessage("Primero elegí una tarjeta de repetición.", "is-error is-soft-error");
+      return;
+    }
+    tryPlace(selectedValue);
+  });
+
+  target.addEventListener("dragover", (event) => {
+    if (solved) return;
+    event.preventDefault();
+    target.classList.add("is-drag-over");
+  });
+
+  target.addEventListener("dragleave", () => target.classList.remove("is-drag-over"));
+  target.addEventListener("drop", (event) => {
+    if (solved) return;
+    event.preventDefault();
+    target.classList.remove("is-drag-over");
+    const droppedValue = Number(event.dataTransfer?.getData("text/plain")) || draggedValue;
+    tryPlace(droppedValue);
+  });
 }
 
 function renderPathChallenge(id = 1) {

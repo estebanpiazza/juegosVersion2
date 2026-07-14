@@ -26,6 +26,38 @@
       "consigna": "Hay muchas estrellas flotando en fila. Elige el bloque que te ayuda a recogerlas todas juntas con un solo movimiento.",
       "objetivo": "Reconocer la repetición como una forma de automatizar una acción que se realiza cuatro veces.",
       "interaccion": "Arrastrar o seleccionar la tarjeta Repetición x4 y colocarla en el primer espacio del algoritmo."
+    },
+    {
+      "id": "n6-d4",
+      "titulo": "Antena espacial",
+      "tipo": "n6-ruta-antena",
+      "consigna": "Encuentra las piezas que necesita para terminar de armarla.",
+      "objetivo": "Construir una secuencia de movimientos que permita recoger las dos piezas de la antena.",
+      "interaccion": "Seleccionar las tarjetas Avanzar, Girar a la izquierda y Girar a la derecha para completar el algoritmo de diez pasos."
+    },
+    {
+      "id": "n6-d5",
+      "titulo": "Desvío lunar",
+      "tipo": "n6-desvio-crater",
+      "consigna": "Observa el suelo lunar seguro y elige los movimientos para armar un desvío perfecto.",
+      "objetivo": "Diseñar una secuencia completa que rodee un obstáculo y lleve a Nano hasta el radar.",
+      "interaccion": "Seleccionar tarjetas de movimiento reutilizables para programar una ruta segura alrededor del cráter."
+    },
+    {
+      "id": "n6-d6",
+      "titulo": "Evitar el satélite",
+      "tipo": "n6-debug-satelite",
+      "consigna": "Observa las opciones y elige la ficha incorrecta para ayudarlo a evitar el choque.",
+      "objetivo": "Depurar una secuencia identificando y reemplazando la instrucción que provoca una colisión.",
+      "interaccion": "Tocar la segunda tarjeta Avanzar y reemplazarla por Girar a la derecha desde el menú emergente."
+    },
+    {
+      "id": "n6-d7",
+      "titulo": "Energía baja",
+      "tipo": "n6-repeticion-paneles",
+      "consigna": "Nano Astronauta debe encender los paneles solares de la base espacial. Cuenta cuántos hay y elige el bloque de repetición correcto.",
+      "objetivo": "Asociar una cantidad visual con el parámetro correcto de un bloque de repetición.",
+      "interaccion": "Arrastrar o seleccionar la tarjeta Repetición x4 y colocarla en el espacio vacío del algoritmo."
     }
   ]
 }

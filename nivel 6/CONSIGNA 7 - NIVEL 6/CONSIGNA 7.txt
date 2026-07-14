@@ -1,0 +1,3 @@
+Consigna: ¡Energía baja! Nano Astronauta debe encender los paneles solares de la base espacial. Cuenta cuántos hay y elige el bloque de repetición correcto.
+
+Mecánica: Drag & Drop. Asociación de cantidad visual con parámetro de bucle. La cuadrícula muestra una hilera recta en la superficie lunar con 4 paneles solares apagados. En la pantalla se presenta un bloque contenedor de repetición incompleto con un espacio en blanco para el número: [Repetición x?] ( [Avanzar] + [Encender panel] ). Abajo hay opciones numéricas: [x2], [x3], [x4] y [x5]. El niño arrastra la tarjeta [x4] al bloque.
