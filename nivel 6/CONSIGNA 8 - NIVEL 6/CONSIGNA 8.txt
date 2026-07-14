@@ -1,0 +1,3 @@
+Consigna: ¡Campo de asteroides! El camino seguro es muy largo. Elige la combinación exacta que Nano debe repetir para cruzar sin salirse de la ruta en zigzag.
+
+Mecánica: Drag & Drop. Identificación de patrón y anidamiento de secuencia dentro de un bucle. Trayectoria extensa en forma de escalera o zigzag flotando entre asteroides. En pantalla está el bloque contenedor [Repetición x4] con dos espacios vacíos seguidos en su interior. En las opciones inferiores se ofrecen tarjetas sueltas de [Avanzar], [Girar a la derecha], [Girar a la izquierda] y [Activar propulsor]. El alumno debe arrastrar la secuencia combinada [Avanzar] + [Girar a la derecha] dentro del bloque de repetición.

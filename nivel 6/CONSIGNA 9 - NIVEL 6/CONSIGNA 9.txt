@@ -1,0 +1,3 @@
+Consigna: ¡Misión de recolección! Hay cuatro cápsulas de investigación perdidas en órbita. Elige los bloques ordenados para que Nano logre recogerlas todas.
+
+Mecánica: Drag & Drop. Secuencia de tres acciones consecutivas dentro de un bucle perimetral. Recorrido en forma de cuadrado en el espacio con 4 cápsulas espaciales (una en cada vértice). En pantalla se presenta el bloque contenedor [Repetición x4] con tres espacios vacíos verticales en su interior. El alumno debe ordenar las acciones [Avanzar], [Recoger cápsula] y [Girar a la izquierda] dentro del bucle de repetición para automatizar la ruta.

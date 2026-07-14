@@ -58,6 +58,22 @@
       "consigna": "Nano Astronauta debe encender los paneles solares de la base espacial. Cuenta cuántos hay y elige el bloque de repetición correcto.",
       "objetivo": "Asociar una cantidad visual con el parámetro correcto de un bloque de repetición.",
       "interaccion": "Arrastrar o seleccionar la tarjeta Repetición x4 y colocarla en el espacio vacío del algoritmo."
+    },
+    {
+      "id": "n6-d8",
+      "titulo": "Campo de asteroides",
+      "tipo": "n6-patron-asteroides",
+      "consigna": "El camino seguro es muy largo. Elige la combinación exacta que Nano debe repetir para cruzar sin salirse de la ruta en zigzag.",
+      "objetivo": "Identificar un patrón compuesto y ubicar su secuencia dentro de un bloque de repetición.",
+      "interaccion": "Arrastrar o seleccionar las tarjetas Avanzar y Girar a la derecha, en ese orden, dentro del bloque Repetición x4."
+    },
+    {
+      "id": "n6-d9",
+      "titulo": "Misión de recolección",
+      "tipo": "n6-recoleccion-capsulas",
+      "consigna": "Hay cuatro cápsulas de investigación perdidas en órbita. Elige los bloques ordenados para que Nano logre recogerlas todas.",
+      "objetivo": "Ordenar una secuencia de tres acciones dentro de un bucle que recorre un circuito cerrado.",
+      "interaccion": "Arrastrar o seleccionar Avanzar, Recoger cápsula y Girar a la izquierda, en ese orden, dentro del bloque Repetición x4."
     }
   ]
 }

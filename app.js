@@ -92,6 +92,8 @@ const challengeTypeRenderers = {
   "n6-desvio-crater": (id) => renderN6CraterDetourChallenge(id),
   "n6-debug-satelite": (id) => renderN6SatelliteDebugChallenge(id),
   "n6-repeticion-paneles": (id) => renderN6SolarRepetitionChallenge(id),
+  "n6-patron-asteroides": (id) => renderN6AsteroidPatternChallenge(id),
+  "n6-recoleccion-capsulas": (id) => renderN6CapsuleCollectionChallenge(id),
   "repeticion-obligatoria": (id) => renderRepeatRequiredChallenge(id),
   "laberinto-flechas": (id) => renderDesignD6ArrowMazeChallenge(id),
   "ordenar-algoritmo": (id) => renderOrderAlgorithmChallenge(id),
@@ -224,6 +226,8 @@ const N6_ASSET_FOLDER_BY_CHALLENGE = {
   5: "CONSIGNA 5 - NIVEL 6",
   6: "CONSIGNA 6 - Nivel 6",
   7: "CONSIGNA 7 - NIVEL 6",
+  8: "CONSIGNA 8 - NIVEL 6",
+  9: "CONSIGNA 9 - NIVEL 6",
 };
 
 function n6Asset(challengeNumber, fileName) {
@@ -763,6 +767,10 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n6Asset(6, "Fondo.png");
       case "n6-repeticion-paneles":
         return n6Asset(6, "Fondo.png");
+      case "n6-patron-asteroides":
+        return n6Asset(8, "Fondo.png");
+      case "n6-recoleccion-capsulas":
+        return n6Asset(9, "Fondo.png");
       case "secuenciacion-guiada":
         return DESIGN_D1_STAGE_BACKGROUND;
       case "depuracion-inicial":
@@ -5328,6 +5336,378 @@ function renderN6SolarRepetitionChallenge(id = 7) {
     target.classList.remove("is-drag-over");
     const droppedValue = Number(event.dataTransfer?.getData("text/plain")) || draggedValue;
     tryPlace(droppedValue);
+  });
+}
+
+function renderN6AsteroidPatternChallenge(id = 8) {
+  const commands = [
+    { id: "derecha", label: "Girar a la derecha", card: "GIRAR DERECHA.png", icon: "DERECHA.png" },
+    { id: "avanzar", label: "Avanzar", card: "Tarjeta avanzar.png", icon: "AVANZAR.png" },
+    { id: "izquierda", label: "Girar a la izquierda", card: "GIRAR IZQUIERDA.png", icon: "IZQUIERDA.png" },
+  ];
+  const expected = ["avanzar", "derecha"];
+  const placed = [null, null];
+  let selectedCommand = null;
+  let draggedCommand = null;
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n6-card n6-card-d8">
+      <header class="challenge-header n6-d4-header">
+        <div class="n6-d4-instruction n6-d8-instruction">
+          <h2>¡CAMPO DE ASTEROIDES!</h2>
+          <p data-consigna-text>${getChallengeInstruction(id, "El camino seguro es muy largo. Elige la combinación exacta que Nano debe repetir para cruzar sin salirse de la ruta en zigzag.")}</p>
+          <button class="n6-d4-listen" type="button" data-speak-consigna aria-label="Escuchar consigna" title="Escuchar consigna">&#128266;</button>
+        </div>
+      </header>
+
+      <section class="n6-d8-board" aria-label="Ruta en zigzag entre asteroides">
+        <img class="n6-d8-grid" src="${n6Asset(8, "Cuadricula.png")}" alt="" aria-hidden="true" />
+        <img class="n6-d8-ship" src="${n6Asset(8, "Nave de astronauta.png")}" alt="Nave de Nano" />
+        <img class="n6-d8-base" src="${n6Asset(8, "Base espacial.png")}" alt="Base espacial de destino" />
+        ${[
+          [18, 26, 7], [51, 27, 7], [31, 44, 10], [18, 61, 7],
+          [67, 61, 7], [48, 77, 10], [31, 91, 7], [67, 91, 7],
+        ].map(([x, y, size], index) => `
+          <img class="n6-d8-asteroid n6-d8-asteroid-${index + 1}" src="${n6Asset(8, "asteroide.png")}" alt="Asteroide" style="--x:${x}%;--y:${y}%;--size:${size}%" />
+        `).join("")}
+      </section>
+
+      <section class="n6-d8-program-panel" aria-label="Bloque de repetición por cuatro">
+        <div class="n6-d8-program">
+          <img class="n6-d8-start" src="${n6Asset(8, "Entrada.png")}" alt="Inicio" />
+          <span class="n6-d8-repeat-open" aria-hidden="true">(</span>
+          <div class="n6-d8-repeat-slots">
+            ${expected.map((command, index) => `
+              <button class="n6-d8-slot" type="button" data-pattern-slot="${index}" data-expected="${command}" aria-label="Paso ${index + 1}, vacío"><span>?</span></button>
+            `).join("")}
+          </div>
+          <span class="n6-d8-repeat-close" aria-hidden="true">)</span>
+          <span class="n6-d8-repeat-count" aria-label="Repetir cuatro veces">x4</span>
+          <img class="n6-d8-finish" src="${n6Asset(8, "Vamos.png")}" alt="Ejecutar" />
+        </div>
+      </section>
+
+      <section class="n6-d8-bank" aria-label="Tarjetas de movimiento">
+        ${commands.map((command) => `
+          <button class="n6-d8-command" type="button" draggable="true" data-pattern-command="${command.id}" aria-label="${command.label}">
+            <span class="n6-d8-command-art">
+              <img class="n6-d8-command-base" src="${n6Asset(8, command.card)}" alt="" aria-hidden="true" />
+              <img class="n6-d8-command-icon" src="${n6Asset(8, command.icon)}" alt="" aria-hidden="true" />
+            </span>
+            <span>${command.label}</span>
+          </button>
+        `).join("")}
+      </section>
+
+      <p class="challenge-message n6-d8-message" data-message></p>
+    </article>
+  `;
+
+  const card = challengeContent.querySelector(".n6-card-d8");
+  const slots = [...challengeContent.querySelectorAll(".n6-d8-slot")];
+  const commandButtons = [...challengeContent.querySelectorAll(".n6-d8-command")];
+
+  function commandById(commandId) {
+    return commands.find((command) => command.id === commandId);
+  }
+
+  function clearSelection() {
+    commandButtons.forEach((button) => button.classList.remove("is-selected"));
+    selectedCommand = null;
+  }
+
+  function renderSlot(index) {
+    const slot = slots[index];
+    const command = commandById(placed[index]);
+    slot.classList.toggle("is-filled", Boolean(command));
+    slot.classList.remove("is-wrong");
+    if (!command) {
+      slot.innerHTML = "<span>?</span>";
+      slot.setAttribute("aria-label", `Paso ${index + 1}, vacío`);
+      return;
+    }
+    slot.innerHTML = `<img src="${n6Asset(8, command.icon)}" alt="${command.label}" />`;
+    slot.setAttribute("aria-label", `Paso ${index + 1}: ${command.label}. Tocar para quitar.`);
+  }
+
+  function finishIfComplete() {
+    if (placed.some((command) => !command)) return;
+    const firstError = placed.findIndex((command, index) => command !== expected[index]);
+    if (firstError !== -1) {
+      slots[firstError].classList.add("is-wrong");
+      setMessage(firstError === 0
+        ? "El patrón debe comenzar avanzando por el tramo seguro."
+        : "Después de avanzar, Nano debe girar a la derecha para seguir el zigzag.", "is-error is-soft-error");
+      window.setTimeout(() => slots[firstError]?.classList.remove("is-wrong"), 850);
+      return;
+    }
+
+    solved = true;
+    slots.forEach((slot) => { slot.disabled = true; slot.classList.add("is-correct"); });
+    commandButtons.forEach((button) => { button.disabled = true; });
+    clearSelection();
+    card.classList.add("is-running");
+    setMessage("¡Patrón correcto! Nano repite avanzar y girar a la derecha para cruzar el campo.", "is-success");
+    completeChallenge(id, 4300);
+  }
+
+  function placeCommand(index, commandId) {
+    if (solved || !commandById(commandId)) return;
+    placed[index] = commandId;
+    renderSlot(index);
+    clearSelection();
+    playSound("place");
+    finishIfComplete();
+    if (!solved && placed.some((command) => !command)) {
+      setMessage("Primer movimiento colocado. Ahora completa la combinación que se repite.", "is-good");
+    }
+  }
+
+  commandButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+      commandButtons.forEach((item) => item.classList.remove("is-selected"));
+      selectedCommand = button.dataset.patternCommand;
+      button.classList.add("is-selected");
+      setMessage(`${commandById(selectedCommand).label} seleccionado. Tocá uno de los espacios del bloque.`, "is-good");
+    });
+    button.addEventListener("dragstart", (event) => {
+      if (solved) return;
+      draggedCommand = button.dataset.patternCommand;
+      event.dataTransfer?.setData("text/plain", draggedCommand);
+      if (event.dataTransfer) event.dataTransfer.effectAllowed = "copy";
+      button.classList.add("is-dragging");
+    });
+    button.addEventListener("dragend", () => {
+      draggedCommand = null;
+      button.classList.remove("is-dragging");
+      slots.forEach((slot) => slot.classList.remove("is-drag-over"));
+    });
+  });
+
+  slots.forEach((slot, index) => {
+    slot.addEventListener("click", () => {
+      if (solved) return;
+      if (selectedCommand) {
+        placeCommand(index, selectedCommand);
+        return;
+      }
+      if (placed[index]) {
+        placed[index] = null;
+        renderSlot(index);
+        setMessage("Tarjeta quitada. Elegí otra para corregir la combinación.", "is-good");
+        return;
+      }
+      setMessage("Primero elegí o arrastrá una tarjeta de movimiento.", "is-error is-soft-error");
+    });
+    slot.addEventListener("dragover", (event) => {
+      if (solved) return;
+      event.preventDefault();
+      slot.classList.add("is-drag-over");
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-drag-over"));
+    slot.addEventListener("drop", (event) => {
+      if (solved) return;
+      event.preventDefault();
+      slot.classList.remove("is-drag-over");
+      placeCommand(index, event.dataTransfer?.getData("text/plain") || draggedCommand);
+    });
+  });
+}
+
+function renderN6CapsuleCollectionChallenge(id = 9) {
+  const commands = [
+    { id: "derecha", label: "Girar a la derecha", card: "GIRAR DERECHA.png", icon: "DERECHA.png" },
+    { id: "avanzar", label: "Avanzar", card: "Tarjeta avanzar.png", icon: "AVANZAR.png" },
+    { id: "recoger", label: "Recoger cápsula", card: null, icon: "Capsula.png" },
+    { id: "izquierda", label: "Girar a la izquierda", card: "GIRAR IZQUIERDA.png", icon: "IZQUIERDA.png" },
+  ];
+  const expected = ["avanzar", "recoger", "izquierda"];
+  const placed = [null, null, null];
+  let selectedCommand = null;
+  let draggedCommand = null;
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n6-card n6-card-d9">
+      <header class="challenge-header n6-d4-header">
+        <div class="n6-d4-instruction n6-d9-instruction">
+          <h2>¡MISIÓN DE RECOLECCIÓN!</h2>
+          <p data-consigna-text>${getChallengeInstruction(id, "Hay cuatro cápsulas de investigación perdidas en órbita. Elige los bloques ordenados para que Nano logre recogerlas todas.")}</p>
+          <button class="n6-d4-listen" type="button" data-speak-consigna aria-label="Escuchar consigna" title="Escuchar consigna">&#128266;</button>
+        </div>
+      </header>
+
+      <section class="n6-d9-board" aria-label="Recorrido cuadrado con cuatro cápsulas de investigación">
+        <img class="n6-d9-grid" src="${n6Asset(9, "Cuadricula.png")}" alt="" aria-hidden="true" />
+        ${[
+          [72, 74], [72, 28], [23, 28], [23, 74],
+        ].map(([x, y], index) => `
+          <img class="n6-d9-capsule n6-d9-capsule-${index + 1}" src="${n6Asset(9, "Capsula.png")}" alt="Cápsula de investigación ${index + 1}" style="--x:${x}%;--y:${y}%" data-capsule />
+        `).join("")}
+        <img class="n6-d9-nano" src="${n6Asset(9, "cara Derecha.png")}" alt="Nano astronauta" />
+      </section>
+
+      <img class="n6-d9-panels-bg" src="${n6Asset(9, "tablero.png")}" alt="" aria-hidden="true" />
+
+      <section class="n6-d9-program-panel" aria-label="Algoritmo de repetición por cuatro">
+        <div class="n6-d9-program-heading">
+          <span>REPETICIÓN</span><strong>x4</strong>
+        </div>
+        <div class="n6-d9-program">
+          <span class="n6-d9-repeat-open" aria-hidden="true">(</span>
+          <div class="n6-d9-repeat-slots">
+            ${expected.map((command, index) => `
+              <button class="n6-d9-slot" type="button" data-capsule-slot="${index}" data-expected="${command}" aria-label="Paso ${index + 1}, vacío"><span>?</span></button>
+            `).join("")}
+          </div>
+          <span class="n6-d9-repeat-close" aria-hidden="true">)</span>
+        </div>
+      </section>
+
+      <section class="n6-d9-bank" aria-label="Tarjetas para ordenar">
+        ${commands.map((command) => `
+          <button class="n6-d9-command ${command.id === "recoger" ? "is-capsule-command" : ""}" type="button" draggable="true" data-capsule-command="${command.id}" aria-label="${command.label}">
+            <span class="n6-d9-command-art">
+              ${command.card ? `<img class="n6-d9-command-base" src="${n6Asset(9, command.card)}" alt="" aria-hidden="true" />` : `<span class="n6-d9-command-base n6-d9-capsule-card-base" aria-hidden="true"></span>`}
+              <img class="n6-d9-command-icon" src="${n6Asset(9, command.icon)}" alt="" aria-hidden="true" />
+            </span>
+            <span>${command.label}</span>
+          </button>
+        `).join("")}
+      </section>
+
+      <p class="challenge-message n6-d9-message" data-message></p>
+    </article>
+  `;
+
+  const card = challengeContent.querySelector(".n6-card-d9");
+  const slots = [...challengeContent.querySelectorAll(".n6-d9-slot")];
+  const commandButtons = [...challengeContent.querySelectorAll(".n6-d9-command")];
+  const capsules = [...challengeContent.querySelectorAll("[data-capsule]")];
+
+  function commandById(commandId) {
+    return commands.find((command) => command.id === commandId);
+  }
+
+  function clearSelection() {
+    commandButtons.forEach((button) => button.classList.remove("is-selected"));
+    selectedCommand = null;
+  }
+
+  function commandMarkup(command) {
+    if (command.id === "recoger") {
+      return `<img class="is-capsule-icon" src="${n6Asset(9, command.icon)}" alt="${command.label}" />`;
+    }
+    return `<img src="${n6Asset(9, command.icon)}" alt="${command.label}" />`;
+  }
+
+  function renderSlot(index) {
+    const slot = slots[index];
+    const command = commandById(placed[index]);
+    slot.classList.toggle("is-filled", Boolean(command));
+    slot.classList.remove("is-wrong");
+    if (!command) {
+      slot.innerHTML = "<span>?</span>";
+      slot.setAttribute("aria-label", `Paso ${index + 1}, vacío`);
+      return;
+    }
+    slot.innerHTML = commandMarkup(command);
+    slot.setAttribute("aria-label", `Paso ${index + 1}: ${command.label}. Tocar para quitar.`);
+  }
+
+  function finishIfComplete() {
+    if (placed.some((command) => !command)) return;
+    const firstError = placed.findIndex((command, index) => command !== expected[index]);
+    if (firstError !== -1) {
+      slots[firstError].classList.add("is-wrong");
+      const hints = [
+        "Nano primero debe avanzar hasta cada cápsula.",
+        "Cuando llega al vértice, la segunda acción es recoger la cápsula.",
+        "Después de recogerla, debe girar a la izquierda para continuar el cuadrado.",
+      ];
+      setMessage(hints[firstError], "is-error is-soft-error");
+      window.setTimeout(() => slots[firstError]?.classList.remove("is-wrong"), 850);
+      return;
+    }
+
+    solved = true;
+    slots.forEach((slot) => { slot.disabled = true; slot.classList.add("is-correct"); });
+    commandButtons.forEach((button) => { button.disabled = true; });
+    clearSelection();
+    card.classList.add("is-running");
+    capsules.forEach((capsule, index) => {
+      window.setTimeout(() => {
+        capsule.classList.add("is-collected");
+        capsule.alt = `Cápsula de investigación ${index + 1} recogida`;
+      }, 650 + (index * 720));
+    });
+    setMessage("¡Secuencia correcta! Nano repite las tres acciones y recoge las cuatro cápsulas.", "is-success");
+    completeChallenge(id, 4300);
+  }
+
+  function placeCommand(index, commandId) {
+    if (solved || !commandById(commandId)) return;
+    placed[index] = commandId;
+    renderSlot(index);
+    clearSelection();
+    playSound("place");
+    finishIfComplete();
+    if (!solved && placed.some((command) => !command)) {
+      setMessage(`Paso ${index + 1} colocado. Completá los espacios restantes del bucle.`, "is-good");
+    }
+  }
+
+  commandButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+      commandButtons.forEach((item) => item.classList.remove("is-selected"));
+      selectedCommand = button.dataset.capsuleCommand;
+      button.classList.add("is-selected");
+      setMessage(`${commandById(selectedCommand).label} seleccionado. Tocá el espacio donde debe ir.`, "is-good");
+    });
+    button.addEventListener("dragstart", (event) => {
+      if (solved) return;
+      draggedCommand = button.dataset.capsuleCommand;
+      event.dataTransfer?.setData("text/plain", draggedCommand);
+      if (event.dataTransfer) event.dataTransfer.effectAllowed = "copy";
+      button.classList.add("is-dragging");
+    });
+    button.addEventListener("dragend", () => {
+      draggedCommand = null;
+      button.classList.remove("is-dragging");
+      slots.forEach((slot) => slot.classList.remove("is-drag-over"));
+    });
+  });
+
+  slots.forEach((slot, index) => {
+    slot.addEventListener("click", () => {
+      if (solved) return;
+      if (selectedCommand) {
+        placeCommand(index, selectedCommand);
+        return;
+      }
+      if (placed[index]) {
+        placed[index] = null;
+        renderSlot(index);
+        setMessage("Tarjeta quitada. Podés corregir este paso.", "is-good");
+        return;
+      }
+      setMessage("Primero elegí o arrastrá una tarjeta.", "is-error is-soft-error");
+    });
+    slot.addEventListener("dragover", (event) => {
+      if (solved) return;
+      event.preventDefault();
+      slot.classList.add("is-drag-over");
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-drag-over"));
+    slot.addEventListener("drop", (event) => {
+      if (solved) return;
+      event.preventDefault();
+      slot.classList.remove("is-drag-over");
+      placeCommand(index, event.dataTransfer?.getData("text/plain") || draggedCommand);
+    });
   });
 }
 
