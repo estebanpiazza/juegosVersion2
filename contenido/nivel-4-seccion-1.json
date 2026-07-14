@@ -130,6 +130,26 @@
       "consigna": "¡Alerta de lluvia! Nano no sabe cómo llegar. Aplica la lógica y elige las tarjetas para completar el algoritmo.",
       "objetivo": "Programar a Nano sobre la alfombra para llegar al final del recorrido.",
       "interaccion": "Completar el algoritmo con Avanzar, Avanzar, Izquierda, Avanzar, Avanzar, Derecha, Avanzar y Avanzar."
+    },
+    {
+      "id": "n4-rework-b2-d1",
+      "numero": 20,
+      "bloque": 2,
+      "titulo": "¡Ring, ring!",
+      "tipo": "secuencia-despertar-n4",
+      "consigna": "Ayuda a Nano a ordenar los pasos para despertarse e ir al colegio.",
+      "objetivo": "Reconocer y ordenar temporalmente tres acciones cotidianas.",
+      "interaccion": "Arrastrar o seleccionar las imágenes en este orden: el despertador suena, Nano bosteza y Nano se pone de pie."
+    },
+    {
+      "id": "n4-rework-b2-d2",
+      "numero": 21,
+      "bloque": 2,
+      "titulo": "Cordones en orden",
+      "tipo": "secuencia-cordones-n4",
+      "consigna": "Nano se puso sus zapatillas favoritas, pero los cordones están sueltos. Observa los pasos y ordénalos para que no se tropiece.",
+      "objetivo": "Ordenar temporalmente los movimientos necesarios para atar los cordones.",
+      "interaccion": "Arrastrar o seleccionar las nueve imágenes desde los cordones sueltos hasta el nudo terminado."
     }
   ]
 }

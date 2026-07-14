@@ -1,0 +1,6 @@
+¡Ring, ring! Ayuda a Nano a ordenar los pasos para despertarse e ir al colegio.
+
+Mecánica:
+Drag & Drop. Se muestran tres espacios vacíos y tres imágenes desordenadas: el despertador suena, Nano bosteza y Nano se pone de pie. El jugador debe arrastrar cada imagen al lugar correcto para formar la secuencia de acciones.
+
+NOTA: Te mando la los archivos originales como por si te sirven, si no usa las que estan diseñados. La nota musical e icono de sonido es para el despertador por que lo visualizan con movimiento animado la musical con el icono de sonido. Culaquier cosa preguntame

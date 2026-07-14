@@ -41,7 +41,7 @@ function renderStageCards(stages) {
       const displayNumber = getStageDisplayNumber(stage, index);
       const title = stage.titulo || `Desafio ${displayNumber}`;
       return `
-        <a class="stage-node" href="nivel.html?nivel=${stageLevel}&desafio=${internalNumber}" aria-label="Entrar a ${title}">
+        <a class="stage-node" href="nivel.html?nivel=${stageLevel}&desafio=${displayNumber}" aria-label="Entrar a ${title}">
           <span>${displayNumber}</span>
         </a>
       `;

@@ -70,6 +70,8 @@ const challengeTypeRenderers = {
   "recuperar-destornillador-alfombra": (id) => renderN4ProgrammingCarpetChallenge(id),
   "alerta-lluvia-alfombra": (id) => renderN4ProgrammingCarpetChallenge(id),
   "recuperar-tesoro-alfombra": (id) => renderN4ProgrammingCarpetChallenge(id),
+  "secuencia-despertar-n4": (id) => renderN4WakeUpSequenceChallenge(id),
+  "secuencia-cordones-n4": (id) => renderN4ShoelaceSequenceChallenge(id),
   "secuenciacion-guiada": (id) => renderPathChallenge(id),
   "depuracion-inicial": (id) => renderBalanceChallengeV2(id),
   "programacion-por-bloques": (id) => renderRobotChallengeV2(id),
@@ -151,6 +153,15 @@ const N4_ASSET_FOLDER_BY_CHALLENGE = {
 
 function n4Asset(challengeNumber, fileName) {
   const folder = N4_ASSET_FOLDER_BY_CHALLENGE[challengeNumber] || `CONSIGNA ${challengeNumber}`;
+  return `${N4_NEW_ASSET_BASE}/${encodeURIComponent(folder)}/${encodeURIComponent(fileName)}`;
+}
+
+function n4Block2Asset(fileName) {
+  return n4Block2ChallengeAsset(1, fileName);
+}
+
+function n4Block2ChallengeAsset(challengeNumber, fileName) {
+  const folder = `CONSIGNA ${challengeNumber} - BLOQUE 2 - NIVEL 4`;
   return `${N4_NEW_ASSET_BASE}/${encodeURIComponent(folder)}/${encodeURIComponent(fileName)}`;
 }
 
@@ -733,6 +744,10 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n4Asset(18, "CONSIGNA 18.png");
       case "recuperar-tesoro-alfombra":
         return n4Asset(19, "CONSIGNA 19.png");
+      case "secuencia-despertar-n4":
+        return n4Block2Asset("FONDO.png");
+      case "secuencia-cordones-n4":
+        return n4Block2Asset("FONDO.png");
       case "n5-clasificar-robots":
         return n5Asset(1, "Fondo consigna 1.jpg");
       case "n5-seleccionar-energia":
@@ -851,6 +866,18 @@ function getChallengeDisplayNumber(id) {
   if (idMatch) return Number(idMatch[1]);
 
   return id;
+}
+
+function resolveChallengeInternalNumber(requestedNumber) {
+  const challenges = getChallengesFromData(currentLevelData);
+  const matchingIndex = challenges.findIndex((challenge, index) => {
+    const explicitNumber = Number(challenge?.numero || challenge?.actividad || challenge?.desafio);
+    if (Number.isFinite(explicitNumber) && explicitNumber > 0) return explicitNumber === requestedNumber;
+    const idMatch = String(challenge?.id || "").match(/d(\d+)$/i);
+    return idMatch ? Number(idMatch[1]) === requestedNumber : index + 1 === requestedNumber;
+  });
+  if (matchingIndex !== -1) return matchingIndex + 1;
+  return Math.min(Math.max(requestedNumber, 1), totalChallenges);
 }
 
 function closeScenarioModal() {
@@ -4323,6 +4350,292 @@ function renderN5HandwashingOrderChallenge(id = 8) {
       renderSlots();
       maybeComplete();
     });
+  });
+}
+
+function renderN4WakeUpSequenceChallenge(id) {
+  const steps = [
+    { id: "alarma", label: "El despertador suena", file: "Despertador suena.png" },
+    { id: "bostezo", label: "Nano bosteza", file: "Nano bosteza.png" },
+    { id: "de-pie", label: "Nano se pone de pie", file: "Nano parado.png" },
+  ];
+  const bankOrder = [steps[1], steps[0], steps[2]];
+  const slots = Array(steps.length).fill(null);
+  let selectedSlot = 0;
+  let selectedStep = null;
+  let solved = false;
+
+  const stepById = (stepId) => steps.find((step) => step.id === stepId);
+  const stepMarkup = (step, compact = false) => `
+    <span class="n4-b2-d1-step-art${compact ? " is-compact" : ""}">
+      <img src="${n4Block2Asset(step.file)}" alt="" aria-hidden="true" />
+      ${step.id === "alarma" ? `
+        <span class="n4-b2-d1-alarm-motion" aria-hidden="true">
+          <img src="${n4Block2Asset("nota.png")}" alt="" />
+          <img src="${n4Block2Asset("alarma.png")}" alt="" />
+        </span>
+      ` : ""}
+    </span>
+    <span class="n4-b2-d1-step-label">${step.label}</span>
+  `;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-b2-d1-card">
+      ${renderChallengeHeader(
+        "BLOQUE 2 · DESAFÍO 1",
+        "¡RING, RING!",
+        getChallengeInstruction(id, "Ayuda a Nano a ordenar los pasos para despertarse e ir al colegio."),
+      )}
+      <section class="n4-b2-d1-layout" aria-label="Ordenar la secuencia para despertarse">
+        <div class="n4-b2-d1-slots" aria-label="Secuencia ordenada">
+          ${steps.map((_, index) => `
+            <button class="n4-b2-d1-slot${index === 0 ? " is-selected" : ""}" type="button" data-wake-slot="${index}" aria-label="Paso ${index + 1}, vacío">
+              <strong>${index + 1}</strong>
+              <span class="n4-b2-d1-placeholder">Arrastrá una imagen aquí</span>
+            </button>
+          `).join("")}
+        </div>
+        <div class="n4-b2-d1-bank" aria-label="Imágenes desordenadas">
+          ${bankOrder.map((step) => `
+            <button class="n4-b2-d1-option" type="button" draggable="true" data-wake-step="${step.id}" aria-label="${step.label}">
+              ${stepMarkup(step, true)}
+            </button>
+          `).join("")}
+        </div>
+      </section>
+      <p class="challenge-message n4-b2-d1-message" data-message>Ordená las tres imágenes desde lo que ocurre primero hasta lo que ocurre al final.</p>
+    </article>
+  `;
+
+  const slotNodes = [...challengeContent.querySelectorAll("[data-wake-slot]")];
+  const optionNodes = [...challengeContent.querySelectorAll("[data-wake-step]")];
+
+  function renderState() {
+    slotNodes.forEach((slot, index) => {
+      const step = stepById(slots[index]);
+      slot.classList.toggle("is-selected", index === selectedSlot && !solved);
+      slot.classList.remove("is-drag-over");
+      slot.setAttribute("aria-label", step ? `Paso ${index + 1}: ${step.label}` : `Paso ${index + 1}, vacío`);
+      slot.innerHTML = step
+        ? `<strong>${index + 1}</strong>${stepMarkup(step)}`
+        : `<strong>${index + 1}</strong><span class="n4-b2-d1-placeholder">Arrastrá una imagen aquí</span>`;
+    });
+
+    optionNodes.forEach((option) => {
+      const isPlaced = slots.includes(option.dataset.wakeStep);
+      option.classList.toggle("is-placed", isPlaced);
+      option.classList.toggle("is-selected", option.dataset.wakeStep === selectedStep && !isPlaced);
+      option.setAttribute("aria-pressed", String(option.dataset.wakeStep === selectedStep && !isPlaced));
+    });
+  }
+
+  function placeStep(stepId, slotIndex) {
+    if (solved || !stepById(stepId)) return;
+    const previousIndex = slots.indexOf(stepId);
+    if (previousIndex !== -1) slots[previousIndex] = null;
+    slots[slotIndex] = stepId;
+    selectedStep = null;
+    slotNodes.forEach((slot) => slot.classList.remove("is-wrong"));
+
+    const nextEmpty = slots.findIndex((value) => !value);
+    selectedSlot = nextEmpty === -1 ? slotIndex : nextEmpty;
+    renderState();
+
+    if (slots.some((value) => !value)) {
+      setMessage("Bien. Ahora ubicá la imagen que sigue.", "is-good");
+      return;
+    }
+
+    const firstWrong = steps.findIndex((step, index) => slots[index] !== step.id);
+    if (firstWrong !== -1) {
+      slotNodes[firstWrong].classList.add("is-wrong");
+      selectedSlot = firstWrong;
+      renderState();
+      slotNodes[firstWrong].classList.add("is-wrong");
+      setMessage(`Revisá el paso ${firstWrong + 1}. ¿Qué ocurre antes?`, "is-error is-soft-error");
+      return;
+    }
+
+    solved = true;
+    slotNodes.forEach((slot) => slot.classList.add("is-correct"));
+    renderState();
+    setMessage("¡Secuencia completa! Suena el despertador, Nano bosteza y después se pone de pie.", "is-success");
+    completeChallenge(id);
+  }
+
+  slotNodes.forEach((slot) => {
+    slot.addEventListener("click", () => {
+      if (solved) return;
+      const slotIndex = Number(slot.dataset.wakeSlot);
+      if (selectedStep) {
+        placeStep(selectedStep, slotIndex);
+        return;
+      }
+      selectedSlot = slotIndex;
+      renderState();
+    });
+    slot.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      slot.classList.add("is-drag-over");
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-drag-over"));
+    slot.addEventListener("drop", (event) => {
+      event.preventDefault();
+      placeStep(event.dataTransfer?.getData("text/plain"), Number(slot.dataset.wakeSlot));
+    });
+  });
+
+  optionNodes.forEach((option) => {
+    option.addEventListener("click", () => {
+      if (solved) return;
+      const stepId = option.dataset.wakeStep;
+      if (slots.includes(stepId)) {
+        selectedSlot = slots.indexOf(stepId);
+        renderState();
+        return;
+      }
+      selectedStep = selectedStep === stepId ? null : stepId;
+      if (selectedStep) placeStep(selectedStep, selectedSlot);
+      else renderState();
+    });
+    option.addEventListener("dragstart", (event) => {
+      event.dataTransfer?.setData("text/plain", option.dataset.wakeStep);
+      option.classList.add("is-dragging");
+    });
+    option.addEventListener("dragend", () => option.classList.remove("is-dragging"));
+  });
+}
+
+function renderN4ShoelaceSequenceChallenge(id) {
+  const orderedFileNumbers = [5, 3, 4, 9, 6, 2, 8, 7, 1];
+  const steps = orderedFileNumbers.map((fileNumber, index) => ({
+    id: `cordon-${fileNumber}`,
+    label: `Paso ${index + 1} para atar los cordones`,
+    file: `CORDON ${fileNumber}.png`,
+  }));
+  const bankOrder = [steps[5], steps[1], steps[8], steps[3], steps[0], steps[6], steps[2], steps[7], steps[4]];
+  const slots = Array(steps.length).fill(null);
+  let selectedSlot = 0;
+  let solved = false;
+
+  const stepById = (stepId) => steps.find((step) => step.id === stepId);
+  const imageMarkup = (step) => `<img src="${n4Block2ChallengeAsset(2, step.file)}" alt="" aria-hidden="true" />`;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-b2-d2-card">
+      ${renderChallengeHeader(
+        "BLOQUE 2 · DESAFÍO 2",
+        "CORDONES EN ORDEN",
+        getChallengeInstruction(id, "Nano se puso sus zapatillas favoritas, pero los cordones están sueltos. Observa los pasos y ordénalos para que no se tropiece."),
+      )}
+      <section class="n4-b2-d2-layout" aria-label="Ordenar los pasos para atar los cordones">
+        <div class="n4-b2-d2-slots" aria-label="Secuencia ordenada">
+          ${steps.map((_, index) => `
+            <button class="n4-b2-d2-slot${index === 0 ? " is-selected" : ""}" type="button" data-lace-slot="${index}" aria-label="Paso ${index + 1}, vacío">
+              <strong>${index + 1}</strong>
+              <span>?</span>
+            </button>
+          `).join("")}
+        </div>
+        <div class="n4-b2-d2-bank" aria-label="Pasos desordenados">
+          ${bankOrder.map((step) => `
+            <button class="n4-b2-d2-option" type="button" draggable="true" data-lace-step="${step.id}" aria-label="${step.label}">
+              ${imageMarkup(step)}
+            </button>
+          `).join("")}
+        </div>
+      </section>
+      <p class="challenge-message n4-b2-d2-message" data-message>Ordená las nueve imágenes desde el primer movimiento hasta el nudo terminado.</p>
+    </article>
+  `;
+
+  const slotNodes = [...challengeContent.querySelectorAll("[data-lace-slot]")];
+  const optionNodes = [...challengeContent.querySelectorAll("[data-lace-step]")];
+
+  function renderState() {
+    slotNodes.forEach((slot, index) => {
+      const step = stepById(slots[index]);
+      slot.classList.toggle("is-selected", index === selectedSlot && !solved);
+      slot.classList.remove("is-drag-over");
+      slot.setAttribute("aria-label", step ? `Paso ${index + 1}: ${step.label}` : `Paso ${index + 1}, vacío`);
+      slot.innerHTML = step
+        ? `<strong>${index + 1}</strong>${imageMarkup(step)}`
+        : `<strong>${index + 1}</strong><span>?</span>`;
+    });
+    optionNodes.forEach((option) => {
+      const isPlaced = slots.includes(option.dataset.laceStep);
+      option.classList.toggle("is-placed", isPlaced);
+      option.disabled = solved;
+    });
+  }
+
+  function placeStep(stepId, slotIndex) {
+    if (solved || !stepById(stepId)) return;
+    const previousIndex = slots.indexOf(stepId);
+    if (previousIndex !== -1) slots[previousIndex] = null;
+    slots[slotIndex] = stepId;
+    slotNodes.forEach((slot) => slot.classList.remove("is-wrong"));
+    const nextEmpty = slots.findIndex((value) => !value);
+    selectedSlot = nextEmpty === -1 ? slotIndex : nextEmpty;
+    renderState();
+
+    if (slots.some((value) => !value)) {
+      setMessage(`Paso ubicado. Faltan ${slots.filter((value) => !value).length}.`, "is-good");
+      return;
+    }
+
+    const wrongIndexes = steps
+      .map((step, index) => slots[index] === step.id ? -1 : index)
+      .filter((index) => index !== -1);
+    if (wrongIndexes.length) {
+      wrongIndexes.forEach((index) => slotNodes[index].classList.add("is-wrong"));
+      selectedSlot = wrongIndexes[0];
+      renderState();
+      wrongIndexes.forEach((index) => slotNodes[index].classList.add("is-wrong"));
+      setMessage(`Revisá desde el paso ${wrongIndexes[0] + 1}: todavía hay movimientos fuera de orden.`, "is-error is-soft-error");
+      return;
+    }
+
+    solved = true;
+    slotNodes.forEach((slot) => slot.classList.add("is-correct"));
+    renderState();
+    setMessage("¡Cordones atados! Los nueve movimientos quedaron en el orden correcto.", "is-success");
+    completeChallenge(id);
+  }
+
+  slotNodes.forEach((slot) => {
+    slot.addEventListener("click", () => {
+      if (solved) return;
+      selectedSlot = Number(slot.dataset.laceSlot);
+      renderState();
+    });
+    slot.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      slot.classList.add("is-drag-over");
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-drag-over"));
+    slot.addEventListener("drop", (event) => {
+      event.preventDefault();
+      placeStep(event.dataTransfer?.getData("text/plain"), Number(slot.dataset.laceSlot));
+    });
+  });
+
+  optionNodes.forEach((option) => {
+    option.addEventListener("click", () => {
+      if (solved) return;
+      const stepId = option.dataset.laceStep;
+      if (slots.includes(stepId)) {
+        selectedSlot = slots.indexOf(stepId);
+        renderState();
+        return;
+      }
+      placeStep(stepId, selectedSlot);
+    });
+    option.addEventListener("dragstart", (event) => {
+      event.dataTransfer?.setData("text/plain", option.dataset.laceStep);
+      option.classList.add("is-dragging");
+    });
+    option.addEventListener("dragend", () => option.classList.remove("is-dragging"));
   });
 }
 
@@ -9489,7 +9802,7 @@ async function initializeLevelPage() {
   wireSelectorButtons();
 
   const initialChallenge = Number.isInteger(requestedChallenge)
-    ? Math.min(Math.max(requestedChallenge, 1), totalChallenges)
+    ? resolveChallengeInternalNumber(requestedChallenge)
     : 1;
 
   if (challenges.length) {
