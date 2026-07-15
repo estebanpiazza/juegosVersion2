@@ -1,0 +1,3 @@
+CONSIGNA: El pasillo es muy largo. Nano tiene que dar 4 pasos iguales y se está cansando, guíalo para llegar al final del camino.
+
+Mecánica: El niño debe poner 4 fichas para avanzar. Nano hace los pasos pero se lo ve cansado y transpirado.

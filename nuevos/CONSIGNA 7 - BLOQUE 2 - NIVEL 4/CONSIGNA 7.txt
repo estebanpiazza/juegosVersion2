@@ -1,0 +1,1 @@
+CONSIGNA:¡Ups! Faltan pasos en el algoritmo y Nano no llega a la puerta. Observa el camino y selecciona en orden las fichas que faltan para que Nano llegue al objetivo!

@@ -170,6 +170,76 @@
       "consigna": "Observa la situación y une las parejas correctas.",
       "objetivo": "Relacionar cuatro situaciones cotidianas con el objeto que permite resolverlas.",
       "interaccion": "Arrastrar o seleccionar cada solución para unir lluvia con paraguas, frío con abrigo, dientes sucios con cepillo y calor con agua."
+    },
+    {
+      "id": "n4-rework-b2-d6",
+      "numero": 25,
+      "bloque": 2,
+      "titulo": "¡Llegamos a la escuela!",
+      "tipo": "camino-escuela-n4",
+      "consigna": "¡Llegamos a la escuela! Pero el patio está lleno de mochilas tiradas. Arma el camino con las flechas para que Nano llegue a su aula sin chocar.",
+      "objetivo": "Crear una secuencia de movimientos que lleve a Nano hasta la escuela evitando los obstáculos.",
+      "interaccion": "Seleccionar avanzar y los giros para armar el algoritmo; después ejecutarlo con el botón de la bandera."
+    },
+    {
+      "id": "n4-rework-b2-d7",
+      "numero": 26,
+      "bloque": 2,
+      "titulo": "¡Ups! Faltan pasos",
+      "tipo": "completar-camino-escuela-n4",
+      "consigna": "¡Ups! Faltan pasos en el algoritmo y Nano no llega a la puerta. Observa el camino y selecciona en orden las fichas que faltan para que Nano llegue al objetivo.",
+      "objetivo": "Identificar y completar los tres comandos faltantes de un algoritmo de recorrido.",
+      "interaccion": "Completar los espacios vacíos con avanzar, girar a la derecha y avanzar; después ejecutar el algoritmo."
+    },
+    {
+      "id": "n4-rework-b2-d8",
+      "numero": 27,
+      "bloque": 2,
+      "titulo": "¡Cuidado!",
+      "tipo": "depurar-casillero-n4",
+      "consigna": "¡Cuidado! Hay una ficha intrusa que hará que Nano choque contra el casillero. Encuentra la ficha equivocada y ¡tócala para sacarla!",
+      "objetivo": "Detectar y eliminar el comando sobrante de una secuencia antes de que Nano choque.",
+      "interaccion": "Tocar la tercera ficha de avanzar para quitarla y dejar a Nano frente al casillero."
+    },
+    {
+      "id": "n4-rework-b2-d9",
+      "numero": 28,
+      "bloque": 2,
+      "titulo": "La clave del casillero",
+      "tipo": "clave-conteo-n4",
+      "consigna": "Nano olvidó su clave. Observa los dibujos, cuenta cuántos hay en cada grupo y toca los números en orden para armar el código. ¡Tú puedes!",
+      "objetivo": "Contar cuatro grupos de objetos y formar una clave numérica respetando su orden.",
+      "interaccion": "Ingresar 6, 4, 2 y 3 para representar lapiceras, tablets, drones y mochilas."
+    },
+    {
+      "id": "n4-rework-b2-d11",
+      "numero": 30,
+      "bloque": 2,
+      "titulo": "El pasillo es muy largo",
+      "tipo": "cuatro-avances-n4",
+      "consigna": "El pasillo es muy largo. Nano tiene que dar 4 pasos iguales y se está cansando, guíalo para llegar al final del camino.",
+      "objetivo": "Construir una secuencia de cuatro comandos iguales para recorrer un camino recto.",
+      "interaccion": "Colocar cuatro fichas de avanzar y ejecutar el algoritmo para llegar a la meta."
+    },
+    {
+      "id": "n4-rework-b2-d12",
+      "numero": 31,
+      "bloque": 2,
+      "titulo": "¡Busquemos la manera más rápida!",
+      "tipo": "repetir-cuatro-n4",
+      "consigna": "¡Busquemos la manera más rápida! Reemplaza las flechas usando la tarjeta de repetición.",
+      "objetivo": "Simplificar cuatro comandos iguales mediante una instrucción de repetición.",
+      "interaccion": "Combinar una ficha de avanzar con la tarjeta repetir por cuatro y ejecutar el algoritmo."
+    },
+    {
+      "id": "n4-rework-b2-d14",
+      "numero": 33,
+      "bloque": 2,
+      "titulo": "¡Misión laberinto!",
+      "tipo": "laberinto-baterias-n4",
+      "consigna": "¡Misión laberinto! Crea tu propia secuencia: ayuda a Nano a pasar por las baterías para cargar energía y encuentra la salida sin tocar los obstáculos. ¡A jugar!",
+      "objetivo": "Programar un recorrido seguro que recoja las dos baterías antes de alcanzar la salida.",
+      "interaccion": "Construir y ejecutar una secuencia de hasta doce avances y giros evitando los virus tecnológicos."
     }
   ]
 }

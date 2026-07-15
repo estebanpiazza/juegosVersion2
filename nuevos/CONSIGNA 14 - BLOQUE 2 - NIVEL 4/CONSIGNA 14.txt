@@ -1,0 +1,1 @@
+CONSIGNA:¡Misión laberinto!  Crea tu propia secuencia: ayuda a Nano a pasar por la batería para cargar energía y encuentra la salida sin tocar los obstáculos. ¡A jugar! (ES LA ACT 6 DEL OTRO ARCHIVO)
