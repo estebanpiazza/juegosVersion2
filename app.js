@@ -248,6 +248,17 @@ function n6Asset(challengeNumber, fileName) {
   return `${N6_ASSET_BASE}/${encodeURIComponent(folder)}/${encodeURIComponent(fileName)}`;
 }
 
+function renderGridSequenceEndpoint(position) {
+  const isStart = position === "start";
+  return `
+    <img
+      class="grid-sequence-endpoint grid-sequence-endpoint--${isStart ? "start" : "finish"}"
+      src="${n6Asset(6, isStart ? "Entrada.png" : "Vamos.png")}"
+      alt="${isStart ? "Inicio" : "Final"}"
+    />
+  `;
+}
+
 function renderRobotMarker() {
   return `<img class="robot-marker" src="${ROBOT_IMAGE_SRC}" alt="Nano" style="--robot-rotation: 0deg" />`;
 }
@@ -2480,8 +2491,10 @@ function renderN4ProgrammingCarpetChallenge(id = 4) {
                 <span class="play-section-num">1</span>
                 <span class="play-section-label">Tu algoritmo</span>
               </div>
-              <div class="play-algo-slots n4-play-slots" role="list" aria-label="Timeline del algoritmo" style="--slot-count:${config.solution.length};">
+              <div class="play-algo-slots n4-play-slots ${config.solution.length > 5 ? "is-long" : ""}" role="list" aria-label="Timeline del algoritmo" style="--slot-count:${config.solution.length + 2};">
+                ${renderGridSequenceEndpoint("start")}
                 ${slotsMarkup}
+                ${renderGridSequenceEndpoint("finish")}
               </div>
             </section>
             <section class="play-section n4-play-section" aria-label="Tarjetas de programacion">
@@ -3892,7 +3905,9 @@ function renderN5ChargingPathChallenge(id = 3) {
         </div>
         <div class="n5-program-panel">
           <div class="n5-slots" data-slots>
+            ${renderGridSequenceEndpoint("start")}
             ${expected.map((_, index) => `<button class="n5-slot ${index === 0 ? "is-selected" : ""}" type="button" data-slot="${index}" aria-label="Paso ${index + 1}">${index + 1}</button>`).join("")}
+            ${renderGridSequenceEndpoint("finish")}
           </div>
           <div class="n5-card-bank">
             ${cards.map((card) => `
@@ -5109,9 +5124,11 @@ function renderN6InitialDirectionChallenge(id = 1) {
       <section class="n6-d1-algorithm" aria-label="Algoritmo">
         <h3>ALGORITMO</h3>
         <div class="n6-d1-slots">
+          ${renderGridSequenceEndpoint("start")}
           ${Array.from({ length: 5 }, (_, index) => `
             <div class="n6-d1-slot" data-algorithm-slot="${index}"><span>?</span></div>
           `).join("")}
+          ${renderGridSequenceEndpoint("finish")}
         </div>
       </section>
       <section class="n6-d1-options-panel" aria-label="Tarjetas de programación">
@@ -5292,10 +5309,12 @@ function renderN6StarRepetitionChallenge(id = 3) {
 
       <section class="n6-d3-algorithm" aria-label="Algoritmo">
         <div class="n6-d3-slots">
+          ${renderGridSequenceEndpoint("start")}
           <button class="n6-d3-slot n4-drop-target" type="button" data-algorithm-slot="0" data-expected="repetir" aria-label="Primer espacio del algoritmo"><span>?</span></button>
           ${Array.from({ length: 4 }, (_, index) => `
             <div class="n6-d3-slot" data-algorithm-slot="${index + 1}"><span>?</span></div>
           `).join("")}
+          ${renderGridSequenceEndpoint("finish")}
         </div>
       </section>
 
@@ -5412,9 +5431,11 @@ function renderN6AntennaRouteChallenge(id = 4) {
           <button class="n6-d4-clear" type="button" data-clear-route aria-label="Borrar algoritmo">Borrar</button>
         </div>
         <div class="n6-d4-slots">
+          ${renderGridSequenceEndpoint("start")}
           ${Array.from({ length: 10 }, (_, index) => `
             <button class="n6-d4-slot" type="button" data-route-slot="${index}" aria-label="Paso ${index + 1}, vacío"><span>?</span></button>
           `).join("")}
+          ${renderGridSequenceEndpoint("finish")}
         </div>
       </section>
 
@@ -5558,9 +5579,11 @@ function renderN6CraterDetourChallenge(id = 5) {
           <button class="n6-d4-clear" type="button" data-clear-route aria-label="Borrar algoritmo">Borrar</button>
         </div>
         <div class="n6-d4-slots">
+          ${renderGridSequenceEndpoint("start")}
           ${Array.from({ length: 10 }, (_, index) => `
             <button class="n6-d4-slot" type="button" data-route-slot="${index}" aria-label="Paso ${index + 1}, vacío"><span>?</span></button>
           `).join("")}
+          ${renderGridSequenceEndpoint("finish")}
         </div>
       </section>
 
@@ -6155,6 +6178,7 @@ function renderN6CapsuleCollectionChallenge(id = 9) {
           <span>REPETICIÓN</span><strong>x4</strong>
         </div>
         <div class="n6-d9-program">
+          ${renderGridSequenceEndpoint("start")}
           <span class="n6-d9-repeat-open" aria-hidden="true">(</span>
           <div class="n6-d9-repeat-slots">
             ${expected.map((command, index) => `
@@ -6162,6 +6186,7 @@ function renderN6CapsuleCollectionChallenge(id = 9) {
             `).join("")}
           </div>
           <span class="n6-d9-repeat-close" aria-hidden="true">)</span>
+          ${renderGridSequenceEndpoint("finish")}
         </div>
       </section>
 

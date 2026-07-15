@@ -24159,3 +24159,52 @@ body:has(.n4-b2-d5-card) .challenge-shell {
   .n4-b2-d5-bank { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .n4-b2-d5-pair { grid-template-rows: 160px 125px; }
 }
+
+/* Extremos fijos de los algoritmos asociados a una cuadricula (niveles 4 a 6). */
+.grid-sequence-endpoint {
+  display: block;
+  min-width: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  align-self: center;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.n4-program-card .n4-play-slots > .grid-sequence-endpoint {
+  width: clamp(68px, 7vw, 92px);
+}
+
+.n4-program-card .n4-play-slots.is-long {
+  grid-template-columns: repeat(5, clamp(58px, 5.7vw, 76px));
+}
+
+.n4-program-card .n4-play-slots.is-long > .grid-sequence-endpoint {
+  width: clamp(58px, 5.7vw, 76px);
+}
+
+.n5-slots > .grid-sequence-endpoint {
+  width: clamp(58px, 6vw, 92px);
+  flex: 0 0 auto;
+}
+
+.n6-d1-slots,
+.n6-d3-slots {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.n6-d4-slots {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.n6-d1-slots > .grid-sequence-endpoint,
+.n6-d3-slots > .grid-sequence-endpoint,
+.n6-d4-slots > .grid-sequence-endpoint,
+.n6-d9-program > .grid-sequence-endpoint {
+  max-height: 100%;
+}
+
+.n6-d9-program {
+  grid-template-columns: .72fr .3fr 3fr .3fr .72fr;
+}
