@@ -339,7 +339,9 @@ function loadIframe(panel, src) {
             [class*="backpack_backpack-container"],
             [class*="backpack_backpack-header"],
             [class*="backpack_backpack-list"],
-            [id*="account-nav"] { display: none !important; }
+            [id*="account-nav"],
+            button[aria-label="Elige un objeto"],
+            button[aria-label="Elige un fondo"] { display: none !important; }
           `;
           doc.head.appendChild(style);
           hideEditorChromeActions(doc);
