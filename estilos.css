@@ -24037,3 +24037,125 @@ body:has(.n6-card) .game-stage-bg {
   }
 }
 
+/* ===== Nivel 4 · Bloque 2 · Desafío 5 (parejas cotidianas) ===== */
+body:has(.n4-b2-d5-card) .game-workspace,
+body:has(.n4-b2-d5-card) .challenge-shell {
+  width: 100%;
+  max-width: none;
+}
+
+body:has(.n4-b2-d5-card) .challenge-shell {
+  background: transparent;
+  box-shadow: none;
+}
+
+.challenge-card.n4-b2-d5-card {
+  position: relative;
+  min-height: min(830px, calc(100vh - 96px));
+  padding: 18px clamp(18px, 3vw, 54px) 16px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 28px;
+  background: rgba(238, 252, 255, .2);
+  box-shadow: inset 0 0 0 2px rgba(8, 219, 247, .42);
+}
+
+.n4-b2-d5-card .challenge-header {
+  width: min(780px, 90%);
+  margin: 0 auto 14px;
+  padding: 12px 24px;
+  border: 3px solid #08dbf7;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, .96);
+  box-shadow: 0 8px 20px rgba(0, 70, 112, .18);
+  text-align: center;
+}
+
+.n4-b2-d5-card .challenge-kicker { display: none; }
+.n4-b2-d5-card .challenge-title-row { margin: 0; justify-content: center; }
+.n4-b2-d5-card .challenge-header h2 { color: #087bb9; font-size: clamp(24px, 2.1vw, 38px); }
+.n4-b2-d5-card .challenge-header p { margin: 0 0 4px; color: #58595b; font-size: clamp(15px, 1.15vw, 21px); }
+.n4-b2-d5-card .listen-consigna { width: 42px; height: 42px; min-height: 42px; padding: 0; }
+.n4-b2-d5-card .listen-consigna [data-speech-label] { display: none; }
+
+.n4-b2-d5-layout { display: grid; gap: 14px; }
+.n4-b2-d5-situations,
+.n4-b2-d5-bank {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(10px, 1.4vw, 24px);
+}
+
+.n4-b2-d5-pair { display: grid; grid-template-rows: minmax(155px, 1fr) minmax(118px, .72fr); gap: 10px; }
+.n4-b2-d5-situation,
+.n4-b2-d5-slot,
+.n4-b2-d5-option {
+  position: relative;
+  overflow: hidden;
+  border: 3px solid #08dbf7;
+  border-radius: 20px;
+  background: rgba(235, 252, 255, .92);
+  box-shadow: 0 7px 16px rgba(0, 83, 122, .2), inset 0 0 18px rgba(8, 219, 247, .14);
+}
+
+.n4-b2-d5-situation img,
+.n4-b2-d5-slot img,
+.n4-b2-d5-option img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.n4-b2-d5-situation strong,
+.n4-b2-d5-slot strong,
+.n4-b2-d5-option strong {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 7px;
+  padding: 5px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .9);
+  color: #075c85;
+  font-size: clamp(12px, 1vw, 17px);
+  text-align: center;
+}
+
+.n4-b2-d5-letter {
+  position: absolute;
+  z-index: 2;
+  top: 8px;
+  left: 8px;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: #08cbe7;
+  color: #fff;
+  font-weight: 900;
+}
+
+.n4-b2-d5-slot { min-height: 112px; padding: 0; cursor: pointer; }
+.n4-b2-d5-slot > span { color: #2983a5; font-weight: 800; font-size: clamp(13px, 1vw, 17px); }
+.n4-b2-d5-slot.is-drag-over,
+.n4-b2-d5-option.is-selected { border-color: #f5920a; transform: translateY(-3px); box-shadow: 0 0 0 5px rgba(245, 146, 10, .25); }
+.n4-b2-d5-slot.is-correct { border-color: #25d366; animation: n4-b2-d5-pop .35s ease-out; }
+.n4-b2-d5-slot.is-wrong { border-color: #e25353; animation: n4-b2-d1-shake .28s ease-in-out 2; }
+
+.n4-b2-d5-bank { padding: 10px; border-radius: 20px; background: rgba(255, 255, 255, .82); }
+.n4-b2-d5-option { height: clamp(112px, 15vh, 158px); padding: 0; cursor: grab; transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease; }
+.n4-b2-d5-option:hover,
+.n4-b2-d5-option:focus-visible { transform: translateY(-4px); }
+.n4-b2-d5-option.is-dragging { opacity: .45; }
+.n4-b2-d5-option.is-placed { opacity: .25; transform: scale(.93); cursor: default; }
+.n4-b2-d5-pair.is-complete .n4-b2-d5-situation { border-color: #25d366; }
+.n4-b2-d5-message { margin: 12px auto 0; max-width: 900px; text-align: center; }
+
+@keyframes n4-b2-d5-pop {
+  0% { transform: scale(.92); }
+  70% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+@media (max-width: 800px) {
+  .challenge-card.n4-b2-d5-card { overflow-y: auto; }
+  .n4-b2-d5-situations,
+  .n4-b2-d5-bank { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .n4-b2-d5-pair { grid-template-rows: 160px 125px; }
+}

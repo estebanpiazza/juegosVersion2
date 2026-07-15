@@ -160,6 +160,16 @@
       "consigna": "¡A lavarse los dientes! Para que queden limpios hay que seguir un orden. Ordena las imágenes.",
       "objetivo": "Reconocer y ordenar temporalmente los pasos necesarios para cepillarse los dientes.",
       "interaccion": "Arrastrar o seleccionar las ocho imágenes desde tomar el cepillo hasta guardarlo limpio."
+    },
+    {
+      "id": "n4-rework-b2-d5",
+      "numero": 24,
+      "bloque": 2,
+      "titulo": "Parejas cotidianas",
+      "tipo": "parejas-situaciones-n4",
+      "consigna": "Observa la situación y une las parejas correctas.",
+      "objetivo": "Relacionar cuatro situaciones cotidianas con el objeto que permite resolverlas.",
+      "interaccion": "Arrastrar o seleccionar cada solución para unir lluvia con paraguas, frío con abrigo, dientes sucios con cepillo y calor con agua."
     }
   ]
 }

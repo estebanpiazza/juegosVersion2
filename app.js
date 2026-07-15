@@ -73,6 +73,7 @@ const challengeTypeRenderers = {
   "secuencia-despertar-n4": (id) => renderN4WakeUpSequenceChallenge(id),
   "secuencia-cordones-n4": (id) => renderN4ShoelaceSequenceChallenge(id),
   "secuencia-cepillado-n4": (id) => renderN4ToothbrushingSequenceChallenge(id),
+  "parejas-situaciones-n4": (id) => renderN4SituationPairsChallenge(id),
   "secuenciacion-guiada": (id) => renderPathChallenge(id),
   "depuracion-inicial": (id) => renderBalanceChallengeV2(id),
   "programacion-por-bloques": (id) => renderRobotChallengeV2(id),
@@ -751,6 +752,8 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n4Block2Asset("FONDO.png");
       case "secuencia-cepillado-n4":
         return n4Block2ChallengeAsset(3, "FONDO.png");
+      case "parejas-situaciones-n4":
+        return n4Block2ChallengeAsset(5, "FONDO.jpg");
       case "n5-clasificar-robots":
         return n5Asset(1, "Fondo consigna 1.jpg");
       case "n5-seleccionar-energia":
@@ -4782,6 +4785,143 @@ function renderN4ToothbrushingSequenceChallenge(id) {
       option.classList.add("is-dragging");
     });
     option.addEventListener("dragend", () => option.classList.remove("is-dragging"));
+  });
+}
+
+function renderN4SituationPairsChallenge(id) {
+  const situations = [
+    { id: "calor", label: "Hace calor", file: "calor.png", answer: "agua" },
+    { id: "lluvia", label: "Llueve", file: "lluvia.png", answer: "paraguas" },
+    { id: "dientes", label: "Dientes sucios", file: "dientes sucios.png", answer: "cepillo" },
+    { id: "frio", label: "Hace frío", file: "frio.png", answer: "abrigo" },
+  ];
+  const solutions = [
+    { id: "paraguas", label: "Paraguas", file: "paraguas.png" },
+    { id: "agua", label: "Agua", file: "vaso agua.png" },
+    { id: "abrigo", label: "Abrigo", file: "campera.png" },
+    { id: "cepillo", label: "Cepillo", file: "cepillo de dientes.png" },
+  ];
+  const solutionById = Object.fromEntries(solutions.map((solution) => [solution.id, solution]));
+  const matches = new Map();
+  let selectedSolution = null;
+  let solved = false;
+
+  const image = (item) => `
+    <img src="${n4Block2ChallengeAsset(5, item.file)}" alt="" aria-hidden="true" />
+    <strong>${item.label}</strong>
+  `;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-b2-d5-card">
+      ${renderChallengeHeader(
+        "BLOQUE 2 · DESAFÍO 5",
+        "¡A JUGAR!",
+        getChallengeInstruction(id, "Observa la situación y une las parejas correctas."),
+      )}
+      <section class="n4-b2-d5-layout" aria-label="Unir situaciones cotidianas con sus soluciones">
+        <div class="n4-b2-d5-situations">
+          ${situations.map((situation, index) => `
+            <div class="n4-b2-d5-pair" data-pair="${situation.id}">
+              <div class="n4-b2-d5-situation">
+                <span class="n4-b2-d5-letter" aria-hidden="true">${String.fromCharCode(65 + index)}</span>
+                ${image(situation)}
+              </div>
+              <button class="n4-b2-d5-slot" type="button" data-pair-slot="${situation.id}" aria-label="Solución para ${situation.label}">
+                <span>Elegí la solución</span>
+              </button>
+            </div>
+          `).join("")}
+        </div>
+        <div class="n4-b2-d5-bank" aria-label="Soluciones disponibles">
+          ${solutions.map((solution) => `
+            <button class="n4-b2-d5-option" type="button" draggable="true" data-pair-solution="${solution.id}" aria-label="${solution.label}">
+              ${image(solution)}
+            </button>
+          `).join("")}
+        </div>
+      </section>
+      <p class="challenge-message n4-b2-d5-message" data-message>Tocá una solución y después la situación que corresponda, o arrastrala hasta su casillero.</p>
+    </article>
+  `;
+
+  const messageNode = challengeContent.querySelector("[data-message]");
+  const optionNodes = [...challengeContent.querySelectorAll("[data-pair-solution]")];
+  const slotNodes = [...challengeContent.querySelectorAll("[data-pair-slot]")];
+
+  const setLocalMessage = (text, state = "") => {
+    messageNode.textContent = text;
+    messageNode.className = `challenge-message n4-b2-d5-message ${state}`.trim();
+  };
+
+  const refreshSelection = () => {
+    optionNodes.forEach((option) => {
+      option.classList.toggle("is-selected", option.dataset.pairSolution === selectedSolution);
+      option.classList.toggle("is-placed", [...matches.values()].includes(option.dataset.pairSolution));
+      option.disabled = [...matches.values()].includes(option.dataset.pairSolution);
+    });
+  };
+
+  const tryMatch = (situationId, solutionId) => {
+    if (solved || matches.has(situationId) || !solutionId) return;
+    const situation = situations.find((item) => item.id === situationId);
+    const slot = challengeContent.querySelector(`[data-pair-slot="${situationId}"]`);
+    if (!situation || !slot) return;
+
+    slot.classList.remove("is-wrong");
+    if (situation.answer !== solutionId) {
+      slot.classList.add("is-wrong");
+      setLocalMessage("Esa pareja no va junta. Mirá bien la situación y probá otra vez.", "is-error is-soft-error");
+      window.setTimeout(() => slot.classList.remove("is-wrong"), 650);
+      return;
+    }
+
+    const solution = solutionById[solutionId];
+    matches.set(situationId, solutionId);
+    selectedSolution = null;
+    slot.classList.add("is-correct");
+    slot.innerHTML = image(solution);
+    slot.setAttribute("aria-label", `${situation.label} se une con ${solution.label}`);
+    slot.closest("[data-pair]")?.classList.add("is-complete");
+    refreshSelection();
+
+    if (matches.size === situations.length) {
+      solved = true;
+      setLocalMessage("¡Excelente! Uniste cada situación con la solución correcta.", "is-success");
+      completeChallenge(id);
+      return;
+    }
+    setLocalMessage(`¡Muy bien! Ya completaste ${matches.size} de ${situations.length} parejas.`, "is-good");
+  };
+
+  optionNodes.forEach((option) => {
+    option.addEventListener("click", () => {
+      selectedSolution = option.dataset.pairSolution;
+      refreshSelection();
+      setLocalMessage(`Ahora tocá el casillero que corresponde a ${solutionById[selectedSolution].label}.`, "is-good");
+    });
+    option.addEventListener("dragstart", (event) => {
+      selectedSolution = option.dataset.pairSolution;
+      option.classList.add("is-dragging");
+      event.dataTransfer?.setData("text/plain", selectedSolution);
+      if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
+      refreshSelection();
+    });
+    option.addEventListener("dragend", () => option.classList.remove("is-dragging"));
+  });
+
+  slotNodes.forEach((slot) => {
+    slot.addEventListener("click", () => tryMatch(slot.dataset.pairSlot, selectedSolution));
+    slot.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      slot.classList.add("is-drag-over");
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-drag-over"));
+    slot.addEventListener("drop", (event) => {
+      event.preventDefault();
+      slot.classList.remove("is-drag-over");
+      const solutionId = event.dataTransfer?.getData("text/plain") || selectedSolution;
+      tryMatch(slot.dataset.pairSlot, solutionId);
+    });
   });
 }
 
