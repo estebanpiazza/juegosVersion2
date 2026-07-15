@@ -78,6 +78,7 @@ const challengeTypeRenderers = {
   "completar-camino-escuela-n4": (id) => renderN4MissingSchoolStepsChallenge(id),
   "depurar-casillero-n4": (id) => renderN4LockerDebugChallenge(id),
   "clave-conteo-n4": (id) => renderN4CountingCodeChallenge(id),
+  "secuencia-lavado-manos-n4": (id) => renderN4HandwashingSequenceChallenge(id),
   "cuatro-avances-n4": (id) => renderN4FourStepsChallenge(id),
   "repetir-cuatro-n4": (id) => renderN4RepeatFourChallenge(id),
   "laberinto-baterias-n4": (id) => renderN4BatteryLabyrinthChallenge(id),
@@ -785,6 +786,8 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n4Block2ChallengeAsset(8, "FONDO .png");
       case "clave-conteo-n4":
         return n4Block2ChallengeAsset(9, "FONDO.jpg");
+      case "secuencia-lavado-manos-n4":
+        return n4Block2ChallengeAsset(10, "FONDO.png");
       case "cuatro-avances-n4":
         return n4Block2ChallengeAsset(11, "FONDO.png");
       case "repetir-cuatro-n4":
@@ -5554,6 +5557,159 @@ function renderN4CountingCodeChallenge(id) {
   });
 
   renderAnswers();
+}
+
+function renderN4HandwashingSequenceChallenge(id) {
+  const steps = [
+    { id: "mojar", label: "Mojarse las manos", file: "Mojarse la manos.png" },
+    { id: "jabon", label: "Agarrar el jabón", file: "agarra el jabon.png" },
+    { id: "enjabonar", label: "Enjabonarse las manos", file: "Enjabonarse las manos.png" },
+    { id: "enjuagar", label: "Enjuagarse las manos", file: "Enjuagarse las manos.png" },
+    { id: "secar", label: "Secarse las manos", file: "Secarse las manos.png" },
+  ];
+  const bankOrder = [steps[1], steps[3], steps[4], steps[0], steps[2]];
+  const slots = Array(steps.length).fill(null);
+  let selectedSlot = 0;
+  let solved = false;
+
+  const stepById = (stepId) => steps.find((step) => step.id === stepId);
+  const imageMarkup = (step) => `<img src="${n4Block2ChallengeAsset(10, step.file)}" alt="" aria-hidden="true" />`;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-b2-d10-card">
+      ${renderChallengeHeader(
+        "BLOQUE 2 · DESAFÍO 10",
+        "¡HORA DE LA MERIENDA!",
+        getChallengeInstruction(id, "Pero primero... ¡manos limpias! Ordena los pasos."),
+      )}
+      <section class="n4-b2-d10-layout" aria-label="Ordenar los pasos para lavarse las manos">
+        <div class="n4-b2-d10-slots" aria-label="Secuencia ordenada">
+          ${steps.map((_, index) => `
+            <button class="n4-b2-d10-slot${index === 0 ? " is-selected" : ""}" type="button" data-hand-slot="${index}" aria-label="Paso ${index + 1}, vacío">
+              <strong>${index + 1}</strong>
+              <span>?</span>
+            </button>
+          `).join("")}
+        </div>
+        <div class="n4-b2-d10-bank" aria-label="Imágenes desordenadas">
+          ${bankOrder.map((step) => `
+            <button class="n4-b2-d10-option" type="button" draggable="true" data-hand-step="${step.id}" aria-label="${step.label}">
+              ${imageMarkup(step)}
+            </button>
+          `).join("")}
+        </div>
+      </section>
+      <p class="challenge-message n4-b2-d10-message" data-message>Ordená las cinco imágenes desde que mojás las manos hasta que quedan limpias y secas.</p>
+    </article>
+  `;
+
+  const slotNodes = [...challengeContent.querySelectorAll("[data-hand-slot]")];
+  const optionNodes = [...challengeContent.querySelectorAll("[data-hand-step]")];
+
+  function renderState() {
+    slotNodes.forEach((slot, index) => {
+      const step = stepById(slots[index]);
+      slot.classList.toggle("is-selected", index === selectedSlot && !solved);
+      slot.classList.remove("is-drag-over");
+      slot.setAttribute("aria-label", step ? `Paso ${index + 1}: ${step.label}` : `Paso ${index + 1}, vacío`);
+      slot.innerHTML = step
+        ? `<strong>${index + 1}</strong>${imageMarkup(step)}`
+        : `<strong>${index + 1}</strong><span>?</span>`;
+    });
+    optionNodes.forEach((option) => {
+      option.classList.toggle("is-placed", slots.includes(option.dataset.handStep));
+      option.disabled = solved;
+    });
+  }
+
+  function placeStep(stepId, slotIndex) {
+    if (solved || !stepById(stepId)) return;
+    const previousIndex = slots.indexOf(stepId);
+    if (previousIndex !== -1) slots[previousIndex] = null;
+    slots[slotIndex] = stepId;
+    slotNodes.forEach((slot) => slot.classList.remove("is-wrong"));
+    const nextEmpty = slots.findIndex((value) => !value);
+    selectedSlot = nextEmpty === -1 ? slotIndex : nextEmpty;
+    renderState();
+
+    if (slots.some((value) => !value)) {
+      setMessage(`Paso ubicado. Faltan ${slots.filter((value) => !value).length}.`, "is-good");
+      return;
+    }
+
+    const wrongIndexes = steps
+      .map((step, index) => slots[index] === step.id ? -1 : index)
+      .filter((index) => index !== -1);
+    if (wrongIndexes.length) {
+      wrongIndexes.forEach((index) => slotNodes[index].classList.add("is-wrong"));
+      selectedSlot = wrongIndexes[0];
+      renderState();
+      wrongIndexes.forEach((index) => slotNodes[index].classList.add("is-wrong"));
+      setMessage(`Revisá desde el paso ${wrongIndexes[0] + 1}. Pensá qué acción debe ocurrir antes.`, "is-error is-soft-error");
+      return;
+    }
+
+    solved = true;
+    slotNodes.forEach((slot) => slot.classList.add("is-correct"));
+    renderState();
+    setMessage("¡Manos limpias! Mojaste, usaste jabón, enjabonaste, enjuagaste y secaste en el orden correcto.", "is-success");
+    completeChallenge(id);
+  }
+
+  slotNodes.forEach((slot) => {
+    slot.addEventListener("click", () => {
+      if (solved) return;
+      selectedSlot = Number(slot.dataset.handSlot);
+      renderState();
+    });
+    slot.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      slot.classList.add("is-drag-over");
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-drag-over"));
+    slot.addEventListener("drop", (event) => {
+      event.preventDefault();
+      placeStep(event.dataTransfer?.getData("text/plain"), Number(slot.dataset.handSlot));
+    });
+  });
+
+  optionNodes.forEach((option) => {
+    option.addEventListener("click", () => {
+      if (solved) return;
+      const stepId = option.dataset.handStep;
+      if (slots.includes(stepId)) {
+        const previousIndex = slots.indexOf(stepId);
+        if (previousIndex !== selectedSlot) {
+          const displacedStep = slots[selectedSlot];
+          slots[selectedSlot] = stepId;
+          slots[previousIndex] = displacedStep;
+          slotNodes.forEach((slot) => slot.classList.remove("is-wrong"));
+        }
+        renderState();
+        if (slots.every(Boolean)) {
+          const firstWrong = steps.findIndex((step, index) => slots[index] !== step.id);
+          if (firstWrong === -1) {
+            solved = true;
+            slotNodes.forEach((slot) => slot.classList.add("is-correct"));
+            renderState();
+            setMessage("¡Manos limpias! Mojaste, usaste jabón, enjabonaste, enjuagaste y secaste en el orden correcto.", "is-success");
+            completeChallenge(id);
+          } else {
+            selectedSlot = firstWrong;
+            slotNodes[firstWrong].classList.add("is-wrong");
+            setMessage(`Revisá el paso ${firstWrong + 1}. Podés tocar otra imagen para intercambiarlas.`, "is-error is-soft-error");
+          }
+        }
+        return;
+      }
+      placeStep(stepId, selectedSlot);
+    });
+    option.addEventListener("dragstart", (event) => {
+      event.dataTransfer?.setData("text/plain", option.dataset.handStep);
+      option.classList.add("is-dragging");
+    });
+    option.addEventListener("dragend", () => option.classList.remove("is-dragging"));
+  });
 }
 
 function renderN4FourStepsChallenge(id) {

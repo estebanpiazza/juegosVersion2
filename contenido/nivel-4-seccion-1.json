@@ -212,6 +212,16 @@
       "interaccion": "Ingresar 6, 4, 2 y 3 para representar lapiceras, tablets, drones y mochilas."
     },
     {
+      "id": "n4-rework-b2-d10",
+      "numero": 29,
+      "bloque": 2,
+      "titulo": "¡Hora de la merienda!",
+      "tipo": "secuencia-lavado-manos-n4",
+      "consigna": "¡Hora de la merienda! Pero primero... ¡manos limpias! Ordena los pasos.",
+      "objetivo": "Reconocer y ordenar temporalmente los cinco pasos necesarios para lavarse las manos.",
+      "interaccion": "Arrastrar o seleccionar las imágenes en este orden: mojarse las manos, agarrar el jabón, enjabonarse, enjuagarse y secarse."
+    },
+    {
       "id": "n4-rework-b2-d11",
       "numero": 30,
       "bloque": 2,

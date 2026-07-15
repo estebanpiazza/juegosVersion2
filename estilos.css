@@ -25203,3 +25203,215 @@ body:has(.n4-b2-d9-card) .challenge-shell { background: transparent; box-shadow:
 .n6-d9-program {
   grid-template-columns: .72fr .3fr 3fr .3fr .72fr;
 }
+/* ===== Nivel 4 · Bloque 2 · Desafío 10 (lavado de manos) ===== */
+body:has(.n4-b2-d10-card) .game-workspace,
+body:has(.n4-b2-d10-card) .challenge-shell {
+  padding: 0;
+}
+
+body:has(.n4-b2-d10-card) .challenge-shell {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.challenge-card.n4-b2-d10-card {
+  position: relative;
+  gap: min(1vh, 8px);
+  padding: min(1.4vh, 11px) 3.2% min(.8vh, 7px);
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: none;
+}
+
+.n4-b2-d10-card .challenge-header {
+  position: relative;
+  z-index: 4;
+  width: min(76%, 1080px);
+  max-width: none;
+  margin: 0 auto;
+  padding: min(.85vh, 7px) 6%;
+  border: 3px solid #09cde7;
+  border-radius: 23px;
+  background: rgba(255, 255, 255, .95);
+  box-shadow: 0 0 18px rgba(9, 205, 231, .45);
+}
+
+.n4-b2-d10-card .challenge-kicker {
+  margin: 0;
+  color: #0a7abe;
+  font-size: clamp(.55rem, .72vw, .72rem);
+}
+
+.n4-b2-d10-card .challenge-title-row { margin: 0; }
+
+.n4-b2-d10-card .challenge-header h2 {
+  margin: 0;
+  color: #0877b9;
+  font-size: clamp(1.08rem, 1.75vw, 1.65rem);
+  line-height: 1;
+}
+
+.n4-b2-d10-card .challenge-header p {
+  display: block;
+  margin: 3px 0 0;
+  color: #606060;
+  font-size: clamp(.67rem, .98vw, .92rem);
+  line-height: 1.08;
+}
+
+.n4-b2-d10-card .listen-consigna {
+  position: absolute;
+  right: 1.8%;
+  top: 50%;
+  width: clamp(32px, 3vw, 44px);
+  min-height: 0;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  transform: translateY(-50%);
+  border: 2px solid #09cde7;
+  background: rgba(9, 205, 231, .12);
+}
+
+.n4-b2-d10-card .listen-consigna [data-speech-label] { display: none; }
+
+.n4-b2-d10-layout {
+  min-height: 0;
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-rows: minmax(0, 1.55fr) minmax(0, .76fr);
+  gap: min(1.2vh, 10px);
+}
+
+.n4-b2-d10-slots {
+  min-height: 0;
+  padding-inline: 5%;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: min(1.1vh, 9px) 2.4%;
+}
+
+.n4-b2-d10-slot {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  padding: 5px;
+  overflow: hidden;
+  border: 3px solid #08cde7;
+  border-radius: 15px;
+  background: rgba(211, 249, 253, .78);
+  box-shadow: inset 0 0 17px rgba(8, 205, 231, .15), 0 0 11px rgba(8, 205, 231, .25);
+  cursor: pointer;
+}
+
+.n4-b2-d10-slot:nth-child(1) { grid-column: 1 / 3; }
+.n4-b2-d10-slot:nth-child(2) { grid-column: 3 / 5; }
+.n4-b2-d10-slot:nth-child(3) { grid-column: 5 / 7; }
+.n4-b2-d10-slot:nth-child(4) { grid-column: 2 / 4; }
+.n4-b2-d10-slot:nth-child(5) { grid-column: 4 / 6; }
+
+.n4-b2-d10-slot > strong {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: clamp(30px, 3.4vw, 48px);
+  aspect-ratio: 1.08;
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
+  color: #fff;
+  background: #08cde7;
+  font-size: clamp(.82rem, 1.3vw, 1.15rem);
+}
+
+.n4-b2-d10-slot > span {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: #1187a8;
+  font-size: clamp(1.4rem, 3vw, 2.5rem);
+  font-weight: 900;
+}
+
+.n4-b2-d10-slot > img,
+.n4-b2-d10-option > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.n4-b2-d10-slot.is-selected,
+.n4-b2-d10-slot.is-drag-over {
+  border-color: #ffae00;
+  background: rgba(255, 247, 211, .88);
+  transform: translateY(-2px);
+}
+
+.n4-b2-d10-slot.is-wrong {
+  border-color: #ef4966;
+  animation: n4-b2-d1-shake .28s ease-in-out 2;
+}
+
+.n4-b2-d10-slot.is-correct {
+  border-color: #63c834;
+  background: rgba(235, 255, 224, .88);
+}
+
+.n4-b2-d10-bank {
+  min-height: 0;
+  padding: min(1vh, 8px) 3%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 2.2%;
+  border: 3px solid #08cde7;
+  border-radius: 17px;
+  background: rgba(222, 251, 255, .72);
+  box-shadow: 0 0 14px rgba(8, 205, 231, .32);
+}
+
+.n4-b2-d10-option {
+  min-width: 0;
+  min-height: 0;
+  padding: 2px;
+  overflow: hidden;
+  border: 2px solid #08cde7;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, .96);
+  box-shadow: 0 5px 10px rgba(15, 86, 130, .14);
+  cursor: grab;
+  transition: transform .16s ease, border-color .16s ease, opacity .16s ease;
+}
+
+.n4-b2-d10-option:hover,
+.n4-b2-d10-option:focus-visible {
+  border-color: #ffae00;
+  transform: translateY(-3px);
+}
+
+.n4-b2-d10-option.is-placed { opacity: .28; filter: grayscale(.45); }
+.n4-b2-d10-option.is-dragging { opacity: .4; }
+
+.n4-b2-d10-message {
+  min-height: 28px;
+  margin: 0;
+  padding: 4px 11px;
+  flex: 0 0 auto;
+  font-size: clamp(.64rem, .9vw, .84rem);
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .challenge-card.n4-b2-d10-card { overflow-y: auto; }
+  .n4-b2-d10-card .challenge-header { width: 94%; }
+  .n4-b2-d10-layout { min-height: 900px; grid-template-rows: 1.7fr 1fr; }
+  .n4-b2-d10-slots { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, 180px); }
+  .n4-b2-d10-slot:nth-child(n) { grid-column: auto; }
+  .n4-b2-d10-slot:last-child { grid-column: 1 / 3; width: 48%; justify-self: center; }
+  .n4-b2-d10-bank { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, 145px); }
+  .n4-b2-d10-option:last-child { grid-column: 1 / 3; width: 48%; justify-self: center; }
+}
