@@ -1,5 +1,6 @@
 // Editor local de bloques.
-const SCRATCH_LOCAL_EDITOR = "scratch-editor/build/index.html";
+const SCRATCH_LOCAL_EDITOR = "scratch/editor/index.html";
+const SCRATCH_HOSTED_EDITOR = "https://scratchfoundation.github.io/scratch-gui/";
 const EDITOR_BUILD_REV = "20260707-3";
 
 const SCRATCH_NIVELES = {
@@ -273,8 +274,12 @@ function loadEditor() {
   const panel = document.querySelector("[data-scratch-editor-panel]");
   if (!panel) return;
 
-  const src = editorOverride || SCRATCH_LOCAL_EDITOR;
-  const editorSrc = withEditorLocale(src);
+  if (editorOverride) {
+    loadIframe(panel, buildEditorSrc(editorOverride));
+    return;
+  }
+
+  const editorSrc = buildEditorSrc(SCRATCH_LOCAL_EDITOR);
 
   // Verificar si el editor local está disponible antes de cargar el iframe.
   // Evita el error 404 visible dentro del iframe.
@@ -283,19 +288,24 @@ function loadEditor() {
       if (res.ok) {
         loadIframe(panel, editorSrc);
       } else {
-        panel.innerHTML = buildFallback();
+        loadIframe(panel, buildHostedEditorSrc());
       }
     })
     .catch(() => {
-      panel.innerHTML = buildFallback();
+      loadIframe(panel, buildHostedEditorSrc());
     });
 }
 
-function withEditorLocale(src) {
+function buildHostedEditorSrc() {
+  return buildEditorSrc(SCRATCH_HOSTED_EDITOR);
+}
+
+function buildEditorSrc(src) {
   try {
     const url = new URL(src, window.location.href);
     url.searchParams.set("locale", "es");
     url.searchParams.set("bt", EDITOR_BUILD_REV);
+    if (url.origin !== window.location.origin) return url.href;
     return url.pathname.replace(/^\//, "") + url.search + url.hash;
   } catch {
     const separator = src.includes("?") ? "&" : "?";
