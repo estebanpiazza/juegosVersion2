@@ -65,6 +65,16 @@
       "tipo": "n5-maquina-autonoma",
       "consigna": "¿Cuál de estas máquinas trabaja completamente sola?",
       "interaccion": "Tocar la tarjeta de la aspiradora robótica."
+    },
+    {
+      "id": "n5-b2-d1",
+      "numero": 11,
+      "bloque": 2,
+      "titulo": "¡A preparar un sándwich!",
+      "tipo": "n5-b2-secuencia-sandwich",
+      "consigna": "Ordena los pasos desde el principio hasta el final.",
+      "objetivo": "Comprender que un algoritmo es una serie de pasos ordenados para resolver un problema.",
+      "interaccion": "Arrastrar los ocho ingredientes a los casilleros para ordenar la preparación del sándwich."
     }
   ]
 }

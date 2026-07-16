@@ -98,6 +98,7 @@ const challengeTypeRenderers = {
   "n5-lavado-manos": (id) => renderN5HandwashingOrderChallenge(id),
   "n5-debug-choque": (id) => renderN5DebugCrashChallenge(id),
   "n5-maquina-autonoma": (id) => renderN5AutonomousMachineChallenge(id),
+  "n5-b2-secuencia-sandwich": (id) => renderN5SandwichSequenceChallenge(id),
   "n6-direccion-inicial": (id) => renderN6InitialDirectionChallenge(id),
   "n6-condicional-meteoritos": (id) => renderN6MeteorConditionChallenge(id),
   "n6-repeticion-estrellas": (id) => renderN6StarRepetitionChallenge(id),
@@ -242,6 +243,12 @@ const N5_ASSET_FOLDER_BY_CHALLENGE = {
 function n5Asset(challengeNumber, fileName) {
   const folder = N5_ASSET_FOLDER_BY_CHALLENGE[challengeNumber] || `CONSIGNA ${challengeNumber}`;
   return `${N5_ASSET_BASE}/${encodeURIComponent(folder)}/${encodeURIComponent(fileName)}`;
+}
+
+const N5_BLOCK2_ASSET_BASE = "nuevos/CONSIGNA%201%20-%20BLOQUE%202%20%20-%20NIVEL%205";
+
+function n5Block2Asset(fileName) {
+  return `${N5_BLOCK2_ASSET_BASE}/${encodeURIComponent(fileName)}`;
 }
 
 const N6_ASSET_BASE = "nivel%206";
@@ -817,6 +824,8 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n5Asset(9, "Fondo.png");
       case "n5-maquina-autonoma":
         return n5Asset(10, "Fondo.png");
+      case "n5-b2-secuencia-sandwich":
+        return n5Block2Asset("FONDO.jpg");
       case "n6-direccion-inicial":
         return n6Asset(1, "Fondo.png");
       case "n6-condicional-meteoritos":
@@ -4403,6 +4412,157 @@ function renderN5HandwashingOrderChallenge(id = 8) {
       renderSlots();
       maybeComplete();
     });
+  });
+}
+
+function renderN5SandwichSequenceChallenge(id) {
+  const steps = [
+    { id: "pan-base", label: "Colocar la primera rebanada de pan", file: "pan.png" },
+    { id: "mayonesa", label: "Agregar mayonesa", file: "mayonesa.png" },
+    { id: "lechuga", label: "Agregar lechuga", file: "lechuga.png" },
+    { id: "tomate", label: "Agregar tomate", file: "tomate.png" },
+    { id: "jamon", label: "Agregar jamón", file: "jamon.png" },
+    { id: "queso", label: "Agregar queso", file: "queso.png" },
+    { id: "huevo", label: "Agregar huevo", file: "huevo.png" },
+    { id: "pan-tapa", label: "Cerrar con la segunda rebanada de pan", file: "pan.png" },
+  ];
+  const bankOrder = [steps[1], steps[2], steps[0], steps[6], steps[3], steps[4], steps[7], steps[5]];
+  const slots = Array(steps.length).fill(null);
+  let selectedSlot = 0;
+  let selectedStep = null;
+  let solved = false;
+
+  const stepById = (stepId) => steps.find((step) => step.id === stepId);
+  const ingredientMarkup = (step) => `
+    <img src="${n5Block2Asset(step.file)}" alt="" aria-hidden="true" />
+  `;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n5-card n5-b2-sandwich-card">
+      ${renderChallengeHeader(
+        "BLOQUE 2 · DESAFÍO 1",
+        "¡A PREPARAR UN SÁNDWICH!",
+        getChallengeInstruction(id, "Ordena los pasos desde el principio hasta el final."),
+      )}
+      <section class="n5-b2-sandwich-layout" aria-label="Ordenar los pasos para preparar un sándwich">
+        <img class="n5-b2-sandwich-screen" src="${n5Block2Asset("Pantalla.png")}" alt="" aria-hidden="true" />
+        <div class="n5-b2-sandwich-slots" aria-label="Secuencia del algoritmo">
+          ${steps.map((_, index) => `
+            <button class="n5-b2-sandwich-slot${index === 0 ? " is-selected" : ""}" type="button" data-sandwich-slot="${index}" aria-label="Paso ${index + 1}, vacío">
+              <span>${index + 1}</span>
+            </button>
+          `).join("")}
+        </div>
+        <div class="n5-b2-sandwich-bank" aria-label="Ingredientes desordenados">
+          ${bankOrder.map((step) => `
+            <button class="n5-b2-sandwich-option" type="button" draggable="true" data-sandwich-step="${step.id}" aria-label="${step.label}">
+              ${ingredientMarkup(step)}
+            </button>
+          `).join("")}
+        </div>
+      </section>
+      <p class="challenge-message n5-b2-sandwich-message" data-message>Arrastrá cada ingrediente al casillero correcto, desde el primer paso hasta el último.</p>
+    </article>
+  `;
+
+  const slotNodes = [...challengeContent.querySelectorAll("[data-sandwich-slot]")];
+  const optionNodes = [...challengeContent.querySelectorAll("[data-sandwich-step]")];
+
+  function renderState() {
+    slotNodes.forEach((slot, index) => {
+      const step = stepById(slots[index]);
+      slot.classList.toggle("is-selected", index === selectedSlot && !solved);
+      slot.classList.remove("is-drag-over");
+      slot.setAttribute("aria-label", step ? `Paso ${index + 1}: ${step.label}` : `Paso ${index + 1}, vacío`);
+      slot.innerHTML = step ? ingredientMarkup(step) : `<span>${index + 1}</span>`;
+    });
+
+    optionNodes.forEach((option) => {
+      const isPlaced = slots.includes(option.dataset.sandwichStep);
+      option.classList.toggle("is-placed", isPlaced);
+      option.classList.toggle("is-selected", option.dataset.sandwichStep === selectedStep && !isPlaced);
+      option.disabled = solved;
+      option.setAttribute("aria-pressed", String(option.dataset.sandwichStep === selectedStep && !isPlaced));
+    });
+  }
+
+  function placeStep(stepId, slotIndex) {
+    if (solved || !stepById(stepId) || !Number.isInteger(slotIndex)) return;
+
+    const previousIndex = slots.indexOf(stepId);
+    const displacedStep = slots[slotIndex];
+    if (previousIndex !== -1) slots[previousIndex] = displacedStep || null;
+    slots[slotIndex] = stepId;
+    selectedStep = null;
+    slotNodes.forEach((slot) => slot.classList.remove("is-wrong"));
+
+    const nextEmpty = slots.findIndex((value) => !value);
+    selectedSlot = nextEmpty === -1 ? slotIndex : nextEmpty;
+    renderState();
+
+    if (slots.some((value) => !value)) {
+      const remaining = slots.filter((value) => !value).length;
+      setMessage(`Paso ubicado. ${remaining === 1 ? "Falta un ingrediente." : `Faltan ${remaining} ingredientes.`}`, "is-good");
+      return;
+    }
+
+    const wrongIndexes = steps
+      .map((step, index) => slots[index] === step.id ? -1 : index)
+      .filter((index) => index !== -1);
+
+    if (wrongIndexes.length) {
+      wrongIndexes.forEach((index) => slotNodes[index].classList.add("is-wrong"));
+      selectedSlot = wrongIndexes[0];
+      setMessage(`Revisá el paso ${wrongIndexes[0] + 1}. El sándwich empieza y termina con una rebanada de pan.`, "is-error is-soft-error");
+      return;
+    }
+
+    solved = true;
+    slotNodes.forEach((slot) => slot.classList.add("is-correct"));
+    renderState();
+    setMessage("¡Algoritmo completo! Preparaste el sándwich paso a paso.", "is-success");
+    completeChallenge(id);
+  }
+
+  slotNodes.forEach((slot) => {
+    slot.addEventListener("click", () => {
+      if (solved) return;
+      const slotIndex = Number(slot.dataset.sandwichSlot);
+      if (selectedStep) {
+        placeStep(selectedStep, slotIndex);
+        return;
+      }
+      selectedSlot = slotIndex;
+      renderState();
+    });
+    slot.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      slot.classList.add("is-drag-over");
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-drag-over"));
+    slot.addEventListener("drop", (event) => {
+      event.preventDefault();
+      placeStep(event.dataTransfer?.getData("text/plain"), Number(slot.dataset.sandwichSlot));
+    });
+  });
+
+  optionNodes.forEach((option) => {
+    option.addEventListener("click", () => {
+      if (solved) return;
+      const stepId = option.dataset.sandwichStep;
+      if (slots.includes(stepId)) {
+        selectedSlot = slots.indexOf(stepId);
+        renderState();
+        return;
+      }
+      selectedStep = stepId;
+      placeStep(stepId, selectedSlot);
+    });
+    option.addEventListener("dragstart", (event) => {
+      event.dataTransfer?.setData("text/plain", option.dataset.sandwichStep);
+      option.classList.add("is-dragging");
+    });
+    option.addEventListener("dragend", () => option.classList.remove("is-dragging"));
   });
 }
 

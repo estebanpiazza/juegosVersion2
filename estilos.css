@@ -21883,6 +21883,204 @@ article.challenge-card.n4-sound-card {
   font-weight: 900;
 }
 
+/* Nivel 5 · Bloque 2 · Desafío 1: algoritmo para preparar un sándwich. */
+.n5-b2-sandwich-card .challenge-header {
+  top: clamp(8px, 1.4vh, 18px);
+  width: min(920px, 76%);
+  padding: clamp(7px, 0.8vw, 11px) clamp(18px, 2vw, 30px);
+  border-radius: 18px;
+}
+
+.n5-b2-sandwich-card .challenge-header::after,
+.n5-b2-sandwich-card .challenge-kicker,
+.n5-b2-sandwich-message {
+  display: none;
+}
+
+.n5-b2-sandwich-card .challenge-header h2 {
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.n5-b2-sandwich-card .challenge-header p {
+  margin-top: 3px;
+  font-size: clamp(0.78rem, 1.3vw, 1.25rem);
+  line-height: 1.15;
+  font-weight: 900;
+}
+
+.n5-b2-sandwich-layout {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.n5-b2-sandwich-screen {
+  position: absolute;
+  left: 0;
+  top: 17%;
+  z-index: 1;
+  width: 100%;
+  height: 81%;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+
+.n5-b2-sandwich-slots {
+  position: absolute;
+  left: 4.4%;
+  top: 18.7%;
+  z-index: 2;
+  width: 91.5%;
+  height: 48.3%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  column-gap: 5.7%;
+  row-gap: 3.3%;
+}
+
+.n5-b2-sandwich-slot {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 10%;
+  overflow: visible;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.n5-b2-sandwich-slot > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.n5-b2-sandwich-slot img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 8px rgba(12, 55, 78, 0.2));
+  pointer-events: none;
+}
+
+.n5-b2-sandwich-slot.is-selected,
+.n5-b2-sandwich-slot.is-drag-over {
+  background: rgba(255, 255, 255, 0.36);
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.9), 0 0 0 5px rgba(0, 199, 223, 0.4);
+  transform: scale(1.025);
+}
+
+.n5-b2-sandwich-slot.is-wrong {
+  background: rgba(255, 70, 95, 0.2);
+  box-shadow: inset 0 0 0 5px rgba(255, 63, 95, 0.9);
+  animation: n5-sandwich-shake 0.42s ease;
+}
+
+.n5-b2-sandwich-slot.is-correct {
+  background: rgba(41, 200, 95, 0.13);
+  box-shadow: inset 0 0 0 4px rgba(41, 200, 95, 0.72);
+}
+
+.n5-b2-sandwich-bank {
+  position: absolute;
+  left: 6.7%;
+  top: 72.1%;
+  z-index: 2;
+  width: 86.8%;
+  height: 19.5%;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  align-items: center;
+  gap: 1.2%;
+}
+
+.n5-b2-sandwich-option {
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 4%;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  cursor: grab;
+  touch-action: manipulation;
+  transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+}
+
+.n5-b2-sandwich-option img {
+  width: 96%;
+  height: 96%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 8px rgba(12, 55, 78, 0.2));
+  pointer-events: none;
+}
+
+.n5-b2-sandwich-option:hover,
+.n5-b2-sandwich-option:focus-visible,
+.n5-b2-sandwich-option.is-selected {
+  outline: 3px solid rgba(0, 199, 223, 0.9);
+  outline-offset: 2px;
+  background: rgba(255, 255, 255, 0.45);
+  transform: translateY(-5px) scale(1.06);
+}
+
+.n5-b2-sandwich-option.is-dragging {
+  opacity: 0.55;
+  cursor: grabbing;
+}
+
+.n5-b2-sandwich-option.is-placed {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@keyframes n5-sandwich-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+@media (max-width: 760px) {
+  .n5-b2-sandwich-card .challenge-header {
+    width: 88%;
+  }
+
+  .n5-b2-sandwich-slots {
+    left: 3.7%;
+    width: 92.7%;
+    column-gap: 4.5%;
+  }
+
+  .n5-b2-sandwich-slot {
+    padding: 5%;
+    border-radius: 10px;
+  }
+
+  .n5-b2-sandwich-bank {
+    left: 4.5%;
+    width: 91%;
+    gap: 0.4%;
+  }
+
+  .n5-b2-sandwich-option {
+    padding: 0;
+    border-radius: 8px;
+  }
+}
+
 /* Template: debug. */
 .n5-debug-card .challenge-header {
   width: min(980px, 88%);
