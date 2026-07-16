@@ -82,6 +82,26 @@
       "consigna": "Ordena los pasos desde el principio hasta el final.",
       "objetivo": "Comprender que un algoritmo es una serie de pasos ordenados para resolver un problema.",
       "interaccion": "Arrastrar los ocho ingredientes a los casilleros para ordenar la preparación del sándwich."
+    },
+    {
+      "id": "n5-b2-d3",
+      "numero": 14,
+      "bloque": 2,
+      "titulo": "El código es muy largo",
+      "tipo": "n5-b2-identificar-repeticion",
+      "consigna": "¡El código es muy largo! Toca la flecha que se repite muchas veces seguidas.",
+      "objetivo": "Identificar un patrón de instrucciones repetidas dentro de un algoritmo.",
+      "interaccion": "Tocar cualquiera de las tres primitivas Avanzar repetidas consecutivamente."
+    },
+    {
+      "id": "n5-b2-d4",
+      "numero": 15,
+      "bloque": 2,
+      "titulo": "Un algoritmo más corto",
+      "tipo": "n5-b2-comprimir-repeticion",
+      "consigna": "¡Hagamos el algoritmo más corto! Coloca la flecha de avanzar dentro del bloque de repetición x3.",
+      "objetivo": "Comprender que una repetición permite expresar varias instrucciones iguales con menos bloques.",
+      "interaccion": "Arrastrar la primitiva Avanzar al espacio vacío del bloque Repetir x3."
     }
   ]
 }

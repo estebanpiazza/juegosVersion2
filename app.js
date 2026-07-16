@@ -100,6 +100,8 @@ const challengeTypeRenderers = {
   "n5-maquina-autonoma": (id) => renderN5AutonomousMachineChallenge(id),
   "n5-luces-automaticas": (id) => renderN5AutomaticLightsChallenge(id),
   "n5-b2-secuencia-sandwich": (id) => renderN5SandwichSequenceChallenge(id),
+  "n5-b2-identificar-repeticion": (id) => renderN5RepeatedCommandChallenge(id),
+  "n5-b2-comprimir-repeticion": (id) => renderN5RepeatBlockChallenge(id),
   "n6-direccion-inicial": (id) => renderN6InitialDirectionChallenge(id),
   "n6-condicional-meteoritos": (id) => renderN6MeteorConditionChallenge(id),
   "n6-repeticion-estrellas": (id) => renderN6StarRepetitionChallenge(id),
@@ -251,6 +253,11 @@ const N5_BLOCK2_ASSET_BASE = "nuevos/CONSIGNA%201%20-%20BLOQUE%202%20%20-%20NIVE
 
 function n5Block2Asset(fileName) {
   return `${N5_BLOCK2_ASSET_BASE}/${encodeURIComponent(fileName)}`;
+}
+
+function n5Block2ChallengeAsset(challengeNumber, fileName) {
+  const folder = `CONSIGNA ${challengeNumber} - BLOQUE 2 - NIVEL 5`;
+  return `${N5_ASSET_BASE}/${encodeURIComponent(folder)}/${encodeURIComponent(fileName)}`;
 }
 
 const N6_ASSET_BASE = "nivel%206";
@@ -830,6 +837,10 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n5Asset(11, "FONDO LUCES APAGADA.png");
       case "n5-b2-secuencia-sandwich":
         return n5Block2Asset("FONDO.jpg");
+      case "n5-b2-identificar-repeticion":
+        return n5Block2ChallengeAsset(3, "FONDO.jpg");
+      case "n5-b2-comprimir-repeticion":
+        return n5Block2ChallengeAsset(4, "FONDO.jpg");
       case "n6-direccion-inicial":
         return n6Asset(1, "Fondo.png");
       case "n6-condicional-meteoritos":
@@ -4567,6 +4578,193 @@ function renderN5SandwichSequenceChallenge(id) {
       option.classList.add("is-dragging");
     });
     option.addEventListener("dragend", () => option.classList.remove("is-dragging"));
+  });
+}
+
+function renderN5RepeatedCommandChallenge(id) {
+  const asset = (fileName) => n5Block2ChallengeAsset(3, fileName);
+  const commands = [
+    { type: "start", label: "Inicio", file: "Entrada.png" },
+    { type: "advance", label: "Avanzar, primera vez", file: "AVANZAR.png" },
+    { type: "advance", label: "Avanzar, segunda vez", file: "AVANZAR.png" },
+    { type: "advance", label: "Avanzar, tercera vez", file: "AVANZAR.png" },
+    { type: "emotion", label: "Emoción cansado", file: "Cansado.png" },
+    { type: "turn", label: "Girar a la derecha", file: "Naranja 2.png" },
+    { type: "finish", label: "Final", file: "Vamos.png" },
+  ];
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n5-card n5-b2-repeat-card">
+      ${renderChallengeHeader(
+        "BLOQUE 2 · DESAFÍO 3",
+        "¡EL CÓDIGO ES MUY LARGO!",
+        getChallengeInstruction(id, "Toca la flecha que se repite muchas veces seguidas."),
+      )}
+      <section class="n5-b2-repeat-layout" aria-label="Encuentra la primitiva que se repite">
+        <div class="n5-b2-repeat-grid" aria-hidden="true">
+          ${Array.from({ length: 36 }, () => "<span></span>").join("")}
+          <img src="${asset("Entrada.png")}" alt="" />
+        </div>
+        <div class="n5-b2-repeat-program">
+          <img class="n5-b2-repeat-panel" src="${asset("Tu algoritmo.png")}" alt="" aria-hidden="true" />
+          <div class="n5-b2-repeat-commands" aria-label="Algoritmo: inicio, avanzar tres veces, emoción cansado, girar a la derecha y final">
+            ${commands.map((command, index) => `
+              <button
+                class="n5-b2-repeat-command n5-b2-repeat-command--${command.type}"
+                type="button"
+                data-command="${command.type}"
+                aria-label="${command.label}"
+                ${command.type === "start" || command.type === "finish" ? "disabled" : ""}
+              >
+                <img src="${asset(command.file)}" alt="" aria-hidden="true" />
+                <span>${index + 1}</span>
+              </button>
+            `).join("")}
+          </div>
+        </div>
+      </section>
+      <p class="challenge-message n5-b2-repeat-message" data-message>Tocá una de las fichas que aparece varias veces seguidas.</p>
+    </article>
+  `;
+
+  const commandButtons = [...challengeContent.querySelectorAll(".n5-b2-repeat-command:not(:disabled)")];
+  commandButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+      if (button.dataset.command !== "advance") {
+        button.classList.remove("is-wrong");
+        void button.offsetWidth;
+        button.classList.add("is-wrong");
+        setMessage("Esa ficha aparece una sola vez. Buscá la que está repetida tres veces seguidas.", "is-error is-soft-error");
+        return;
+      }
+
+      solved = true;
+      challengeContent.querySelectorAll('[data-command="advance"]').forEach((advance) => {
+        advance.classList.add("is-correct");
+      });
+      commandButtons.forEach((command) => { command.disabled = true; });
+      setMessage("¡Muy bien! La primitiva AVANZAR se repite tres veces seguidas.", "is-success");
+      completeChallenge(id);
+    });
+  });
+}
+
+function renderN5RepeatBlockChallenge(id) {
+  const asset = (fileName) => n5Block2ChallengeAsset(4, fileName);
+  const cards = [
+    { type: "left", label: "Girar a la izquierda", file: "naranja 1.png" },
+    { type: "right", label: "Girar a la derecha", file: "Naranja 2.png" },
+    { type: "advance", label: "Avanzar", file: "AVANZAR.png" },
+  ];
+  let selectedCard = null;
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n5-card n5-b2-compress-card">
+      ${renderChallengeHeader(
+        "BLOQUE 2 · DESAFÍO 4",
+        "¡HAGAMOS EL ALGORITMO MÁS CORTO!",
+        getChallengeInstruction(id, "Coloca la flecha de avanzar dentro del bloque de repetición x3."),
+      )}
+      <section class="n5-b2-compress-layout" aria-label="Completar un bloque de repetición por tres">
+        <div class="n5-b2-compress-grid" aria-label="Nano debe avanzar tres casilleros hasta la meta">
+          <img class="n5-b2-compress-grid-art" src="${asset("CUADRICULA.png")}" alt="Cuadrícula de seis por seis" />
+          <img class="n5-b2-compress-nano" src="${asset("Nano arriba.png")}" alt="Nano" />
+          <img class="n5-b2-compress-goal" src="${asset("Vamos.png")}" alt="Meta" />
+        </div>
+
+        <div class="n5-b2-compress-program">
+          <img class="n5-b2-compress-panel" src="${asset("Tu algoritmo.png")}" alt="" aria-hidden="true" />
+          <div class="n5-b2-compress-code" aria-label="Algoritmo incompleto">
+            <img src="${asset("Entrada.png")}" alt="Inicio" />
+            <button class="n5-b2-compress-slot" type="button" data-repeat-slot aria-label="Espacio vacío dentro de repetir por tres">
+              <span aria-hidden="true">?</span>
+            </button>
+            <img src="${asset("Reptir x3.png")}" alt="Repetir por tres" />
+            <img src="${asset("Vamos.png")}" alt="Final" />
+          </div>
+        </div>
+
+        <div class="n5-b2-compress-bank" aria-label="Tarjetas de programación">
+          <img class="n5-b2-compress-bank-panel" src="${asset("Tarjetas de Programacion.png")}" alt="" aria-hidden="true" />
+          <div class="n5-b2-compress-options">
+            ${cards.map((card) => `
+              <button class="n5-b2-compress-option" type="button" draggable="true" data-compress-card="${card.type}" aria-label="${card.label}">
+                <img src="${asset(card.file)}" alt="" aria-hidden="true" />
+              </button>
+            `).join("")}
+          </div>
+        </div>
+      </section>
+      <p class="challenge-message n5-b2-compress-message" data-message>Arrastrá AVANZAR al espacio vacío del bloque ×3.</p>
+    </article>
+  `;
+
+  const slot = challengeContent.querySelector("[data-repeat-slot]");
+  const options = [...challengeContent.querySelectorAll("[data-compress-card]")];
+  const nano = challengeContent.querySelector(".n5-b2-compress-nano");
+
+  function clearSelection() {
+    options.forEach((option) => option.classList.remove("is-selected"));
+  }
+
+  function placeCard(cardType) {
+    if (solved || !cardType) return;
+    const card = cards.find((item) => item.type === cardType);
+    if (!card) return;
+
+    slot.classList.remove("is-drag-over", "is-wrong");
+    if (cardType !== "advance") {
+      void slot.offsetWidth;
+      slot.classList.add("is-wrong");
+      selectedCard = null;
+      clearSelection();
+      setMessage("Ese giro cambia el rumbo de Nano. Probá con la ficha que lo hace avanzar.", "is-error is-soft-error");
+      return;
+    }
+
+    solved = true;
+    selectedCard = null;
+    clearSelection();
+    slot.classList.add("is-correct");
+    slot.innerHTML = `<img src="${asset(card.file)}" alt="Avanzar" />`;
+    slot.setAttribute("aria-label", "Avanzar dentro de repetir por tres");
+    slot.disabled = true;
+    options.forEach((option) => { option.disabled = true; });
+    nano.classList.add("is-running");
+    setMessage("¡Excelente! AVANZAR ×3 reemplaza tres instrucciones iguales.", "is-success");
+    completeChallenge(id);
+  }
+
+  options.forEach((option) => {
+    option.addEventListener("click", () => {
+      if (solved) return;
+      selectedCard = option.dataset.compressCard;
+      clearSelection();
+      option.classList.add("is-selected");
+      setMessage(`Ficha ${cards.find((card) => card.type === selectedCard)?.label} seleccionada. Tocá el espacio vacío.`, "is-good");
+    });
+    option.addEventListener("dragstart", (event) => {
+      event.dataTransfer?.setData("text/plain", option.dataset.compressCard);
+      option.classList.add("is-dragging");
+    });
+    option.addEventListener("dragend", () => option.classList.remove("is-dragging"));
+  });
+
+  slot.addEventListener("click", () => {
+    if (selectedCard) placeCard(selectedCard);
+    else if (!solved) setMessage("Primero elegí una tarjeta de programación.", "is-good");
+  });
+  slot.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    if (!solved) slot.classList.add("is-drag-over");
+  });
+  slot.addEventListener("dragleave", () => slot.classList.remove("is-drag-over"));
+  slot.addEventListener("drop", (event) => {
+    event.preventDefault();
+    placeCard(event.dataTransfer?.getData("text/plain"));
   });
 }
 

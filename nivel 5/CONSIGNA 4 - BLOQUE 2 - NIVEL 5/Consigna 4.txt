@@ -1,0 +1,3 @@
+Consigna: ¡Hagamos el algoritmo más corto! Coloca la flecha de avanzar dentro del bloque de repetición x3.
+
+Mecánica: Drag & Drop. Optimización de código. En la regla de programación hay un bloque contenedor vacío que tiene un indicador visual de [Repetición x3]. El usuario debe arrastrar una tarjeta de acción [Avanzar] desde el menú y soltarla en el espacio interno del bloque contenedor.

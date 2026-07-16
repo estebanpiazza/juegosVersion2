@@ -1,0 +1,3 @@
+Consigna: ¡El código es muy largo! Toca la flecha que se repite muchas veces seguidas.
+
+Mecánica: Tap. Identificación de patrones. La interfaz muestra una línea de código fija en pantalla: [Avanzar] -> [Avanzar] -> [Avanzar] ->[Emocion Cansado]-> [Girar a la derecha]. Al hacer Tap sobre cualquiera de las tres tarjetas de [Avanzar], el juego da feedback correcto resaltando el patrón repetitivo.
