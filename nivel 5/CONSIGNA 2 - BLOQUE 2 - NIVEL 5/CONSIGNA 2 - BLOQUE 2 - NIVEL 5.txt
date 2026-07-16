@@ -1,0 +1,3 @@
+Consigna: Guía a Nano hasta su base.
+
+Mecánica: Drag & Drop. Recorrido lineal simple en cuadrícula que requiere exactamente 3 casilleros de avance. El panel inferior tiene los espacios vacíos y la botonera ofrece flechas sueltas de [Avanzar], [Girar] y [Saltar]. El alumno debe encastrar tres flechas de avance seguidas.
