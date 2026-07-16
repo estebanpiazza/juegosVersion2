@@ -1,0 +1,3 @@
+Consigna: ¡Se apagó la luz! Selecciona lo que debe encenderse automáticamente para poder ver.
+
+Mecánica: Tap (Lógica de sensores). La pantalla del juego se oscurece simulando falta de luz. Se presentan tres botones interactivos en la interfaz: [Ventilador], [Luces LED] y [Hacer sonido]. Al seleccionar [Luces LED], la pantalla vuelve a iluminarse y se reproduce una animación de Nano activando sus luces.

@@ -98,6 +98,7 @@ const challengeTypeRenderers = {
   "n5-lavado-manos": (id) => renderN5HandwashingOrderChallenge(id),
   "n5-debug-choque": (id) => renderN5DebugCrashChallenge(id),
   "n5-maquina-autonoma": (id) => renderN5AutonomousMachineChallenge(id),
+  "n5-luces-automaticas": (id) => renderN5AutomaticLightsChallenge(id),
   "n5-b2-secuencia-sandwich": (id) => renderN5SandwichSequenceChallenge(id),
   "n6-direccion-inicial": (id) => renderN6InitialDirectionChallenge(id),
   "n6-condicional-meteoritos": (id) => renderN6MeteorConditionChallenge(id),
@@ -238,6 +239,7 @@ const N5_ASSET_FOLDER_BY_CHALLENGE = {
   8: "CONSIGNA 8",
   9: "CONSIGNA 9 - NIVEL 5",
   10: "Consigna 10",
+  11: "CONSIGNA 11 BLOQUE 1  - NIVEL 5",
 };
 
 function n5Asset(challengeNumber, fileName) {
@@ -824,6 +826,8 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n5Asset(9, "Fondo.png");
       case "n5-maquina-autonoma":
         return n5Asset(10, "Fondo.png");
+      case "n5-luces-automaticas":
+        return n5Asset(11, "FONDO LUCES APAGADA.png");
       case "n5-b2-secuencia-sandwich":
         return n5Block2Asset("FONDO.jpg");
       case "n6-direccion-inicial":
@@ -6650,6 +6654,56 @@ function renderN5AutonomousMachineChallenge(id = 10) {
       answered = true;
       button.classList.add("is-correct");
       setMessage("Correcto. La aspiradora robot trabaja sola.", "is-success");
+      completeChallenge(id);
+    });
+  });
+}
+
+function renderN5AutomaticLightsChallenge(id = 11) {
+  let solved = false;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n5-card n5-lights-card">
+      <div class="n5-lights-scene" aria-live="polite">
+        <img class="n5-lights-background is-dark" src="${n5Asset(11, "FONDO LUCES APAGADA.png")}" alt="Sala con las luces apagadas" />
+        <img class="n5-lights-background is-lit" src="${n5Asset(11, "FONDO LUCES PRENDIDAS.png")}" alt="Sala iluminada" />
+        ${renderN5Header(id, "¡Se apagó la luz! Selecciona lo que debe encenderse automáticamente para poder ver.")}
+        <img class="n5-lights-nano is-off" src="${n5Asset(11, "Robot apagado.png")}" alt="Nano con sus luces apagadas" />
+        <img class="n5-lights-nano is-on" src="${n5Asset(11, "Robot encendidio.png")}" alt="Nano con sus luces encendidas" />
+        <div class="n5-lights-options" aria-label="Controles de iluminación">
+          <button class="n5-lights-option" type="button" data-light-choice="on" aria-label="Encender las luces">
+            <img src="${n5Asset(11, "Tarjeta on.png")}" alt="ON, encender" />
+          </button>
+          <button class="n5-lights-option" type="button" data-light-choice="off" aria-label="Mantener las luces apagadas">
+            <img src="${n5Asset(11, "Tarjeta off.png")}" alt="OFF, apagar" />
+          </button>
+        </div>
+      </div>
+      <p class="challenge-message n5-lights-message" data-message>Elegí la tarjeta que permite volver a ver.</p>
+    </article>
+  `;
+
+  challengeContent.querySelectorAll("[data-light-choice]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+
+      challengeContent.querySelectorAll("[data-light-choice]").forEach((option) => {
+        option.classList.remove("is-correct", "is-wrong");
+      });
+
+      if (button.dataset.lightChoice !== "on") {
+        button.classList.add("is-wrong");
+        setMessage("Con OFF la sala sigue a oscuras. Probá con la opción que enciende las luces.", "is-error is-soft-error");
+        return;
+      }
+
+      solved = true;
+      button.classList.add("is-correct");
+      challengeContent.querySelector(".n5-lights-scene")?.classList.add("is-illuminated");
+      challengeContent.querySelectorAll("[data-light-choice]").forEach((option) => {
+        option.disabled = true;
+      });
+      setMessage("¡Correcto! Las luces LED se encienden automáticamente y Nano vuelve a ver.", "is-success");
       completeChallenge(id);
     });
   });

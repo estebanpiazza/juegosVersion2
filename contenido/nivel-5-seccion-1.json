@@ -67,8 +67,15 @@
       "interaccion": "Tocar la tarjeta de la aspiradora robótica."
     },
     {
+      "id": "n5-d11",
+      "titulo": "Luces automáticas",
+      "tipo": "n5-luces-automaticas",
+      "consigna": "¡Se apagó la luz! Selecciona lo que debe encenderse automáticamente para poder ver.",
+      "interaccion": "Elegir ON para encender las luces LED e iluminar la sala."
+    },
+    {
       "id": "n5-b2-d1",
-      "numero": 11,
+      "numero": 12,
       "bloque": 2,
       "titulo": "¡A preparar un sándwich!",
       "tipo": "n5-b2-secuencia-sandwich",

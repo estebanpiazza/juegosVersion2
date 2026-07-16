@@ -22411,6 +22411,234 @@ article.challenge-card.n4-sound-card {
   }
 }
 
+/* Nivel 5 · Bloque 1 · Consigna 11: luces automáticas. */
+.n5-lights-card {
+  min-height: 0;
+  background: #061321;
+}
+
+.n5-lights-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #061321;
+}
+
+.n5-lights-background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  transition: opacity 0.9s ease, filter 0.9s ease;
+}
+
+.n5-lights-background.is-dark {
+  z-index: 1;
+  opacity: 1;
+}
+
+.n5-lights-background.is-lit {
+  z-index: 2;
+  opacity: 0;
+  filter: brightness(0.72);
+}
+
+.n5-lights-scene.is-illuminated .n5-lights-background.is-dark {
+  opacity: 0;
+}
+
+.n5-lights-scene.is-illuminated .n5-lights-background.is-lit {
+  opacity: 1;
+  filter: brightness(1);
+}
+
+.n5-lights-card .challenge-header {
+  top: clamp(10px, 2vh, 24px);
+  z-index: 6;
+  width: min(1030px, 76%);
+  padding: clamp(8px, 1vw, 13px) clamp(16px, 2vw, 28px);
+  border-radius: 22px;
+}
+
+.n5-lights-card .challenge-header::after,
+.n5-lights-card .challenge-kicker {
+  display: none;
+}
+
+.n5-lights-card .challenge-header h2 {
+  font-size: clamp(1.2rem, 2.1vw, 2.05rem);
+  text-transform: uppercase;
+}
+
+.n5-lights-card .challenge-header p {
+  font-size: clamp(0.84rem, 1.35vw, 1.22rem);
+  line-height: 1.2;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.n5-lights-nano {
+  position: absolute;
+  left: 12.5%;
+  bottom: 7%;
+  z-index: 4;
+  width: min(19vw, 275px);
+  height: 58%;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.28));
+  pointer-events: none;
+  transition: opacity 0.55s ease, transform 0.55s ease, filter 0.55s ease;
+  transform: translateX(-50%);
+}
+
+.n5-lights-nano.is-on {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.96);
+}
+
+.n5-lights-scene.is-illuminated .n5-lights-nano.is-off {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.96);
+}
+
+.n5-lights-scene.is-illuminated .n5-lights-nano.is-on {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+  filter: brightness(1.08) drop-shadow(0 0 24px rgba(69, 226, 255, 0.68));
+  animation: n5-lights-nano-celebrate 0.72s ease 0.35s both;
+}
+
+.n5-lights-options {
+  position: absolute;
+  left: 55%;
+  bottom: 5.5%;
+  z-index: 5;
+  width: min(55vw, 760px);
+  height: 57%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  gap: clamp(26px, 5vw, 84px);
+  transform: translateX(-50%);
+}
+
+.n5-lights-option {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 24px;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 0.18s ease, filter 0.18s ease, opacity 0.18s ease;
+}
+
+.n5-lights-option img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.n5-lights-option:hover,
+.n5-lights-option:focus-visible {
+  outline: 0;
+  transform: translateY(-6px) scale(1.035);
+  filter: brightness(1.08) drop-shadow(0 0 18px rgba(0, 215, 244, 0.78));
+}
+
+.n5-lights-option.is-wrong {
+  filter: drop-shadow(0 0 18px rgba(255, 63, 95, 0.96));
+  animation: n5-lights-shake 0.42s ease;
+}
+
+.n5-lights-option.is-correct {
+  filter: brightness(1.08) drop-shadow(0 0 22px rgba(41, 200, 95, 0.95));
+  transform: translateY(-5px) scale(1.04);
+}
+
+.n5-lights-option:disabled:not(.is-correct) {
+  opacity: 0.72;
+}
+
+.n5-lights-card > .n5-lights-message {
+  z-index: 7;
+  width: min(720px, 58%);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes n5-lights-nano-celebrate {
+  0% { transform: translateX(-50%) scale(0.96); }
+  55% { transform: translateX(-50%) translateY(-3%) scale(1.06); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+
+@keyframes n5-lights-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-7px); }
+  75% { transform: translateX(7px); }
+}
+
+@media (max-width: 900px) and (orientation: portrait) {
+  .n5-lights-card {
+    min-height: 760px;
+  }
+
+  .n5-lights-card .challenge-header {
+    width: 92%;
+  }
+
+  .n5-lights-nano {
+    left: 18%;
+    bottom: 7%;
+    width: min(31vw, 245px);
+    height: 48%;
+  }
+
+  .n5-lights-options {
+    left: 67%;
+    bottom: 12%;
+    width: min(57vw, 440px);
+    height: 45%;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 560px) {
+  .n5-lights-card {
+    min-height: 790px;
+  }
+
+  .n5-lights-card .challenge-header {
+    width: 94%;
+    border-radius: 14px;
+  }
+
+  .n5-lights-nano {
+    left: 22%;
+    bottom: 22%;
+    width: 38vw;
+    height: 40%;
+  }
+
+  .n5-lights-options {
+    left: 68%;
+    bottom: 25%;
+    width: 52vw;
+    height: 37%;
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .n5-lights-card > .n5-lights-message {
+    width: 88%;
+  }
+}
+
 @media (max-width: 900px) {
   .n5-card {
     padding: 0;
