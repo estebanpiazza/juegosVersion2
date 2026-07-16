@@ -81,6 +81,7 @@ const challengeTypeRenderers = {
   "secuencia-lavado-manos-n4": (id) => renderN4HandwashingSequenceChallenge(id),
   "cuatro-avances-n4": (id) => renderN4FourStepsChallenge(id),
   "repetir-cuatro-n4": (id) => renderN4RepeatFourChallenge(id),
+  "repetir-saltos-n4": (id) => renderN4RepeatJumpsChallenge(id),
   "laberinto-baterias-n4": (id) => renderN4BatteryLabyrinthChallenge(id),
   "secuenciacion-guiada": (id) => renderPathChallenge(id),
   "depuracion-inicial": (id) => renderBalanceChallengeV2(id),
@@ -792,6 +793,8 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n4Block2ChallengeAsset(11, "FONDO.png");
       case "repetir-cuatro-n4":
         return n4Block2ChallengeAsset(12, "FONDO.png");
+      case "repetir-saltos-n4":
+        return n4Block2ChallengeAsset(13, "FONDO.jpg");
       case "laberinto-baterias-n4":
         return n4Block2ChallengeAsset(14, "FONDO.jpg");
       case "n5-clasificar-robots":
@@ -6012,6 +6015,145 @@ function renderN4RepeatFourChallenge(id) {
   runButton.addEventListener("click", runAlgorithm);
   renderSequence();
   setNanoRow(start.row);
+}
+
+function renderN4RepeatJumpsChallenge(id) {
+  const choices = [];
+  const labels = { jump: "Saltar", repeat2: "Repetir dos veces", repeat3: "Repetir tres veces" };
+  const files = { jump: "tarjeta SALTAR.png", repeat2: "Reptir x2.png", repeat3: "Reptir x3.png" };
+  let running = false;
+  let solved = false;
+  const asset = (fileName) => n4Block2ChallengeAsset(13, fileName);
+  const choiceIcon = (choice) => `<img src="${asset(files[choice])}" alt="" aria-hidden="true" />`;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n4-b2-d13-card">
+      ${renderChallengeHeader(
+        "BLOQUE 2 · DESAFÍO 13",
+        "¡MÚSICA EN EL RECREO!",
+        getChallengeInstruction(id, "Nano quiere dar 3 saltos seguidos. Utiliza la tarjeta de repetición correcta."),
+      )}
+      <section class="n4-b2-d13-layout" aria-label="Programar tres saltos con una repetición">
+        <div class="n4-b2-d13-nano-stage" aria-label="Nano listo para bailar">
+          <img class="n4-b2-d13-screen" src="${asset("PANTALLA.png")}" alt="" aria-hidden="true" />
+          <img class="n4-b2-d13-nano" src="${asset("ROBOT DE FRENTE.png")}" alt="Nano" />
+          <span class="n4-b2-d13-music" aria-hidden="true">♪</span>
+        </div>
+        <div class="n4-b2-d13-program">
+          <div class="n4-b2-d13-panel n4-b2-d13-algorithm">
+            <img src="${asset("Tu algoritmo.png")}" alt="" aria-hidden="true" />
+            <div class="n4-b2-d13-sequence" data-jump-sequence aria-label="Tu algoritmo"></div>
+            <button class="n4-b2-d13-run" type="button" data-jump-run aria-label="Ejecutar algoritmo">▶</button>
+          </div>
+          <div class="n4-b2-d13-panel n4-b2-d13-bank">
+            <img src="${asset("Tarjeta de programacion.png")}" alt="" aria-hidden="true" />
+            <div class="n4-b2-d13-actions" aria-label="Tarjetas de programación">
+              ${["jump", "repeat2", "repeat3"].map((choice) => `
+                <button type="button" data-jump-choice="${choice}" aria-label="${labels[choice]}">${choiceIcon(choice)}</button>
+              `).join("")}
+              <button class="n4-b2-d13-clear" type="button" data-jump-clear>Borrar</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <p class="challenge-message n4-b2-d13-message" data-message>Elegí la acción y la repetición para que Nano salte tres veces.</p>
+    </article>
+  `;
+
+  const nano = challengeContent.querySelector(".n4-b2-d13-nano");
+  const music = challengeContent.querySelector(".n4-b2-d13-music");
+  const sequenceNode = challengeContent.querySelector("[data-jump-sequence]");
+  const runButton = challengeContent.querySelector("[data-jump-run]");
+  const choiceButtons = [...challengeContent.querySelectorAll("[data-jump-choice]")];
+  const clearButton = challengeContent.querySelector("[data-jump-clear]");
+
+  function renderSequence() {
+    sequenceNode.innerHTML = Array.from({ length: 2 }, (_, index) => {
+      const choice = choices[index];
+      return `<button class="n4-b2-d13-slot${choice ? " is-filled" : ""}" type="button" data-jump-slot="${index}" aria-label="Paso ${index + 1}: ${choice ? labels[choice] : "vacío"}">
+        ${choice ? choiceIcon(choice) : "<span>?</span>"}
+      </button>`;
+    }).join("");
+    sequenceNode.querySelectorAll("[data-jump-slot]").forEach((slot) => {
+      slot.addEventListener("click", () => {
+        if (running || solved) return;
+        const index = Number(slot.dataset.jumpSlot);
+        if (index >= choices.length) return;
+        choices.splice(index, 1);
+        renderSequence();
+        setMessage("Quitaste una tarjeta. Volvé a completar el algoritmo.", "is-good");
+      });
+    });
+  }
+
+  function setControlsDisabled(disabled) {
+    runButton.disabled = disabled;
+    choiceButtons.forEach((button) => { button.disabled = disabled; });
+    clearButton.disabled = disabled;
+  }
+
+  function wait(milliseconds) {
+    return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+  }
+
+  async function runAlgorithm() {
+    if (running || solved) return;
+    if (choices.length < 2) {
+      setMessage(`Todavía falta${choices.length ? " una tarjeta" : "n dos tarjetas"}.`, "is-error is-soft-error");
+      return;
+    }
+    const correct = choices[0] === "jump" && choices[1] === "repeat3";
+    if (!correct) {
+      const wrongIndex = choices[0] !== "jump" ? 0 : 1;
+      sequenceNode.querySelector(`[data-jump-slot="${wrongIndex}"]`)?.classList.add("is-wrong");
+      setMessage(wrongIndex === 0
+        ? "Primero elegí la acción que Nano quiere repetir: saltar."
+        : "Nano quiere dar tres saltos. Revisá el número de la repetición.", "is-error is-soft-error");
+      return;
+    }
+
+    running = true;
+    setControlsDisabled(true);
+    sequenceNode.querySelector('[data-jump-slot="1"]')?.classList.add("is-running");
+    for (let jump = 1; jump <= 3; jump += 1) {
+      nano.classList.remove("is-jumping");
+      void nano.offsetWidth;
+      nano.classList.add("is-jumping");
+      music.textContent = jump === 1 ? "♪" : jump === 2 ? "♫" : "♬";
+      music.classList.remove("is-playing");
+      void music.offsetWidth;
+      music.classList.add("is-playing");
+      setMessage(jump < 3 ? `Salto ${jump} de 3...` : "¡Tres saltos! Nano completó su baile.", jump < 3 ? "is-good" : "is-success");
+      await wait(650);
+    }
+    sequenceNode.querySelector('[data-jump-slot="1"]')?.classList.remove("is-running");
+    nano.classList.remove("is-jumping");
+    nano.classList.add("is-celebrating");
+    solved = true;
+    completeChallenge(id);
+  }
+
+  choiceButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (running || solved) return;
+      if (choices.length >= 2) {
+        setMessage("Ya elegiste dos tarjetas. Tocá el botón verde para probar.", "is-good");
+        return;
+      }
+      choices.push(button.dataset.jumpChoice);
+      renderSequence();
+      setMessage(choices.length === 1 ? "Ahora elegí cuántas veces debe repetir la acción." : "Algoritmo listo. ¡Tocá el botón verde!", "is-good");
+    });
+  });
+
+  clearButton.addEventListener("click", () => {
+    if (running || solved) return;
+    choices.length = 0;
+    renderSequence();
+    setMessage("Algoritmo borrado. Elegí saltar y luego una repetición.", "is-good");
+  });
+  runButton.addEventListener("click", runAlgorithm);
+  renderSequence();
 }
 
 function renderN4BatteryLabyrinthChallenge(id) {

@@ -25035,6 +25035,168 @@ body:has(.n4-b2-d9-card) .challenge-shell { background: transparent; box-shadow:
   .n4-b2-d12-clear { padding: 5px 7px; font-size: .62rem; }
 }
 
+/* ===== Nivel 4 · Bloque 2 · Desafío 13 (tres saltos) ===== */
+.n4-b2-d13-card .challenge-header { width: min(920px, 94%); margin-bottom: 10px; }
+.n4-b2-d13-card .challenge-header h2 { font-size: clamp(21px, 1.9vw, 32px); }
+.n4-b2-d13-card .challenge-header p { font-size: clamp(13px, 1.05vw, 18px); }
+
+.n4-b2-d13-layout {
+  width: min(100%, 1080px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(210px, .72fr) minmax(440px, 1.45fr);
+  align-items: center;
+  gap: clamp(12px, 2vw, 28px);
+}
+
+.n4-b2-d13-nano-stage {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 305px);
+  aspect-ratio: 941 / 1672;
+}
+.n4-b2-d13-screen { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; }
+.n4-b2-d13-nano {
+  position: absolute;
+  left: 20%;
+  bottom: 5.5%;
+  width: 62%;
+  height: 82%;
+  object-fit: contain;
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 7px 5px rgba(0, 0, 0, .23));
+}
+.n4-b2-d13-nano.is-jumping { animation: n4-b2-d13-jump .62s ease-in-out; }
+.n4-b2-d13-nano.is-celebrating { animation: n4-b2-d13-celebrate .45s ease-in-out 3 alternate; }
+.n4-b2-d13-music {
+  position: absolute;
+  right: 8%;
+  top: 15%;
+  color: #80e900;
+  font-size: clamp(30px, 4vw, 58px);
+  font-weight: 900;
+  opacity: 0;
+  text-shadow: 0 3px 0 #fff;
+}
+.n4-b2-d13-music.is-playing { animation: n4-b2-d13-note .62s ease-out; }
+
+.n4-b2-d13-program { min-width: 0; display: grid; gap: clamp(10px, 1.5vw, 18px); }
+.n4-b2-d13-panel { position: relative; width: 100%; }
+.n4-b2-d13-algorithm { aspect-ratio: 3587 / 1173; }
+.n4-b2-d13-bank { width: 83%; aspect-ratio: 3587 / 1082; }
+.n4-b2-d13-panel > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; filter: drop-shadow(0 7px 8px rgba(20, 73, 94, .2)); }
+
+.n4-b2-d13-sequence {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 35%;
+  bottom: 13%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 14%;
+}
+.n4-b2-d13-slot {
+  width: 100%;
+  aspect-ratio: 1.12;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 2px dashed #10c9df;
+  border-radius: 9px;
+  color: #0bc4dc;
+  background: rgba(255, 255, 255, .9);
+  font-size: clamp(23px, 3vw, 42px);
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform .17s ease, filter .17s ease;
+}
+.n4-b2-d13-slot.is-filled { border: 0; background: transparent; }
+.n4-b2-d13-slot:hover { transform: translateY(-3px); }
+.n4-b2-d13-slot.is-wrong { animation: n4-b2-d6-shake .28s ease 2; filter: drop-shadow(0 0 6px #e25353); }
+.n4-b2-d13-slot.is-running { animation: n4-b2-d12-repeat-pulse .44s ease infinite alternate; }
+.n4-b2-d13-slot img { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+.n4-b2-d13-run {
+  position: absolute;
+  right: 5%;
+  top: 42%;
+  width: 13%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  color: #fff;
+  background: #65b83d;
+  box-shadow: 0 4px 0 #398221, 0 5px 10px rgba(0, 0, 0, .2);
+  font-size: clamp(17px, 2vw, 30px);
+  cursor: pointer;
+  transition: transform .17s ease;
+}
+.n4-b2-d13-run:hover { transform: scale(1.08); }
+
+.n4-b2-d13-actions {
+  position: absolute;
+  left: 7%;
+  right: 5%;
+  top: 39%;
+  bottom: 7%;
+  display: flex;
+  align-items: center;
+  gap: 6%;
+}
+.n4-b2-d13-actions button:not(.n4-b2-d13-clear) {
+  width: 22%;
+  aspect-ratio: 1.12;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: transform .17s ease, filter .17s ease;
+}
+.n4-b2-d13-actions button:not(.n4-b2-d13-clear):hover { transform: translateY(-4px); filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .18)); }
+.n4-b2-d13-actions img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.n4-b2-d13-clear {
+  margin-left: auto;
+  padding: 7px 11px;
+  border: 2px solid #f7951d;
+  border-radius: 999px;
+  color: #9b4f00;
+  background: #fff8eb;
+  font-weight: 900;
+  cursor: pointer;
+}
+.n4-b2-d13-message { max-width: 900px; margin: 8px auto 0; text-align: center; }
+
+@keyframes n4-b2-d13-jump {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  15% { transform: translateY(2%) scaleY(.96); }
+  52% { transform: translateY(-17%) rotate(3deg) scaleY(1.02); }
+}
+@keyframes n4-b2-d13-celebrate {
+  from { transform: rotate(-3deg); }
+  to { transform: rotate(3deg) translateY(-3%); }
+}
+@keyframes n4-b2-d13-note {
+  0% { opacity: 0; transform: translateY(15px) scale(.7) rotate(-8deg); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-35px) scale(1.2) rotate(8deg); }
+}
+
+@media (max-width: 760px) {
+  .challenge-card.n4-b2-d13-card { overflow-y: auto; }
+  .n4-b2-d13-layout { grid-template-columns: minmax(100px, .45fr) minmax(280px, 1.55fr); gap: 9px; }
+  .n4-b2-d13-bank { width: 100%; }
+  .n4-b2-d13-clear { padding: 4px 7px; font-size: .62rem; }
+}
+@media (max-width: 480px) {
+  .n4-b2-d13-layout { grid-template-columns: 1fr; }
+  .n4-b2-d13-nano-stage { width: 110px; }
+  .n4-b2-d13-program { width: 100%; }
+  .n4-b2-d13-card .challenge-header { margin-bottom: 5px; }
+}
+
 /* ===== Nivel 4 · Bloque 2 · Desafío 14 (laberinto con baterías) ===== */
 .n4-b2-d14-heading {
   width: min(100%, 1030px);

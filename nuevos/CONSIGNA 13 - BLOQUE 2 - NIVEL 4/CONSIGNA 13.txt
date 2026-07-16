@@ -1,0 +1,3 @@
+CONSIGNA:¡Música en el recreo! Nano quiere dar 3 saltos seguidos. Utiliza la tarjeta de repetición correcta.
+
+Mecánica: aca vamos a crear una ficha de salto que no existe

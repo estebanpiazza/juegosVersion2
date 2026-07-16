@@ -242,6 +242,16 @@
       "interaccion": "Combinar una ficha de avanzar con la tarjeta repetir por cuatro y ejecutar el algoritmo."
     },
     {
+      "id": "n4-rework-b2-d13",
+      "numero": 32,
+      "bloque": 2,
+      "titulo": "¡Música en el recreo!",
+      "tipo": "repetir-saltos-n4",
+      "consigna": "¡Música en el recreo! Nano quiere dar 3 saltos seguidos. Utiliza la tarjeta de repetición correcta.",
+      "objetivo": "Combinar una acción nueva con una instrucción de repetición para ejecutar tres saltos.",
+      "interaccion": "Elegir primero la tarjeta Saltar y después Repetir por tres; ejecutar el algoritmo para ver los tres saltos."
+    },
+    {
       "id": "n4-rework-b2-d14",
       "numero": 33,
       "bloque": 2,
