@@ -1,0 +1,3 @@
+Consigna: ¡Cuidado! El código tiene un error. Toca el número equivocado para corregirlo.
+
+Mecánica: Tap (Depuración / Debugging). El algoritmo en la pantalla muestra un error en el parámetro del bucle: [Repetición x5] (Avanzar). Al hacer Tap directamente sobre el número [x5], este cambia automáticamente por la opción correcta [x3].  El código dice x5 pero Nano solo debe dar 3 pasos. Toca el número equivocado para arreglarlo.

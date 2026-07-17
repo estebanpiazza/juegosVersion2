@@ -1,0 +1,3 @@
+Consigna: Cuenta los pasos hasta la meta y elige la ficha de repetición correcto.
+
+Mecánica: Drag & Drop. Desplazamiento lineal largo en cuadrícula de 5 casilleros de distancia. En el menú flotan los bloques de bucle [x3], [x4] y [x5]. El niño debe contar los casilleros de la pantalla, seleccionar el bloque contenedor [x5] y colocar la flecha de avance dentro de él.

@@ -1,0 +1,3 @@
+Consigna: ¡Nano dobló para el lado equivocado! Toca la flecha de giro que está mal para corregir el rumbo.
+
+Mecánica: Tap (Depuración). El algoritmo erróneo visible en pantalla es: [Repetición x3 (Avanzar)] -> [Girar a la izquierda]. Al hacer Tap sobre la tarjeta de [Girar a la izquierda], el backend cambia el asset por [Girar a la derecha], modificando la orientación del robot en la cuadrícula.

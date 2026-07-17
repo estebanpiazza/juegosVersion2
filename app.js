@@ -102,6 +102,13 @@ const challengeTypeRenderers = {
   "n5-b2-secuencia-sandwich": (id) => renderN5SandwichSequenceChallenge(id),
   "n5-b2-identificar-repeticion": (id) => renderN5RepeatedCommandChallenge(id),
   "n5-b2-comprimir-repeticion": (id) => renderN5RepeatBlockChallenge(id),
+  "n5-b2-contar-repeticion": (id) => renderN5LoopBuilderChallenge(id, 6),
+  "n5-b2-depurar-repeticion": (id) => renderN5LoopDebugChallenge(id, 7),
+  "n5-b2-completar-tramo": (id) => renderN5LoopBuilderChallenge(id, 8),
+  "n5-b2-patron-luces": (id) => renderN5LightPatternChallenge(id),
+  "n5-b2-completar-giro": (id) => renderN5LoopBuilderChallenge(id, 11),
+  "n5-b2-depurar-giro": (id) => renderN5LoopDebugChallenge(id, 12),
+  "n5-b2-desafio-final": (id) => renderN5LoopBuilderChallenge(id, 13),
   "n6-direccion-inicial": (id) => renderN6InitialDirectionChallenge(id),
   "n6-condicional-meteoritos": (id) => renderN6MeteorConditionChallenge(id),
   "n6-repeticion-estrellas": (id) => renderN6StarRepetitionChallenge(id),
@@ -841,6 +848,14 @@ function resolveChallengeBackground(challengeData, challengeId) {
         return n5Block2ChallengeAsset(3, "FONDO.jpg");
       case "n5-b2-comprimir-repeticion":
         return n5Block2ChallengeAsset(4, "FONDO.jpg");
+      case "n5-b2-contar-repeticion":
+      case "n5-b2-depurar-repeticion":
+      case "n5-b2-completar-tramo":
+      case "n5-b2-patron-luces":
+      case "n5-b2-completar-giro":
+      case "n5-b2-depurar-giro":
+      case "n5-b2-desafio-final":
+        return n5Block2ChallengeAsset(Number(challengeData?.id?.match(/d(\d+)$/)?.[1] || challengeId), "FONDO.jpg");
       case "n6-direccion-inicial":
         return n6Asset(1, "Fondo.png");
       case "n6-condicional-meteoritos":
@@ -4765,6 +4780,247 @@ function renderN5RepeatBlockChallenge(id) {
   slot.addEventListener("drop", (event) => {
     event.preventDefault();
     placeCard(event.dataTransfer?.getData("text/plain"));
+  });
+}
+
+const N5_LOOP_CARD_FILES = {
+  advance: "AVANZAR.png",
+  left: "naranja 1.png",
+  right: "Naranja 2.png",
+  repeat2: "Reptir x2.png",
+  repeat3: "Reptir x3.png",
+  repeat4: "Reptir x4.png",
+  repeat5: "Reptir x5.png",
+};
+
+const N5_LOOP_CARD_LABELS = {
+  advance: "Avanzar",
+  left: "Girar a la izquierda",
+  right: "Girar a la derecha",
+  repeat2: "Repetir por dos",
+  repeat3: "Repetir por tres",
+  repeat4: "Repetir por cuatro",
+  repeat5: "Repetir por cinco",
+};
+
+function renderN5LoopBuilderChallenge(id, challengeNumber) {
+  const configs = {
+    6: {
+      title: "CUENTA LOS PASOS HASTA LA META",
+      instruction: "Cuenta los pasos hasta la meta y elige la ficha de repetición correcta.",
+      fixedBefore: [], expected: ["advance", "repeat5"], fixedAfter: [],
+      options: ["repeat3", "repeat4", "repeat5", "advance"], nano: "Nano arriba.png",
+      start: [5, 3], goal: [0, 3], hint: "Armá AVANZAR ×5 para recorrer los cinco casilleros.",
+    },
+    8: {
+      title: "AL CAMINO DE NANO LE FALTA UN TRAMO",
+      instruction: "Selecciona el bloque que falta para completarlo.",
+      fixedBefore: ["advance", "advance", "right", "advance"], expected: ["repeat3"], fixedAfter: [],
+      options: ["left", "repeat3", "advance"], nano: "Nano derecha.png",
+      start: [1, 3], goal: [4, 3], hint: "Elegí el bloque que repite el último avance tres veces.",
+    },
+    11: {
+      title: "COMPLETA LA SECUENCIA",
+      instruction: "Observa el código y completa la secuencia con el bloque que falta.",
+      fixedBefore: ["advance", "repeat3"], expected: ["right"], fixedAfter: [],
+      options: ["left", "right", "advance"], nano: "Nano derecha.png",
+      start: [0, 2], goal: [3, 5], hint: "Mirá la esquina: después de avanzar, Nano debe doblar hacia la derecha.",
+    },
+    13: {
+      title: "¡EL GRAN DESAFÍO FINAL!",
+      instruction: "Combina las repeticiones con los giros y presiona Play.",
+      fixedBefore: ["advance"], expected: ["repeat2", "right"], fixedAfter: ["advance"],
+      options: ["left", "right", "repeat2", "repeat4"], nano: "Nano derecha.png",
+      start: [1, 1], goal: [2, 3], hint: "Completá los dos espacios y después presioná Play.", requirePlay: true,
+    },
+  };
+  const config = configs[challengeNumber];
+  if (!config) return;
+  const asset = (fileName) => n5Block2ChallengeAsset(challengeNumber, fileName);
+  const slots = Array(config.expected.length).fill(null);
+  let selected = null;
+  let solved = false;
+
+  const cardMarkup = (type, extraClass = "") => `<span class="n5-loop-card ${extraClass}" data-card-type="${type}">
+    <img src="${asset(N5_LOOP_CARD_FILES[type])}" alt="${N5_LOOP_CARD_LABELS[type]}" />
+  </span>`;
+
+  challengeContent.innerHTML = `
+    <article class="challenge-card n5-card n5-loop-card-shell n5-loop-d${challengeNumber}">
+      ${renderChallengeHeader(`BLOQUE 2 · DESAFÍO ${challengeNumber}`, config.title, getChallengeInstruction(id, config.instruction))}
+      <section class="n5-loop-layout">
+        <div class="n5-loop-board" aria-label="Cuadrícula del recorrido">
+          <img src="${asset("CUADRICULA.png")}" alt="Cuadrícula de seis por seis" />
+          <img class="n5-loop-nano" style="--row:${config.start[0]};--col:${config.start[1]}" src="${asset(config.nano)}" alt="Nano" />
+          <img class="n5-loop-goal" style="--row:${config.goal[0]};--col:${config.goal[1]}" src="${asset("Vamos.png")}" alt="Meta" />
+        </div>
+        <div class="n5-loop-workspace">
+          <div class="n5-loop-program" aria-label="Tu algoritmo">
+            <strong><span>1</span> Tu algoritmo</strong>
+            <div class="n5-loop-sequence">
+              <span class="n5-loop-endpoint is-start" aria-label="Inicio">⚑</span>
+              ${config.fixedBefore.map((type) => cardMarkup(type, "is-fixed")).join("")}
+              ${config.expected.map((_, index) => `<button class="n5-loop-slot" type="button" data-loop-slot="${index}" aria-label="Espacio ${index + 1} vacío"><span>?</span></button>`).join("")}
+              ${config.fixedAfter.map((type) => cardMarkup(type, "is-fixed")).join("")}
+              <span class="n5-loop-endpoint is-finish" aria-label="Meta">⚑</span>
+              ${config.requirePlay ? '<button class="n5-loop-play" type="button" data-loop-play aria-label="Ejecutar algoritmo">▶</button>' : ""}
+            </div>
+          </div>
+          <div class="n5-loop-bank" aria-label="Tarjetas de programación">
+            <strong><span>2</span> Tarjetas de programación</strong>
+            <div class="n5-loop-options">
+              ${config.options.map((type) => `<button type="button" draggable="true" data-loop-option="${type}" aria-label="${N5_LOOP_CARD_LABELS[type]}">${cardMarkup(type)}</button>`).join("")}
+            </div>
+          </div>
+        </div>
+      </section>
+      <p class="challenge-message n5-loop-message" data-message>${config.hint}</p>
+    </article>`;
+
+  const slotNodes = [...challengeContent.querySelectorAll("[data-loop-slot]")];
+  const optionNodes = [...challengeContent.querySelectorAll("[data-loop-option]")];
+  const playButton = challengeContent.querySelector("[data-loop-play]");
+
+  function finishIfReady() {
+    if (slots.some((value) => !value)) return;
+    const correct = config.expected.every((type, index) => slots[index] === type);
+    slotNodes.forEach((slot, index) => slot.classList.toggle("is-wrong", slots[index] !== config.expected[index]));
+    if (!correct) {
+      setMessage("Hay una tarjeta fuera de lugar. Observá el recorrido y probá otra combinación.", "is-error is-soft-error");
+      return;
+    }
+    if (config.requirePlay) {
+      playButton?.classList.add("is-ready");
+      setMessage("¡Algoritmo listo! Presioná Play para ejecutarlo.", "is-good");
+      return;
+    }
+    solved = true;
+    slotNodes.forEach((slot) => slot.classList.add("is-correct"));
+    optionNodes.forEach((option) => { option.disabled = true; });
+    challengeContent.querySelector(".n5-loop-nano")?.classList.add("is-running");
+    setMessage("¡Muy bien! Completaste el algoritmo correcto.", "is-success");
+    completeChallenge(id);
+  }
+
+  function place(type, index) {
+    if (solved || !N5_LOOP_CARD_FILES[type] || !Number.isInteger(index)) return;
+    slots[index] = type;
+    selected = null;
+    const slot = slotNodes[index];
+    slot.classList.remove("is-drag-over", "is-wrong");
+    slot.innerHTML = cardMarkup(type);
+    slot.setAttribute("aria-label", `${N5_LOOP_CARD_LABELS[type]} en espacio ${index + 1}`);
+    optionNodes.forEach((option) => option.classList.remove("is-selected"));
+    finishIfReady();
+  }
+
+  optionNodes.forEach((option) => {
+    option.addEventListener("click", () => {
+      if (solved) return;
+      selected = option.dataset.loopOption;
+      optionNodes.forEach((node) => node.classList.toggle("is-selected", node === option));
+      const emptyIndex = slots.findIndex((value) => !value);
+      if (emptyIndex !== -1) place(selected, emptyIndex);
+    });
+    option.addEventListener("dragstart", (event) => event.dataTransfer?.setData("text/plain", option.dataset.loopOption));
+  });
+  slotNodes.forEach((slot) => {
+    const index = Number(slot.dataset.loopSlot);
+    slot.addEventListener("click", () => selected ? place(selected, index) : setMessage("Elegí una tarjeta y después tocá este espacio.", "is-good"));
+    slot.addEventListener("dragover", (event) => { event.preventDefault(); slot.classList.add("is-drag-over"); });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-drag-over"));
+    slot.addEventListener("drop", (event) => { event.preventDefault(); place(event.dataTransfer?.getData("text/plain"), index); });
+  });
+  playButton?.addEventListener("click", () => {
+    if (solved) return;
+    if (slots.some((value) => !value)) {
+      setMessage("Todavía quedan espacios vacíos en el algoritmo.", "is-error is-soft-error");
+      return;
+    }
+    if (!config.expected.every((type, index) => slots[index] === type)) {
+      finishIfReady();
+      return;
+    }
+    solved = true;
+    playButton.classList.add("is-running");
+    slotNodes.forEach((slot) => slot.classList.add("is-correct"));
+    challengeContent.querySelector(".n5-loop-nano")?.classList.add("is-running", "is-final-run");
+    setMessage("¡Desafío final superado! Nano llegó a la meta.", "is-success");
+    completeChallenge(id);
+  });
+}
+
+function renderN5LoopDebugChallenge(id, challengeNumber) {
+  const isRepeatDebug = challengeNumber === 7;
+  const asset = (fileName) => n5Block2ChallengeAsset(challengeNumber, fileName);
+  const wrongType = isRepeatDebug ? "repeat5" : "left";
+  const correctType = isRepeatDebug ? "repeat3" : "right";
+  const prefix = isRepeatDebug ? ["advance"] : ["advance", "repeat3"];
+  let solved = false;
+  const card = (type, interactive = false) => `<${interactive ? "button" : "span"} class="n5-loop-card${interactive ? " n5-loop-debug-target" : " is-fixed"}" ${interactive ? 'type="button" data-debug-loop' : ""}>
+    <img src="${asset(N5_LOOP_CARD_FILES[type])}" alt="${N5_LOOP_CARD_LABELS[type]}" />
+  </${interactive ? "button" : "span"}>`;
+  challengeContent.innerHTML = `
+    <article class="challenge-card n5-card n5-loop-card-shell n5-loop-debug-shell">
+      ${renderChallengeHeader(`BLOQUE 2 · DESAFÍO ${challengeNumber}`, isRepeatDebug ? "¡CUIDADO!" : "¡NANO DOBLÓ PARA EL LADO EQUIVOCADO!", getChallengeInstruction(id, isRepeatDebug ? "Toca el número equivocado para corregirlo." : "Toca la flecha de giro que está mal para corregir el rumbo."))}
+      <section class="n5-loop-layout">
+        <div class="n5-loop-board">
+          <img src="${asset("CUADRICULA.png")}" alt="Cuadrícula de seis por seis" />
+          <img class="n5-loop-nano" style="--row:${isRepeatDebug ? 3 : 5};--col:3" src="${asset(isRepeatDebug ? "Nano izquierda.png" : "Nano derecha.png")}" alt="Nano" />
+          <img class="n5-loop-goal" style="--row:${isRepeatDebug ? 3 : 2};--col:${isRepeatDebug ? 1 : 3}" src="${asset("Vamos.png")}" alt="Meta" />
+        </div>
+        <div class="n5-loop-workspace">
+          <div class="n5-loop-program is-debug">
+            <strong><span>1</span> Tu algoritmo</strong>
+            <div class="n5-loop-sequence"><span class="n5-loop-endpoint is-start">⚑</span>${prefix.map((type) => card(type)).join("")}${card(wrongType, true)}<span class="n5-loop-endpoint is-finish">⚑</span></div>
+          </div>
+          <div class="n5-loop-debug-tip">Tocá ${isRepeatDebug ? "el bloque ×5" : "la flecha de giro izquierda"} para reparar el código.</div>
+        </div>
+      </section>
+      <p class="challenge-message n5-loop-message" data-message>Encontrá el error marcado por el recorrido de Nano.</p>
+    </article>`;
+  const target = challengeContent.querySelector("[data-debug-loop]");
+  target.addEventListener("click", () => {
+    if (solved) return;
+    solved = true;
+    target.classList.add("is-correct");
+    target.innerHTML = `<img src="${asset(N5_LOOP_CARD_FILES[correctType])}" alt="${N5_LOOP_CARD_LABELS[correctType]}" />`;
+    challengeContent.querySelector(".n5-loop-nano")?.classList.add("is-running");
+    setMessage(isRepeatDebug ? "¡Corregido! Nano necesita repetir el avance tres veces." : "¡Corregido! Nano ahora gira a la derecha.", "is-success");
+    completeChallenge(id);
+  });
+}
+
+function renderN5LightPatternChallenge(id) {
+  const asset = (fileName) => n5Block2ChallengeAsset(9, fileName);
+  let solved = false;
+  challengeContent.innerHTML = `
+    <article class="challenge-card n5-card n5-light-pattern-card">
+      ${renderChallengeHeader("BLOQUE 2 · DESAFÍO 9", "LAS LUCES DE NANO PARPADEAN", getChallengeInstruction(id, "¿Cuántas veces se repite? Toca el número correcto."))}
+      <section class="n5-light-pattern-stage" aria-label="Nano alterna sus luces verde y azul tres veces">
+        <img class="n5-light-robot is-green" src="${asset("Robot verde.png")}" alt="Nano con luz verde" />
+        <img class="n5-light-robot is-blue" src="${asset("Robot azul.png")}" alt="Nano con luz azul" />
+        <div class="n5-light-cycles" aria-hidden="true"><span>1</span><span>2</span><span>3</span></div>
+      </section>
+      <div class="n5-light-answers" aria-label="Cantidad de repeticiones">
+        ${[2, 3, 4, 5].map((number) => `<button type="button" data-light-repeat="${number}" aria-label="Se repite ${number} veces"><img src="${asset(`Reptir x${number}.png`)}" alt="×${number}" /></button>`).join("")}
+      </div>
+      <p class="challenge-message n5-loop-message" data-message>Observá verde-azul, verde-azul, verde-azul y contá los ciclos.</p>
+    </article>`;
+  challengeContent.querySelectorAll("[data-light-repeat]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (solved) return;
+      if (button.dataset.lightRepeat !== "3") {
+        button.classList.add("is-wrong");
+        setMessage("Contá cada pareja verde-azul completa y probá otra vez.", "is-error is-soft-error");
+        return;
+      }
+      solved = true;
+      button.classList.add("is-correct");
+      challengeContent.querySelector(".n5-light-pattern-stage")?.classList.add("is-solved");
+      setMessage("¡Exacto! El patrón verde-azul se repite tres veces.", "is-success");
+      completeChallenge(id);
+    });
   });
 }
 

@@ -21883,6 +21883,146 @@ article.challenge-card.n4-sound-card {
   font-weight: 900;
 }
 
+/* Nivel 5 · Bloque 2 · Desafíos de repeticiones y giros (6–13). */
+.challenge-card.n5-loop-card-shell,
+.challenge-card.n5-light-pattern-card {
+  gap: clamp(6px, 1vh, 12px);
+  overflow: hidden;
+}
+
+.n5-loop-card-shell .challenge-header,
+.n5-light-pattern-card .challenge-header {
+  width: min(92%, 1040px);
+  padding: clamp(8px, 1.4vh, 16px) clamp(16px, 3vw, 38px);
+}
+
+.n5-loop-card-shell .challenge-title,
+.n5-light-pattern-card .challenge-title { font-size: clamp(1rem, 2.15vw, 1.85rem); }
+
+.n5-loop-layout {
+  width: min(96%, 1220px);
+  min-height: 0;
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(300px, .82fr) minmax(460px, 1.35fr);
+  gap: clamp(12px, 2vw, 28px);
+  align-items: center;
+}
+
+.n5-loop-board {
+  position: relative;
+  width: min(100%, 510px);
+  aspect-ratio: 1;
+  justify-self: center;
+  padding: 4.7%;
+  border: 4px solid #0dc6e6;
+  background: rgba(255,255,255,.94);
+  box-shadow: 0 12px 25px rgba(0,91,135,.2);
+}
+
+.n5-loop-board > img:first-child { width: 100%; height: 100%; object-fit: fill; }
+.n5-loop-nano,
+.n5-loop-goal {
+  position: absolute;
+  z-index: 2;
+  left: calc(4.7% + var(--col) * 15.1%);
+  top: calc(4.7% + var(--row) * 15.1%);
+  width: 15%;
+  height: 15%;
+  object-fit: contain;
+  transition: transform .55s ease, left 1.4s ease, top 1.4s ease;
+}
+.n5-loop-goal { z-index: 1; padding: 2%; }
+.n5-loop-nano.is-running { transform: scale(1.14); filter: drop-shadow(0 0 13px #44e9ff); }
+.n5-loop-nano.is-final-run { left: calc(4.7% + 3 * 15.1%); top: calc(4.7% + 2 * 15.1%); }
+
+.n5-loop-workspace { display: grid; gap: clamp(12px, 2vh, 22px); min-width: 0; }
+.n5-loop-program,
+.n5-loop-bank,
+.n5-loop-debug-tip {
+  border: 3px solid #08c4df;
+  border-radius: 26px;
+  background: rgba(255,255,255,.96);
+  padding: clamp(13px, 2vw, 24px);
+  box-shadow: 0 10px 20px rgba(0,89,143,.16);
+}
+.n5-loop-bank { border-color: #ff9815; }
+.n5-loop-program > strong,
+.n5-loop-bank > strong {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px; color: #04bcd8; font-size: clamp(.95rem, 1.8vw, 1.5rem);
+}
+.n5-loop-bank > strong { color: #ef8a0b; }
+.n5-loop-program > strong span,
+.n5-loop-bank > strong span {
+  display: grid; place-items: center; width: 34px; aspect-ratio: 1; border-radius: 50%; color: white; background: #04bcd8;
+}
+.n5-loop-bank > strong span { background: #ef8a0b; }
+
+.n5-loop-sequence,
+.n5-loop-options { display: flex; align-items: center; justify-content: center; gap: clamp(5px, .7vw, 10px); min-width: 0; }
+.n5-loop-options { flex-wrap: wrap; }
+.n5-loop-card,
+.n5-loop-slot,
+.n5-loop-options button {
+  display: grid; place-items: center;
+  width: clamp(56px, 7vw, 92px); aspect-ratio: 1;
+  border: 0; background: transparent; padding: 0;
+}
+.n5-loop-card img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+.n5-loop-slot {
+  border: 3px dashed #0bc7e3; border-radius: 16px; background: #f8feff; color: #0bbbd6;
+  font-size: clamp(1.8rem, 4vw, 3.4rem); font-weight: 900; cursor: pointer;
+}
+.n5-loop-slot .n5-loop-card { width: 100%; }
+.n5-loop-slot.is-drag-over, .n5-loop-options button.is-selected { outline: 5px solid rgba(24,204,232,.32); transform: scale(1.05); }
+.n5-loop-slot.is-wrong, .n5-loop-debug-target.is-wrong { outline: 5px solid #ff625d; animation: n5-loop-shake .32s ease; }
+.n5-loop-slot.is-correct, .n5-loop-debug-target.is-correct { outline: 5px solid #72d94b; border-radius: 14px; }
+.n5-loop-options button { cursor: grab; transition: transform .18s ease, filter .18s ease; }
+.n5-loop-options button:hover { transform: translateY(-4px) scale(1.04); filter: drop-shadow(0 8px 8px rgba(0,88,132,.22)); }
+.n5-loop-endpoint { display: grid; place-items: center; flex: 0 0 auto; width: clamp(48px, 5.5vw, 72px); aspect-ratio: 1; border-radius: 50%; color: white; font-size: clamp(1.7rem, 3vw, 2.5rem); }
+.n5-loop-endpoint.is-start { background: #ffbf17; }.n5-loop-endpoint.is-finish { background: #62ba3c; }
+.n5-loop-play { flex: 0 0 auto; width: clamp(48px, 5vw, 66px); aspect-ratio: 1; border: 0; border-radius: 50%; background: #22bc67; color: white; font-size: 1.7rem; cursor: pointer; box-shadow: 0 6px 0 #128e4a; }
+.n5-loop-play.is-ready { animation: n5-loop-pulse 1s infinite; }.n5-loop-play.is-running { transform: translateY(5px); box-shadow: none; }
+.n5-loop-debug-target { cursor: pointer; border: 0; background: transparent; padding: 0; }
+.n5-loop-debug-tip { border-color: #ff9815; color: #236f98; text-align: center; font-weight: 800; font-size: clamp(.9rem, 1.5vw, 1.25rem); }
+.n5-loop-message { margin: 0; padding: 4px 12px; min-height: 28px; flex: 0 0 auto; font-size: clamp(.7rem, 1vw, .9rem); }
+
+.n5-light-pattern-stage {
+  position: relative; flex: 1 1 auto; width: min(90%, 900px); min-height: 250px;
+  border: 4px solid #10d8ef; border-radius: 28px;
+  background: radial-gradient(circle at center, rgba(29,224,255,.28), transparent 38%), rgba(1,42,77,.9);
+  overflow: hidden;
+}
+.n5-light-robot { position: absolute; left: 50%; top: 50%; width: min(42%, 340px); height: 88%; object-fit: contain; transform: translate(-50%,-50%); }
+.n5-light-robot.is-green { animation: n5-light-green 3.6s steps(1) infinite; }
+.n5-light-robot.is-blue { animation: n5-light-blue 3.6s steps(1) infinite; }
+.n5-light-cycles { position: absolute; left: 4%; bottom: 5%; display: flex; gap: 12px; }
+.n5-light-cycles span { display: grid; place-items: center; width: 42px; aspect-ratio: 1; border-radius: 50%; color: white; background: #0dc7e5; font-weight: 900; opacity: .3; animation: n5-cycle-count 3.6s infinite; }
+.n5-light-cycles span:nth-child(2) { animation-delay: 1.2s; }.n5-light-cycles span:nth-child(3) { animation-delay: 2.4s; }
+.n5-light-pattern-stage.is-solved .n5-light-robot { animation-play-state: paused; }
+.n5-light-answers { flex: 0 0 auto; width: min(86%, 760px); display: flex; justify-content: center; gap: clamp(12px, 3vw, 38px); }
+.n5-light-answers button { width: clamp(70px, 10vw, 120px); aspect-ratio: 1; border: 0; background: transparent; cursor: pointer; transition: transform .18s ease; }
+.n5-light-answers button:hover { transform: scale(1.08); }.n5-light-answers img { width: 100%; }
+.n5-light-answers button.is-wrong { outline: 5px solid #ff625d; border-radius: 18px; }.n5-light-answers button.is-correct { outline: 6px solid #72d94b; border-radius: 18px; transform: scale(1.08); }
+
+@keyframes n5-light-green { 0%,16.6%,33.2%,49.8%,66.4%,83% { opacity: 1 } 8.3%,24.9%,41.5%,58.1%,74.7%,91.3% { opacity: 0 } }
+@keyframes n5-light-blue { 0%,16.6%,33.2%,49.8%,66.4%,83% { opacity: 0 } 8.3%,24.9%,41.5%,58.1%,74.7%,91.3% { opacity: 1 } }
+@keyframes n5-cycle-count { 0%,32% { opacity: 1; transform: scale(1.18) } 33%,100% { opacity: .3; transform: scale(1) } }
+@keyframes n5-loop-shake { 25% { transform: translateX(-7px) } 75% { transform: translateX(7px) } }
+@keyframes n5-loop-pulse { 50% { transform: scale(1.12); box-shadow: 0 6px 0 #128e4a, 0 0 0 9px rgba(34,188,103,.2) } }
+
+@media (max-width: 820px) {
+  .challenge-card.n5-loop-card-shell { overflow-y: auto; }
+  .n5-loop-layout { grid-template-columns: 1fr; min-height: 850px; }
+  .n5-loop-board { width: min(78vw, 430px); }
+  .n5-loop-card, .n5-loop-slot, .n5-loop-options button { width: clamp(52px, 12vw, 82px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .n5-light-robot.is-green, .n5-light-robot.is-blue, .n5-light-cycles span, .n5-loop-play.is-ready { animation-duration: 8s; }
+}
+
 /* Nivel 5 · Bloque 2 · Desafío 1: algoritmo para preparar un sándwich. */
 .n5-b2-sandwich-card .challenge-header {
   top: clamp(8px, 1.4vh, 18px);

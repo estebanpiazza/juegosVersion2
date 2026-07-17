@@ -1,0 +1,5 @@
+Consigna: Las luces de Nano parpadean: verde-azul, verde-azul, verde-azul. ¿Cuántas veces se repite? Toca el número correcto.
+
+Mecánica: Tap (Reconocimiento de patrones). Animación en pantalla de las luces del robot haciendo la secuencia tres veces seguidas. En la base aparecen los botones táctiles: [x2], [x3] y [x5]. El niño evalúa el bucle visual y presiona [x3].
+
+Nota: HACER EL EFECTO DE PARPADEO PARA QUE SE ENTIENDA POR FIS

@@ -1,0 +1,3 @@
+Consigna: Observa el código y completa la secuencia con el bloque que falta. 
+
+Mecánica: Drag & Drop (Lateralidad y secuencia pos-bucle). El código en pantalla ya cuenta con la estructura armada: [Repetición x3 (Avanzar)] [ ? ]. El niño debe elegir la flecha de giro correcta (izquierda o derecha) de la botonera según la esquina de la cuadrícula y encastrarla justo afuera, a la derecha del bloque contenedor.

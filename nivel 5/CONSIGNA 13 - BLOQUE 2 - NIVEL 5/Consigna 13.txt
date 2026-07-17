@@ -1,0 +1,3 @@
+Consigna: ¡El gran desafío final! Combina las repeticiones con los giros y presiona Play.
+
+Mecánica: Drag & Drop + Tap. El escenario en cuadrícula requiere un recorrido mixto (avanzar en bucle, girar, avanzar en bucle). La regla de código tiene tres espacios vacíos intercalados. El alumno encastra los bloques contenedores de repetición y las flechas de giro en los huecos correspondientes y luego hace Tap sobre el botón verde de "Ejecutar" (Play).

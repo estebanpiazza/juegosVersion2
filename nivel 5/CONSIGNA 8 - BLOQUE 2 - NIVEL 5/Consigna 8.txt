@@ -1,0 +1,3 @@
+Consigna: Al camino de Nano le falta un tramo. Selecciona el bloque que falta para completarlo.
+
+Mecánica: Drag & Drop. La barra de código muestra una secuencia incompleta que deja a Nano a mitad de camino en la cuadrícula. Abajo se muestran opciones como tarjetas sueltas o bloques de bucle prearmados. El jugador arrastra el bloque de repetición correcto al casillero que quedó vacío al final del código.

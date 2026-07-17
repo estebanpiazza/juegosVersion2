@@ -102,6 +102,76 @@
       "consigna": "¡Hagamos el algoritmo más corto! Coloca la flecha de avanzar dentro del bloque de repetición x3.",
       "objetivo": "Comprender que una repetición permite expresar varias instrucciones iguales con menos bloques.",
       "interaccion": "Arrastrar la primitiva Avanzar al espacio vacío del bloque Repetir x3."
+    },
+    {
+      "id": "n5-b2-d6",
+      "numero": 17,
+      "bloque": 2,
+      "titulo": "Cinco pasos hasta la meta",
+      "tipo": "n5-b2-contar-repeticion",
+      "consigna": "Cuenta los pasos hasta la meta y elige la ficha de repetición correcta.",
+      "objetivo": "Relacionar la distancia en la cuadrícula con el parámetro de una repetición.",
+      "interaccion": "Colocar Avanzar y Repetir x5 en los espacios del algoritmo."
+    },
+    {
+      "id": "n5-b2-d7",
+      "numero": 18,
+      "bloque": 2,
+      "titulo": "Corregir la repetición",
+      "tipo": "n5-b2-depurar-repeticion",
+      "consigna": "¡Cuidado! El código tiene un error. Toca el número equivocado para corregirlo.",
+      "objetivo": "Depurar el parámetro incorrecto de un bloque de repetición.",
+      "interaccion": "Tocar Repetir x5 para convertirlo en Repetir x3."
+    },
+    {
+      "id": "n5-b2-d8",
+      "numero": 19,
+      "bloque": 2,
+      "titulo": "Completar el tramo",
+      "tipo": "n5-b2-completar-tramo",
+      "consigna": "Al camino de Nano le falta un tramo. Selecciona el bloque que falta para completarlo.",
+      "objetivo": "Reconocer la repetición que completa una secuencia de movimiento.",
+      "interaccion": "Arrastrar Repetir x3 al espacio vacío del algoritmo."
+    },
+    {
+      "id": "n5-b2-d9",
+      "numero": 20,
+      "bloque": 2,
+      "titulo": "Patrón de luces",
+      "tipo": "n5-b2-patron-luces",
+      "consigna": "Las luces de Nano parpadean: verde-azul, verde-azul, verde-azul. ¿Cuántas veces se repite? Toca el número correcto.",
+      "objetivo": "Contar las repeticiones de un patrón visual alternado.",
+      "interaccion": "Observar el parpadeo animado y tocar Repetir x3."
+    },
+    {
+      "id": "n5-b2-d11",
+      "numero": 22,
+      "bloque": 2,
+      "titulo": "Completar el giro",
+      "tipo": "n5-b2-completar-giro",
+      "consigna": "Observa el código y completa la secuencia con el bloque que falta.",
+      "objetivo": "Elegir el giro correcto después de un bloque de repetición.",
+      "interaccion": "Arrastrar Girar a la derecha al espacio posterior a Repetir x3."
+    },
+    {
+      "id": "n5-b2-d12",
+      "numero": 23,
+      "bloque": 2,
+      "titulo": "Corregir el rumbo",
+      "tipo": "n5-b2-depurar-giro",
+      "consigna": "¡Nano dobló para el lado equivocado! Toca la flecha de giro que está mal para corregir el rumbo.",
+      "objetivo": "Depurar una instrucción de lateralidad incorrecta.",
+      "interaccion": "Tocar Girar a la izquierda para reemplazarlo por Girar a la derecha."
+    },
+    {
+      "id": "n5-b2-d13",
+      "numero": 24,
+      "bloque": 2,
+      "titulo": "El gran desafío final",
+      "tipo": "n5-b2-desafio-final",
+      "consigna": "¡El gran desafío final! Combina las repeticiones con los giros y presiona Play.",
+      "objetivo": "Combinar avance, repetición y giro en un algoritmo mixto.",
+      "interaccion": "Completar con Repetir x2 y Girar a la derecha, y ejecutar el recorrido."
     }
   ]
 }
